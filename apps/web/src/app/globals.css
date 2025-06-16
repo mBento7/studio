@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background-start-rgb: 245, 245, 245;
+    --background-end-rgb: 230, 230, 230;
+    
+    --foreground: 0 0% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 98%;
+    --accent: 210 100% 55%;
+    --accent-foreground: 0 0% 98%;
+    --ring: 210 100% 50%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 85%;
+    --input: 0 0% 93%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background-start-rgb: 25, 25, 25;
+    --background-end-rgb: 10, 10, 10;
+
+    --foreground: 0 0% 90%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 90%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 90%;
+    --primary: 210 85% 60%;
+    --primary-foreground: 0 0% 10%;
+    --accent: 210 80% 65%;
+    --accent-foreground: 0 0% 10%;
+    --ring: 210 85% 60%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --destructive: 0 70% 50.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 25%;
+    --input: 0 0% 22%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-foreground;
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    background: linear-gradient(to bottom, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+  }
+}
+
+/* Esconde scrollbar de forma cross-browser */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
