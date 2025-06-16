@@ -23,6 +23,7 @@ export interface ExperienceItem {
   title: string;
   company: string;
   years: string;
+  description: string;
 }
 
 export interface EducationItem {

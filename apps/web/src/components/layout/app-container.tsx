@@ -5,7 +5,8 @@ import { useAuth } from '@/hooks/use-auth';
 import { SidebarNav } from '@/features/dashboard/sidebar-nav';
 import { PublicHeader } from '@/features/public/header';
 import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export function AppContainer({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -23,24 +24,34 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Render the standard app shell
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
       <PublicHeader />
       <div className="flex flex-1 pt-16">
         {showSidebar && (
-          <SidebarNav 
-            isSidebarOpen={isSidebarOpen} 
-            toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
-          />
+          <aside
+            className={cn(
+              "flex-shrink-0 h-full min-h-screen bg-muted text-muted-foreground border-r shadow-sm transition-all duration-300 flex flex-col relative pt-16",
+              isSidebarOpen ? "w-56" : "w-16"
+            )}
+          >
+            <SidebarNav isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <div className="absolute top-1/2 -right-3 -translate-y-1/2 z-50">
+              <Button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                size="icon"
+                variant="ghost"
+                className="h-7 w-7 rounded-full shadow border border-border bg-card/70 backdrop-blur-sm hover:bg-accent/40 transition"
+              >
+                {isSidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              </Button>
+            </div>
+          </aside>
         )}
-        <main className={cn(
-          "flex-1 overflow-auto transition-all duration-300",
-          showSidebar && (isSidebarOpen ? "lg:ml-64 md:ml-16" : "lg:ml-16 md:ml-16")
-        )}>
-           <div className="p-0 md:p-6">
-             {children}
-           </div>
+        <main className="flex-1 overflow-x-auto">
+          <div className="p-0 md:p-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

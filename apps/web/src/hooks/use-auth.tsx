@@ -16,6 +16,7 @@ interface AuthContextType {
   signInWithEmail: (email: string, password: string) => Promise<void>;
   sendPasswordResetEmail: (email: string) => Promise<void>;
   signOutUser: () => Promise<void>;
+  updateUserProfile: (profile: UserProfile) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -149,16 +150,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   };
 
+  // Adiciona a função para permitir atualização externa do perfil
+  const updateUserProfile = (profile: UserProfile) => {
+    setCurrentUserProfile(profile);
+  };
+
   return (
-    <AuthContext.Provider value={{ 
-        user, 
+    <AuthContext.Provider value={{
+        user,
         currentUserProfile,
-        loading, 
-        signInWithGoogle, 
-        signUpWithEmail, 
-        signInWithEmail, 
-        sendPasswordResetEmail, 
-        signOutUser, 
+        loading,
+        signInWithGoogle,
+        signUpWithEmail,
+        signInWithEmail,
+        sendPasswordResetEmail,
+        signOutUser,
+        updateUserProfile, // Expõe a nova função
     }}>
       {children}
     </AuthContext.Provider>

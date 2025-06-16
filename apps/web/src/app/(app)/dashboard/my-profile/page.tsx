@@ -21,20 +21,18 @@ export default function MyProfilePage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
-        <p className="text-muted-foreground">
-          Esta é uma visão geral do seu perfil. Use os atalhos abaixo ou o menu para editar suas informações.
-        </p>
+    <div className="space-y-10 max-w-6xl mx-auto py-8">
+      <div className="animate-fade-in-up">
+        <h1 className="text-4xl font-extrabold tracking-tight text-primary drop-shadow-sm mb-2">Meu Perfil</h1>
+        <p className="text-muted-foreground text-lg">Esta é uma visão geral do seu perfil. Use os atalhos abaixo ou o menu para editar suas informações.</p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-10 animate-fade-in-up">
         <div className="lg:col-span-2 space-y-8">
           {/* Card de Pré-visualização do Perfil */}
-          <Card>
+          <Card className="rounded-2xl shadow-xl border border-border bg-card/90 transition hover:shadow-2xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-xl font-bold">
                 <User />
                 Pré-visualização do Perfil Público
               </CardTitle>
@@ -43,16 +41,16 @@ export default function MyProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="scale-90 origin-top-left">
+              <div className="scale-95 origin-top-left">
                   <PublicProfileCard profile={currentUserProfile} />
               </div>
               <div className="mt-4 flex gap-4">
-                <Button asChild>
+                <Button asChild className="shadow-md">
                     <Link href="/dashboard/settings/content">
                     <Edit className="mr-2 h-4 w-4"/> Editar Conteúdo
                     </Link>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="shadow-md">
                     <Link href="/dashboard/settings/appearance">
                     <Settings className="mr-2 h-4 w-4"/> Editar Aparência
                     </Link>
@@ -64,7 +62,9 @@ export default function MyProfilePage() {
         
         {/* Coluna da Direita com Conquistas */}
         <div className="space-y-8">
-          <AchievementsCard />
+          <div className="rounded-2xl shadow-xl border border-border bg-card/90 p-4 animate-fade-in-up">
+            <AchievementsCard />
+          </div>
         </div>
       </div>
     </div>

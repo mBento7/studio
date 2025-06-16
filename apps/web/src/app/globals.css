@@ -4,52 +4,52 @@
 
 @layer base {
   :root {
-    --background-start-rgb: 245, 245, 245;
-    --background-end-rgb: 230, 230, 230;
+    --background-start-rgb: 245, 245, 245; /* branco suave */
+    --background-end-rgb: 235, 240, 245;   /* cinza muito claro */
     
-    --foreground: 0 0% 20%;
+    --foreground: 220 13% 18%; /* cinza carvão */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 220 13% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
-    --primary: 210 100% 50%;
+    --popover-foreground: 220 13% 18%;
+    --primary: 210 80% 36%; /* azul escuro */
     --primary-foreground: 0 0% 98%;
-    --accent: 210 100% 55%;
+    --accent: 174 100% 28%; /* teal */
     --accent-foreground: 0 0% 98%;
-    --ring: 210 100% 50%;
+    --ring: 174 100% 28%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 210 16% 90%;
+    --muted-foreground: 220 13% 40%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 85%;
-    --input: 0 0% 93%;
-    --radius: 0.5rem;
+    --border: 210 16% 85%;
+    --input: 210 16% 93%;
+    --radius: 0.75rem; /* bordas mais suaves */
   }
 
   .dark {
-    --background-start-rgb: 25, 25, 25;
-    --background-end-rgb: 10, 10, 10;
+    --background-start-rgb: 25, 28, 34;
+    --background-end-rgb: 18, 20, 24;
 
     --foreground: 0 0% 90%;
-    --card: 0 0% 12%;
+    --card: 220 13% 13%;
     --card-foreground: 0 0% 90%;
-    --popover: 0 0% 12%;
+    --popover: 220 13% 13%;
     --popover-foreground: 0 0% 90%;
-    --primary: 210 85% 60%;
+    --primary: 210 80% 46%;
     --primary-foreground: 0 0% 10%;
-    --accent: 210 80% 65%;
+    --accent: 174 100% 38%;
     --accent-foreground: 0 0% 10%;
-    --ring: 210 85% 60%;
+    --ring: 174 100% 38%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 0 0% 20%;
+    --muted: 210 16% 20%;
     --muted-foreground: 0 0% 60%;
     --destructive: 0 70% 50.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 25%;
-    --input: 0 0% 22%;
+    --border: 210 16% 25%;
+    --input: 210 16% 22%;
   }
 }
 
@@ -59,8 +59,10 @@
   }
   body {
     @apply text-foreground;
-    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    font-family: var(--font-geist-sans), 'Inter', Arial, Helvetica, sans-serif;
     background: linear-gradient(to bottom, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+    letter-spacing: 0.01em;
+    font-size: 1.04rem;
   }
 }
 
