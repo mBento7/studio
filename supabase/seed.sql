@@ -46,31 +46,31 @@ CREATE POLICY "Users can update their own profile."
 
 CREATE TABLE public.social_links (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  profile_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   platform TEXT NOT NULL,
   url TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE public.social_links ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view social links." ON public.social_links FOR SELECT USING (true);
-CREATE POLICY "Users can manage their own social links." ON public.social_links FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage their own social links." ON public.social_links FOR ALL USING (auth.uid() = profile_id);
 
 
 CREATE TABLE public.services (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  profile_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view services." ON public.services FOR SELECT USING (true);
-CREATE POLICY "Users can manage their own services." ON public.services FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage their own services." ON public.services FOR ALL USING (auth.uid() = profile_id);
 
 
 CREATE TABLE public.portfolio_items (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  profile_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   image_url TEXT NOT NULL,
   caption TEXT,
   description TEXT,
@@ -78,8 +78,57 @@ CREATE TABLE public.portfolio_items (
 );
 ALTER TABLE public.portfolio_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view portfolio items." ON public.portfolio_items FOR SELECT USING (true);
-CREATE POLICY "Users can manage their own portfolio items." ON public.portfolio_items FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage their own portfolio items." ON public.portfolio_items FOR ALL USING (auth.uid() = profile_id);
 
+-- Novas tabelas a serem adicionadas para sincronizar com o banco de dados
+CREATE TABLE public.experience (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  company TEXT NOT NULL,
+  years TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+ALTER TABLE public.experience ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public experience items are viewable by everyone." ON public.experience FOR SELECT USING (true);
+CREATE POLICY "Users can manage their own experience items." ON public.experience FOR ALL USING (auth.uid() = profile_id);
+
+CREATE TABLE public.education (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  degree TEXT NOT NULL,
+  institution TEXT NOT NULL,
+  years TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+ALTER TABLE public.education ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public education items are viewable by everyone." ON public.education FOR SELECT USING (true);
+CREATE POLICY "Users can manage their own education items." ON public.education FOR ALL USING (auth.uid() = profile_id);
+
+CREATE TABLE public.reviews (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  author_name TEXT NOT NULL,
+  author_avatar_url TEXT,
+  rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+  comment TEXT,
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public reviews are viewable by everyone." ON public.reviews FOR SELECT USING (true);
+CREATE POLICY "Users can manage their own reviews." ON public.reviews FOR ALL USING (auth.uid() = profile_id);
+
+CREATE TABLE public.layout_templates (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  description TEXT,
+  image_url TEXT,
+  available_for TEXT[] CHECK (available_for <@ ARRAY['standard'::text, 'premium'::text]),
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+ALTER TABLE public.layout_templates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Layout templates are viewable by everyone." ON public.layout_templates FOR SELECT USING (true);
+CREATE POLICY "Users can manage their own layout templates." ON public.layout_templates FOR ALL USING (auth.uid() = profile_id); -- Note: This policy might need adjustment based on how layout templates are managed. Assuming they are system-wide for now.
 
 -- 3. Função e Trigger para criar um perfil automaticamente no cadastro de um novo usuário
 
@@ -134,6 +183,12 @@ CREATE TRIGGER on_profile_updated
 CREATE INDEX idx_profiles_category ON public.profiles(category);
 CREATE INDEX idx_profiles_is_available ON public.profiles(is_available);
 CREATE INDEX idx_profiles_city ON public.profiles((location->>'city'));
+
+-- Índices para as novas tabelas
+CREATE INDEX idx_experience_profile_id ON public.experience(profile_id);
+CREATE INDEX idx_education_profile_id ON public.education(profile_id);
+CREATE INDEX idx_reviews_profile_id ON public.reviews(profile_id);
+CREATE INDEX idx_layout_templates_name ON public.layout_templates(name);
 
 -- Exemplos de queries para campos JSONB:
 -- Buscar perfis por cidade:
