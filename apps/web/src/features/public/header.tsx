@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/logo";
-import { AvatarRoot, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -122,7 +122,7 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
             </Link>
           </Button>
 
-          {currentUserProfile?.socialLinks?.length > 0 && (
+          {currentUserProfile && currentUserProfile.socialLinks && currentUserProfile.socialLinks.length > 0 && (
               <div className="hidden lg:flex items-center gap-2">
                 {currentUserProfile.socialLinks.map((link: SocialLink) => {
                   const Icon =
@@ -172,7 +172,7 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
                   variant="ghost"
                   className="relative h-8 w-8 rounded-full"
                 >
-                  <AvatarRoot className="h-8 w-8">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={currentUserProfile.profilePictureUrl}
                       alt={currentUserProfile.name}
@@ -180,7 +180,7 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
                     <AvatarFallback>
                       {getInitial(currentUserProfile.name)}
                     </AvatarFallback>
-                  </AvatarRoot>
+                  </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

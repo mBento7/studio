@@ -1,3 +1,5 @@
+import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MessageSquare, Briefcase, Facebook, Twitch } from "lucide-react";
+
 export interface SocialLink {
   id: string;
   platform: string; 
@@ -57,6 +59,7 @@ export interface UserProfile {
   email?: string;
   phone?: string;
   whatsappNumber?: string;
+  website?: string;
   bio: string;
   profilePictureUrl: string;
   profilePictureDataAiHint?: string;
@@ -83,9 +86,34 @@ export interface UserProfile {
   layoutTemplateId?: string;
   plan?: 'free' | 'standard' | 'premium';
   isAvailable?: boolean;
+  isProfileComplete?: boolean;
   reviews?: Review[];
   premiumBanner?: PremiumBanner;
 }
+
+export interface ProfileLayoutProps {
+  user: UserProfile;
+  primaryColorHex: string;
+  isCurrentUserProfile: boolean;
+  mounted: boolean;
+  toast: ReturnType<typeof import("@/hooks/use-toast").useToast>['toast'];
+  qrCodeUrl: string;
+  onPortfolioItemClick: (item: PortfolioItem) => void;
+}
+
+export const platformIcons: { [key: string]: React.ElementType } = {
+  linkedin: Linkedin,
+  twitter: Twitter,
+  instagram: Instagram,
+  github: Github,
+  website: Globe,
+  youtube: Youtube,
+  behance: Globe, 
+  discord: MessageSquare, 
+  tiktok: MessageSquare, 
+  facebook: Facebook,
+  twitch: Twitch,
+};
 
 export interface AccentColor {
   name: string;

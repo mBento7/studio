@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { UserProfile } from "@/lib/types";
+import { mockCurrentUser, mockUserProfiles } from "@/lib/mock-data";
 
 // Esta função substitui 'getMockUserByUsername'
 export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
@@ -15,6 +16,11 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     .single();
 
   if (profileError || !profile) {
+    // Fallback para qualquer usuário mock em desenvolvimento
+    if (process.env.NODE_ENV !== 'production') {
+      const mockUser = mockUserProfiles.find(u => u.username === username);
+      if (mockUser) return mockUser;
+    }
     console.error(`Perfil não encontrado para o username: ${username}`, profileError);
     return null;
   }

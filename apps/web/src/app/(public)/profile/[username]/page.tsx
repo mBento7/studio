@@ -10,7 +10,7 @@ interface ProfilePageProps {
 }
 
 // A página agora é um Server Component assíncrono
-export default async function UserProfilePage({ params }: ProfilePageProps) {
+export default async function ProfileServerPage({ params }: ProfilePageProps) {
   const { username } = params;
   
   // 1. Busca os dados no servidor ANTES de renderizar a página

@@ -16,6 +16,10 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
   // we can assume that if a user is logged in, they should see the sidebar.
   const showSidebar = !loading && user;
 
+  // Determina a classe de largura para a barra lateral e a margem para o conteúdo principal
+  const sidebarWidthClass = isSidebarOpen ? "w-56" : "w-16";
+  const mainMlClass = isSidebarOpen ? "ml-56" : "ml-16";
+
   if (loading) {
     return (
        <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -27,12 +31,12 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <div className="flex flex-1 pt-16">
+      <div className="flex flex-1">
         {showSidebar && (
           <aside
             className={cn(
-              "flex-shrink-0 h-full min-h-screen bg-muted text-muted-foreground border-r shadow-sm transition-all duration-300 flex flex-col relative pt-16",
-              isSidebarOpen ? "w-56" : "w-16"
+              "fixed top-16 left-0 h-[calc(100vh-theme(spacing.16))] bg-muted text-muted-foreground border-r shadow-sm transition-all duration-300 flex flex-col z-40",
+              sidebarWidthClass
             )}
           >
             <SidebarNav isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
@@ -48,7 +52,7 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
             </div>
           </aside>
         )}
-        <main className="flex-1 overflow-x-auto">
+        <main className={cn("flex-1 overflow-x-auto pt-16", showSidebar && mainMlClass)}>
           <div className="p-0 md:p-6">
             {children}
           </div>

@@ -48,16 +48,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
   // Itens de navegação com sub-itens para "Meu Perfil"
   const navItems: NavItem[] = [
     { href: "/dashboard/feed", label: "Home", icon: Home },
-    { 
-      href: "/dashboard/my-profile", 
-      label: "Meu Perfil", 
-      icon: User,
-      subItems: [
-        { href: "/dashboard", label: "Editar Perfil", icon: Pencil },
-        { href: "/dashboard/settings/appearance", label: "Aparência", icon: Palette },
-        { href: "/dashboard/settings/content", label: "Conteúdo", icon: Pencil },
-      ]
-    },
+    { href: "/dashboard", label: "Editar Perfil", icon: Pencil },
     { href: publicProfileLink, label: "Ver Perfil Público", icon: Eye },
     { href: "/dashboard/referrals", label: "Indique e Ganhe", icon: Gift },
     { href: "/dashboard/account", label: "Conta", icon: UserCog },
@@ -84,7 +75,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
                       className={cn("w-full justify-start gap-3", !isSidebarOpen && "justify-center")}
                     >
                       <item.icon className="w-5 h-5 shrink-0" />
-                      <span className={cn("truncate", !isSidebarOpen && "sr-only")}>{item.label}</span>
+                      <span className={cn("truncate", !isSidebarOpen && "hidden")}>{item.label}</span>
                     </Button>
                   </Link>
                 </TooltipTrigger>
@@ -135,7 +126,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
                 ) : (
                   <LogOut className="w-5 h-5 shrink-0" />
                 )}
-                <span className={cn("truncate", !isSidebarOpen && "sr-only")}>Sair</span>
+                <span className={cn("truncate", !isSidebarOpen && "hidden")}>Sair</span>
               </Button>
             </TooltipTrigger>
             {!isSidebarOpen && (

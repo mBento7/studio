@@ -20,12 +20,40 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { BillingSettings } from '@/features/dashboard/billing-settings';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from '@/hooks/use-toast';
+import { updateUserProfileInMockData } from '@/lib/mock-data';
 
 export default function AccountPage() {
-  const { signOutUser } = useAuth();
+  const { signOutUser, currentUserProfile, updateCurrentUserProfile } = useAuth();
+  const { toast } = useToast();
 
   const handleLogout = async () => {
     await signOutUser();
+  };
+
+  const handlePlanChange = (newPlan: 'free' | 'standard' | 'premium') => {
+    if (!currentUserProfile) return;
+
+    // Atualiza o plano no mock-data
+    const updatedUser = updateUserProfileInMockData({
+      ...currentUserProfile,
+      plan: newPlan,
+    });
+
+    // Atualiza o estado do usuário na sessão (via useAuth)
+    updateCurrentUserProfile(updatedUser);
+
+    toast({
+      title: "Plano Atualizado",
+      description: `Seu plano foi alterado para "${newPlan}".`,
+    });
   };
 
   return (
@@ -69,6 +97,36 @@ export default function AccountPage() {
           <Button>Alterar Senha</Button>
         </CardContent>
       </Card>
+
+      {/* Seção de Configurações de Desenvolvedor (apenas em DEV) */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Shield className="w-6 h-6" />
+              <CardTitle>Configurações de Desenvolvedor</CardTitle>
+            </div>
+            <CardDescription>
+              Altere seu plano para fins de teste. Visível apenas em desenvolvimento.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="plan-select">Plano Atual</Label>
+              <Select onValueChange={handlePlanChange} value={currentUserProfile?.plan || 'free'}>
+                <SelectTrigger id="plan-select" className="w-[180px]">
+                  <SelectValue placeholder="Selecione um plano" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="free">Básico (Free)</SelectItem>
+                  <SelectItem value="standard">Standard</SelectItem>
+                  <SelectItem value="premium">Premium</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Seção de Excluir Conta */}
       <Card className="border-destructive">

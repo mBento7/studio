@@ -3,6 +3,159 @@ import type { UserProfile } from './types';
 export const mockUserProfiles: UserProfile[] = [
   {
     id: '1',
+    username: 'joaofree',
+    name: 'João Free',
+    email: 'joao.free@email.com',
+    bio: 'Plano gratuito, template básico. Conteúdo limitado.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joaofree',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-joaofree/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'github', url: 'https://github.com/joaofree' }
+    ],
+    location: { city: 'São Paulo', country: 'BR' },
+    services: [],
+    portfolio: [],
+    skills: ['HTML', 'CSS'],
+    experience: [],
+    education: [],
+    category: 'Desenvolvedor',
+    layoutTemplateId: 'minimalist',
+    plan: 'free',
+    isAvailable: true,
+    isProfileComplete: true,
+  },
+  {
+    id: '2',
+    username: 'mariastandard',
+    name: 'Maria Standard',
+    email: 'maria.standard@email.com',
+    bio: 'Plano standard, template moderno. Foco em serviços e alguns projetos.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mariastandard',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-mariastandard/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/mariastandard' }
+    ],
+    location: { city: 'Rio de Janeiro', country: 'BR' },
+    services: [
+      { id: 's1', name: 'Consultoria de UX', description: 'Orientação para melhoria da experiência do usuário.' },
+      { id: 's2', name: 'Design de Interfaces', description: 'Criação de interfaces intuitivas e atraentes.' },
+    ],
+    portfolio: [
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/proj1/400/300', caption: 'Redesign de E-commerce', description: 'Projeto completo de reestruturação visual e de usabilidade.' },
+      { id: 'p2', imageUrl: 'https://picsum.photos/seed/proj2/400/300', caption: 'App de Produtividade', description: 'Desenvolvimento do fluxo de usuário e prototipagem.' },
+    ],
+    skills: ['UX Design', 'UI Design', 'Figma', 'Prototipagem'],
+    experience: [],
+    education: [],
+    category: 'Designer',
+    layoutTemplateId: 'modern',
+    plan: 'standard',
+    isAvailable: true,
+  },
+  {
+    id: '3',
+    username: 'pedropremium',
+    name: 'Pedro Premium',
+    email: 'pedro.premium@email.com',
+    bio: 'Plano premium, template avançado. Perfil completo com vasta experiência e projetos.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=pedropremium',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-pedropremium/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'twitter', url: 'https://twitter.com/pedropremium' },
+      { id: '2', platform: 'github', url: 'https://github.com/pedropremium' },
+      { id: '3', platform: 'website', url: 'https://pedropremium.com' },
+    ],
+    location: { city: 'Belo Horizonte', country: 'BR', address: 'Av. Principal, 123' },
+    services: [
+      { id: 's3', name: 'Desenvolvimento Mobile (iOS/Android)', description: 'Criação de aplicativos nativos de alta performance.' },
+      { id: 's4', name: 'Consultoria de Arquitetura', description: 'Definição de arquitetura escalável para projetos.' },
+      { id: 's5', name: 'Workshops de React Native', description: 'Treinamentos personalizados para equipes de desenvolvimento.' },
+    ],
+    portfolio: [
+      { id: 'p3', imageUrl: 'https://picsum.photos/seed/proj3/400/300', caption: 'Plataforma EAD Completa', description: 'Sistema educacional com funcionalidades de vídeo, quiz e acompanhamento.' },
+      { id: 'p4', imageUrl: 'https://picsum.photos/seed/proj4/400/300', caption: 'App de Fintech', description: 'Aplicativo financeiro com integração bancária e segurança de ponta.' },
+      { id: 'p5', imageUrl: 'https://picsum.photos/seed/proj5/400/300', caption: 'Game Mobile 3D', description: 'Desenvolvimento de jogo com gráficos avançados e jogabilidade imersiva.' },
+    ],
+    skills: ['React Native', 'Flutter', 'Node.js', 'AWS', 'CI/CD'],
+    experience: [
+      { id: 'e1', title: 'Engenheiro de Software Sênior', company: 'Tech Solutions', years: '2020 - Atualmente', description: 'Liderança de equipes, desenvolvimento de arquiteturas e otimização de sistemas.' },
+      { id: 'e2', title: 'Desenvolvedor Mobile Pleno', company: 'App Innovators', years: '2018 - 2020', description: 'Criação e manutenção de aplicativos mobile para clientes diversos.' },
+    ],
+    education: [
+      { id: 'ed1', degree: 'Mestrado em Engenharia de Software', institution: 'Universidade Federal', years: '2023 - 2025' },
+      { id: 'ed2', degree: 'Bacharelado em Ciência da Computação', institution: 'Universidade Estadual', years: '2014 - 2018' },
+    ],
+    category: 'Mobile',
+    layoutTemplateId: 'advanced',
+    plan: 'premium',
+    isAvailable: true,
+  },
+  {
+    id: '7',
+    username: 'camilaportfolio',
+    name: 'Camila Portfólio',
+    email: 'camila.portfolio@email.com',
+    bio: 'Plano standard, template focado em portfólio. Designer Visual.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=camilaportfolio',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-camila/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'behance', url: 'https://behance.net/camilaportfolio' },
+      { id: '2', platform: 'dribbble', url: 'https://dribbble.com/camilaportfolio' }
+    ],
+    location: { city: 'Salvador', country: 'BR' },
+    services: [
+      { id: 's6', name: 'Design de Logo', description: 'Criação de identidade visual.' },
+      { id: 's7', name: 'Ilustração Digital', description: 'Serviços de ilustração personalizada.' },
+    ],
+    portfolio: [
+      { id: 'p6', imageUrl: 'https://picsum.photos/seed/proj6/400/300', caption: 'Identidade Visual Marca X', description: 'Desenvolvimento completo de identidade visual.' },
+      { id: 'p7', imageUrl: 'https://picsum.photos/seed/proj7/400/300', caption: 'Campanha Publicitária Y', description: 'Criação de artes para campanha digital.' },
+    ],
+    skills: ['Design Gráfico', 'Illustrator', 'Photoshop'],
+    experience: [],
+    education: [],
+    category: 'Designer',
+    layoutTemplateId: 'portfolio-focus',
+    plan: 'standard',
+    isAvailable: true,
+    isProfileComplete: true,
+  },
+  {
+    id: '8',
+    username: 'robertobusiness',
+    name: 'Roberto Business',
+    email: 'roberto.business@email.com',
+    bio: 'Plano premium, template Pro. Consultor de Marketing Digital.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=robertobusiness',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-roberto/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/robertobusiness' },
+      { id: '2', platform: 'twitter', url: 'https://twitter.com/robertobusiness' }
+    ],
+    location: { city: 'Porto Alegre', country: 'BR' },
+    services: [
+      { id: 's8', name: 'Consultoria de SEO', description: 'Otimização para motores de busca.' },
+      { id: 's9', name: 'Gestão de Tráfego Pago', description: 'Campanhas de anúncios online.' },
+    ],
+    portfolio: [
+      { id: 'p8', imageUrl: 'https://picsum.photos/seed/proj8/400/300', caption: 'Estratégia de Conteúdo X', description: 'Planejamento e execução de conteúdo.' },
+      { id: 'p9', imageUrl: 'https://picsum.photos/seed/proj9/400/300', caption: 'Campanha de Leads Y', description: 'Otimização de funis de vendas.' },
+    ],
+    skills: ['SEO', 'Google Ads', 'Facebook Ads', 'Marketing Digital'],
+    experience: [
+      { id: 'e3', title: 'Head de Marketing', company: 'Digital Solutions', years: '2021 - Atualmente', description: 'Liderança e estratégia de marketing digital.' },
+    ],
+    education: [
+      { id: 'ed3', degree: 'Pós-graduação em Marketing', institution: 'FGV', years: '2019 - 2020' },
+    ],
+    category: 'Marketing',
+    layoutTemplateId: 'premium-pro',
+    plan: 'premium',
+    isAvailable: true,
+    isProfileComplete: true,
+  },
+  {
+    id: '4',
     username: 'joaosilva',
     name: 'João Silva',
     bio: 'Desenvolvedor Full Stack | React | Node.js',
@@ -22,9 +175,12 @@ export const mockUserProfiles: UserProfile[] = [
     experience: [],
     education: [],
     category: '',
+    plan: 'free',
+    layoutTemplateId: 'basic',
+    isProfileComplete: false,
   },
   {
-    id: '2',
+    id: '5',
     username: 'mariasouza',
     name: 'Maria Souza',
     bio: 'Designer UX/UI | Figma | Adobe XD',
@@ -44,9 +200,12 @@ export const mockUserProfiles: UserProfile[] = [
     experience: [],
     education: [],
     category: '',
+    plan: 'free',
+    layoutTemplateId: 'basic',
+    isProfileComplete: false,
   },
   {
-    id: '3',
+    id: '6',
     username: 'pedrosantos',
     name: 'Pedro Santos',
     bio: 'Desenvolvedor Mobile | React Native | Flutter',
@@ -66,6 +225,9 @@ export const mockUserProfiles: UserProfile[] = [
     experience: [],
     education: [],
     category: '',
+    plan: 'free',
+    layoutTemplateId: 'basic',
+    isProfileComplete: false,
   }
 ];
 
@@ -76,7 +238,21 @@ export function updateMockCurrentUser(data: any) {
   console.log('Mock update user:', data);
 }
 
-export function updateMockUserLayout(username: string, layoutTemplateId: string) {
-  // Simulação de atualização do layout do usuário mock
-  console.log(`Mock update layout for user ${username} to layout ${layoutTemplateId}`);
+export function getMockUserByUsername(username: string): UserProfile | null {
+  return mockUserProfiles.find(user => user.username === username) || null;
+}
+
+export function updateUserProfileInMockData(updatedUser: UserProfile): UserProfile {
+  const index = mockUserProfiles.findIndex(user => user.id === updatedUser.id);
+  if (index !== -1) {
+    mockUserProfiles[index] = updatedUser;
+    // Se o usuário atualizado for o mockCurrentUser, atualize-o também
+    if (mockCurrentUser.id === updatedUser.id) {
+      Object.assign(mockCurrentUser, updatedUser);
+    }
+    console.log('Mock user profile updated:', updatedUser.username, updatedUser.plan);
+  } else {
+    console.warn('User not found in mockUserProfiles for update:', updatedUser.id);
+  }
+  return updatedUser;
 } 

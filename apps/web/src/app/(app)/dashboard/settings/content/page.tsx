@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -28,7 +27,7 @@ const EXPERIENCE_LIMIT_PREMIUM = 10;
 
 export default function ContentSettingsPage() {
   const { toast } = useToast();
-  const { currentUserProfile, updateCurrentAuthProfile } = useAuth();
+  const { currentUserProfile, updateUserProfile } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [activeProfile, setActiveProfile] = useState<UserProfile | null>(null);
@@ -189,7 +188,7 @@ export default function ContentSettingsPage() {
         youtubeVideoDescription: youtubeDescription,
         premiumBanner: premiumBanner,
     };
-    updateCurrentAuthProfile(updatedProfile);
+    updateUserProfile(updatedProfile);
     updateMockCurrentUser(updatedProfile); 
     toast({ title: "Conteúdo Salvo", description: "Suas seções de conteúdo foram atualizadas com sucesso!" });
   };
