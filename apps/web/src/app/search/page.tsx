@@ -13,7 +13,9 @@ import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
 
 const categories = Array.from(new Set(mockUserProfiles.map(p => p.category).filter(c => c && c.trim() !== ""))).sort();
-const cities = Array.from(new Set(mockUserProfiles.map(p => p.location?.city).filter(c => c && c.trim() !== ""))).sort();
+const cities = Array.from(new Set(mockUserProfiles.map(p => p.location?.city).filter((c): c is string => c !== undefined && c.trim() !== ""))).sort();
+
+console.log('mockUserProfiles carregado em search/page.tsx:', mockUserProfiles.length, 'perfis');
 
 const ALL_VALUE = "all";
 
@@ -134,7 +136,7 @@ export default function SearchPage() {
     }
     
     if (selectedCity && selectedCity !== ALL_VALUE) {
-      results = results.filter(profile => profile.location.city === selectedCity);
+      results = results.filter(profile => profile.location?.city === selectedCity);
     }
     
     setFilteredProfiles(results);

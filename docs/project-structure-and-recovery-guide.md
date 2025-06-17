@@ -15,27 +15,33 @@ O ponto mais crítico para a recuperação são as **variáveis de ambiente**, q
 Aqui está a descrição de cada arquivo e pasta importante na raiz do projeto:
 
 ### Pastas Principais
-*   `.idx/`: Pasta de configuração do **Firebase Studio** (anteriormente conhecido como Project IDX). Este rebranding reflete o compromisso do Google em integrar profundamente as ferramentas de desenvolvimento com todo o ecossistema Firebase. Pode ser ignorada em outros ambientes.
-*   `.next/`: Pasta de build gerada automaticamente pelo Next.js quando você executa `npm run dev` ou `npm run build`. **Nunca deve ser enviada para o Git.**
-*   `.vscode/`: Contém configurações específicas do editor Visual Studio Code. É seguro versionar para manter a consistência entre os desenvolvedores.
+*   `apps/`: Contém as aplicações do monorepo. Atualmente, inclui `web/` (o frontend Next.js).
+*   `db/`: Armazena os schemas do banco de dados e políticas de segurança (RLS) do Supabase.
 *   `docs/`: Contém toda a documentação estratégica e técnica do projeto, como planos de arquitetura, monetização e este guia.
-*   `node_modules/`: Onde todas as dependências do projeto (pacotes do `npm`) são instaladas. É gerada ao rodar `npm install`. **Nunca deve ser enviada para o Git.**
-*   `src/`: O coração do projeto. Contém todo o código-fonte da aplicação (componentes, páginas, hooks, etc.).
+*   `infra/`: Contém configurações e scripts relacionados à infraestrutura e deploy, como configurações do Coolify.
+*   `.next/`: Pasta de build gerada automaticamente pelo Next.js quando você executa `pnpm dev` ou `pnpm build`. **Nunca deve ser enviada para o Git.**
+*   `node_modules/`: Onde todas as dependências do projeto (pacotes do `pnpm`) são instaladas. É gerada ao rodar `pnpm install`. **Nunca deve ser enviada para o Git.**
+*   `packages/`: (Vazio no momento) Destinado a pacotes internos reutilizáveis no monorepo (ex: `ui-kit`, `types`).
+*   `src/`: (Localizado dentro de `apps/web/`) O coração da aplicação web. Contém todo o código-fonte da aplicação (componentes, páginas, hooks, etc.).
+*   `supabase/`: Contém arquivos relacionados à configuração do Supabase, como `seed.sql`.
+*   `.vscode/`: Contém configurações específicas do editor Visual Studio Code. É seguro versionar para manter a consistência entre os desenvolvedores.
 
 ### Arquivos de Configuração
 *   `.env` / `.env.local`: **Arquivos críticos e secretos.** Contêm as variáveis de ambiente, como chaves de API e credenciais de banco de dados. `.env.local` tem prioridade sobre `.env` e NUNCA deve ser enviado para o Git.
 *   `.gitignore`: Um arquivo vital que instrui o Git sobre quais arquivos e pastas ignorar (ex: `node_modules`, `.next`, `.env.local`). Ele é o guardião da segurança do seu repositório.
-*   `components.json`: Arquivo de configuração para a ferramenta `shadcn/ui`. Ele informa onde os componentes de UI devem ser instalados.
-*   `next.config.ts`: Arquivo de configuração principal do Next.js. Permite customizar o comportamento do framework.
-*   `package.json`: O "RG" do projeto. Define o nome, versão, dependências e scripts (`dev`, `build`, etc.).
-*   `package-lock.json`: Um "clone" exato da sua `node_modules`. Garante que todos os desenvolvedores e o servidor de produção usem exatamente as mesmas versões de cada dependência, evitando o "funciona na minha máquina".
-*   `postcss.config.mjs` / `tailwind.config.ts`: Arquivos de configuração para o Tailwind CSS, o framework de estilização.
-*   `tsconfig.json`: Arquivo de configuração do TypeScript. Define as regras de compilação e verificação de tipos.
+*   `components.json`: (Localizado em `apps/web/`) Arquivo de configuração para a ferramenta `shadcn/ui`. Ele informa onde os componentes de UI devem ser instalados.
+*   `next.config.ts`: (Localizado em `apps/web/`) Arquivo de configuração principal do Next.js. Permite customizar o comportamento do framework.
+*   `package.json`: O "RG" do monorepo. Define o nome, versão, dependências e scripts (`dev`, `build`, etc.) para o projeto como um todo. As aplicações dentro de `apps/` têm seus próprios `package.json`.
+*   `package-lock.json` ou `pnpm-lock.yaml`: (Na raiz do monorepo) Um "clone" exato das suas `node_modules`. Garante que todos os desenvolvedores e o servidor de produção usem exatamente as mesmas versões de cada dependência, evitando o "funciona na minha máquina". Com `pnpm`, o arquivo é `pnpm-lock.yaml`.
+*   `postcss.config.mjs` / `tailwind.config.ts`: (Localizado em `apps/web/`) Arquivos de configuração para o Tailwind CSS, o framework de estilização.
+*   `pnpm-workspace.yaml`: (Na raiz do monorepo) Define os workspaces para o `pnpm`, indicando quais pastas contêm pacotes do monorepo (`apps/*`, `packages/*`).
+*   `tsconfig.base.json`: (Na raiz do monorepo) Arquivo base de configuração do TypeScript para o monorepo. Garante configurações consistentes entre os subprojetos.
+*   `tsconfig.json`: (Localizado em `apps/web/`) Arquivo de configuração do TypeScript específico para a aplicação web.
 
 ### Outros Arquivos
-*   `.modified`: Este parece ser um arquivo gerado por alguma ferramenta específica do seu ambiente para rastrear modificações. Geralmente, não precisa ser gerenciado manualmente.
-*   `README.md`: A documentação principal e a porta de entrada para o projeto, que já aprimoramos.
-*   `next-env.d.ts`: Arquivo de declaração de tipos do TypeScript para o Next.js. Garante que o TypeScript entenda os tipos do Next.js.
+*   `NEXT_STEPS.md`: Documento que lista os próximos passos e o roadmap para o desenvolvimento e produção do projeto.
+*   `README.md`: A documentação principal e a porta de entrada para o projeto.
+*   `next-env.d.ts`: (Localizado em `apps/web/`) Arquivo de declaração de tipos do TypeScript para o Next.js. Garante que o TypeScript entenda os tipos do Next.js.
 
 ---
 
@@ -49,14 +55,14 @@ Para restaurar o projeto em uma máquina nova do zero, siga estes passos:
     cd [NOME_DA_PASTA_DO_PROJETO]
     ```
 
-2.  **Instalar as Dependências**
-    Este comando lê o `package.json` e o `package-lock.json` e baixa todas as dependências necessárias na pasta `node_modules`.
+2.  **Instalar as Dependências (na raiz do monorepo)**
+    Este comando lê o `package.json` e o `pnpm-lock.yaml` (ou `package-lock.json`) na raiz do monorepo e baixa todas as dependências necessárias, gerenciando as dependências de todos os workspaces.
     ```bash
-    npm install
+    pnpm install
     ```
 
 3.  **Criar o Arquivo de Variáveis de Ambiente**
-    Este é o passo mais importante. Crie um arquivo chamado `.env.local` na raiz do projeto. Adicione as seguintes variáveis (com seus valores corretos):
+    Este é o passo mais importante. Crie um arquivo chamado `.env.local` na raiz do monorepo (ou dentro de `apps/web/` se for específico da aplicação web). Adicione as seguintes variáveis (com seus valores corretos):
     ```env
     # Credenciais do Supabase
     NEXT_PUBLIC_SUPABASE_URL=SUA_URL_DO_PROJETO_AQUI
@@ -65,10 +71,10 @@ Para restaurar o projeto em uma máquina nova do zero, siga estes passos:
     # Adicione aqui outras chaves secretas (Stripe, Resend, etc.) que você usar no futuro.
     ```
 
-4.  **Iniciar o Servidor de Desenvolvimento**
-    Após a conclusão dos passos anteriores, a aplicação está pronta para ser executada.
+4.  **Iniciar o Servidor de Desenvolvimento (na raiz do monorepo)**
+    Após a conclusão dos passos anteriores, a aplicação está pronta para ser executada. O comando `pnpm dev` na raiz irá iniciar o servidor de desenvolvimento para a aplicação `apps/web` (que foi configurada para ser o target padrão para `dev`).
     ```bash
-    npm run dev
+    pnpm dev
     ```
     Abra seu navegador em `http://localhost:3000` (ou a porta indicada) e a aplicação deverá estar funcionando perfeitamente.
 
@@ -99,8 +105,8 @@ Para restaurar o projeto em uma máquina nova do zero, siga estes passos:
   SELECT * FROM public.profiles WHERE skills ? 'React';
   ```
 
-## 8. 🏗️ Estrutura Monorepo (atual)
+## 8. 🏗️ Estrutura Monorepo
 
-- O projeto está organizado em `apps/web`, `infra`, `db`, `docs` e `supabase`.
-- Cada app ou serviço tem seu próprio `package.json` e configuração.
+- O projeto está organizado em `apps/web`, `infra`, `db`, `docs` e `supabase` na raiz do monorepo.
+- Cada app ou serviço tem seu próprio `package.json` e configuração (para `apps/web`).
 - Documentação, scripts e exemplos de deploy estão em `docs/` e `infra/`.

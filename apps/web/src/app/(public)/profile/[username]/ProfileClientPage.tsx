@@ -12,9 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from "@/hooks/use-toast";
-import { DigitalBusinessCard } from '@/features/public/digital-business-card';
-import { PortfolioItemModal } from '@/features/public/portfolio-item-modal';
-import { PremiumBannerDisplay } from '@/features/public/premium-banner-display';
+import { DigitalBusinessCard } from '@/features/profile/digital-business-card';
+import { PortfolioItemModal } from '@/features/profile/portfolio-item-modal';
+import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 import { platformIcons } from "@/lib/types";
 // Removidos notFound e getMockUserByUsername, pois são responsabilidades do Server Component
 // import { notFound } from "next/navigation";
@@ -40,6 +40,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
   const [userToDisplay, setUserToDisplay] = useState<UserProfile | null>(initialUserProfile);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [primaryColorHex, setPrimaryColorHex] = useState('008080');
 
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
@@ -109,6 +110,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
       const bgColor = theme === 'dark' ? '1A1A1A' : 'FFFFFF';
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(profileUrl)}&color=${colorForQr}&bgcolor=${bgColor}&format=png&qzone=1`;
       setQrCodeUrl(qrUrl);
+      setPrimaryColorHex(colorForQr);
     }
   }, [userToDisplay, theme]);
 
@@ -122,7 +124,8 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
   }
 
   const commonLayoutProps = {
-    userProfile: userToDisplay,
+    user: userToDisplay,
+    primaryColorHex: primaryColorHex,
     isCurrentUserProfile: authUser?.id === userToDisplay.id,
     qrCodeUrl: qrCodeUrl,
     onPortfolioItemClick: handleOpenPortfolioModal,

@@ -8,10 +8,10 @@ import { mockCurrentUser, mockUserProfiles } from "@/lib/mock-data";
 export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
   const supabase = await createClient();
 
-  // 1. Busca o perfil principal na tabela 'profiles'
+  // 1. Busca o perfil principal na tabela 'profiles', incluindo o profile_snapshot
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*, profile_snapshot') // Incluindo o novo campo snapshot
     .eq('username', username)
     .single();
 
@@ -25,27 +25,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     return null;
   }
 
-  // 2. Busca os dados relacionados em paralelo para otimizar o tempo de carregamento
-  const [
-    { data: socialLinks, error: socialLinksError },
-    { data: services, error: servicesError },
-    { data: portfolioItems, error: portfolioItemsError }
-  ] = await Promise.all([
-    supabase.from('social_links').select('*').eq('profile_id', profile.id),
-    supabase.from('services').select('*').eq('profile_id', profile.id),
-    supabase.from('portfolio_items').select('*').eq('profile_id', profile.id)
-  ]);
-
-  if (socialLinksError || servicesError || portfolioItemsError) {
-    console.error("Erro ao buscar dados relacionados do perfil:", {
-      socialLinksError,
-      servicesError,
-      portfolioItemsError
-    });
-    // Mesmo com erro, podemos retornar o perfil principal, se preferir
-  }
-
-  // 3. Monta o objeto UserProfile final, combinando todos os dados
+  // 2. Monta o objeto UserProfile final, combinando dados do perfil e do snapshot
   const userProfile: UserProfile = {
     id: profile.id,
     username: profile.username,
@@ -61,22 +41,31 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     layoutTemplateId: profile.layout_template_id,
     isAvailable: profile.is_available,
     
-    // Converte os dados JSONB e os dados relacionais para o formato esperado
-    location: profile.location ? JSON.parse(JSON.stringify(profile.location)) : { city: '', country: '' },
-    skills: profile.skills ? JSON.parse(JSON.stringify(profile.skills)) : [],
-    premiumBanner: profile.premium_banner ? JSON.parse(JSON.stringify(profile.premium_banner)) : undefined,
+    // Campos JSONB que ainda existem na tabela profiles (location, skills, premium_banner)
+    location: profile.location || { city: '', country: '' },
+    skills: profile.skills || [],
+    premiumBanner: profile.premium_banner || undefined,
 
-    socialLinks: socialLinks || [],
-    services: services || [],
-    portfolio: portfolioItems || [],
-    
-    // Campos que podem não estar na tabela `profiles` e precisam ser tratados
-    experience: [], // Adicionar busca se criar a tabela 'experience'
-    education: [],  // Adicionar busca se criar a tabela 'education'
-    reviews: [],    // Adicionar busca se criar a tabela 'reviews'
+    // Dados que agora vêm do profile_snapshot
+    socialLinks: (profile.profile_snapshot?.social_links || []) as UserProfile['socialLinks'],
+    services: (profile.profile_snapshot?.services || []) as UserProfile['services'],
+    portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
+    experience: (profile.profile_snapshot?.experience || []) as UserProfile['experience'],
+    education: (profile.profile_snapshot?.education || []) as UserProfile['education'],
+    reviews: (profile.profile_snapshot?.reviews || []) as UserProfile['reviews'],
   };
 
   return userProfile;
+}
+
+export async function refreshProfileSnapshot(profileId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc('refresh_profile_snapshot', { p_profile_id: profileId });
+
+  if (error) {
+    console.error("Erro ao atualizar snapshot do perfil:", error);
+    throw error;
+  }
 }
 
 // Futuramente, você pode adicionar outras funções de serviço aqui, como:

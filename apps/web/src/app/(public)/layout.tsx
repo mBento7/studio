@@ -1,4 +1,4 @@
-import { PublicFooter } from '@/features/public/footer';
+import { PublicFooter } from '@/features/landing/footer';
 
 export default function PublicLayout({
   children,

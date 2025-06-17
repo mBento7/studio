@@ -13,7 +13,7 @@ export interface Service {
 }
 
 export interface PortfolioItem {
-  id: string;
+  id?: string | number;
   imageUrl: string;
   caption?: string;
   description?: string;
@@ -25,7 +25,7 @@ export interface ExperienceItem {
   title: string;
   company: string;
   years: string;
-  description: string;
+  description?: string;
 }
 
 export interface EducationItem {

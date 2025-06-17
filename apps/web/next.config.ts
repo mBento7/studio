@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Adiciona pacotes a serem transpilados para o funcionamento correto do monorepo.
+  // Isso é essencial para que o Next.js processe o código de pacotes fora da pasta 'apps/web',
+  // como os componentes de UI compartilhados em 'packages/ui'.
+  transpilePackages: ["@repo/ui"],
   allowedDevOrigins: [
     "https://3003-firebase-studio-1747088894258.cluster-uf6urqn4lned4spwk4xorq6bpo.cloudworkstations.dev",
   ],

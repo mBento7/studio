@@ -1,0 +1,20 @@
+{
+  "name": "whosdo-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter nextn dev",
+    "build": "pnpm --filter nextn build",
+    "lint": "pnpm --filter nextn lint",
+    "typecheck": "pnpm --filter nextn typecheck",
+    "genkit:dev": "pnpm --filter nextn genkit:dev",
+    "genkit:watch": "pnpm --filter nextn genkit:watch"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "pnpm": "^9.0.0"
+  }
+} 

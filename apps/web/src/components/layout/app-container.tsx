@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { SidebarNav } from '@/features/dashboard/sidebar-nav';
-import { PublicHeader } from '@/features/public/header';
+import { PublicHeader } from '@/features/landing/header';
 import { cn } from '@/lib/utils';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -14,7 +14,7 @@ O objetivo é ter controle total sobre a infraestrutura, otimizar custos e garan
 
 ## 3. 📁 Estrutura de Repositório Recomendada (Monorepo)
 
-Para facilitar o gerenciamento de múltiplos serviços (ex: web, API customizada), a estrutura do projeto pode evoluir para um modelo de monorepo:
+Para facilitar o gerenciamento de múltiplos serviços (ex: web, API customizada), o projeto foi estruturado em um modelo de monorepo:
 
 ```bash
 /
@@ -28,7 +28,7 @@ Para facilitar o gerenciamento de múltiplos serviços (ex: web, API customizada
 │   └── schemas/          # Migrations, policies e schemas do Supabase
 └── docs/                 # Documentação do projeto
 ```
-**Nota:** Esta é uma evolução futura. Atualmente, nosso projeto Next.js ocupa a raiz do repositório.
+**Nota:** Esta estrutura de monorepo já foi implementada no projeto.
 
 ## 4. ⚙️ Configuração da Infraestrutura
 

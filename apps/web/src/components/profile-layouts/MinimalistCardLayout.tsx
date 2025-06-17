@@ -8,6 +8,7 @@ import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrC
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileLayoutProps, platformIcons } from "@/lib/types"; // Importar ProfileLayoutProps e platformIcons
+import { DigitalBusinessCard } from "@/features/profile/digital-business-card"; // Caminho corrigido após refatoração
 
 const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColorHex, isCurrentUserProfile, mounted, toast, qrCodeUrl, onPortfolioItemClick }) => {
   const handleDownloadQrCodeMinimalist = async () => {

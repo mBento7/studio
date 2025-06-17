@@ -7,6 +7,7 @@ import type { UserProfile, PortfolioItem, Service } from "@/lib/types";
 import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrCode, Download, Edit3, MessageSquare, Briefcase, ArrowRight, Loader2, Building, GraduationCap, Star, Palette, Facebook, Twitch, Save, Eye, Link as LinkIcon, Maximize } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { PremiumBannerDisplay } from "@/features/landing/premium-banner-display";
 import { ProfileLayoutProps, platformIcons } from "@/lib/types"; // Importar ProfileLayoutProps e platformIcons
 
 

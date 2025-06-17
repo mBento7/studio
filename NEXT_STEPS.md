@@ -1,25 +1,17 @@
 # Próximos Passos de Produção
 
+Este documento detalha os próximos passos e o roadmap para o desenvolvimento e produção do WhosDo.com. Muitos destes itens foram iniciados ou concluídos durante a reestruturação do projeto.
+
 ## 1. Estrutura de Código
 
-- [ ] **Migrar para Monorepo**: Adotar estrutura sugerida em `/docs/hosting-and-deployment-strategy.md`.
-  ```
-  /
-  ├── apps/
-  │   ├── web/              # Frontend Next.js
-  │   └── backend-api/      # (Opcional) API customizada
-  ├── infra/
-  │   ├── coolify-config/   # Configurações de deploy
-  │   └── scripts/          # Scripts de automação
-  ├── db/
-  │   ├── schemas/          # Migrations e seeds do Supabase
-  │   └── policies/         # Políticas RLS documentadas
-  └── docs/                 # Documentação
-  ```
+- [x] **Migrar para Monorepo**: Adotar estrutura sugerida. **(Concluído)**
+  > O projeto foi migrado para uma estrutura de monorepo na raiz, utilizando `pnpm-workspace.yaml`. As pastas `apps/` e `packages/` foram estabelecidas.
 
-- [ ] **Refatoração por Features**: Iniciar a migração para `src/features/` conforme o plano de refatoração.
+- [x] **Refatoração por Features**: Iniciar a migração para `src/features/` conforme o plano de refatoração. **(Em Andamento/Concluído para `public`)**
+  > A pasta `src/features/public/` foi refatorada e seus conteúdos movidos para `src/features/profile/` e `src/features/landing/`. Novas funcionalidades devem seguir essa abordagem modular.
 
 - [ ] **Camada de Serviços**: Centralizar lógica de acesso a dados em `src/services/`.
+  > `src/services/profile.service.ts` já existe e serve como base. Novas lógicas de negócio devem ser adicionadas ou centralizadas aqui.
 
 ## 2. Infraestrutura
 
@@ -42,7 +34,9 @@
 
 ## 5. Documentação
 
-- [ ] **Atualizar README**: Refletir nova estrutura, processos e políticas de segurança.
+- [x] **Atualizar README**: Refletir nova estrutura, processos e políticas de segurança. **(Concluído)**
+  > O `README.md` na raiz do projeto foi atualizado para refletir a nova estrutura de monorepo e as informações essenciais para o desenvolvimento.
+
 - [ ] **Checklist de Produção**: Manter checklist atualizado conforme evolução do projeto.
 - [ ] **Documentar Políticas e Migrations**: Garantir que toda alteração relevante no banco esteja documentada e versionada.
 

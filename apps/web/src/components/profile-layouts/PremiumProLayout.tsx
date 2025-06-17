@@ -3,6 +3,7 @@
 import React from 'react';
 import { ProfileLayoutProps, Service, PortfolioItem } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 
 const PremiumProLayout: React.FC<ProfileLayoutProps> = ({ user, isCurrentUserProfile, qrCodeUrl, onPortfolioItemClick, toast, mounted }) => {
   return (
