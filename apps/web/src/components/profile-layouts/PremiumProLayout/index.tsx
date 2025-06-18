@@ -5,7 +5,13 @@ import { ProfileLayoutProps, Service, PortfolioItem } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 
-const PremiumProLayout: React.FC<ProfileLayoutProps> = ({ user, isCurrentUserProfile, qrCodeUrl, onPortfolioItemClick, toast, mounted }) => {
+const PremiumProLayout: React.FC<ProfileLayoutProps> = ({ user, isCurrentUserProfile, qrCodeUrl, onPortfolioItemClick, toast, mounted, primaryColorHex }) => {
+  // Fallbacks seguros
+  const services = user.services || [];
+  const portfolio = user.portfolio || [];
+  const socialLinks = user.socialLinks || [];
+  const location = user.location || { city: '', country: '' };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-xl border-purple-300">
@@ -19,9 +25,9 @@ const PremiumProLayout: React.FC<ProfileLayoutProps> = ({ user, isCurrentUserPro
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gray-50 p-4 rounded-md border">
               <h3 className="font-semibold text-lg text-purple-700 mb-2">Serviços Premium</h3>
-              {user.services && user.services.length > 0 ? (
+              {services.length > 0 ? (
                 <ul className="list-disc list-inside text-gray-700">
-                  {user.services.map((service: Service, index: number) => (
+                  {services.map((service: Service, index: number) => (
                     <li key={index}>{service.name}</li>
                   ))}
                 </ul>
@@ -31,9 +37,9 @@ const PremiumProLayout: React.FC<ProfileLayoutProps> = ({ user, isCurrentUserPro
             </div>
             <div className="bg-gray-50 p-4 rounded-md border">
               <h3 className="font-semibold text-lg text-purple-700 mb-2">Portfólio Avançado</h3>
-              {user.portfolio && user.portfolio.length > 0 ? (
+              {portfolio.length > 0 ? (
                 <ul className="list-disc list-inside text-gray-700">
-                  {user.portfolio.map((item: PortfolioItem, index: number) => (
+                  {portfolio.map((item: PortfolioItem, index: number) => (
                     <li key={index}>{item.caption}</li>
                   ))}
                 </ul>

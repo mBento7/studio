@@ -133,4 +133,47 @@ Este documento foi atualizado para refletir o progresso da reestruturação da o
 
 ---
 
+## Editar e Personalizar Layouts de Perfil
+
+### Melhores Práticas
+
+1. **Componentização**  
+   Separe partes reutilizáveis dos layouts em componentes menores (ex: Avatar, Card, Lista de Skills, etc).
+
+2. **Uso de Props e Configurações**  
+   Permita que os layouts recebam props/configurações para customizar cores, fontes, exibição de seções, etc.
+
+3. **Slots/Children**  
+   Utilize `children` ou slots para permitir inserção de conteúdo customizado em pontos estratégicos do layout.
+
+4. **CSS Isolado**  
+   Use módulos CSS, Tailwind ou styled-components para garantir que estilos de um layout não afetem outros.
+
+5. **Hooks e Utilitários**  
+   Crie hooks para lógica compartilhada (ex: formatação de dados, manipulação de preferências do usuário).
+
+6. **Storybook e Documentação**  
+   Utilize Storybook para visualizar e documentar variações dos layouts, facilitando testes e customizações.
+
+7. **Tipagem e Validação**  
+   Defina tipos claros para as props dos layouts, garantindo robustez e facilitando manutenção.
+
+8. **Fallbacks Seguros**  
+   Sempre trate campos opcionais ou ausentes (ex: arrays vazios, objetos undefined) para evitar erros de runtime.
+
+9. **Persistência de Preferências**  
+   Salve as escolhas de layout/configuração do usuário no banco de dados ou localStorage para personalização persistente.
+
+### Recomendações Gerais
+- Mantenha os layouts desacoplados da lógica de dados sempre que possível.
+- Documente claramente quais props/configurações cada layout aceita.
+- Permita fácil adição de novos layouts seguindo o padrão estabelecido.
+- Considere internacionalização (i18n) para textos e labels dos layouts.
+
+---
+
+Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenção na personalização dos layouts de perfil.
+
+---
+
 > Criado por Micael Bento | Estrutura recomendada por ChatGPT (OpenAI) 

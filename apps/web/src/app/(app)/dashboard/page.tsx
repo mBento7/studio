@@ -88,17 +88,17 @@ export default function EditProfilePage() {
             ...data,
             // Mapear campos do Supabase para o formato do formulário, se necessário
             // Por exemplo, 'full_name' do Supabase para 'fullName' do formulário
-            fullName: data.full_name, // Supondo que o Supabase retorna 'full_name'
+            name: data.full_name, // Mapeia full_name do Supabase para name do formulário
             isAvailable: data.is_available,
             profilePictureUrl: data.profile_picture_url,
             coverPhotoUrl: data.cover_photo_url,
             whatsappNumber: data.whatsapp_number,
-            socialLinks: data.social_links || [],
-            services: data.services || [],
-            portfolio: data.portfolio_items || [],
-            experience: data.experience || [],
-            education: data.education || [],
-            reviews: data.reviews || [],
+            socialLinks: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
+            services: data.services?.map((service: any) => ({ ...service, id: String(service.id) })) || [],
+            portfolio: data.portfolio_items?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+            experience: data.experience?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+            education: data.education?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+            reviews: data.reviews?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
             skills: data.skills ?? [], // Garante que skills é sempre um array
           } as UserProfile);
         }
@@ -114,10 +114,10 @@ export default function EditProfilePage() {
     setIsLoading(true);
     try {
       // Mapear de volta para o formato do Supabase, se necessário
-      const { fullName, isAvailable, profilePictureUrl, coverPhotoUrl, whatsappNumber, socialLinks, services, portfolio, experience, education, reviews, ...rest } = data;
+      const { name, isAvailable, profilePictureUrl, coverPhotoUrl, whatsappNumber, socialLinks, services, portfolio, experience, education, reviews, ...rest } = data;
       const updateData = {
         ...rest,
-        full_name: fullName,
+        full_name: name, // Mapeia name do formulário para full_name do Supabase
         is_available: isAvailable,
         profile_picture_url: profilePictureUrl,
         cover_photo_url: coverPhotoUrl,
@@ -154,12 +154,14 @@ export default function EditProfilePage() {
         description: "Suas informações foram salvas com sucesso.",
       });
     } catch (error) {
-      console.error("Erro ao salvar perfil:", error);
+      console.error("Erro ao salvar perfil:", JSON.stringify(error, null, 2));
       let errorMessage = "Ocorreu um erro ao salvar seu perfil.";
       if (error instanceof ZodError) {
         errorMessage = "Verifique os campos do formulário: " + error.errors.map(e => e.message).join(", ");
       } else if (error instanceof Error) {
         errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage = JSON.stringify(error);
       }
       toast({
         title: "Erro ao salvar perfil",

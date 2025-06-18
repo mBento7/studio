@@ -7,10 +7,19 @@ import type { UserProfile, PortfolioItem } from "@/lib/types";
 import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrCode, Download, Edit3, MessageSquare, Briefcase, ArrowRight, Loader2, Building, GraduationCap, Star, Palette, Facebook, Twitch, Save, Eye, Link as LinkIcon, Maximize } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ProfileLayoutProps, platformIcons } from "@/lib/types"; // Importar ProfileLayoutProps e platformIcons
-import { DigitalBusinessCard } from "@/features/profile/digital-business-card"; // Caminho corrigido após refatoração
+import { ProfileLayoutProps, platformIcons } from "@/lib/types";
+import { DigitalBusinessCard } from "@/features/profile/digital-business-card";
 
 const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColorHex, isCurrentUserProfile, mounted, toast, qrCodeUrl, onPortfolioItemClick }) => {
+  // Fallbacks seguros
+  const skills = user.skills || [];
+  const experience = user.experience || [];
+  const education = user.education || [];
+  const portfolio = user.portfolio || [];
+  const services = user.services || [];
+  const socialLinks = user.socialLinks || [];
+  const location = user.location || { city: '', country: '' };
+
   const handleDownloadQrCodeMinimalist = async () => {
     if (!user || !primaryColorHex) return;
     const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${user.username}` : `https://idbox.site/profile/${user.username}`;
@@ -72,9 +81,9 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
             {user.bio}
           </p>
 
-          {user.socialLinks && user.socialLinks.length > 0 && (
+          {socialLinks.length > 0 && (
             <div className="flex justify-center flex-wrap gap-3 mb-6">
-              {user.socialLinks.map(link => {
+              {socialLinks.map(link => {
                 const IconComponent = platformIcons[link.platform] || Globe;
                 return (
                   <Button key={link.id} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary rounded-full w-10 h-10 hover:bg-primary/10">
@@ -87,11 +96,11 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
             </div>
           )}
 
-          {user.portfolio && user.portfolio.length > 0 && (
+          {portfolio.length > 0 && (
              <div className="mb-6">
                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Alguns trabalhos:</h3>
                   <div className="flex justify-center flex-wrap gap-2">
-                    {user.portfolio.slice(0, 3).map(item => (
+                    {portfolio.slice(0, 3).map(item => (
                       <div key={item.id} className="w-16 h-16 rounded-md overflow-hidden border shadow-sm cursor-pointer group relative" onClick={() => onPortfolioItemClick(item)}>
                         <Image src={item.imageUrl} alt={item.caption || 'Portfólio'} fill style={{objectFit: 'cover'}} data-ai-hint={item.dataAiHint || 'thumbnail project'} />
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -180,4 +189,4 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
   );
 };
 
-export default MinimalistCardLayout;
+export default MinimalistCardLayout; 

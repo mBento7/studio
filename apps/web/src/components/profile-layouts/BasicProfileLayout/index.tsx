@@ -1,11 +1,10 @@
 "use client";
 
 import React from 'react';
-// Removidos Button, Card, CardContent, CardHeader, CardTitle se não forem usados diretamente aqui
 import type { UserProfile, PortfolioItem } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { cn } from "@/lib/utils"; // Importar cn
+import { cn } from "@/lib/utils";
 import { platformIcons } from "@/lib/types";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,11 +16,11 @@ interface BasicProfileLayoutProps {
   isCurrentUserProfile: boolean;
   qrCodeUrl: string | null;
   onPortfolioItemClick: (item: PortfolioItem) => void;
-  toast: any; // Adicionado para compatibilidade, idealmente tipar melhor
+  toast: any;
   mounted: boolean;
 }
 
-export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
+const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
   user,
   isCurrentUserProfile,
   qrCodeUrl,
@@ -29,6 +28,15 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
   toast,
   mounted,
 }) => {
+  // Fallbacks seguros
+  const skills = user.skills || [];
+  const experience = user.experience || [];
+  const education = user.education || [];
+  const portfolio = user.portfolio || [];
+  const services = user.services || [];
+  const socialLinks = user.socialLinks || [];
+  const location = user.location || { city: '', country: '' };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
@@ -56,16 +64,16 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
                 <Phone className="w-5 h-5" />
               </a>
             )}
-            {user.location?.city && user.location?.country && (
+            {location.city && location.country && (
               <span className="text-gray-500 flex items-center">
-                <MapPin className="w-5 h-5 mr-1" /> {user.location.city}, {user.location.country}
+                <MapPin className="w-5 h-5 mr-1" /> {location.city}, {location.country}
               </span>
             )}
           </div>
 
-          {user.socialLinks && user.socialLinks.length > 0 && (
+          {socialLinks.length > 0 && (
             <div className="flex justify-center flex-wrap gap-3 mb-6">
-              {user.socialLinks.map(link => {
+              {socialLinks.map(link => {
                 const IconComponent = platformIcons[link.platform as keyof typeof platformIcons] || Globe;
                 return (
                   <Button key={link.id} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary rounded-full w-8 h-8 hover:bg-primary/10">
@@ -80,9 +88,9 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
 
           <div className="text-gray-700 text-sm w-full text-left mt-4">
             <h2 className="text-lg font-semibold mb-2">Serviços</h2>
-            {user.services && user.services.length > 0 ? (
+            {services.length > 0 ? (
               <ul className="list-disc list-inside mb-4 pl-4">
-                {user.services.map((service, index) => (
+                {services.map((service, index) => (
                   <li key={index}>{service.name} - {service.description}</li>
                 ))}
               </ul>
@@ -91,9 +99,9 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
             )}
 
             <h2 className="text-lg font-semibold mb-2">Portfólio</h2>
-            {user.portfolio && user.portfolio.length > 0 ? (
+            {portfolio.length > 0 ? (
               <div className="grid grid-cols-2 gap-2 mb-4">
-                {user.portfolio.slice(0, 4).map((item, index) => (
+                {portfolio.slice(0, 4).map((item, index) => (
                   <div key={index} className="relative w-full h-24 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center cursor-pointer" onClick={() => onPortfolioItemClick(item)}>
                     <Image src={item.imageUrl} alt={item.caption || 'Portfólio'} layout="fill" objectFit="cover" />
                     <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -107,9 +115,9 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
             )}
 
             <h2 className="text-lg font-semibold mb-2">Experiência</h2>
-            {user.experience && user.experience.length > 0 ? (
+            {experience.length > 0 ? (
               <ul className="list-disc list-inside mb-4 pl-4">
-                {user.experience.map((exp, index) => (
+                {experience.map((exp, index) => (
                   <li key={index}><strong>{exp.title}</strong> em {exp.company} ({exp.years})</li>
                 ))}
               </ul>
@@ -118,9 +126,9 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
             )}
 
             <h2 className="text-lg font-semibold mb-2">Educação</h2>
-            {user.education && user.education.length > 0 ? (
+            {education.length > 0 ? (
               <ul className="list-disc list-inside mb-4 pl-4">
-                {user.education.map((edu, index) => (
+                {education.map((edu, index) => (
                   <li key={index}><strong>{edu.degree}</strong> de {edu.institution} ({edu.years})</li>
                 ))}
               </ul>
@@ -145,4 +153,6 @@ export const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
       </div>
     </div>
   );
-}; 
+};
+
+export default BasicProfileLayout; 

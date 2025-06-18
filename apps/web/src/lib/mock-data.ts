@@ -13,13 +13,21 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'github', url: 'https://github.com/joaofree' }
     ],
     location: { city: 'São Paulo', country: 'BR' },
-    services: [],
-    portfolio: [],
+    services: [
+      { id: 's1', name: 'Landing Page Simples', description: 'Criação de landing pages para pequenos negócios.' }
+    ],
+    portfolio: [
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/portfree1/400/300', caption: 'Landing Page Loja X', description: 'Página de apresentação para loja local.' }
+    ],
     skills: ['HTML', 'CSS'],
-    experience: [],
-    education: [],
+    experience: [
+      { id: 'e1', title: 'Freelancer Web', company: 'Autônomo', years: '2023', description: 'Pequenos projetos de sites estáticos.' }
+    ],
+    education: [
+      { id: 'ed1', degree: 'Ensino Médio Completo', institution: 'Escola Estadual', years: '2018 - 2020' }
+    ],
     category: 'Desenvolvedor',
-    layoutTemplateId: 'minimalist',
+    layoutTemplateId: 'minimalist-card',
     plan: 'free',
     isAvailable: true,
     isProfileComplete: true,
@@ -37,16 +45,20 @@ export const mockUserProfiles: UserProfile[] = [
     ],
     location: { city: 'Rio de Janeiro', country: 'BR' },
     services: [
-      { id: 's1', name: 'Consultoria de UX', description: 'Orientação para melhoria da experiência do usuário.' },
-      { id: 's2', name: 'Design de Interfaces', description: 'Criação de interfaces intuitivas e atraentes.' },
+      { id: 's2', name: 'Consultoria de UX', description: 'Orientação para melhoria da experiência do usuário.' },
+      { id: 's3', name: 'Design de Interfaces', description: 'Criação de interfaces intuitivas e atraentes.' },
     ],
     portfolio: [
-      { id: 'p1', imageUrl: 'https://picsum.photos/seed/proj1/400/300', caption: 'Redesign de E-commerce', description: 'Projeto completo de reestruturação visual e de usabilidade.' },
-      { id: 'p2', imageUrl: 'https://picsum.photos/seed/proj2/400/300', caption: 'App de Produtividade', description: 'Desenvolvimento do fluxo de usuário e prototipagem.' },
+      { id: 'p2', imageUrl: 'https://picsum.photos/seed/proj2/400/300', caption: 'Redesign de E-commerce', description: 'Projeto completo de reestruturação visual e de usabilidade.' },
+      { id: 'p3', imageUrl: 'https://picsum.photos/seed/proj3/400/300', caption: 'App de Produtividade', description: 'Desenvolvimento do fluxo de usuário e prototipagem.' },
     ],
     skills: ['UX Design', 'UI Design', 'Figma', 'Prototipagem'],
-    experience: [],
-    education: [],
+    experience: [
+      { id: 'e2', title: 'Designer Júnior', company: 'Agência Criativa', years: '2022 - 2023', description: 'Atendimento a clientes e criação de wireframes.' }
+    ],
+    education: [
+      { id: 'ed2', degree: 'Tecnólogo em Design Gráfico', institution: 'IFRJ', years: '2020 - 2022' }
+    ],
     category: 'Designer',
     layoutTemplateId: 'modern',
     plan: 'standard',
@@ -67,23 +79,23 @@ export const mockUserProfiles: UserProfile[] = [
     ],
     location: { city: 'Belo Horizonte', country: 'BR', address: 'Av. Principal, 123' },
     services: [
-      { id: 's3', name: 'Desenvolvimento Mobile (iOS/Android)', description: 'Criação de aplicativos nativos de alta performance.' },
-      { id: 's4', name: 'Consultoria de Arquitetura', description: 'Definição de arquitetura escalável para projetos.' },
-      { id: 's5', name: 'Workshops de React Native', description: 'Treinamentos personalizados para equipes de desenvolvimento.' },
+      { id: 's4', name: 'Desenvolvimento Mobile (iOS/Android)', description: 'Criação de aplicativos nativos de alta performance.' },
+      { id: 's5', name: 'Consultoria de Arquitetura', description: 'Definição de arquitetura escalável para projetos.' },
+      { id: 's6', name: 'Workshops de React Native', description: 'Treinamentos personalizados para equipes de desenvolvimento.' },
     ],
     portfolio: [
-      { id: 'p3', imageUrl: 'https://picsum.photos/seed/proj3/400/300', caption: 'Plataforma EAD Completa', description: 'Sistema educacional com funcionalidades de vídeo, quiz e acompanhamento.' },
-      { id: 'p4', imageUrl: 'https://picsum.photos/seed/proj4/400/300', caption: 'App de Fintech', description: 'Aplicativo financeiro com integração bancária e segurança de ponta.' },
-      { id: 'p5', imageUrl: 'https://picsum.photos/seed/proj5/400/300', caption: 'Game Mobile 3D', description: 'Desenvolvimento de jogo com gráficos avançados e jogabilidade imersiva.' },
+      { id: 'p4', imageUrl: 'https://picsum.photos/seed/proj4/400/300', caption: 'Plataforma EAD Completa', description: 'Sistema educacional com funcionalidades de vídeo, quiz e acompanhamento.' },
+      { id: 'p5', imageUrl: 'https://picsum.photos/seed/proj5/400/300', caption: 'App de Fintech', description: 'Aplicativo financeiro com integração bancária e segurança de ponta.' },
+      { id: 'p6', imageUrl: 'https://picsum.photos/seed/proj6/400/300', caption: 'Game Mobile 3D', description: 'Desenvolvimento de jogo com gráficos avançados e jogabilidade imersiva.' },
     ],
     skills: ['React Native', 'Flutter', 'Node.js', 'AWS', 'CI/CD'],
     experience: [
-      { id: 'e1', title: 'Engenheiro de Software Sênior', company: 'Tech Solutions', years: '2020 - Atualmente', description: 'Liderança de equipes, desenvolvimento de arquiteturas e otimização de sistemas.' },
-      { id: 'e2', title: 'Desenvolvedor Mobile Pleno', company: 'App Innovators', years: '2018 - 2020', description: 'Criação e manutenção de aplicativos mobile para clientes diversos.' },
+      { id: 'e3', title: 'Engenheiro de Software Sênior', company: 'Tech Solutions', years: '2020 - Atualmente', description: 'Liderança de equipes, desenvolvimento de arquiteturas e otimização de sistemas.' },
+      { id: 'e4', title: 'Desenvolvedor Mobile Pleno', company: 'App Innovators', years: '2018 - 2020', description: 'Criação e manutenção de aplicativos mobile para clientes diversos.' },
     ],
     education: [
-      { id: 'ed1', degree: 'Mestrado em Engenharia de Software', institution: 'Universidade Federal', years: '2023 - 2025' },
-      { id: 'ed2', degree: 'Bacharelado em Ciência da Computação', institution: 'Universidade Estadual', years: '2014 - 2018' },
+      { id: 'ed3', degree: 'Mestrado em Engenharia de Software', institution: 'Universidade Federal', years: '2023 - 2025' },
+      { id: 'ed4', degree: 'Bacharelado em Ciência da Computação', institution: 'Universidade Estadual', years: '2014 - 2018' },
     ],
     category: 'Mobile',
     layoutTemplateId: 'advanced',
@@ -104,16 +116,20 @@ export const mockUserProfiles: UserProfile[] = [
     ],
     location: { city: 'Salvador', country: 'BR' },
     services: [
-      { id: 's6', name: 'Design de Logo', description: 'Criação de identidade visual.' },
-      { id: 's7', name: 'Ilustração Digital', description: 'Serviços de ilustração personalizada.' },
+      { id: 's7', name: 'Design de Logo', description: 'Criação de identidade visual.' },
+      { id: 's8', name: 'Ilustração Digital', description: 'Serviços de ilustração personalizada.' },
     ],
     portfolio: [
-      { id: 'p6', imageUrl: 'https://picsum.photos/seed/proj6/400/300', caption: 'Identidade Visual Marca X', description: 'Desenvolvimento completo de identidade visual.' },
-      { id: 'p7', imageUrl: 'https://picsum.photos/seed/proj7/400/300', caption: 'Campanha Publicitária Y', description: 'Criação de artes para campanha digital.' },
+      { id: 'p7', imageUrl: 'https://picsum.photos/seed/proj7/400/300', caption: 'Identidade Visual Marca X', description: 'Desenvolvimento completo de identidade visual.' },
+      { id: 'p8', imageUrl: 'https://picsum.photos/seed/proj8/400/300', caption: 'Campanha Publicitária Y', description: 'Criação de artes para campanha digital.' },
     ],
     skills: ['Design Gráfico', 'Illustrator', 'Photoshop'],
-    experience: [],
-    education: [],
+    experience: [
+      { id: 'e5', title: 'Designer Freelancer', company: 'Autônoma', years: '2021 - Atualmente', description: 'Projetos de branding e ilustração.' }
+    ],
+    education: [
+      { id: 'ed5', degree: 'Bacharel em Design', institution: 'UFBA', years: '2017 - 2021' }
+    ],
     category: 'Designer',
     layoutTemplateId: 'portfolio-focus',
     plan: 'standard',
@@ -134,19 +150,19 @@ export const mockUserProfiles: UserProfile[] = [
     ],
     location: { city: 'Porto Alegre', country: 'BR' },
     services: [
-      { id: 's8', name: 'Consultoria de SEO', description: 'Otimização para motores de busca.' },
-      { id: 's9', name: 'Gestão de Tráfego Pago', description: 'Campanhas de anúncios online.' },
+      { id: 's9', name: 'Consultoria de SEO', description: 'Otimização para motores de busca.' },
+      { id: 's10', name: 'Gestão de Tráfego Pago', description: 'Campanhas de anúncios online.' },
     ],
     portfolio: [
-      { id: 'p8', imageUrl: 'https://picsum.photos/seed/proj8/400/300', caption: 'Estratégia de Conteúdo X', description: 'Planejamento e execução de conteúdo.' },
-      { id: 'p9', imageUrl: 'https://picsum.photos/seed/proj9/400/300', caption: 'Campanha de Leads Y', description: 'Otimização de funis de vendas.' },
+      { id: 'p9', imageUrl: 'https://picsum.photos/seed/proj9/400/300', caption: 'Estratégia de Conteúdo X', description: 'Planejamento e execução de conteúdo.' },
+      { id: 'p10', imageUrl: 'https://picsum.photos/seed/proj10/400/300', caption: 'Campanha de Leads Y', description: 'Otimização de funis de vendas.' },
     ],
     skills: ['SEO', 'Google Ads', 'Facebook Ads', 'Marketing Digital'],
     experience: [
-      { id: 'e3', title: 'Head de Marketing', company: 'Digital Solutions', years: '2021 - Atualmente', description: 'Liderança e estratégia de marketing digital.' },
+      { id: 'e6', title: 'Head de Marketing', company: 'Digital Solutions', years: '2021 - Atualmente', description: 'Liderança e estratégia de marketing digital.' },
     ],
     education: [
-      { id: 'ed3', degree: 'Pós-graduação em Marketing', institution: 'FGV', years: '2019 - 2020' },
+      { id: 'ed6', degree: 'Pós-graduação em Marketing', institution: 'FGV', years: '2019 - 2020' },
     ],
     category: 'Marketing',
     layoutTemplateId: 'premium-pro',

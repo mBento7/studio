@@ -21,9 +21,9 @@ import { platformIcons } from "@/lib/types";
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
 
 // Componentes de layout de perfil
-import { BasicProfileLayout } from "@/components/profile-layouts/BasicProfileLayout";
-import { ModernProfileLayout } from "@/components/profile-layouts/ModernProfileLayout";
-import { AdvancedProfileLayout } from "@/components/profile-layouts/AdvancedProfileLayout";
+import BasicProfileLayout from "@/components/profile-layouts/BasicProfileLayout";
+import ModernProfileLayout from "@/components/profile-layouts/ModernProfileLayout";
+import AdvancedProfileLayout from "@/components/profile-layouts/AdvancedProfileLayout";
 import MinimalistCardLayout from "@/components/profile-layouts/MinimalistCardLayout";
 import PortfolioFocusLayout from "@/components/profile-layouts/PortfolioFocusLayout";
 import PremiumProLayout from "@/components/profile-layouts/PremiumProLayout";
