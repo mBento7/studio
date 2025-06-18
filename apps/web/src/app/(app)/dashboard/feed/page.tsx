@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import SearchShowcase, { SearchBannerCarousel } from '../../../search/SearchShowcase';
 
 // Mock data
 const stories = [
@@ -140,22 +141,6 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
   );
 }
 
-function PublicHeader() {
-  return (
-    <header className="sticky top-0 z-20 backdrop-blur-sm bg-background/70 px-6 py-3 flex items-center justify-between shadow-md">
-      <h1 className="text-3xl font-extrabold tracking-tight text-primary drop-shadow-sm">WhosDo</h1>
-      <div className="relative w-1/3">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Buscar serviços..."
-          className="w-full pl-10 pr-4 py-2 rounded-full bg-white/30 text-foreground placeholder-muted-foreground focus:bg-white/50 transition shadow-sm border border-border"
-        />
-      </div>
-    </header>
-  );
-}
-
 function StoriesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
     const storiesPerView = 7;
@@ -170,80 +155,33 @@ function StoriesCarousel() {
   };
 
   return (
-    <section className="px-6">
-      <div className="p-6 space-y-6 bg-card/50 backdrop-blur-sm rounded-2xl border">
-                        <h2 className="text-lg font-bold text-foreground">Destaques 24h</h2>
+    <section className="px-4">
+      <div className="p-4 space-y-4 bg-card/50 backdrop-blur-sm rounded-2xl border">
+        <h2 className="text-lg font-bold text-foreground mb-2">Destaques 24h</h2>
         <div className="relative">
-          {/* Left Arrow */}
-          <button
-            onClick={scrollLeft}
-            disabled={currentIndex === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/80 hover:bg-background rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-110"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-                              {/* Stories Container */}
-          <div className="overflow-hidden px-12 py-12">
-                        <div 
-              className="flex space-x-6 transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * (96 + 24)}px)` }}
+          {/* Carrossel ajustado */}
+          <div className="overflow-hidden px-8 py-4">
+            <div 
+              className="flex space-x-4 transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${0})` }}
             >
               {stories.map((s) => (
                 <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer">
-                  <div className="relative w-24 h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50">
-                    {/* Circular progress indicator */}
-                    <svg className="absolute inset-0 w-24 h-24 -rotate-90 group-hover:animate-pulse">
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="46"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        fill="none"
-                        className="text-muted-foreground/30"
-                      />
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="46"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        fill="none"
-                        strokeDasharray={`${2 * Math.PI * 46}`}
-                        strokeDashoffset={`${2 * Math.PI * 46 * (1 - s.timeLeft / 100)}`}
-                        className="text-primary transition-all duration-300 group-hover:text-primary/80"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    
+                  <div className="relative w-20 h-20 rounded-full transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-primary/50">
                     {/* Avatar container */}
-                    <div className="absolute inset-2 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
+                    <div className="absolute inset-1 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
                       <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
                     </div>
-                    
-                                        {/* Time indicator */}
-                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
+                    {/* Time indicator */}
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
                       {Math.floor(s.timeLeft / 100 * 24)}h
                     </div>
-                    
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
                   </div>
-                  <p className="mt-3 text-sm text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+                  <p className="mt-2 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Right Arrow */}
-          <button
-            onClick={scrollRight}
-            disabled={currentIndex >= maxIndex}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/80 hover:bg-background rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-110"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
         </div>
       </div>
     </section>
@@ -341,28 +279,16 @@ function SocialCard({ item }: { item: any }) {
   );
 }
 
-function FeedContent() {
+function FeedContent({ activeTab, setActiveTab }: { activeTab: 'trending'|'new'|'recommended', setActiveTab: (tab: 'trending'|'new'|'recommended') => void }) {
   const tabs = [
     { key: 'trending', label: 'Em Alta', icon: Flame },
     { key: 'new', label: 'Novidades', icon: Sparkles },
     { key: 'recommended', label: 'Recomendados', icon: Handshake },
   ];
-  const [activeTab, setActiveTab] = useState<'trending'|'new'|'recommended'>('trending');
-
+  // Os tabs agora são controlados externamente
   return (
     <section className="space-y-8">
-      <div className="flex space-x-3 mb-2">
-        {tabs.map((t) => (
-          <TabButton
-            key={t.key}
-            icon={t.icon}
-            label={t.label}
-            active={activeTab === t.key}
-            onClick={() => setActiveTab(t.key as 'trending'|'new'|'recommended')}
-          />
-        ))}
-      </div>
-
+      {/* Os tabs foram movidos para a barra principal */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {feedItems[activeTab].map((item) => (
           <SocialCard key={item.id} item={item} />
@@ -613,27 +539,145 @@ function CouponsWidget() {
 }
 
 export default function FeedPage() {
+  const [tab, setTab] = useState<'feed' | 'search'>('feed');
+  const [activeFeedTab, setActiveFeedTab] = useState<'trending'|'new'|'recommended'>('trending');
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+
+  // Definição dos botões principais
+  const mainTabs = [
+    { key: 'feed', label: 'Em Alta', icon: Flame },
+    { key: 'search', label: 'Buscar Profissionais', icon: Search },
+  ];
+
+  // Definição dos tabs internos do feed (remover 'Em Alta')
+  const feedTabs = [
+    { key: 'new', label: 'Novidades', icon: Sparkles },
+    { key: 'recommended', label: 'Recomendados', icon: Handshake },
+  ];
+
+  // Array de banners mockados para o carrossel
+  const searchBanners = [
+    { id: 1, image: 'https://placehold.co/600x200/2563eb/fff?text=Oferta+Especial+20%25+OFF', link: '/promo', type: 'promo', title: 'Oferta Especial: 20% OFF!' },
+    { id: 2, image: 'https://placehold.co/600x200/facc15/222?text=TechSolutions+Apps+sob+medida', link: '/profile/techsolutions', type: 'patrocinado', title: 'TechSolutions - Apps sob medida' },
+    { id: 3, image: 'https://placehold.co/600x200/22d3ee/222?text=Ganhe+créditos+indicando+amigos!', link: '/creditos', type: 'institucional', title: 'Ganhe créditos indicando amigos!' },
+    { id: 4, image: 'https://placehold.co/600x200/6366f1/fff?text=WhosDo.com+Conecte-se+e+conquiste+clientes', link: 'https://whosdo.com', type: 'institucional', title: 'WhosDo.com: Conecte-se, destaque-se e conquiste mais clientes! Descubra todos os benefícios.' },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto py-8 space-y-8">
-        <PublicHeader />
-        <StoriesCarousel />
-        <div className="grid lg:grid-cols-4 gap-8 px-6">
-          <div className="lg:col-span-3 space-y-8">
-            <FeedContent />
+      <div className="max-w-7xl mx-auto pt-2 pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-6 items-start">
+          {/* Coluna principal */}
+          <div className="flex flex-col min-w-0">
+            {/* Exibir banner só quando busca estiver ativa */}
+            {tab === 'search' && (
+              <div className="px-2 mb-3">
+                <SearchBannerCarousel banners={searchBanners} />
+              </div>
+            )}
+            {/* Botões de navegação e tabs - sempre no topo */}
+            <div className="flex flex-wrap gap-1 mb-4 px-2">
+              {mainTabs.map((t) => (
+                <button
+                  key={t.key}
+                  onClick={() => setTab(t.key as 'feed'|'search')}
+                  className={cn(
+                    'flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm transition shadow-sm',
+                    tab === t.key
+                      ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                      : 'bg-background/70 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:scale-105',
+                    'transition-all duration-200'
+                  )}
+                  style={{ boxShadow: tab === t.key ? '0 2px 8px 0 rgba(0,0,0,0.10)' : undefined }}
+                >
+                  <t.icon className="w-4 h-4" />
+                  {t.label}
+                </button>
+              ))}
+              <div className="flex gap-1 ml-2">
+                {feedTabs.map((t) => (
+                  <button
+                    key={t.key}
+                    onClick={() => setActiveFeedTab(t.key as 'new'|'recommended')}
+                    className={cn(
+                      'flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm transition shadow-sm',
+                      activeFeedTab === t.key
+                        ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                        : 'bg-background/70 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:scale-105',
+                      'transition-all duration-200'
+                    )}
+                    style={{ boxShadow: activeFeedTab === t.key ? '0 2px 8px 0 rgba(0,0,0,0.10)' : undefined }}
+                  >
+                    <t.icon className="w-4 h-4" />
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {/* Mostrar stories só quando não está em busca */}
+            {tab === 'feed' && (
+              <section className="px-2">
+                <div className="p-2 space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0">
+                  <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
+                  <div className="relative">
+                    <div className="overflow-hidden px-4 py-2">
+                      <div 
+                        className="flex space-x-5 transition-transform duration-500 ease-in-out"
+                        style={{ transform: `translateX(-${0})` }}
+                      >
+                        {stories.map((s) => (
+                          <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer">
+                            <div className="relative w-24 h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50">
+                              <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
+                                <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
+                                {Math.floor(s.timeLeft / 100 * 24)}h
+                              </div>
+                            </div>
+                            <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Conteúdo do feed */}
+                <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-3 mt-4 transition-colors duration-200">
+                  <FeedContent activeTab={activeFeedTab} setActiveTab={setActiveFeedTab} />
+                </div>
+              </section>
+            )}
+            {tab === 'search' && (
+              <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-3 mt-4 transition-colors duration-200">
+                <SearchShowcase />
+              </div>
+            )}
           </div>
-                              <div className="space-y-6">
-            <UserAdExample />
-            <PremiumAdCard />
-            <QuickActions onCouponClick={() => setIsCouponModalOpen(true)} />
-            <ActivityStats />
-            <TrendingHashtags />
-            <UserSuggestions />
-            <TrendingAds />
-            <CouponsWidget />
+          {/* Coluna da direita fixa e mais estreita */}
+          <div className="hidden lg:block relative min-w-[12rem] max-w-[16rem] w-full">
+            <div className="sticky top-16 flex flex-col gap-4">
+              <UserAdExample />
+              <PremiumAdCard />
+              <QuickActions onCouponClick={() => setIsCouponModalOpen(true)} />
+              <ActivityStats />
+              <TrendingHashtags />
+              <UserSuggestions />
+              <TrendingAds />
+              <CouponsWidget />
+            </div>
           </div>
+        </div>
+        {/* Mobile: widgets abaixo do feed */}
+        <div className="lg:hidden flex flex-col gap-4 mt-6">
+          <UserAdExample />
+          <PremiumAdCard />
+          <QuickActions onCouponClick={() => setIsCouponModalOpen(true)} />
+          <ActivityStats />
+          <TrendingHashtags />
+          <UserSuggestions />
+          <TrendingAds />
+          <CouponsWidget />
         </div>
         <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setIsCouponModalOpen} />
       </div>

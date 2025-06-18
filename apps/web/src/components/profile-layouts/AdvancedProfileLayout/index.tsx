@@ -12,6 +12,21 @@ import { useToast } from "@/hooks/use-toast";
 import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 import { Badge } from "@/components/ui/badge";
 
+/*
+ * AdvancedProfileLayout
+ *
+ * Plano: premium
+ * Gatilho: user.plan === 'premium' && (user.layoutTemplateId === 'advanced' || !user.layoutTemplateId)
+ *
+ * Itens/Seções liberados:
+ * - Todas as funcionalidades do plano standard
+ * - Maior quantidade de Serviços e Portfólio
+ * - Integração com YouTube/Vídeos
+ * - Banner personalizado
+ * - Recursos de cupons avançados
+ * - Funcionalidade de Stories
+ */
+
 interface AdvancedProfileLayoutProps {
   user: UserProfile;
   isCurrentUserProfile: boolean;
@@ -80,9 +95,68 @@ const AdvancedProfileLayout: React.FC<AdvancedProfileLayoutProps> = ({
     <div className="bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
         <Card className="shadow-2xl border-primary/20">
-          <CardHeader className="bg-gradient-to-r from-blue-700 to-purple-700 text-white p-8 rounded-t-lg">
-            <CardTitle className="text-4xl font-bold">{user.name}</CardTitle>
-            <p className="text-blue-100 text-lg mt-2">{user.category}</p>
+          <CardHeader className="bg-gradient-to-r from-blue-700 to-purple-700 text-white p-8 rounded-t-lg relative overflow-hidden">
+            {/* Capa */}
+            {user.coverPhotoUrl && (
+              <img src={user.coverPhotoUrl} alt="Capa do perfil" className="absolute inset-0 w-full h-40 object-cover opacity-60" style={{zIndex:1}} />
+            )}
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center md:gap-8">
+              {/* Foto de perfil */}
+              <div className="flex-shrink-0 -mt-20 md:mt-0">
+                <img
+                  src={user.profilePictureUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'}
+                  alt={user.name}
+                  className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover bg-white"
+                />
+              </div>
+              <div>
+                <CardTitle className="text-4xl font-bold drop-shadow-sm">{user.name}</CardTitle>
+                <p className="text-blue-100 text-lg mt-2">{user.category}</p>
+                <p className="text-base text-blue-50 mt-2 whitespace-pre-line">{user.bio}</p>
+                {/* Localização */}
+                {user.location?.city && (
+                  <p className="text-xs mt-2 flex items-center gap-1 text-blue-100">
+                    <span className="inline-block w-2 h-2 bg-green-400 rounded-full" />
+                    {user.location.city}{user.location.state ? `, ${user.location.state}` : ''} - {user.location.country}
+                  </p>
+                )}
+                {/* Contatos */}
+                <div className="flex flex-wrap gap-3 mt-3">
+                  {user.email && (
+                    <a href={`mailto:${user.email}`} className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">{user.email}</a>
+                  )}
+                  {user.phone && (
+                    <a href={`tel:${user.phone}`} className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">{user.phone}</a>
+                  )}
+                  {user.whatsappNumber && (
+                    <a href={`https://wa.me/${user.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 transition">WhatsApp</a>
+                  )}
+                  {user.website && (
+                    <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">Site</a>
+                  )}
+                </div>
+                {/* Links sociais */}
+                {socialLinks.length > 0 && (
+                  <div className="flex gap-2 mt-3">
+                    {socialLinks.map((link) => {
+                      const Icon = platformIcons[link.platform] || Globe;
+                      return (
+                        <a
+                          key={link.id}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition"
+                          title={link.platform}
+                        >
+                          <Icon className="w-5 h-5 text-white" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-8 space-y-8">
             <div className="flex flex-col md:flex-row gap-8">

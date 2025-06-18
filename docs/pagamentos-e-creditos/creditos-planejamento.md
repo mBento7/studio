@@ -321,4 +321,35 @@ flowchart TD
 - Use RLS e funções SQL para garantir segurança e atomicidade.
 - O sistema é flexível para expansão futura (novos tipos de bônus, pacotes, integrações de pagamento, etc).
 
+---
+
+# 📢 Expositor de Anúncios e Marketplace na Página /search
+
+## Visão Geral
+A página `/search` será o principal hub de descoberta de serviços e produtos, funcionando como um marketplace moderno (inspirado em lista telefônica digital/iFood). Nela, usuários poderão buscar profissionais, visualizar anúncios pagos, banners promocionais e perfis premium, além de acessar oportunidades de auto-divulgação.
+
+## Estrutura Recomendada
+- **Carrossel de Banners**: No topo, banners rotativos para anúncios patrocinados, promoções e campanhas institucionais.
+- **Cards Premium**: Perfis que pagaram para destaque, exibidos logo abaixo dos banners, com visual diferenciado (ex: borda dourada, selo "Premium").
+- **Botão de Auto-divulgação**: Chamada clara para que qualquer usuário possa comprar destaque, levando ao fluxo de compra de créditos.
+- **Lista de Perfis/Serviços**: Exibição dos demais perfis, filtráveis por categoria, cidade, etc.
+
+## Integração com Créditos
+- O destaque de banners e cards premium será feito via sistema de créditos (ver seções anteriores).
+- O botão "Quero me destacar" leva ao fluxo de compra de créditos e seleção do tipo de destaque (banner, card premium, etc).
+- Possibilidade de diferentes valores de créditos para cada tipo de exposição (ex: banner = 50 créditos/semana, card premium = 20 créditos/semana).
+
+## Benefícios
+- Monetização recorrente e escalável.
+- Incentivo à compra de créditos.
+- Maior engajamento e visibilidade para usuários ativos.
+- Flexibilidade para promoções sazonais e campanhas de marketing.
+
+## Próximos Passos
+1. Implementar carrossel de banners e cards premium na página `/search`.
+2. Integrar botão de auto-divulgação com fluxo de créditos.
+3. Definir regras de exibição (quantos banners, quantos cards premium, duração do destaque).
+4. Medir engajamento e ajustar valores de créditos conforme demanda.
+5. Explorar banners dinâmicos e segmentação (ex: banners por categoria de busca).
+
 --- 

@@ -10,6 +10,24 @@ import Link from "next/link";
 import { ProfileLayoutProps, platformIcons } from "@/lib/types";
 import { DigitalBusinessCard } from "@/features/profile/digital-business-card";
 
+/*
+ * MinimalistCardLayout
+ *
+ * Plano: free (usuário com perfil completo)
+ * Gatilho: user.plan === 'free' && user.isProfileComplete
+ *
+ * Itens/Seções liberados:
+ * - Foto de perfil e capa em destaque
+ * - Nome, cargo/bio proeminentes
+ * - Botões de contato claros
+ * - Breve introdução ou resumo
+ * - Links sociais limitados
+ * - QR Code do perfil
+ * - Portfólio (apenas visualização rápida, limitado)
+ *
+ * Não exibe: experiência, educação, serviços detalhados
+ */
+
 const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColorHex, isCurrentUserProfile, mounted, toast, qrCodeUrl, onPortfolioItemClick }) => {
   // Fallbacks seguros
   const skills = user.skills || [];
@@ -50,7 +68,7 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
       <Card className="max-w-md w-full shadow-2xl overflow-hidden border-primary/20 relative">
         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/light-grey-floral-motif.png')] "></div>
 
-        <div className="h-32 bg-muted relative rounded-t-lg">
+        <div className="h-32 bg-muted relative rounded-t-lg overflow-hidden">
             <Image
                 src={user.coverPhotoUrl}
                 alt={`Foto de capa de ${user.name}`}
@@ -111,6 +129,22 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
                   </div>
              </div>
           )}
+
+          {/* Contatos */}
+          <div className="flex flex-wrap justify-center gap-2 mb-4">
+            {user.email && (
+              <a href={`mailto:${user.email}`} className="text-xs bg-primary/10 px-2 py-1 rounded hover:bg-primary/20 transition">{user.email}</a>
+            )}
+            {user.phone && (
+              <a href={`tel:${user.phone}`} className="text-xs bg-primary/10 px-2 py-1 rounded hover:bg-primary/20 transition">{user.phone}</a>
+            )}
+            {user.whatsappNumber && (
+              <a href={`https://wa.me/${user.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 transition">WhatsApp</a>
+            )}
+            {user.website && (
+              <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-xs bg-primary/10 px-2 py-1 rounded hover:bg-primary/20 transition">Site</a>
+            )}
+          </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             {isCurrentUserProfile ? (

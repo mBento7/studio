@@ -1,134 +1,115 @@
 import type { UserProfile } from './types';
 
 export const mockUserProfiles: UserProfile[] = [
+  // 1. Free Incompleto (BasicProfileLayout)
   {
-    id: '1',
-    username: 'joaofree',
-    name: 'João Free',
-    email: 'joao.free@email.com',
-    bio: 'Plano gratuito, template básico. Conteúdo limitado.',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joaofree',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-joaofree/1200/300',
+    id: 'u1',
+    username: 'ana_basic',
+    name: 'Ana Básica',
+    email: 'ana.basic@email.com',
+    bio: 'Perfil gratuito incompleto. Preencha mais informações para liberar recursos!',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-placeholder/1200/300',
+    socialLinks: [],
+    location: { city: 'Curitiba', country: 'BR' },
+    services: [],
+    portfolio: [],
+    skills: [],
+    experience: [],
+    education: [],
+    category: 'Estudante',
+    layoutTemplateId: 'basic',
+    plan: 'free',
+    isAvailable: true,
+    isProfileComplete: false,
+  },
+  // 2. Free Completo (MinimalistCardLayout)
+  {
+    id: 'u2',
+    username: 'bruno_minimal',
+    name: 'Bruno Minimal',
+    email: 'bruno.minimal@email.com',
+    bio: 'Perfil gratuito completo, visual limpo e objetivo.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=brunominimal',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-bruno/1200/300',
     socialLinks: [
-      { id: '1', platform: 'github', url: 'https://github.com/joaofree' }
+      { id: '1', platform: 'github', url: 'https://github.com/brunominimal' },
+      { id: '2', platform: 'linkedin', url: 'https://linkedin.com/in/brunominimal' }
     ],
     location: { city: 'São Paulo', country: 'BR' },
-    services: [
-      { id: 's1', name: 'Landing Page Simples', description: 'Criação de landing pages para pequenos negócios.' }
-    ],
+    services: [],
     portfolio: [
-      { id: 'p1', imageUrl: 'https://picsum.photos/seed/portfree1/400/300', caption: 'Landing Page Loja X', description: 'Página de apresentação para loja local.' }
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/minimal1/400/300', caption: 'Projeto Minimalista', description: 'Exemplo de portfólio para layout minimalista.' }
     ],
-    skills: ['HTML', 'CSS'],
-    experience: [
-      { id: 'e1', title: 'Freelancer Web', company: 'Autônomo', years: '2023', description: 'Pequenos projetos de sites estáticos.' }
-    ],
-    education: [
-      { id: 'ed1', degree: 'Ensino Médio Completo', institution: 'Escola Estadual', years: '2018 - 2020' }
-    ],
+    skills: ['HTML', 'CSS', 'Javascript'],
+    experience: [],
+    education: [],
     category: 'Desenvolvedor',
-    layoutTemplateId: 'minimalist-card',
+    layoutTemplateId: 'minimalist',
     plan: 'free',
     isAvailable: true,
     isProfileComplete: true,
   },
+  // 3. Standard Modern (ModernProfileLayout)
   {
-    id: '2',
-    username: 'mariastandard',
-    name: 'Maria Standard',
-    email: 'maria.standard@email.com',
-    bio: 'Plano standard, template moderno. Foco em serviços e alguns projetos.',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mariastandard',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-mariastandard/1200/300',
+    id: 'u3',
+    username: 'carla_modern',
+    name: 'Carla Moderna',
+    email: 'carla.modern@email.com',
+    bio: 'Plano standard, layout moderno. Serviços, portfólio, experiência e educação.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=carlamodern',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-carla/1200/300',
     socialLinks: [
-      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/mariastandard' }
+      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/carlamodern' },
+      { id: '2', platform: 'twitter', url: 'https://twitter.com/carlamodern' }
     ],
-    location: { city: 'Rio de Janeiro', country: 'BR' },
+    location: { city: 'Belo Horizonte', country: 'BR' },
     services: [
-      { id: 's2', name: 'Consultoria de UX', description: 'Orientação para melhoria da experiência do usuário.' },
-      { id: 's3', name: 'Design de Interfaces', description: 'Criação de interfaces intuitivas e atraentes.' },
+      { id: 's1', name: 'Consultoria Web', description: 'Consultoria para sites institucionais.' }
     ],
     portfolio: [
-      { id: 'p2', imageUrl: 'https://picsum.photos/seed/proj2/400/300', caption: 'Redesign de E-commerce', description: 'Projeto completo de reestruturação visual e de usabilidade.' },
-      { id: 'p3', imageUrl: 'https://picsum.photos/seed/proj3/400/300', caption: 'App de Produtividade', description: 'Desenvolvimento do fluxo de usuário e prototipagem.' },
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/modern1/400/300', caption: 'Site Institucional', description: 'Projeto de site para empresa.' }
     ],
-    skills: ['UX Design', 'UI Design', 'Figma', 'Prototipagem'],
+    skills: ['Web Design', 'React', 'Figma'],
     experience: [
-      { id: 'e2', title: 'Designer Júnior', company: 'Agência Criativa', years: '2022 - 2023', description: 'Atendimento a clientes e criação de wireframes.' }
+      { id: 'e1', title: 'Web Designer', company: 'Agência Web', years: '2022-2023', description: 'Criação de layouts responsivos.' }
     ],
     education: [
-      { id: 'ed2', degree: 'Tecnólogo em Design Gráfico', institution: 'IFRJ', years: '2020 - 2022' }
+      { id: 'ed1', degree: 'Tecnólogo em Web Design', institution: 'IFMG', years: '2020-2022' }
     ],
-    category: 'Designer',
+    category: 'Web Designer',
     layoutTemplateId: 'modern',
     plan: 'standard',
     isAvailable: true,
+    isProfileComplete: true,
   },
+  // 4. Standard Portfolio Focus (PortfolioFocusLayout)
   {
-    id: '3',
-    username: 'pedropremium',
-    name: 'Pedro Premium',
-    email: 'pedro.premium@email.com',
-    bio: 'Plano premium, template avançado. Perfil completo com vasta experiência e projetos.',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=pedropremium',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-pedropremium/1200/300',
+    id: 'u4',
+    username: 'danilo_portfolio',
+    name: 'Danilo Portfólio',
+    email: 'danilo.portfolio@email.com',
+    bio: 'Plano standard, layout focado em portfólio. Destaque para projetos visuais.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=daniloportfolio',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-danilo/1200/300',
     socialLinks: [
-      { id: '1', platform: 'twitter', url: 'https://twitter.com/pedropremium' },
-      { id: '2', platform: 'github', url: 'https://github.com/pedropremium' },
-      { id: '3', platform: 'website', url: 'https://pedropremium.com' },
+      { id: '1', platform: 'behance', url: 'https://behance.net/daniloportfolio' },
+      { id: '2', platform: 'dribbble', url: 'https://dribbble.com/daniloportfolio' }
     ],
-    location: { city: 'Belo Horizonte', country: 'BR', address: 'Av. Principal, 123' },
+    location: { city: 'Recife', country: 'BR' },
     services: [
-      { id: 's4', name: 'Desenvolvimento Mobile (iOS/Android)', description: 'Criação de aplicativos nativos de alta performance.' },
-      { id: 's5', name: 'Consultoria de Arquitetura', description: 'Definição de arquitetura escalável para projetos.' },
-      { id: 's6', name: 'Workshops de React Native', description: 'Treinamentos personalizados para equipes de desenvolvimento.' },
+      { id: 's1', name: 'Ilustração', description: 'Ilustrações digitais para campanhas.' }
     ],
     portfolio: [
-      { id: 'p4', imageUrl: 'https://picsum.photos/seed/proj4/400/300', caption: 'Plataforma EAD Completa', description: 'Sistema educacional com funcionalidades de vídeo, quiz e acompanhamento.' },
-      { id: 'p5', imageUrl: 'https://picsum.photos/seed/proj5/400/300', caption: 'App de Fintech', description: 'Aplicativo financeiro com integração bancária e segurança de ponta.' },
-      { id: 'p6', imageUrl: 'https://picsum.photos/seed/proj6/400/300', caption: 'Game Mobile 3D', description: 'Desenvolvimento de jogo com gráficos avançados e jogabilidade imersiva.' },
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/portfolio1/400/300', caption: 'Ilustração Publicitária', description: 'Arte para campanha de verão.' },
+      { id: 'p2', imageUrl: 'https://picsum.photos/seed/portfolio2/400/300', caption: 'Logo Marca', description: 'Criação de logotipo para startup.' }
     ],
-    skills: ['React Native', 'Flutter', 'Node.js', 'AWS', 'CI/CD'],
+    skills: ['Illustrator', 'Photoshop', 'Branding'],
     experience: [
-      { id: 'e3', title: 'Engenheiro de Software Sênior', company: 'Tech Solutions', years: '2020 - Atualmente', description: 'Liderança de equipes, desenvolvimento de arquiteturas e otimização de sistemas.' },
-      { id: 'e4', title: 'Desenvolvedor Mobile Pleno', company: 'App Innovators', years: '2018 - 2020', description: 'Criação e manutenção de aplicativos mobile para clientes diversos.' },
+      { id: 'e1', title: 'Ilustrador', company: 'Estúdio Criativo', years: '2021-2023', description: 'Projetos de ilustração e identidade visual.' }
     ],
     education: [
-      { id: 'ed3', degree: 'Mestrado em Engenharia de Software', institution: 'Universidade Federal', years: '2023 - 2025' },
-      { id: 'ed4', degree: 'Bacharelado em Ciência da Computação', institution: 'Universidade Estadual', years: '2014 - 2018' },
-    ],
-    category: 'Mobile',
-    layoutTemplateId: 'advanced',
-    plan: 'premium',
-    isAvailable: true,
-  },
-  {
-    id: '7',
-    username: 'camilaportfolio',
-    name: 'Camila Portfólio',
-    email: 'camila.portfolio@email.com',
-    bio: 'Plano standard, template focado em portfólio. Designer Visual.',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=camilaportfolio',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-camila/1200/300',
-    socialLinks: [
-      { id: '1', platform: 'behance', url: 'https://behance.net/camilaportfolio' },
-      { id: '2', platform: 'dribbble', url: 'https://dribbble.com/camilaportfolio' }
-    ],
-    location: { city: 'Salvador', country: 'BR' },
-    services: [
-      { id: 's7', name: 'Design de Logo', description: 'Criação de identidade visual.' },
-      { id: 's8', name: 'Ilustração Digital', description: 'Serviços de ilustração personalizada.' },
-    ],
-    portfolio: [
-      { id: 'p7', imageUrl: 'https://picsum.photos/seed/proj7/400/300', caption: 'Identidade Visual Marca X', description: 'Desenvolvimento completo de identidade visual.' },
-      { id: 'p8', imageUrl: 'https://picsum.photos/seed/proj8/400/300', caption: 'Campanha Publicitária Y', description: 'Criação de artes para campanha digital.' },
-    ],
-    skills: ['Design Gráfico', 'Illustrator', 'Photoshop'],
-    experience: [
-      { id: 'e5', title: 'Designer Freelancer', company: 'Autônoma', years: '2021 - Atualmente', description: 'Projetos de branding e ilustração.' }
-    ],
-    education: [
-      { id: 'ed5', degree: 'Bacharel em Design', institution: 'UFBA', years: '2017 - 2021' }
+      { id: 'ed1', degree: 'Bacharel em Design', institution: 'UFPE', years: '2017-2021' }
     ],
     category: 'Designer',
     layoutTemplateId: 'portfolio-focus',
@@ -136,115 +117,95 @@ export const mockUserProfiles: UserProfile[] = [
     isAvailable: true,
     isProfileComplete: true,
   },
+  // 5. Premium Avançado (AdvancedProfileLayout)
   {
-    id: '8',
-    username: 'robertobusiness',
-    name: 'Roberto Business',
-    email: 'roberto.business@email.com',
-    bio: 'Plano premium, template Pro. Consultor de Marketing Digital.',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=robertobusiness',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-roberto/1200/300',
+    id: 'u5',
+    username: 'elisa_advanced',
+    name: 'Elisa Avançada',
+    email: 'elisa.advanced@email.com',
+    bio: 'Plano premium, layout avançado. Perfil completo, vídeos, banner e stories.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=elisaadvanced',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-elisa/1200/300',
     socialLinks: [
-      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/robertobusiness' },
-      { id: '2', platform: 'twitter', url: 'https://twitter.com/robertobusiness' }
+      { id: '1', platform: 'instagram', url: 'https://instagram.com/elisaadvanced' },
+      { id: '2', platform: 'github', url: 'https://github.com/elisaadvanced' }
     ],
-    location: { city: 'Porto Alegre', country: 'BR' },
+    location: { city: 'Florianópolis', country: 'BR', address: 'Rua das Flores, 100' },
     services: [
-      { id: 's9', name: 'Consultoria de SEO', description: 'Otimização para motores de busca.' },
-      { id: 's10', name: 'Gestão de Tráfego Pago', description: 'Campanhas de anúncios online.' },
+      { id: 's1', name: 'Mentoria em Tech', description: 'Acompanhamento de carreira para devs.' },
+      { id: 's2', name: 'Palestras', description: 'Palestras sobre inovação e tecnologia.' }
     ],
     portfolio: [
-      { id: 'p9', imageUrl: 'https://picsum.photos/seed/proj9/400/300', caption: 'Estratégia de Conteúdo X', description: 'Planejamento e execução de conteúdo.' },
-      { id: 'p10', imageUrl: 'https://picsum.photos/seed/proj10/400/300', caption: 'Campanha de Leads Y', description: 'Otimização de funis de vendas.' },
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/advanced1/400/300', caption: 'Mentoria React', description: 'Mentoria para grupo de iniciantes.' },
+      { id: 'p2', imageUrl: 'https://picsum.photos/seed/advanced2/400/300', caption: 'Palestra Tech', description: 'Evento sobre tendências em tecnologia.' }
     ],
-    skills: ['SEO', 'Google Ads', 'Facebook Ads', 'Marketing Digital'],
+    skills: ['Mentoria', 'Palestras', 'React', 'Inovação'],
     experience: [
-      { id: 'e6', title: 'Head de Marketing', company: 'Digital Solutions', years: '2021 - Atualmente', description: 'Liderança e estratégia de marketing digital.' },
+      { id: 'e1', title: 'Tech Lead', company: 'InovaTech', years: '2020-2023', description: 'Liderança de squads de inovação.' }
     ],
     education: [
-      { id: 'ed6', degree: 'Pós-graduação em Marketing', institution: 'FGV', years: '2019 - 2020' },
+      { id: 'ed1', degree: 'Mestrado em Inovação', institution: 'UFSC', years: '2018-2020' }
     ],
-    category: 'Marketing',
+    youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    youtubeVideoTitle: 'Como inovar em tecnologia',
+    youtubeVideoDescription: 'Dicas práticas para inovar no mercado tech.',
+    premiumBanner: {
+      imageUrl: 'https://picsum.photos/seed/bannerelisa/800/200',
+      title: 'Mentoria Premium',
+      description: 'Garanta sua vaga na próxima turma!',
+      ctaText: 'Saiba mais',
+      ctaLink: 'https://elisaadvanced.com/mentoria'
+    },
+    category: 'Mentora',
+    layoutTemplateId: 'advanced',
+    plan: 'premium',
+    isAvailable: true,
+    isProfileComplete: true,
+  },
+  // 6. Premium Pro (PremiumProLayout)
+  {
+    id: 'u6',
+    username: 'felipe_pro',
+    name: 'Felipe Pro',
+    email: 'felipe.pro@email.com',
+    bio: 'Plano premium, layout Pro. Consultor com depoimentos, agendamento e SEO.',
+    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=felipepro',
+    coverPhotoUrl: 'https://picsum.photos/seed/cover-felipe/1200/300',
+    socialLinks: [
+      { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/felipepro' },
+      { id: '2', platform: 'website', url: 'https://felipepro.com' }
+    ],
+    location: { city: 'Brasília', country: 'BR' },
+    services: [
+      { id: 's1', name: 'Consultoria SEO', description: 'Otimização avançada para buscadores.' },
+      { id: 's2', name: 'Agendamento Online', description: 'Sessões de consultoria via Calendly.' }
+    ],
+    portfolio: [
+      { id: 'p1', imageUrl: 'https://picsum.photos/seed/pro1/400/300', caption: 'Case SEO', description: 'Resultados de SEO para cliente X.' }
+    ],
+    skills: ['SEO', 'Consultoria', 'Marketing Digital'],
+    experience: [
+      { id: 'e1', title: 'Consultor Sênior', company: 'SEO Experts', years: '2019-2023', description: 'Projetos de SEO e marketing.' }
+    ],
+    education: [
+      { id: 'ed1', degree: 'MBA em Marketing', institution: 'ESPM', years: '2017-2019' }
+    ],
+    reviews: [
+      { id: 'r1', authorName: 'Cliente Satisfeito', rating: 5, comment: 'Felipe é excelente!', createdAt: '2024-01-10' }
+    ],
+    premiumBanner: {
+      imageUrl: 'https://picsum.photos/seed/bannerfelipe/800/200',
+      title: 'Consultoria Pro',
+      description: 'Agende sua sessão exclusiva.',
+      ctaText: 'Agendar',
+      ctaLink: 'https://felipepro.com/agenda'
+    },
+    category: 'Consultor',
     layoutTemplateId: 'premium-pro',
     plan: 'premium',
     isAvailable: true,
     isProfileComplete: true,
   },
-  {
-    id: '4',
-    username: 'joaosilva',
-    name: 'João Silva',
-    bio: 'Desenvolvedor Full Stack | React | Node.js',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joaosilva',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-joao/1200/300',
-    socialLinks: [
-      { id: '1', platform: 'github', url: 'https://github.com/joaosilva' },
-      { id: '2', platform: 'linkedin', url: 'https://linkedin.com/in/joaosilva' }
-    ],
-    location: {
-      city: 'São Paulo',
-      country: 'BR',
-    },
-    services: [],
-    portfolio: [],
-    skills: ['React', 'Node.js', 'TypeScript'],
-    experience: [],
-    education: [],
-    category: '',
-    plan: 'free',
-    layoutTemplateId: 'basic',
-    isProfileComplete: false,
-  },
-  {
-    id: '5',
-    username: 'mariasouza',
-    name: 'Maria Souza',
-    bio: 'Designer UX/UI | Figma | Adobe XD',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mariasouza',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-maria/1200/300',
-    socialLinks: [
-      { id: '1', platform: 'behance', url: 'https://behance.net/mariasouza' },
-      { id: '2', platform: 'dribbble', url: 'https://dribbble.com/mariasouza' }
-    ],
-    location: {
-      city: 'Rio de Janeiro',
-      country: 'BR',
-    },
-    services: [],
-    portfolio: [],
-    skills: ['Figma', 'Adobe XD', 'UI Design'],
-    experience: [],
-    education: [],
-    category: '',
-    plan: 'free',
-    layoutTemplateId: 'basic',
-    isProfileComplete: false,
-  },
-  {
-    id: '6',
-    username: 'pedrosantos',
-    name: 'Pedro Santos',
-    bio: 'Desenvolvedor Mobile | React Native | Flutter',
-    profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=pedrosantos',
-    coverPhotoUrl: 'https://picsum.photos/seed/cover-pedro/1200/300',
-    socialLinks: [
-      { id: '1', platform: 'github', url: 'https://github.com/pedrosantos' },
-      { id: '2', platform: 'twitter', url: 'https://twitter.com/pedrosantos' }
-    ],
-    location: {
-      city: 'Belo Horizonte',
-      country: 'BR',
-    },
-    services: [],
-    portfolio: [],
-    skills: ['React Native', 'Flutter', 'Mobile Development'],
-    experience: [],
-    education: [],
-    category: '',
-    plan: 'free',
-    layoutTemplateId: 'basic',
-    isProfileComplete: false,
-  }
 ];
 
 export const mockCurrentUser = mockUserProfiles[0];
