@@ -17,6 +17,9 @@ import { createClient } from "@/lib/supabase/client";
 import type { UserProfile } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
 import { ZodError } from "zod";
+import { MainGridLayout } from '@/components/layout/app-container';
+import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
+import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
 
 // Novo componente para painel modular de conteúdo
 function ContentDashboardCards() {
@@ -183,130 +186,86 @@ export default function EditProfilePage() {
     );
   }
 
+  const mockProfile = {
+    name: 'João Silva',
+    email: 'joao@exemplo.com',
+    profilePictureUrl: '',
+    username: 'joaosilva',
+    progress: 85,
+    stats: { views: 1234, connections: 89, projects: 12 },
+  };
+
   return (
-    <div className="max-w-6xl mx-auto py-10 px-2 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* Sidebar */}
-      <aside className="md:col-span-1 flex flex-col items-center gap-6">
-        <Card className="w-full flex flex-col items-center p-6 shadow-lg rounded-2xl bg-card/90 border-0">
-          <ProfileBg />
-          <Avatar className="h-20 w-20 -mt-10 border-4 border-background bg-muted shadow-sm">
-            <AvatarImage src={currentUserProfile?.profilePictureUrl || undefined} alt={currentUserProfile?.name || 'User'} />
-            <AvatarFallback>
-              {currentUserProfile?.name?.substring(0, 2) || 'U'}
-            </AvatarFallback>
-          </Avatar>
-          <div className="text-center mt-4 w-full">
-            <h2 className="text-xl font-bold text-primary">{currentUserProfile?.name || 'Seu Nome'}</h2>
-            <p className="text-muted-foreground text-sm">{currentUserProfile?.email}</p>
-            {/* Profile Progress */}
-            <div className="w-full mt-6 space-y-2">
-              <div className="flex justify-between text-xs">
-                <span className="text-muted-foreground">Progresso do Perfil</span>
-                <span className="text-primary font-medium">{profileProgress}%</span>
-              </div>
-              <Progress value={profileProgress} className="h-2" />
-              <p className="text-xs text-muted-foreground">
-                {profileProgress < 100 ? "Quase lá! Complete seu perfil." : "Perfil completo!"}
-              </p>
-            </div>
-            <Button className="w-full mt-6" variant="secondary" asChild>
-              <Link href={`/profile/${currentUserProfile?.username}`}>
-                <Eye className="w-4 h-4 mr-2" />
-                Ver Perfil Público
-              </Link>
-            </Button>
-          </div>
-        </Card>
-        {/* Quick Stats */}
-        <Card className="w-full p-4 rounded-2xl bg-card/90 border-0">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Visualizações</span>
-              <span className="text-sm font-medium">1,234</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Conexões</span>
-              <span className="text-sm font-medium">89</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Projetos</span>
-              <span className="text-sm font-medium">12</span>
-            </div>
-          </div>
-        </Card>
-      </aside>
-      {/* Main Content */}
-      <section className="md:col-span-2">
-        <div className="mb-8 text-center">
-          <motion.h1
-            className="text-4xl font-extrabold tracking-tight text-primary mb-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Edite Seu Perfil
-          </motion.h1>
-          <motion.p
-            className="text-muted-foreground text-lg"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Personalize seu perfil para refletir sua marca pessoal e experiência.
-          </motion.p>
+    <section className="flex flex-col h-full w-full">
+      <div className="mb-8 text-center">
+        <motion.h1
+          className="text-4xl font-extrabold tracking-tight text-primary mb-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Edite Seu Perfil
+        </motion.h1>
+        <motion.p
+          className="text-muted-foreground text-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Personalize seu perfil para refletir sua marca pessoal e experiência.
+        </motion.p>
+      </div>
+      {/* Grade de cards de navegação como botões */}
+      <div className="mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {cards.filter(card => !card.isContent || card.label === "Conteúdo").map(card => (
+            <button
+              key={card.label}
+              onClick={() => setActiveSection(card.label)}
+              className={`flex flex-col items-center justify-center p-6 rounded-xl border transition shadow-md cursor-pointer
+                ${activeSection === card.label ? "bg-primary text-white" : "bg-white hover:bg-primary/10"}`}
+            >
+              <card.icon className="w-8 h-8 mb-2" />
+              <span className="font-semibold">{card.label}</span>
+            </button>
+          ))}
         </div>
-        {/* Grade de cards de navegação como botões */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {cards.filter(card => !card.isContent || card.label === "Conteúdo").map(card => (
-              <button
-                key={card.label}
-                onClick={() => setActiveSection(card.label)}
-                className={`flex flex-col items-center justify-center p-6 rounded-xl border transition shadow-md cursor-pointer
-                  ${activeSection === card.label ? "bg-primary text-white" : "bg-white hover:bg-primary/10"}`}
-              >
-                <card.icon className="w-8 h-8 mb-2" />
-                <span className="font-semibold">{card.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-        {/* Renderização condicional do conteúdo de edição */}
-        {activeSection === "Básico" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Card className="rounded-2xl shadow-xl border-0 bg-card/80 p-6 backdrop-blur-sm">
-              <ProfileForm
-                initialData={currentUserProfile}
-                onSubmit={handleProfileSubmit}
-                isLoading={isLoading}
-              />
-            </Card>
-          </motion.div>
-        )}
-        {activeSection === "Aparência" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <AppearanceSettingsPage />
-          </motion.div>
-        )}
-        {activeSection === "Conteúdo" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <ContentSettingsPage />
-          </motion.div>
-        )}
-        {/* Outras seções podem ser integradas aqui */}
-      </section>
-    </div>
+      </div>
+      {/* Renderização condicional do conteúdo de edição */}
+      {activeSection === "Básico" && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Card className="rounded-2xl shadow-xl border-0 bg-card/80 p-6 backdrop-blur-sm">
+            <ProfileForm
+              initialData={currentUserProfile}
+              onSubmit={handleProfileSubmit}
+              isLoading={isLoading}
+            />
+          </Card>
+        </motion.div>
+      )}
+      {activeSection === "Aparência" && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <AppearanceSettingsPage />
+        </motion.div>
+      )}
+      {activeSection === "Conteúdo" && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <ContentSettingsPage />
+        </motion.div>
+      )}
+      {/* Outras seções podem ser integradas aqui */}
+    </section>
   );
 }

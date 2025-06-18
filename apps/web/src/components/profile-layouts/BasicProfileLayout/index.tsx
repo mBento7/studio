@@ -93,7 +93,7 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
               {socialLinks.map(link => {
                 const IconComponent = platformIcons[link.platform as keyof typeof platformIcons] || Globe;
                 return (
-                  <Button key={link.id} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary rounded-full w-8 h-8 hover:bg-primary/10">
+                  <Button key={link.id} variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full w-8 h-8 hover:bg-primary/10">
                     <Link href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
                       <IconComponent className="w-4 h-4" />
                     </Link>

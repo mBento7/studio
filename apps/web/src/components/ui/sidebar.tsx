@@ -1,4 +1,3 @@
-
 "use client"
 
 import React from "react"
@@ -261,43 +260,32 @@ const Sidebar = React.forwardRef<
 Sidebar.displayName = "Sidebar"
 
 const SidebarTrigger = React.forwardRef<
-  HTMLButtonElement, // Ref should be for the underlying element (button or child)
-  Omit<React.ComponentProps<typeof Button>, "asChild"> & { asChild?: boolean } // Omit asChild from Button props but allow it here
->(({ className, onClick, asChild = false, children, ...props }, ref) => { // Destructure asChild and children
+  HTMLButtonElement,
+  Omit<React.ComponentProps<typeof Button>, "asChild"> & { asChild?: boolean }
+>(({ className, onClick, children, ...props }, ref) => {
   const { toggleSidebar } = useSidebar();
-  const Comp = asChild ? Slot : Button; // Determine component based on asChild
-
-  const buttonProps = {
-    ref: ref,
-    "data-sidebar": "trigger",
-    variant: "ghost" as const, // Ensure correct type
-    size: "icon" as const, // Ensure correct type
-    className: cn("h-7 w-7", className),
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => { // Ensure correct event type
-      // Attempt to call the onClick passed in props if it exists
-      if (onClick) {
-         try {
-           onClick(event);
-         } catch (e) {
-            console.error("Error in provided onClick handler:", e)
-         }
-      }
-      toggleSidebar();
-    },
-    ...props, // Pass remaining props not explicitly handled
-  };
-
   return (
-    <Comp {...buttonProps}>
-      {/* If using Slot (asChild=true), render the children passed to SidebarTrigger */}
-      {asChild ? children : (
-        /* If not using Slot, render the default trigger content */
-        <>
-          <PanelLeft />
-          <span className="sr-only">Toggle Sidebar</span>
-        </>
-      )}
-    </Comp>
+    <Button
+      ref={ref}
+      data-sidebar="trigger"
+      variant="default"
+      size="sm"
+      className={cn("h-7 w-7", className)}
+      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+        if (onClick) {
+          try {
+            onClick(event);
+          } catch (e) {
+            console.error("Error in provided onClick handler:", e)
+          }
+        }
+        toggleSidebar();
+      }}
+      {...props}
+    >
+      <PanelLeft />
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
   );
 });
 SidebarTrigger.displayName = "SidebarTrigger"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Flame, Sparkles, Handshake, Clock, Percent, Megaphone, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,6 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import SearchShowcase, { SearchBannerCarousel } from '../../../search/SearchShowcase';
+import { FeedCard } from '@/components/feed/FeedCard';
+import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
+import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
+import './feed-scrollbar.css';
 
 // Mock data
 const stories = [
@@ -57,6 +61,75 @@ const coupons = [
   { id: 1, code: "SAVE20", desc: "20% de desconto em limpeza" },
   { id: 2, code: "FIRST10", desc: "10% para novos clientes" },
   { id: 3, code: "PREMIUM15", desc: "15% em serviços premium" },
+];
+
+const postsMock = [
+  {
+    tipo: 'oferta_servico' as const,
+    titulo: 'João Cortes Premium',
+    descricao: 'Cortes masculinos R$ 35 – Atendimento em domicílio até 20h',
+    imagem: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
+    preco: '35',
+    localizacao: 'Vila Mariana',
+    patrocinado: true,
+    usuario: { nome: 'João Cortes', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
+    curtidas: 23,
+    comentarios: 4,
+    tags: ['Barbearia', 'Domicílio'],
+    whatsappUrl: 'https://wa.me/5511999999999',
+  },
+  {
+    tipo: 'oferta_produto' as const,
+    titulo: 'Bolos da Lú – Bolo no pote',
+    descricao: 'R$ 8 cada | Sabores: Chocolate, Morango, Maracujá',
+    imagem: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
+    preco: '8',
+    localizacao: 'Centro',
+    usuario: { nome: 'Bolos da Lú', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    curtidas: 12,
+    comentarios: 2,
+    tags: ['Confeitaria', 'Delivery'],
+    whatsappUrl: 'https://wa.me/5511988888888',
+  },
+  {
+    tipo: 'solicitacao_servico' as const,
+    titulo: 'Preciso de eletricista urgente',
+    descricao: 'Alguém faz instalação de chuveiro hoje na região do Tatuapé? Pago na hora!',
+    imagem: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&h=300&fit=crop',
+    localizacao: 'Tatuapé',
+    usuario: { nome: 'Carlos Silva', avatar: 'https://randomuser.me/api/portraits/men/65.jpg' },
+    curtidas: 5,
+    comentarios: 3,
+    tags: ['Eletricista', 'Urgente'],
+    whatsappUrl: 'https://wa.me/5511977777777',
+    urgente: true,
+  },
+  {
+    tipo: 'solicitacao_produto' as const,
+    titulo: 'Busco notebook usado até R$ 1500',
+    descricao: 'Preciso de um notebook para estudos, pode ser usado, aceito sugestões e ofertas!',
+    imagem: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
+    localizacao: 'Ipiranga',
+    usuario: { nome: 'Ana Paula', avatar: 'https://randomuser.me/api/portraits/women/68.jpg' },
+    curtidas: 7,
+    comentarios: 1,
+    tags: ['Notebook', 'Usado', 'Estudo'],
+    whatsappUrl: 'https://wa.me/5511966666666',
+  },
+  {
+    tipo: 'patrocinado' as const,
+    titulo: 'Curso de Marketing Digital',
+    descricao: 'Aprenda as melhores estratégias de marketing digital com profissionais do mercado. Certificado incluso e suporte vitalício.',
+    imagem: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
+    preco: '297',
+    localizacao: 'Online',
+    patrocinado: true,
+    usuario: { nome: 'EduTech Academy', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
+    curtidas: 156,
+    comentarios: 45,
+    tags: ['marketing', 'digital', 'curso', 'online'],
+    whatsappUrl: 'https://wa.me/5511999999999',
+  },
 ];
 
 interface CreateCouponModalProps {
@@ -143,43 +216,59 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
 
 function StoriesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-    const storiesPerView = 7;
+  const storiesPerView = 7;
   const maxIndex = Math.max(0, stories.length - storiesPerView);
 
+  // Auto-scroll
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [maxIndex]);
+
   const scrollLeft = () => {
-    setCurrentIndex(prev => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
   const scrollRight = () => {
-    setCurrentIndex(prev => Math.min(maxIndex, prev + 1));
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
   return (
     <section className="px-4">
-      <div className="p-4 space-y-4 bg-card/50 backdrop-blur-sm rounded-2xl border">
-        <h2 className="text-lg font-bold text-foreground mb-2">Destaques 24h</h2>
-        <div className="relative">
-          {/* Carrossel ajustado */}
-          <div className="overflow-hidden px-8 py-4">
-            <div 
+      <div className="p-4 space-y-4 bg-card/50 backdrop-blur-sm rounded-2xl border relative z-0">
+        <h2 className="text-lg font-bold text-foreground mb-2 relative z-0">Destaques 24h</h2>
+        <div className="relative w-full">
+          {/* Botões de seta */}
+          {currentIndex > 0 && (
+            <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+          {currentIndex < maxIndex && (
+            <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition">
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
+          <div className="overflow-x-hidden overflow-y-hidden w-full px-8 py-4 scrollbar-none">
+            <div
               className="flex space-x-4 transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${0})` }}
+              style={{ transform: `translateX(-${currentIndex * 6.5}rem)` }}
             >
               {stories.map((s) => (
-                <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer">
-                  <div className="relative w-20 h-20 rounded-full transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-primary/50">
-                    {/* Avatar container */}
-                    <div className="absolute inset-1 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
+                <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer w-20 sm:w-24">
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50 group-hover:z-30 group-hover:relative">
+                    <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
                       <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
                     </div>
-                    {/* Time indicator */}
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
                       {Math.floor(s.timeLeft / 100 * 24)}h
                     </div>
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+                  <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
                 </div>
-              ))}
+              )).slice(currentIndex, currentIndex + storiesPerView)}
             </div>
           </div>
         </div>
@@ -220,7 +309,7 @@ function SocialCard({ item }: { item: any }) {
   };
 
   return (
-    <Card className="hover:shadow-2xl transition-all duration-300 border bg-card/90 rounded-2xl overflow-hidden group">
+    <Card className="hover:shadow-2xl transition-all duration-300 border bg-card/90 rounded-2xl overflow-hidden group max-w-[350px] w-full mx-auto">
       <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20">
         <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('https://picsum.photos/seed/${item.id}/400/200')` }} />
         <div className="relative p-4 h-full flex flex-col justify-between">
@@ -287,9 +376,8 @@ function FeedContent({ activeTab, setActiveTab }: { activeTab: 'trending'|'new'|
   ];
   // Os tabs agora são controlados externamente
   return (
-    <section className="space-y-8">
-      {/* Os tabs foram movidos para a barra principal */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <section className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
         {feedItems[activeTab].map((item) => (
           <SocialCard key={item.id} item={item} />
         ))}
@@ -538,6 +626,78 @@ function CouponsWidget() {
   );
 }
 
+// Novo componente para carrossel de stories com detecção de overflow
+function StoriesCarouselWithOverflow() {
+  const [showLeft, setShowLeft] = React.useState(false);
+  const [showRight, setShowRight] = React.useState(false);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const checkOverflow = () => {
+      setShowLeft(el.scrollLeft > 0);
+      setShowRight(el.scrollWidth > el.clientWidth + el.scrollLeft + 1);
+    };
+    checkOverflow();
+    el.addEventListener('scroll', checkOverflow);
+    window.addEventListener('resize', checkOverflow);
+    return () => {
+      el.removeEventListener('scroll', checkOverflow);
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, []);
+
+  const scrollBy = (amount: number) => {
+    const el = scrollRef.current;
+    if (el) el.scrollBy({ left: amount, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="relative flex items-center justify-center">
+      {showLeft && (
+        <button
+          onClick={() => scrollBy(-120)}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition hidden sm:block"
+          style={{ left: 4 }}
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+      )}
+      <div
+        ref={scrollRef}
+        className="flex space-x-5 overflow-x-auto px-2 py-1 hide-scrollbar"
+        style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
+      >
+        {stories.map((s) => (
+          <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer w-20 sm:w-24">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50 group-hover:z-30 group-hover:relative">
+              <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
+                <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
+                {Math.floor(s.timeLeft / 100 * 24)}h
+              </div>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+          </div>
+        ))}
+      </div>
+      {showRight && (
+        <button
+          onClick={() => scrollBy(120)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition hidden sm:block"
+          style={{ right: 4 }}
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function FeedPage() {
   const [tab, setTab] = useState<'feed' | 'search'>('feed');
   const [activeFeedTab, setActiveFeedTab] = useState<'trending'|'new'|'recommended'>('trending');
@@ -563,124 +723,82 @@ export default function FeedPage() {
     { id: 4, image: 'https://placehold.co/600x200/6366f1/fff?text=WhosDo.com+Conecte-se+e+conquiste+clientes', link: 'https://whosdo.com', type: 'institucional', title: 'WhosDo.com: Conecte-se, destaque-se e conquiste mais clientes! Descubra todos os benefícios.' },
   ];
 
+  // ...mockProfile ou dados reais...
+  const mockProfile = {
+    name: 'João Silva',
+    email: 'joao@exemplo.com',
+    profilePictureUrl: '',
+    username: 'joaosilva',
+    progress: 85,
+    stats: { views: 1234, connections: 89, projects: 12 },
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto pt-2 pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-6 items-start">
-          {/* Coluna principal */}
-          <div className="flex flex-col min-w-0">
-            {/* Exibir banner só quando busca estiver ativa */}
-            {tab === 'search' && (
-              <div className="px-2 mb-3">
-                <SearchBannerCarousel banners={searchBanners} />
+    <>
+      {/* Conteúdo principal do feed (tabs, stories, cards, etc.) */}
+      {/* TODO: Certifique-se de que não há grid/flex duplicado aqui */}
+      {/* Exemplo: */}
+      <div className="w-full">
+        {/* Tabs principais */}
+        <div className="flex flex-nowrap gap-1 mb-4 px-2 overflow-x-auto scrollbar-thin scrollbar-thumb-muted-foreground/30 scrollbar-track-transparent hide-scrollbar">
+          {mainTabs.map((t) => (
+            <Button
+              key={t.key}
+              variant="tab"
+              active={tab === t.key}
+              onClick={() => setTab(t.key as 'feed'|'search')}
+              className="whitespace-nowrap"
+            >
+              <t.icon className="w-4 h-4" />
+              {t.label}
+            </Button>
+          ))}
+          <div className="flex gap-1 ml-2">
+            {feedTabs.map((t) => (
+              <Button
+                key={t.key}
+                variant="tab"
+                active={activeFeedTab === t.key}
+                onClick={() => setActiveFeedTab(t.key as 'new'|'recommended')}
+                className="whitespace-nowrap"
+              >
+                <t.icon className="w-4 h-4" />
+                {t.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+        {/* Banner de busca */}
+        {tab === 'search' && (
+          <div className="px-2 mb-3">
+            <SearchBannerCarousel banners={searchBanners} />
+          </div>
+        )}
+        {/* Stories */}
+        {tab === 'feed' && (
+          <section className="flex flex-col items-center w-full">
+            <div className="w-full max-w-3xl mx-auto p-0 sm:p-0">
+              <div className="space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0 px-2 py-2">
+                <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
+                <StoriesCarouselWithOverflow />
               </div>
-            )}
-            {/* Botões de navegação e tabs - sempre no topo */}
-            <div className="flex flex-wrap gap-1 mb-4 px-2">
-              {mainTabs.map((t) => (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key as 'feed'|'search')}
-                  className={cn(
-                    'flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm transition shadow-sm',
-                    tab === t.key
-                      ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                      : 'bg-background/70 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:scale-105',
-                    'transition-all duration-200'
-                  )}
-                  style={{ boxShadow: tab === t.key ? '0 2px 8px 0 rgba(0,0,0,0.10)' : undefined }}
-                >
-                  <t.icon className="w-4 h-4" />
-                  {t.label}
-                </button>
-              ))}
-              <div className="flex gap-1 ml-2">
-                {feedTabs.map((t) => (
-                  <button
-                    key={t.key}
-                    onClick={() => setActiveFeedTab(t.key as 'new'|'recommended')}
-                    className={cn(
-                      'flex items-center gap-1 px-3 py-1.5 rounded-full font-semibold text-sm transition shadow-sm',
-                      activeFeedTab === t.key
-                        ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                        : 'bg-background/70 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:scale-105',
-                      'transition-all duration-200'
-                    )}
-                    style={{ boxShadow: activeFeedTab === t.key ? '0 2px 8px 0 rgba(0,0,0,0.10)' : undefined }}
-                  >
-                    <t.icon className="w-4 h-4" />
-                    {t.label}
-                  </button>
+              {/* Feed de Descobertas */}
+              <div className="max-w-3xl mx-auto py-6 px-2 sm:px-0">
+                <h1 className="text-2xl font-bold mb-4">Feed de Descobertas</h1>
+                {postsMock.map((post, idx) => (
+                  <FeedCard key={idx} {...post} />
                 ))}
               </div>
             </div>
-            {/* Mostrar stories só quando não está em busca */}
-            {tab === 'feed' && (
-              <section className="px-2">
-                <div className="p-2 space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0">
-                  <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
-                  <div className="relative">
-                    <div className="overflow-hidden px-4 py-2">
-                      <div 
-                        className="flex space-x-5 transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${0})` }}
-                      >
-                        {stories.map((s) => (
-                          <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer">
-                            <div className="relative w-24 h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50">
-                              <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
-                                <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
-                              </div>
-                              <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
-                                {Math.floor(s.timeLeft / 100 * 24)}h
-                              </div>
-                            </div>
-                            <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Conteúdo do feed */}
-                <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-3 mt-4 transition-colors duration-200">
-                  <FeedContent activeTab={activeFeedTab} setActiveTab={setActiveFeedTab} />
-                </div>
-              </section>
-            )}
-            {tab === 'search' && (
-              <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-3 mt-4 transition-colors duration-200">
-                <SearchShowcase />
-              </div>
-            )}
+          </section>
+        )}
+        {tab === 'search' && (
+          <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-2 sm:p-3 mt-4 transition-colors duration-200">
+            <SearchShowcase />
           </div>
-          {/* Coluna da direita fixa e mais estreita */}
-          <div className="hidden lg:block relative min-w-[12rem] max-w-[16rem] w-full">
-            <div className="sticky top-16 flex flex-col gap-4">
-              <UserAdExample />
-              <PremiumAdCard />
-              <QuickActions onCouponClick={() => setIsCouponModalOpen(true)} />
-              <ActivityStats />
-              <TrendingHashtags />
-              <UserSuggestions />
-              <TrendingAds />
-              <CouponsWidget />
-            </div>
-          </div>
-        </div>
-        {/* Mobile: widgets abaixo do feed */}
-        <div className="lg:hidden flex flex-col gap-4 mt-6">
-          <UserAdExample />
-          <PremiumAdCard />
-          <QuickActions onCouponClick={() => setIsCouponModalOpen(true)} />
-          <ActivityStats />
-          <TrendingHashtags />
-          <UserSuggestions />
-          <TrendingAds />
-          <CouponsWidget />
-        </div>
+        )}
         <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setIsCouponModalOpen} />
       </div>
-    </div>
+    </>
   );
 }

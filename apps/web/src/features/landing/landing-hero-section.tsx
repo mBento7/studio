@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -15,10 +14,8 @@ export function LandingHeroSection() {
         <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
           Centralize seus links, portfólio e informações de contato em um perfil profissional que impressiona.
         </p>
-        <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg">
-          <Link href="/login">
-            Crie Seu Perfil Grátis <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
+        <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg">
+          Comece Agora
         </Button>
         <div className="mt-12 md:mt-16 max-w-4xl mx-auto aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border-2 border-border/50">
           <Image

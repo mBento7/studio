@@ -42,7 +42,6 @@ export const PremiumBannerDisplay: React.FC<PremiumBannerDisplayProps> = ({
             size="lg"
             variant="secondary"
             className="text-black bg-white hover:bg-gray-100 transition"
-            asChild
           >
             <a href={ctaLink} target="_blank" rel="noopener noreferrer">
               {ctaText}

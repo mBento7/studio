@@ -68,7 +68,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
           {navItems.map((item) => (
             <div key={item.href}>
               <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <Link href={item.href} passHref>
                     <Button
                       variant={pathname === item.href ? "secondary" : "ghost"}
@@ -91,7 +91,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
                 <div className="pl-6 mt-1 space-y-1">
                   {item.subItems.map((subItem) => (
                      <Tooltip key={subItem.href} delayDuration={0}>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger>
                             <Link href={subItem.href} passHref>
                               <Button
                                 variant={pathname === subItem.href ? "secondary" : "ghost"}
@@ -114,7 +114,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
       <div className="p-4 border-t mt-auto">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger>
               <Button
                 variant="ghost"
                 onClick={handleLogout}

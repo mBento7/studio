@@ -1,9 +1,8 @@
-
 "use client";
 
 import React from 'react';
 import Image from 'next/image';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import type { PortfolioItem } from '@/lib/types';
 import { Maximize } from 'lucide-react';
@@ -39,7 +38,7 @@ export const PortfolioItemModal: React.FC<PortfolioItemModalProps> = ({ item, op
           </div>
         </div>
         <DialogFooter className="p-6 pt-0">
-          <DialogClose asChild>
+          <DialogClose>
             <Button type="button" variant="outline">
               Fechar
             </Button>

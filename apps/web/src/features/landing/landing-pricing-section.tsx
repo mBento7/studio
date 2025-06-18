@@ -1,4 +1,3 @@
-
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle } from 'lucide-react';
@@ -110,7 +109,6 @@ export function LandingPricingSection() {
               </CardContent>
               <CardFooter className="mt-auto">
                 <Button 
-                  asChild 
                   className={`w-full ${plan.isFeatured ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'}`} 
                   size="lg"
                 >

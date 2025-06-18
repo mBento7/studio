@@ -16,6 +16,9 @@ import {
   Twitter,
   Youtube,
   Globe,
+  Pencil,
+  Eye,
+  Gift,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/logo";
@@ -115,44 +118,46 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
         </div>
 
         <nav className="flex items-center gap-2 sm:gap-4">
-          <Button variant="ghost" asChild size="sm">
-            <Link href="/search" className="flex items-center">
-              <Search className="h-4 w-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">Explorar</span>
-            </Link>
+          <Link href="/dashboard/feed" className="flex items-center">
+            <Button variant="default" size="sm">
+              <Home className="h-4 w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">Home</span>
+            </Button>
+          </Link>
+          <Link href="/dashboard" className="flex items-center">
+            <Button variant="default" size="sm">
+              <Pencil className="h-4 w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">Editar Perfil</span>
+            </Button>
+          </Link>
+          <Link href={profileLink} className="flex items-center">
+            <Button variant="default" size="sm">
+              <Eye className="h-4 w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">Ver Perfil Público</span>
+            </Button>
+          </Link>
+          <Link href="/dashboard/referrals" className="flex items-center">
+            <Button variant="default" size="sm">
+              <Gift className="h-4 w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">Indique e Ganhe</span>
+            </Button>
+          </Link>
+          <Link href="/dashboard/account" className="flex items-center">
+            <Button variant="default" size="sm">
+              <User className="h-4 w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">Conta</span>
+            </Button>
+          </Link>
+          <Button variant="default" size="sm" onClick={handleLogout} className="flex items-center">
+            <LogOut className="h-4 w-4 sm:mr-1.5" />
+            <span className="hidden sm:inline">Sair</span>
           </Button>
-
-          {currentUserProfile && currentUserProfile.socialLinks && currentUserProfile.socialLinks.length > 0 && (
-              <div className="hidden lg:flex items-center gap-2">
-                {currentUserProfile.socialLinks.map((link: SocialLink) => {
-                  const Icon =
-                    socialIconMap[link.platform.toLowerCase()] || Globe;
-                  return (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      asChild
-                      key={link.id}
-                    >
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={link.platform}
-                      >
-                        <Icon className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  );
-                })}
-              </div>
-          )}
         </nav>
 
         <div className="flex items-center gap-3">
           <Button
-            variant="ghost"
-            size="icon"
+            variant="default"
+            size="sm"
             className="rounded-full"
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -167,21 +172,16 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
             <div className="w-8 h-8 bg-muted rounded-full animate-pulse" />
           ) : user && currentUserProfile ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
-                >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={currentUserProfile.profilePictureUrl}
-                      alt={currentUserProfile.name}
-                    />
-                    <AvatarFallback>
-                      {getInitial(currentUserProfile.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
+              <DropdownMenuTrigger className="relative h-8 w-8 rounded-full font-semibold transition-colors duration-150 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed bg-gray-700 text-white hover:bg-gray-800 focus:ring-2 focus:ring-gray-400 active:bg-gray-900">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={currentUserProfile.profilePictureUrl}
+                    alt={currentUserProfile.name}
+                  />
+                  <AvatarFallback>
+                    {getInitial(currentUserProfile.name)}
+                  </AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
@@ -195,13 +195,13 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href={profileLink}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Ver Perfil</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/dashboard/feed">
                     <Home className="mr-2 h-4 w-4" />
                     <span>Início</span>
