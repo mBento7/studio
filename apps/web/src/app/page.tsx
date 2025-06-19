@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { redirect } from 'next/navigation';
 
 // Utility function for class names
 function cn(...classes: (string | undefined | null | false)[]): string {
@@ -531,37 +532,8 @@ function PublicFooter() {
 
 // Main HomePage Component
 function HomePage() {
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <PublicHeader isTransparent={true} />
-      <main className="flex-grow">
-        <LandingHeroSection />
-        <LandingBenefitsSection />
-        <LandingTemplatesSection />
-        <LandingTestimonialsSection />
-        <LandingPricingSection />
-        <LandingFaqSection />
-        
-        {/* Final CTA Section */}
-        <section className="py-16 bg-muted">
-          <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
-              Pronto para Elevar Sua Presença Digital?
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-              Junte-se ao {siteConfig.name} hoje e crie um perfil profissional que se destaca.
-            </p>
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <a href="/login">
-                Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-            </Button>
-          </div>
-        </section>
-      </main>
-      <PublicFooter />
-    </div>
-  );
+  redirect('/dashboard/feed');
+  return null;
 }
 
 export default HomePage;

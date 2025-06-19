@@ -129,14 +129,14 @@
 
 /* Botão estilo glass/AI (inspirado na imagem) */
 .glass-btn {
-  border: none;
+  border: 1.5px solid #7f5af0;
   border-radius: 999px;
   padding: 0 20px;
   height: 40px;
   font-size: 1rem;
-  color: #fff;
-  background: rgba(37, 99, 235, 0.55); /* azul translúcido */
-  box-shadow: 0 2px 12px 0 rgba(37, 99, 235, 0.18), 0 1.5px 8px 0 #fff2;
+  color: #e0e6ed;
+  background: rgba(127,90,240,0.13);
+  box-shadow: 0 2px 12px 0 rgba(127,90,240,0.10), 0 1.5px 8px 0 #fff2;
   margin: 0 8px;
   display: inline-flex;
   align-items: center;
@@ -144,44 +144,36 @@
   font-weight: 600;
   position: relative;
   overflow: hidden;
-}
-.glass-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.glass-btn > * {
-  position: relative;
-  z-index: 1;
-}
-.glass-btn:hover {
-  box-shadow: 0 6px 32px 0 rgba(37, 99, 235, 0.22), 0 2px 12px 0 #fff6;
-  transform: scale(1.07);
-  background: rgba(37, 99, 235, 0.55); /* mesma cor do normal, sem escurecer */
+  transition: 
+    box-shadow 0.2s,
+    background 0.2s,
+    color 0.2s,
+    border 0.2s,
+    transform 0.15s;
 }
 .glass-btn.tab-active {
-  background: linear-gradient(90deg, #4f8cff 0%, #a259f7 100%);
-  box-shadow: 0 8px 32px 0 #a259f7cc, 0 0 16px 4px #fff3;
-  border: 2px solid #fff;
+  background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
   color: #fff;
+  border: 2.5px solid #fff;
+  box-shadow: 0 8px 40px 0 #7f5af0cc, 0 2px 12px 0 #fff6;
   transform: scale(1.08);
   z-index: 2;
 }
 .glass-btn.tab-inactive {
   background: rgba(127,90,240,0.13);
-  color: #444;
-  border: none;
-  opacity: 0.85;
-  box-shadow: none;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  color: #5b5b7a;
+  border: 1.5px solid #a259f7;
+  opacity: 1;
+  box-shadow: 0 2px 12px 0 rgba(127,90,240,0.08);
+  filter: none;
+  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
 }
-.glass-btn:active {
-  filter: brightness(0.97) blur(0.5px);
-  transform: scale(0.98);
+.glass-btn.tab-inactive:hover, .glass-btn.tab-inactive:focus {
+  background: linear-gradient(90deg, #ede9fe 0%, #e0fdfa 100%);
+  color: #7f5af0;
+  border: 2px solid #7f5af0;
+  box-shadow: 0 4px 20px 0 #a259f7cc;
+  transform: scale(1.04);
 }
 
 /* Versão menor para ações secundárias */

@@ -132,7 +132,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
 
   const publicProfileLink = userProfile.username ? `/profile/${userProfile.username}` : '/dashboard';
   return (
-    <aside className="flex flex-col items-center gap-3 max-w-[350px] w-full">
+    <aside className="flex flex-col gap-3 max-w-[350px] w-full">
       <Card className="w-full max-w-[350px] flex flex-col items-center p-0 shadow-lg rounded-2xl bg-card/90 border-0 overflow-hidden">
         {/* Capa do perfil */}
         {userProfile.coverPhotoUrl ? (

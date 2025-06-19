@@ -168,7 +168,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
     <div
       ref={ref}
       className={cn(
-        "w-full max-w-2xl mx-auto rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-lg overflow-hidden transition-all hover:shadow-xl bg-white dark:bg-zinc-900 flex flex-col",
+        "w-full mx-auto rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-xl overflow-hidden transition-all hover:shadow-2xl bg-white dark:bg-zinc-900 flex flex-row items-center gap-8 mb-8 p-8",
         config.bg,
         patrocinado && "ring-2 ring-yellow-400 dark:ring-yellow-500",
         urgente && "ring-2 ring-red-400 dark:ring-red-500"
@@ -176,138 +176,62 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
       style={{ minHeight: 'unset' }}
       {...props}
     >
-      {/* Imagem de capa no topo */}
-      <div className="relative w-full aspect-[4/2] md:aspect-[3/1] max-h-48 overflow-hidden bg-muted">
+      {/* Imagem lateral esquerda ainda maior */}
+      <div className="flex-shrink-0 w-44 h-44 rounded-2xl overflow-hidden bg-muted">
         <img
           src={imagem}
           alt={titulo}
           className="w-full h-full object-cover"
-          style={{ maxHeight: 192 }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwTDE3NSAxMjVIMjI1TDIwMCAxNTBaIiBmaWxsPSIjOUNBM0FGIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOUNBM0FGIiBmb250LXNpemU9IjE0Ij5JbWFnZW0gbsOjbyBlbmNvbnRyYWRhPC90ZXh0Pgo8L3N2Zz4K';
           }}
         />
       </div>
-      {/* Conteúdo mais compacto */}
-      <div className="flex-1 flex flex-col justify-between min-w-0 p-3 md:p-4">
-        {/* Header com usuário e badges */}
-        <div className="flex items-center justify-between mb-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <Avatar>
-              <AvatarImage src={usuario.avatar} alt={usuario.nome} />
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-foreground truncate">
-                {usuario.nome}
-              </p>
-              <p className="text-[10px] text-muted-foreground capitalize flex items-center">
-                {config.icon}{config.badge}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-1">
-            {patrocinado && (
-              <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-[10px] px-2 py-0.5">
-                Patrocinado
-              </Badge>
-            )}
-            {urgente && (
-              <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 text-[10px] px-2 py-0.5">
-                Urgente
-              </Badge>
-            )}
-          </div>
+      {/* Conteúdo à direita */}
+      <div className="flex-1 min-w-0 flex flex-col justify-between">
+        {/* Título no topo */}
+        <span className="font-bold text-xl text-foreground truncate block mb-1">{titulo}</span>
+        {/* Imagem de perfil, ícone e badge do tipo de post */}
+        <div className="mb-3 flex items-center gap-3">
+          {/* Imagem de perfil quadrada com cantos arredondados */}
+          <img src={usuario.avatar} alt={usuario.nome} className="w-12 h-12 object-cover rounded-lg border border-border" />
+          <span className="flex-shrink-0 flex items-center gap-1">
+            {config.icon}
+            <span className="uppercase text-xs font-semibold text-muted-foreground tracking-wide">{config.badge}</span>
+          </span>
         </div>
-        {/* Título e descrição mais compactos */}
-        <div>
-          <h3 className="font-bold text-base text-foreground line-clamp-1 mb-0.5 md:text-lg md:mb-1">
-            {titulo}
-          </h3>
-          <p className="text-xs text-muted-foreground line-clamp-2 md:text-sm md:line-clamp-2">
-            {descricao}
-          </p>
-        </div>
-        {/* Preço */}
-        {preco && (
-          <div className="flex items-center justify-between mt-1">
-            <span className="text-base font-bold text-green-600 dark:text-green-400">
-              {preco}
-            </span>
-          </div>
-        )}
+        <p className="text-base text-muted-foreground truncate block">{descricao}</p>
         {/* Tags */}
         {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {tags.slice(0, 3).map((tag, index) => (
-              <Badge
-                key={index}
-                className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-[10px] px-2 py-0.5 rounded-full"
-              >
-                #{tag}
-              </Badge>
+          <div className="flex flex-wrap gap-3 mb-3">
+            {tags.map((tag, i) => (
+              <Badge key={i} className="bg-primary/10 text-primary border-primary/20 text-sm">#{tag}</Badge>
             ))}
-            {tags.length > 3 && (
-              <Badge className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 text-[10px] px-2 py-0.5 rounded-full">
-                +{tags.length - 3}
-              </Badge>
+          </div>
+        )}
+        {/* Ações */}
+        <div className="flex items-center gap-4 mt-3 mb-2">
+          <button
+            onClick={handleLike}
+            className={cn(
+              "flex items-center gap-2 text-base transition-colors",
+              isLiked
+                ? "text-rose-600"
+                : "text-muted-foreground hover:text-rose-600"
             )}
-          </div>
-        )}
-        {/* Localização */}
-        {localizacao && (
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-            <MapPin className="h-4 w-4" />
-            <span className="truncate">{localizacao}</span>
-          </div>
-        )}
-        {/* Footer com ações mais compacto */}
-        <div className="border-t border-border pt-2 mt-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLike}
-              className={cn(
-                "gap-1 text-xs transition-colors py-1 px-2",
-                isLiked ? "text-red-500 hover:text-red-600" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <Heart className={cn("h-4 w-4", isLiked && "fill-current")} />
-              {likeCount}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onComentar}
-              className="gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-1 px-2"
-            >
-              <MessageCircle className="h-4 w-4" />
-              {comentarios}
-            </Button>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLocation}
-              className="text-muted-foreground hover:text-foreground transition-colors py-1 px-2"
-            >
-              <MapPin className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleWhatsApp}
-              className="bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600 transition-colors py-1 px-2"
-            >
-              <Share2 className="h-4 w-4 mr-1" />
-              WhatsApp
-            </Button>
-          </div>
+          >
+            <Heart className={cn("w-5 h-5", isLiked && "fill-current")} />
+            <span>{likeCount}</span>
+          </button>
+          <button className="flex items-center gap-2 text-base text-muted-foreground hover:text-blue-500 transition-colors">
+            <MessageCircle className="w-5 h-5" />
+            <span>{comentarios}</span>
+          </button>
+          {/* CTA: Entrar em contato */}
+          <button className="flex items-center gap-2 py-2 px-4 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm shadow hover:scale-105 transition-transform">
+            Entrar em contato
+          </button>
         </div>
       </div>
     </div>

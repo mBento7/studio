@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Search, Flame, Sparkles, Handshake, Clock, Percent, Megaphone, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Flame, Sparkles, Handshake, Clock, Percent, Megaphone, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, ChevronLeft, ChevronRight, Tag, Star, Hand } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,7 @@ import { FeedCard } from '@/components/feed/FeedCard';
 import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
 import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
 import './feed-scrollbar.css';
+import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
 
 // Mock data
 const stories = [
@@ -309,33 +310,22 @@ function SocialCard({ item }: { item: any }) {
   };
 
   return (
-    <Card className="hover:shadow-2xl transition-all duration-300 border bg-card/90 rounded-2xl overflow-hidden group max-w-[350px] w-full mx-auto">
-      <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20">
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('https://picsum.photos/seed/${item.id}/400/200')` }} />
-        <div className="relative p-4 h-full flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="px-2 py-1 bg-background/80 rounded-full text-xs font-medium">
-              {item.category}
-            </span>
-            <button
-              onClick={handleBookmark}
-              className={cn(
-                "p-2 rounded-full transition-all",
-                isBookmarked 
-                  ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
-                  : "text-muted-foreground hover:bg-background/50"
-              )}
-            >
-              <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")} />
-            </button>
-          </div>
-          <div>
-            <h3 className="font-semibold text-lg text-foreground mb-1">{item.title}</h3>
-            <p className="text-sm text-muted-foreground">por {item.user}</p>
-          </div>
-        </div>
+    <Card className="w-full p-6 rounded-2xl shadow bg-card/90 border mx-auto flex flex-row items-center gap-6">
+      {/* Imagem à esquerda */}
+      <div className="flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+        <img src={item.imagem || `https://picsum.photos/seed/${item.id}/400/200`} alt={item.title || item.titulo} className="object-cover w-full h-full" />
       </div>
-      <CardContent className="p-4">
+      {/* Conteúdo à direita */}
+      <div className="flex-1 min-w-0">
+        <div className="relative">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-semibold text-lg text-foreground truncate">{item.titulo || item.title}</span>
+            {item.patrocinado && (
+              <span className="ml-2 px-2 py-0.5 bg-yellow-200 text-yellow-800 text-xs rounded-full">Patrocinado</span>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground truncate">{item.descricao || item.category}</p>
+        </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -363,7 +353,7 @@ function SocialCard({ item }: { item: any }) {
             <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }
@@ -376,11 +366,15 @@ function FeedContent({ activeTab, setActiveTab }: { activeTab: 'trending'|'new'|
   ];
   // Os tabs agora são controlados externamente
   return (
-    <section className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-        {feedItems[activeTab].map((item) => (
-          <SocialCard key={item.id} item={item} />
-        ))}
+    <section className="space-y-8">
+      <div className="flex justify-center w-full">
+        <div className="w-full max-w-2xl">
+          <div className="grid grid-cols-1 gap-8">
+            {feedItems[activeTab].map((item) => (
+              <SocialCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -702,6 +696,10 @@ export default function FeedPage() {
   const [tab, setTab] = useState<'feed' | 'search'>('feed');
   const [activeFeedTab, setActiveFeedTab] = useState<'trending'|'new'|'recommended'>('trending');
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+  // Filtro de cards
+  const [cardFilter, setCardFilter] = useState<'all'|'oferta_servico'|'oferta_produto'|'solicitacao_servico'|'solicitacao_produto'|'patrocinado'>('all');
+  // Substituir postsMock por estado local
+  const [posts, setPosts] = useState([...postsMock]);
 
   // Definição dos botões principais
   const mainTabs = [
@@ -733,41 +731,27 @@ export default function FeedPage() {
     stats: { views: 1234, connections: 89, projects: 12 },
   };
 
+  // Filtros disponíveis com ícones
+  const cardFilters = [
+    { key: 'all', label: 'Todos', icon: <Flame className="w-5 h-5" /> },
+    { key: 'oferta_servico', label: 'Serviços', icon: <Tag className="w-5 h-5 text-blue-500" /> },
+    { key: 'oferta_produto', label: 'Produtos', icon: <Star className="w-5 h-5 text-green-500" /> },
+    { key: 'solicitacao_servico', label: 'Solicitações de Serviço', icon: <Hand className="w-5 h-5 text-orange-500" /> },
+    { key: 'solicitacao_produto', label: 'Solicitações de Produto', icon: <Hand className="w-5 h-5 text-amber-500" /> },
+    { key: 'patrocinado', label: 'Patrocinados', icon: <Sparkles className="w-5 h-5 text-yellow-500" /> },
+  ];
+
+  // Atualizar filteredPosts para usar posts
+  const filteredPosts = cardFilter === 'all'
+    ? posts
+    : posts.filter(post => post.tipo === cardFilter);
+
   return (
     <>
       {/* Conteúdo principal do feed (tabs, stories, cards, etc.) */}
       {/* TODO: Certifique-se de que não há grid/flex duplicado aqui */}
       {/* Exemplo: */}
       <div className="w-full">
-        {/* Tabs principais */}
-        <div className="flex flex-nowrap gap-1 mb-4 px-2 overflow-x-auto scrollbar-thin scrollbar-thumb-muted-foreground/30 scrollbar-track-transparent hide-scrollbar">
-          {mainTabs.map((t) => (
-            <Button
-              key={t.key}
-              variant="tab"
-              active={tab === t.key}
-              onClick={() => setTab(t.key as 'feed'|'search')}
-              className="whitespace-nowrap"
-            >
-              <t.icon className="w-4 h-4" />
-              {t.label}
-            </Button>
-          ))}
-          <div className="flex gap-1 ml-2">
-            {feedTabs.map((t) => (
-              <Button
-                key={t.key}
-                variant="tab"
-                active={activeFeedTab === t.key}
-                onClick={() => setActiveFeedTab(t.key as 'new'|'recommended')}
-                className="whitespace-nowrap"
-              >
-                <t.icon className="w-4 h-4" />
-                {t.label}
-              </Button>
-            ))}
-          </div>
-        </div>
         {/* Banner de busca */}
         {tab === 'search' && (
           <div className="px-2 mb-3">
@@ -778,14 +762,67 @@ export default function FeedPage() {
         {tab === 'feed' && (
           <section className="flex flex-col items-center w-full">
             <div className="w-full max-w-3xl mx-auto p-0 sm:p-0">
+              {/* Stories */}
               <div className="space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0 px-2 py-2">
                 <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
                 <StoriesCarouselWithOverflow />
               </div>
+              {/* Seção de filtros por ícone */}
+              <div className="flex flex-wrap gap-3 my-6 justify-center">
+                {cardFilters.map(f => {
+                  // Definir cor do texto do label
+                  let labelColor = '';
+                  if (f.key === 'oferta_servico') labelColor = 'text-blue-500';
+                  else if (f.key === 'oferta_produto') labelColor = 'text-green-500';
+                  else if (f.key === 'solicitacao_servico') labelColor = 'text-orange-500';
+                  else if (f.key === 'solicitacao_produto') labelColor = 'text-amber-500';
+                  else if (f.key === 'patrocinado') labelColor = 'text-yellow-500';
+                  else labelColor = 'text-primary';
+                  return (
+                    <button
+                      key={f.key}
+                      onClick={() => setCardFilter(f.key as typeof cardFilter)}
+                      className={`group flex flex-col items-center justify-center p-3 rounded-full transition border shadow-sm text-lg relative
+                        ${cardFilter === f.key
+                          ? 'bg-primary text-white border-primary shadow-md scale-110'
+                          : 'bg-card text-foreground border-border hover:bg-muted/60'}`}
+                      aria-label={f.label}
+                    >
+                      {f.icon}
+                      <span className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-0.5 rounded text-xs font-medium bg-background/90 shadow transition-all duration-200
+                        ${cardFilter === f.key ? `${labelColor} opacity-100 h-auto` : `opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto ${labelColor}`}`}
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {f.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
               {/* Feed de Descobertas */}
               <div className="max-w-3xl mx-auto py-6 px-2 sm:px-0">
                 <h1 className="text-2xl font-bold mb-4">Feed de Descobertas</h1>
-                {postsMock.map((post, idx) => (
+                {/* Editor de Postagens */}
+                <FeedPostEditor onPost={(data) => {
+                  setPosts(prev => [
+                    {
+                      tipo: 'oferta_servico', // ou outro tipo padrão
+                      titulo: data.texto.substring(0, 50) || 'Nova postagem',
+                      descricao: data.texto,
+                      imagem: data.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
+                      preco: '',
+                      localizacao: '',
+                      patrocinado: false,
+                      usuario: { nome: 'Usuário Demo', avatar: 'https://github.com/shadcn.png' },
+                      curtidas: 0,
+                      comentarios: 0,
+                      tags: [],
+                      whatsappUrl: '',
+                    },
+                    ...prev,
+                  ]);
+                }} />
+                {filteredPosts.map((post, idx) => (
                   <FeedCard key={idx} {...post} />
                 ))}
               </div>

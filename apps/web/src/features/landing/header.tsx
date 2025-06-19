@@ -7,8 +7,12 @@ import {
   Home,
   LogOut,
   Moon,
+  Search,
   Sun,
   User,
+  Crown,
+  Bell,
+  PlusSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/logo";
@@ -76,7 +80,7 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
           </Link>
         </div>
 
-        <nav className="flex items-center gap-2 sm:gap-4">
+        <nav className="flex-1 flex justify-center items-center gap-2 sm:gap-4">
           <Link href="/dashboard/feed">
             <button
               className={cn(
@@ -88,6 +92,37 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
               <span className="hidden sm:inline">Home</span>
             </button>
           </Link>
+          <Link href="/search">
+            <button
+              className={cn(
+                navButtonStyles,
+                "bg-muted text-muted-foreground hover:bg-muted-foreground/10"
+              )}
+            >
+              <Search className="h-4 w-4 mr-1 inline-block" />
+              <span className="hidden sm:inline">Buscar</span>
+            </button>
+          </Link>
+          <Link href="/planos">
+            <button
+              className={cn(
+                navButtonStyles,
+                "bg-amber-500 text-white hover:bg-amber-600"
+              )}
+            >
+              <Crown className="h-4 w-4 mr-1 inline-block" />
+              <span className="hidden sm:inline">Planos</span>
+            </button>
+          </Link>
+          <button
+            className={cn(
+              navButtonStyles,
+              "bg-primary text-primary-foreground hover:bg-primary/90"
+            )}
+          >
+            <PlusSquare className="h-4 w-4 mr-1 inline-block" />
+            <span className="hidden sm:inline">Criar</span>
+          </button>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -97,6 +132,13 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
             aria-label="Alternar tema"
           >
             {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </button>
+
+          <button
+            className="rounded-full p-2 bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
+            aria-label="Notificações"
+          >
+            <Bell className="h-5 w-5" />
           </button>
 
           {loading ? (

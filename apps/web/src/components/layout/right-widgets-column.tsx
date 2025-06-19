@@ -157,9 +157,9 @@ export function CouponsWidget() {
 
 export function RightWidgetsColumn({ onCouponClick }: { onCouponClick?: () => void }) {
   return (
-    <div className="sticky top-16 flex flex-col gap-3 max-w-[350px] w-full">
-      <UserAdExample />
+    <div className="flex flex-col gap-3 max-w-[350px] w-full">
       <PremiumAdCard />
+      <UserAdExample />
       {/* <QuickActions onCouponClick={onCouponClick || (() => {})} /> Removido pois está na left-profile-sidebar */}
       {/* <ActivityStats /> Removido pois está na left-profile-sidebar */}
       <TrendingHashtags />
