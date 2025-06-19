@@ -445,7 +445,6 @@ export function ProfileForm() {
                 currentImageUrl={watchedProfilePictureUrl}
                 uploading={profileUploading}
                 setUploading={setProfileUploading}
-                aiHintName="profilePictureDataAiHint"
               />
               <ImageUploadField
                 label="Foto de Capa"
@@ -455,7 +454,6 @@ export function ProfileForm() {
                 currentImageUrl={watchedCoverPhotoUrl}
                 uploading={coverUploading}
                 setUploading={setCoverUploading}
-                aiHintName="coverPhotoDataAiHint"
               />
             </CardContent>
           </Card>

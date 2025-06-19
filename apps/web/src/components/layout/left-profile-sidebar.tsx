@@ -141,18 +141,18 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
           <ProfileBg />
         )}
         {/* Avatar sobreposto */}
-        <div className="relative w-full flex justify-center">
-          <Avatar className="h-20 w-20 -mt-10 border-4 border-background bg-muted shadow-sm">
+        <div className="relative w-full flex justify-center -mt-14 mb-2">
+          <Avatar className="w-28 h-28 rounded-xl border-4 border-background shadow-lg bg-muted overflow-hidden">
             {userProfile.profilePictureUrl ? (
-              <AvatarImage src={userProfile.profilePictureUrl} alt={userProfile.name || 'User'} />
+              <AvatarImage src={userProfile.profilePictureUrl} alt={userProfile.name || 'User'} className="object-cover w-full h-full rounded-xl" />
             ) : (
-              <AvatarFallback>
+              <AvatarFallback className="text-2xl">
                 {userProfile.name && userProfile.name.trim() !== '' ? userProfile.name.substring(0, 2) : 'U'}
               </AvatarFallback>
             )}
           </Avatar>
         </div>
-        <div className="text-center mt-4 w-full px-4 pb-4">
+        <div className="text-center mt-2 w-full px-4 pb-4">
           <h2 className="text-xl font-bold text-primary">
             {userProfile.name && userProfile.name.trim() !== '' ? userProfile.name : 'Nome não cadastrado'}
           </h2>

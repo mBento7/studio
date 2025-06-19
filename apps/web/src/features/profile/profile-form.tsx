@@ -1,8 +1,8 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle, Trash2, Instagram, Linkedin, Github, Facebook, Twitter, Youtube, Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,10 +10,13 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUploadField } from '@/components/ui/image-upload-field';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
 // Esquema de validação para um item do portfólio
 const portfolioItemSchema = z.object({
@@ -82,12 +85,25 @@ interface ProfileFormProps {
   isLoading: boolean;
 }
 
+const socialPlatforms = [
+  { value: "instagram", label: "Instagram", icon: Instagram },
+  { value: "linkedin", label: "LinkedIn", icon: Linkedin },
+  { value: "github", label: "GitHub", icon: Github },
+  { value: "facebook", label: "Facebook", icon: Facebook },
+  { value: "twitter", label: "Twitter/X", icon: Twitter },
+  { value: "youtube", label: "YouTube", icon: Youtube },
+  { value: "website", label: "Website", icon: Globe },
+  { value: "outra", label: "Outra", icon: Globe },
+];
+
 export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
+    watch,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: initialData,
@@ -164,20 +180,40 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
             <Label htmlFor="bio">Bio</Label>
             <Textarea id="bio" {...register("bio")} />
           </div>
-          <div>
-            <Label htmlFor="profilePictureUrl">URL da Foto de Perfil</Label>
-            <Input id="profilePictureUrl" {...register("profilePictureUrl")} />
-            {errors.profilePictureUrl && (
-              <p className="text-destructive text-sm mt-1">{errors.profilePictureUrl.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="coverPhotoUrl">URL da Foto de Capa</Label>
-            <Input id="coverPhotoUrl" {...register("coverPhotoUrl")} />
-            {errors.coverPhotoUrl && (
-              <p className="text-destructive text-sm mt-1">{errors.coverPhotoUrl.message}</p>
-            )}
-          </div>
+          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+            <CardHeader className="pb-4">
+              <CardTitle>Imagens do Perfil</CardTitle>
+              <CardDescription>
+                Gerencie sua foto de perfil e capa
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <ImageUploadField
+                  label="Foto de Perfil"
+                  name="profilePictureUrl"
+                  control={control}
+                  setValue={setValue}
+                  currentImageUrl={watch("profilePictureUrl")}
+                  uploading={false}
+                  setUploading={() => {}}
+                  aspectRatio="1/1"
+                  hint="Recomendado: 1:1, 400x400px, até 2MB."
+                />
+                <ImageUploadField
+                  label="Foto de Capa"
+                  name="coverPhotoUrl"
+                  control={control}
+                  setValue={setValue}
+                  currentImageUrl={watch("coverPhotoUrl")}
+                  uploading={false}
+                  setUploading={() => {}}
+                  aspectRatio="16/9"
+                  hint="Recomendado: 16:9, 1200x675px, até 2MB."
+                />
+              </div>
+            </CardContent>
+          </Card>
           <div>
             <Label htmlFor="category">Categoria</Label>
             <Input id="category" {...register("category")} />
@@ -215,115 +251,78 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
           {socialLinksFields.length === 0 && (
             <p className="text-muted-foreground text-sm mb-4">Adicione links para suas redes sociais.</p>
           )}
-          {socialLinksFields.map((link, index) => (
-            <motion.div
-              key={link.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-end space-x-2 mb-4 border p-4 rounded-lg"
-            >
-              <div className="flex-1 space-y-2">
-                <div>
-                  <Label htmlFor={`socialLinks.${index}.platform`}>Plataforma</Label>
-                  <Input
-                    id={`socialLinks.${index}.platform`}
-                    {...register(`socialLinks.${index}.platform`, { required: "Plataforma é obrigatória" })}
-                    placeholder="Instagram, LinkedIn, GitHub etc."
-                  />
-                  {errors.socialLinks?.[index]?.platform && (
-                    <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.platform?.message}</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor={`socialLinks.${index}.url`}>URL</Label>
-                  <Input
-                    id={`socialLinks.${index}.url`}
-                    {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
-                    placeholder="https://exemplo.com/seu-perfil"
-                  />
-                  {errors.socialLinks?.[index]?.url && (
-                    <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.url?.message}</p>
-                  )}
-                </div>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => removeSocialLink(index)}
+          <div className="space-y-4">
+            {socialLinksFields.map((link, index) => (
+              <motion.div
+                key={link.id}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
               >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </motion.div>
-          ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end border p-4 rounded-lg">
+                  <div>
+                    <Label htmlFor={`socialLinks.${index}.platform`}>Plataforma</Label>
+                    <Controller
+                      control={control}
+                      name={`socialLinks.${index}.platform`}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecione a plataforma" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {socialPlatforms.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                <div className="flex items-center">
+                                  <option.icon className="w-4 h-4 mr-2" />
+                                  {option.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {errors.socialLinks?.[index]?.platform && (
+                      <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.platform?.message}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor={`socialLinks.${index}.url`}>URL</Label>
+                    <Input
+                      id={`socialLinks.${index}.url`}
+                      {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
+                      placeholder={
+                        socialPlatforms.find(opt => opt.value === watch(`socialLinks.${index}.platform`))?.label === "Website"
+                          ? "https://seusite.com"
+                          : "https://exemplo.com/seu-perfil"
+                      }
+                    />
+                    {errors.socialLinks?.[index]?.url && (
+                      <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.url?.message}</p>
+                    )}
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => removeSocialLink(index)}
+                    className="md:col-span-2 mt-2 md:mt-0"
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
           <Button
             type="button"
             variant="outline"
             onClick={() => appendSocialLink({ id: Date.now().toString(), platform: '', url: '' })}
-            className="w-full"
+            className="w-full mt-4"
           >
             <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Link Social
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Serviços</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {servicesFields.length === 0 && (
-            <p className="text-muted-foreground text-sm mb-4">Adicione os serviços que você oferece.</p>
-          )}
-          {servicesFields.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-end space-x-2 mb-4 border p-4 rounded-lg"
-            >
-              <div className="flex-1 space-y-2">
-                <div>
-                  <Label htmlFor={`services.${index}.name`}>Nome do Serviço</Label>
-                  <Input
-                    id={`services.${index}.name`}
-                    {...register(`services.${index}.name`, { required: "Nome do serviço é obrigatório" })}
-                    placeholder="Desenvolvimento Web, Design Gráfico, Consultoria etc."
-                  />
-                  {errors.services?.[index]?.name && (
-                    <p className="text-destructive text-sm mt-1">{errors.services[index]?.name?.message}</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor={`services.${index}.description`}>Descrição (Opcional)</Label>
-                  <Textarea
-                    id={`services.${index}.description`}
-                    {...register(`services.${index}.description`)}
-                    placeholder="Descreva brevemente o serviço."
-                  />
-                </div>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => removeService(index)}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </motion.div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => appendService({ id: Date.now().toString(), name: '', description: '' })}
-            className="w-full"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Serviço
           </Button>
         </CardContent>
       </Card>
@@ -380,8 +379,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
               </div>
               <Button
                 type="button"
-                variant="ghost"
-                size="icon"
+                variant="outline"
+                size="sm"
                 onClick={() => removeExperience(index)}
               >
                 <Trash2 className="h-4 w-4 text-destructive" />
@@ -451,8 +450,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
               </div>
               <Button
                 type="button"
-                variant="ghost"
-                size="icon"
+                variant="outline"
+                size="sm"
                 onClick={() => removeEducation(index)}
               >
                 <Trash2 className="h-4 w-4 text-destructive" />
@@ -466,92 +465,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
             className="w-full"
           >
             <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Educação
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Avaliações</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {reviewsFields.length === 0 && (
-            <p className="text-muted-foreground text-sm mb-4">Adicione avaliações/depoimentos.</p>
-          )}
-          {reviewsFields.map((review, index) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-end space-x-2 mb-4 border p-4 rounded-lg"
-            >
-              <div className="flex-1 space-y-2">
-                <div>
-                  <Label htmlFor={`reviews.${index}.authorName`}>Nome do Autor</Label>
-                  <Input
-                    id={`reviews.${index}.authorName`}
-                    {...register(`reviews.${index}.authorName`, { required: "Nome do autor é obrigatório" })}
-                  />
-                  {errors.reviews?.[index]?.authorName && (
-                    <p className="text-destructive text-sm mt-1">{errors.reviews[index]?.authorName?.message}</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor={`reviews.${index}.authorAvatarUrl`}>URL do Avatar do Autor</Label>
-                  <Input
-                    id={`reviews.${index}.authorAvatarUrl`}
-                    {...register(`reviews.${index}.authorAvatarUrl`)}
-                    placeholder="https://exemplo.com/avatar.jpg"
-                  />
-                  {errors.reviews?.[index]?.authorAvatarUrl && (
-                    <p className="text-destructive text-sm mt-1">{errors.reviews[index]?.authorAvatarUrl?.message}</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor={`reviews.${index}.rating`}>Avaliação (1-5)</Label>
-                  <Input
-                    id={`reviews.${index}.rating`}
-                    type="number"
-                    {...register(`reviews.${index}.rating`, { valueAsNumber: true, min: 1, max: 5 })}
-                  />
-                  {errors.reviews?.[index]?.rating && (
-                    <p className="text-destructive text-sm mt-1">{errors.reviews[index]?.rating?.message}</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor={`reviews.${index}.comment`}>Comentário (Opcional)</Label>
-                  <Textarea
-                    id={`reviews.${index}.comment`}
-                    {...register(`reviews.${index}.comment`)}
-                    placeholder="Escreva o comentário..."
-                  />
-                </div>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => removeReview(index)}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </motion.div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => appendReview({
-              id: Date.now().toString(),
-              authorName: '',
-              authorAvatarUrl: '',
-              rating: 5,
-              comment: ''
-            })}
-            className="w-full"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Avaliação
           </Button>
         </CardContent>
       </Card>

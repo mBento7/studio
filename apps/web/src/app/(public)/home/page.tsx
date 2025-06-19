@@ -1127,23 +1127,11 @@ function PremiumPricing() {
                 Comece gratuitamente hoje mesmo.
               </p>
               
-              <motion.button
-                className="relative group overflow-hidden bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium py-4 px-8 rounded-xl transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="relative z-10 flex items-center gap-3">
-                  <Star className="h-5 w-5" />
-                  Começar Gratuitamente
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "100%" }}
-                  transition={{ duration: 0.5 }}
-                />
-              </motion.button>
+              <Button size="md" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <a href="#pricing">
+                  Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+              </Button>
             </div>
           </div>
         </motion.div>
@@ -1370,7 +1358,7 @@ function WhosDoPricingPage() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
               Junte-se ao {siteConfig.name} hoje e crie um perfil profissional que se destaca com nosso sistema flexível de créditos.
             </p>
-            <Button size="md" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="md" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <a href="#pricing">
                 Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
               </a>

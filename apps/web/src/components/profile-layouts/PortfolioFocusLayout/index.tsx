@@ -136,4 +136,12 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
   );
 };
 
-export default PortfolioFocusLayout; 
+export default PortfolioFocusLayout;
+
+export const config = {
+  id: 'portfolio-focus',
+  name: 'Foco em Portfólio',
+  description: 'Destaque seu portfólio de projetos.',
+  imageUrl: 'https://picsum.photos/seed/layout-portfolio/300/200',
+  plan: 'standard',
+}; 

@@ -272,4 +272,12 @@ const PremiumProLayout: React.FC<ProfileLayoutProps> = ({
   );
 };
 
-export default PremiumProLayout; 
+export default PremiumProLayout;
+
+export const config = {
+  id: 'premium-pro',
+  name: 'Premium Pro',
+  description: 'Layout avançado para máximo impacto profissional.',
+  imageUrl: 'https://picsum.photos/seed/layout-premiumpro/300/200',
+  plan: 'premium',
+}; 

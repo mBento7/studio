@@ -18,7 +18,7 @@ export function MainGridLayout({
   rightSidebar?: React.ReactNode;
 }) {
   return (
-    <div className="max-w-full mx-auto grid grid-cols-1 lg:grid-cols-[16rem_1fr_16rem] gap-3 p-0 md:p-2 px-2 items-stretch min-h-[calc(100vh-4rem)]">
+    <div className="max-w-full mx-auto grid grid-cols-1 lg:grid-cols-[16rem_1fr_16rem] gap-1 p-0 md:p-2 px-0 items-stretch min-h-[calc(100vh-4rem)]">
       {/* Coluna esquerda (sidebar) */}
       <div className="hidden lg:block sticky top-20 h-full self-stretch">
         {leftSidebar}

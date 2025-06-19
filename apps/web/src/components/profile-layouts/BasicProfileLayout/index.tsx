@@ -177,4 +177,12 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
   );
 };
 
-export default BasicProfileLayout; 
+export default BasicProfileLayout;
+
+export const config = {
+  id: 'basic-profile',
+  name: 'Perfil Básico',
+  description: 'Layout básico para perfis simples.',
+  imageUrl: 'https://picsum.photos/seed/layout-basic/300/200',
+  plan: 'free',
+}; 

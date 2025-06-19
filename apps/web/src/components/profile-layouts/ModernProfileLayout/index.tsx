@@ -224,3 +224,11 @@ const ModernProfileLayout = ({
 };
 
 export default ModernProfileLayout;
+
+export const config = {
+  id: 'modern-profile',
+  name: 'Perfil Moderno',
+  description: 'Layout moderno e visualmente atraente.',
+  imageUrl: 'https://picsum.photos/seed/layout-modern/300/200',
+  plan: 'standard',
+};

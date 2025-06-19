@@ -262,4 +262,12 @@ const AdvancedProfileLayout: React.FC<AdvancedProfileLayoutProps> = ({
   );
 };
 
-export default AdvancedProfileLayout; 
+export default AdvancedProfileLayout;
+
+export const config = {
+  id: 'advanced-profile',
+  name: 'Perfil Avançado',
+  description: 'Layout avançado com recursos extras.',
+  imageUrl: 'https://picsum.photos/seed/layout-advanced/300/200',
+  plan: 'premium',
+}; 

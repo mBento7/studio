@@ -222,4 +222,12 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
   );
 };
 
-export default MinimalistCardLayout; 
+export default MinimalistCardLayout;
+
+export const config = {
+  id: 'minimalist-card',
+  name: 'Cartão Minimalista',
+  description: 'Layout elegante e direto. Ideal para começar.',
+  imageUrl: 'https://picsum.photos/seed/layout-minimalist/300/200',
+  plan: 'free',
+}; 
