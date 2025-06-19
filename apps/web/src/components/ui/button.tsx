@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { cn } from '../../lib/utils';
 
 export type ButtonVariant = 'nav' | 'tab' | 'default' | 'gradient' | 'outline';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -11,6 +12,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
 }
 
 const baseStyles =
@@ -40,30 +42,27 @@ const sizeStyles: Record<ButtonSize, string> = {
   lg: 'text-lg px-5 py-3',
 };
 
-export const Button: React.FC<ButtonProps> = ({
-  variant = 'default',
-  size = 'md',
-  active = false,
-  leftIcon,
-  rightIcon,
-  className,
-  children,
-  ...props
-}) => {
-  return (
-    <button
-      className={clsx(
-        baseStyles,
-        variantStyles[variant],
-        sizeStyles[size],
-        active && activeStyles[variant],
-        className
-      )}
-      {...props}
-    >
-      {leftIcon && <span className="w-5 h-5">{leftIcon}</span>}
-      {children}
-      {rightIcon && <span className="w-5 h-5">{rightIcon}</span>}
-    </button>
-  );
-};
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant = 'default', size = 'md', active = false, leftIcon, rightIcon, className, children, ...props }, ref) => {
+    const isTab = variant === 'tab';
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          isTab && 'glass-btn',
+          isTab && (active ? 'tab-active' : 'tab-inactive'),
+          baseStyles,
+          variantStyles[variant],
+          sizeStyles[size],
+          active && activeStyles[variant],
+          className
+        )}
+        {...props}
+      >
+        {leftIcon && <span className="w-5 h-5">{leftIcon}</span>}
+        {children}
+        {rightIcon && <span className="w-5 h-5">{rightIcon}</span>}
+      </button>
+    );
+  }
+);

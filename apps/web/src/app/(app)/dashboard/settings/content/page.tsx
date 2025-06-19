@@ -334,7 +334,7 @@ export default function ContentSettingsPage() {
                   <CardContent className="p-4 flex flex-col justify-center gap-2 w-2/3">
                     <h3 className="text-lg font-semibold">{premiumBanner.title}</h3>
                     <p className="text-sm text-muted-foreground">{premiumBanner.description}</p>
-                    <Button size="sm" asChild><a href={premiumBanner.ctaLink} target="_blank" rel="noopener noreferrer">{premiumBanner.ctaText}</a></Button>
+                    <Button size="sm"><a href={premiumBanner.ctaLink} target="_blank" rel="noopener noreferrer">{premiumBanner.ctaText}</a></Button>
                   </CardContent>
                 </Card>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

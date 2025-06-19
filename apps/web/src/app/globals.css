@@ -74,3 +74,146 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Botão customizado estilo 16 */
+.btn-16 {
+  border: none;
+  color: #000;
+}
+.btn-16:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  direction: rtl;
+  z-index: -1;
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  transition: all 0.3s ease;
+}
+.btn-16:hover {
+  color: #000;
+}
+.btn-16:hover:after {
+  left: auto;
+  right: 0;
+  width: 100%;
+}
+.btn-16:active {
+  top: 2px;
+}
+
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+/* Botão estilo glass/AI (inspirado na imagem) */
+.glass-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0 20px;
+  height: 40px;
+  font-size: 1rem;
+  color: #fff;
+  background: rgba(37, 99, 235, 0.55); /* azul translúcido */
+  box-shadow: 0 2px 12px 0 rgba(37, 99, 235, 0.18), 0 1.5px 8px 0 #fff2;
+  margin: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+.glass-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.glass-btn > * {
+  position: relative;
+  z-index: 1;
+}
+.glass-btn:hover {
+  box-shadow: 0 6px 32px 0 rgba(37, 99, 235, 0.22), 0 2px 12px 0 #fff6;
+  transform: scale(1.07);
+  background: rgba(37, 99, 235, 0.55); /* mesma cor do normal, sem escurecer */
+}
+.glass-btn.tab-active {
+  background: linear-gradient(90deg, #4f8cff 0%, #a259f7 100%);
+  box-shadow: 0 8px 32px 0 #a259f7cc, 0 0 16px 4px #fff3;
+  border: 2px solid #fff;
+  color: #fff;
+  transform: scale(1.08);
+  z-index: 2;
+}
+.glass-btn.tab-inactive {
+  background: rgba(127,90,240,0.13);
+  color: #444;
+  border: none;
+  opacity: 0.85;
+  box-shadow: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.glass-btn:active {
+  filter: brightness(0.97) blur(0.5px);
+  transform: scale(0.98);
+}
+
+/* Versão menor para ações secundárias */
+.glass-btn.sm {
+  height: 26px;
+  font-size: 0.85rem;
+  padding: 0 8px;
+}
+
+/* Aperfeiçoamento UX para botões de abas do feed */
+.glass-btn.tab-active {
+  box-shadow: 0 8px 40px 0 #7f5af0cc, 0 2px 12px 0 #fff6;
+  border: 2.5px solid #fff;
+  background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
+  color: #fff;
+  transform: scale(1.08);
+  z-index: 2;
+}
+.glass-btn.tab-inactive {
+  opacity: 0.85;
+  filter: blur(0.2px);
+}
+.glass-btn:active {
+  filter: brightness(0.95);
+  transform: scale(0.98);
+}
+.glass-btn {
+  margin: 0 0.5rem;
+  min-width: 120px;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}

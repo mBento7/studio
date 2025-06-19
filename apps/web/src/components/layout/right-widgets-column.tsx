@@ -54,73 +54,13 @@ export function PremiumAdCard() {
 }
 
 // QuickActions
-export function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
-  return (
-    <div className="space-y-4 p-5 bg-card/90 backdrop-blur-md rounded-2xl shadow-xl border border-border">
-      <h3 className="text-lg font-semibold text-center">Criar Novo</h3>
-      <TooltipProvider>
-        <div className="space-y-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105">
-                <Clock className="w-4 h-4" />
-                Status (24h)
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Publique um conteúdo que dura 24 horas.</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105" onClick={onCouponClick}>
-                <Percent className="w-4 h-4" />
-                Cupom / Oferta
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ofereça um desconto ou promoção especial.</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105">
-                <Megaphone className="w-4 h-4" />
-                Anúncio Patrocinado
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Impulsione seu conteúdo com mais visibilidade.</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      </TooltipProvider>
-    </div>
-  );
-}
+// export function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
+//   ...
+// }
 
-export function ActivityStats() {
-  return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
-      <h3 className="text-lg font-semibold">Sua Atividade</h3>
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-foreground">Visualizações hoje</span>
-          <span className="font-semibold text-primary">127</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-foreground">Novos seguidores</span>
-          <span className="font-semibold text-green-600">+12</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-foreground">Engajamento</span>
-          <span className="font-semibold text-blue-600">8.4%</span>
-        </div>
-        <Button variant="outline" size="sm" className="w-full mt-2">Ver Relatório Completo</Button>
-      </div>
-    </div>
-  );
-}
+// export function ActivityStats() {
+//   ...
+// }
 
 export function TrendingHashtags() {
   const hashtags = [
@@ -220,8 +160,8 @@ export function RightWidgetsColumn({ onCouponClick }: { onCouponClick?: () => vo
     <div className="sticky top-16 flex flex-col gap-3 max-w-[350px] w-full">
       <UserAdExample />
       <PremiumAdCard />
-      <QuickActions onCouponClick={onCouponClick || (() => {})} />
-      <ActivityStats />
+      {/* <QuickActions onCouponClick={onCouponClick || (() => {})} /> Removido pois está na left-profile-sidebar */}
+      {/* <ActivityStats /> Removido pois está na left-profile-sidebar */}
       <TrendingHashtags />
       <UserSuggestions />
       <TrendingAds />

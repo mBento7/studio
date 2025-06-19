@@ -282,13 +282,13 @@ function TabButton({ icon: Icon, label, active, onClick }: { icon: React.Element
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-full transition font-semibold shadow-sm",
-        active
-          ? "bg-primary text-primary-foreground shadow-lg scale-105"
-          : "bg-background/70 text-muted-foreground hover:bg-background/90 hover:scale-105"
+        "glass-btn sm flex items-center gap-2 px-4 py-2 rounded-full transition font-semibold shadow-sm",
+        active ? "tab-active" : "tab-inactive"
       )}
+      aria-current={active ? "page" : undefined}
+      style={{ margin: '0 0.5rem', minWidth: 120 }}
     >
-      <Icon className="w-5 h-5" />
+      <Icon className="w-5 h-5 mr-2" />
       {label}
     </button>
   );

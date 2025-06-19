@@ -141,16 +141,11 @@ const AdvancedProfileLayout: React.FC<AdvancedProfileLayoutProps> = ({
                     {socialLinks.map((link) => {
                       const Icon = platformIcons[link.platform] || Globe;
                       return (
-                        <a
-                          key={link.id}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition"
-                          title={link.platform}
-                        >
-                          <Icon className="w-5 h-5 text-white" />
-                        </a>
+                        <Button key={link.id} variant="outline" size="sm" className="text-muted-foreground hover:text-primary">
+                          <Link href={link.url} target="_blank" rel="noopener noreferrer">
+                            <Icon className="w-5 h-5" />
+                          </Link>
+                        </Button>
                       );
                     })}
                   </div>
@@ -167,7 +162,7 @@ const AdvancedProfileLayout: React.FC<AdvancedProfileLayoutProps> = ({
                   {socialLinks.map((link, idx) => {
                     const Icon = platformIcons[link.platform] || Globe;
                     return (
-                      <Button key={link.id} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary">
+                      <Button key={link.id} variant="outline" size="sm" className="text-muted-foreground hover:text-primary">
                         <Link href={link.url} target="_blank" rel="noopener noreferrer">
                           <Icon className="w-5 h-5" />
                         </Link>

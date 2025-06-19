@@ -104,7 +104,7 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
               {socialLinks.map(link => {
                 const IconComponent = platformIcons[link.platform] || Globe;
                 return (
-                  <Button key={link.id} variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary rounded-full w-10 h-10 hover:bg-primary/10">
+                  <Button key={link.id} variant="outline" size="sm" className="text-muted-foreground hover:text-primary rounded-full w-10 h-10 hover:bg-primary/10">
                     <Link href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
                       <IconComponent className="w-5 h-5" />
                     </Link>
@@ -148,20 +148,20 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             {isCurrentUserProfile ? (
-              <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
+              <Button size="sm" variant="outline" className="w-full sm:w-auto">
                 <Link href="/dashboard">
                   <Edit3 className="mr-2 h-4 w-4" /> Editar
                 </Link>
               </Button>
             ) : user.plan === 'free' ? (
                 user.whatsappNumber ? (
-                  <Button size="sm" asChild className="w-full sm:w-auto">
+                  <Button size="sm" className="w-full sm:w-auto">
                     <Link href={`https://wa.me/${user.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
                       <MessageSquare className="mr-2 h-4 w-4" /> WhatsApp
                     </Link>
                   </Button>
                 ) : user.email ? (
-                  <Button size="sm" asChild className="w-full sm:w-auto">
+                  <Button size="sm" className="w-full sm:w-auto">
                     <Link href={`mailto:${user.email}`}>
                       <Mail className="mr-2 h-4 w-4" /> Contato
                     </Link>
@@ -170,14 +170,14 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
             ) : (
               <>
                 {user.email && (
-                  <Button size="sm" asChild className="w-full sm:w-auto">
+                  <Button size="sm" className="w-full sm:w-auto">
                     <Link href={`mailto:${user.email}`}>
                       <Mail className="mr-2 h-4 w-4" /> Contato
                     </Link>
                   </Button>
                 )}
                 {user.whatsappNumber && (
-                  <Button size="sm" variant="secondary" asChild className="w-full sm:w-auto">
+                  <Button size="sm" variant="outline" className="w-full sm:w-auto">
                     <Link href={`https://wa.me/${user.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
                       <MessageSquare className="mr-2 h-4 w-4" /> WhatsApp
                     </Link>
@@ -205,10 +205,9 @@ const MinimalistCardLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColor
                     <p className="mt-1 text-xs text-muted-foreground">Escaneie ou clique para baixar</p>
                  </div>
                 <Button
-                    variant="link"
+                    variant="outline"
                     size="sm"
                     className="mt-2 text-xs text-primary"
-                    asChild
                     disabled={!mounted}
                 >
                   <Link href={`/profile/${user.username}/card-preview`} target="_blank">

@@ -45,10 +45,10 @@ function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" asChild>
+            <Button variant="ghost">
               <a href="/login">Entrar</a>
             </Button>
-            <Button asChild>
+            <Button>
               <a href="/register">Começar</a>
             </Button>
           </div>
@@ -77,10 +77,10 @@ function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
                 <a href="#pricing" className="block text-muted-foreground hover:text-foreground transition-colors">Preços</a>
                 <a href="#faq" className="block text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
                 <div className="flex flex-col space-y-2 pt-4">
-                  <Button variant="ghost" asChild>
+                  <Button variant="ghost">
                     <a href="/login">Entrar</a>
                   </Button>
-                  <Button asChild>
+                  <Button>
                     <a href="/register">Começar</a>
                   </Button>
                 </div>
@@ -117,12 +117,12 @@ function LandingHeroSection() {
             Templates modernos, fácil personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+            <Button size="lg">
               <a href="/register">
                 Começar Gratuitamente <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline">
               <a href="#templates">Ver Templates</a>
             </Button>
           </div>
@@ -551,7 +551,7 @@ function HomePage() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
               Junte-se ao {siteConfig.name} hoje e crie um perfil profissional que se destaca.
             </p>
-            <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <a href="/login">
                 Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
               </a>

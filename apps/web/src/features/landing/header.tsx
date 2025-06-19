@@ -8,17 +8,7 @@ import {
   LogOut,
   Moon,
   Sun,
-  Search,
   User,
-  Instagram,
-  Facebook,
-  Linkedin,
-  Twitter,
-  Youtube,
-  Globe,
-  Pencil,
-  Eye,
-  Gift,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/logo";
@@ -31,18 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SocialLink } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const socialIconMap: { [key: string]: React.ElementType } = {
-  instagram: Instagram,
-  facebook: Facebook,
-  linkedin: Linkedin,
-  twitter: Twitter,
-  youtube: Youtube,
-  website: Globe,
-  other: Globe,
-};
+import { WhosdoLogo } from "@/components/common/whosdo-logo";
 
 export function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
   const { user, loading, signOutUser, currentUserProfile } = useAuth();
@@ -50,31 +30,16 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const changeNavbarColor = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
     if (isTransparent) {
-        window.addEventListener("scroll", changeNavbarColor);
+      const handleScroll = () => setIsScrolled(window.scrollY > 10);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }
-
-    return () => {
-      if (isTransparent) {
-        window.removeEventListener("scroll", changeNavbarColor);
-      }
-    };
   }, [isTransparent]);
-
 
   useEffect(() => {
     const stored = localStorage.getItem("theme") as "light" | "dark" | null;
-    const system = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    const system = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     const initTheme = stored || system;
     setTheme(initTheme);
     document.documentElement.classList.toggle("dark", initTheme === "dark");
@@ -87,137 +52,99 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
     document.documentElement.classList.toggle("dark", next === "dark");
   };
 
-  const handleLogout = async () => {
-    await signOutUser();
-  };
+  const handleLogout = async () => await signOutUser();
 
-  const getInitial = (name: string) => {
-    return name ? name.charAt(0).toUpperCase() : "?";
-  };
-
-  const profileLink = currentUserProfile
-    ? `/profile/${currentUserProfile.username}`
-    : "/dashboard";
+  const profileLink = currentUserProfile ? `/profile/${currentUserProfile.username}` : "/dashboard";
 
   const headerClasses = cn(
     "fixed top-0 z-50 w-full transition-all duration-300",
     {
-      "border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60": !isTransparent || isScrolled,
+      "border-b border-border/40 bg-background/80 backdrop-blur-md": !isTransparent || isScrolled,
       "bg-transparent border-none": isTransparent && !isScrolled,
     }
   );
 
+  const navButtonStyles =
+    "px-4 py-2 rounded-full font-semibold text-sm shadow-sm transition hover:brightness-110";
 
   return (
     <header className={headerClasses}>
-      <div className="max-w-screen-2xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+      <div className="relative max-w-screen-2xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-4">
-           <Link href="/home" aria-label="Página Inicial" className="flex items-center gap-2 font-bold text-green-600 hover:scale-105 transition-transform">
-             <Logo />
-           </Link>
+          <Link href="/home" aria-label="Página Inicial" className="flex items-center gap-2 font-bold text-green-600 hover:scale-105 transition-transform">
+            <WhosdoLogo />
+          </Link>
         </div>
 
         <nav className="flex items-center gap-2 sm:gap-4">
-          <Link href="/dashboard/feed" className="flex items-center">
-            <Button variant="default" size="sm">
-              <Home className="h-4 w-4 sm:mr-1.5" />
+          <Link href="/dashboard/feed">
+            <button
+              className={cn(
+                navButtonStyles,
+                "bg-emerald-600 text-white hover:bg-emerald-700"
+              )}
+            >
+              <Home className="h-4 w-4 mr-1 inline-block" />
               <span className="hidden sm:inline">Home</span>
-            </Button>
+            </button>
           </Link>
-          <Link href="/dashboard" className="flex items-center">
-            <Button variant="default" size="sm">
-              <Pencil className="h-4 w-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">Editar Perfil</span>
-            </Button>
-          </Link>
-          <Link href={profileLink} className="flex items-center">
-            <Button variant="default" size="sm">
-              <Eye className="h-4 w-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">Ver Perfil Público</span>
-            </Button>
-          </Link>
-          <Link href="/dashboard/referrals" className="flex items-center">
-            <Button variant="default" size="sm">
-              <Gift className="h-4 w-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">Indique e Ganhe</span>
-            </Button>
-          </Link>
-          <Link href="/dashboard/account" className="flex items-center">
-            <Button variant="default" size="sm">
-              <User className="h-4 w-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">Conta</span>
-            </Button>
-          </Link>
-          <Button variant="default" size="sm" onClick={handleLogout} className="flex items-center">
-            <LogOut className="h-4 w-4 sm:mr-1.5" />
-            <span className="hidden sm:inline">Sair</span>
-          </Button>
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="default"
-            size="sm"
-            className="rounded-full"
+          <button
+            className="rounded-full p-2 bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
             onClick={toggleTheme}
-            aria-label="Toggle theme"
+            aria-label="Alternar tema"
           >
-            {theme === "light" ? (
-              <Moon className="h-5 w-5" />
-            ) : (
-              <Sun className="h-5 w-5" />
-            )}
-          </Button>
+            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </button>
+
           {loading ? (
             <div className="w-8 h-8 bg-muted rounded-full animate-pulse" />
           ) : user && currentUserProfile ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="relative h-8 w-8 rounded-full font-semibold transition-colors duration-150 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed bg-gray-700 text-white hover:bg-gray-800 focus:ring-2 focus:ring-gray-400 active:bg-gray-900">
+              <DropdownMenuTrigger className="h-8 w-8 rounded-full focus:outline-none">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={currentUserProfile.profilePictureUrl}
                     alt={currentUserProfile.name}
                   />
                   <AvatarFallback>
-                    {getInitial(currentUserProfile.name)}
+                    {currentUserProfile.name?.charAt(0).toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {currentUserProfile.name}
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {currentUserProfile.email}
-                    </p>
+              <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuLabel>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">{currentUserProfile.name}</p>
+                    <p className="text-xs text-muted-foreground">{currentUserProfile.email}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href={profileLink}>
                     <User className="mr-2 h-4 w-4" />
-                    <span>Ver Perfil</span>
+                    Ver Perfil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link href="/dashboard/feed">
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>Início</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Sair</span>
+                  Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild size="sm">
-              <Link href="/login">Entrar</Link>
-            </Button>
+            <Link href="/login">
+              <button
+                className={cn(
+                  navButtonStyles,
+                  "bg-white text-foreground border border-border hover:bg-muted"
+                )}
+              >
+                Entrar
+              </button>
+            </Link>
           )}
         </div>
       </div>

@@ -124,7 +124,7 @@ function BannerCarousel({ banners }: { banners: Banner[] }) {
   );
 }
 
-function HighlightsCarousel({ profiles }: { profiles: UserProfile[] }) {
+function HighlightsCarousel({ profiles, gridClass = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6", cardSize = "default" }: { profiles: UserProfile[], gridClass?: string, cardSize?: 'default' | 'small' }) {
   // Perfis premium primeiro
   const premiumProfiles = profiles.filter(p => p.plan === 'premium').slice(0, 4);
   // Exemplo de cards de oferta
@@ -156,21 +156,22 @@ function HighlightsCarousel({ profiles }: { profiles: UserProfile[] }) {
   }
   return (
     <section className="px-2 md:px-6 mb-8">
-      <div className="p-6 space-y-4 bg-card/50 backdrop-blur-sm rounded-2xl border">
+      <div className="w-full p-3 space-y-3 bg-card/80 rounded-xl border border-border/10 shadow-sm mx-auto flex flex-col justify-center">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-bold text-foreground flex items-center gap-2"><Flame className="w-5 h-5 text-orange-500" />Destaques do Showroom</h2>
           <Button className="rounded-full px-4 py-2 text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow hover:from-blue-700 hover:to-purple-700 transition-all border-0" onClick={() => window.location.href='/creditos'}>Quero me destacar</Button>
         </div>
-        <div className="flex gap-6 overflow-x-auto pb-2">
+        {/* Grid responsivo de 3 colunas */}
+        <div className={gridClass}>
           {cards.length === 0 && <span className="text-muted-foreground">Nenhum destaque no momento.</span>}
           {cards.map((card, idx) =>
             card.type === 'premium' ? (
-              <div key={card.data.id} className="min-w-[260px] max-w-xs">
+              <div key={card.data.id} className="w-full">
                 <PublicProfileCard profile={card.data} />
               </div>
             ) : (
-              <div key={card.data.id} className="min-w-[260px] max-w-xs">
-                <div className="rounded-xl overflow-hidden shadow-md bg-gradient-to-br from-blue-900/60 to-blue-400/30 border border-blue-400 flex flex-col min-h-[340px] p-0">
+              <div key={card.data.id} className="w-full">
+                <div className="rounded-xl overflow-hidden shadow-md bg-gradient-to-br from-blue-900/60 to-blue-400/30 border border-blue-400 flex flex-col min-h-[220px] p-0">
                   <div className="relative h-32">
                     <img src={card.data.image} alt={card.data.title} className="absolute inset-0 w-full h-full object-cover object-center" />
                     <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-semibold shadow">{card.data.badge}</span>
@@ -362,6 +363,7 @@ export default function SearchShowcase() {
               </motion.div>
             </CardHeader>
             <CardContent className="relative z-10">
+              {/* Showroom entre as caixas de pesquisa e o texto de resultados encontrados */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -407,12 +409,17 @@ export default function SearchShowcase() {
                       </SelectContent>
                     </Select>
                     {hasActiveFilters && (
-                      <Button variant="ghost" onClick={clearFilters} className="rounded-full h-12 px-4" type="button">
+                      <Button variant="outline" onClick={clearFilters} className="rounded-full h-12 px-4" type="button">
                         <X className="w-4 h-4 mr-1" /> Limpar
                       </Button>
                     )}
                   </div>
                 </form>
+                {relatedShowroom.length > 0 && (
+                  <div className="mb-8">
+                    <ShowroomHighlights profiles={relatedShowroom} gridClass="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" cardSize="small" />
+                  </div>
+                )}
                 <div className="text-sm text-muted-foreground text-right pr-2">
                   {filteredProfiles.length} resultado{filteredProfiles.length === 1 ? '' : 's'} encontrado{filteredProfiles.length === 1 ? '' : 's'}
                 </div>
@@ -438,12 +445,6 @@ export default function SearchShowcase() {
             </CardContent>
           </Card>
         </motion.div>
-        {/* Showroom abaixo das caixas de pesquisa, cards menores, 4 colunas */}
-        {relatedShowroom.length > 0 && (
-          <div className="mt-8">
-            <ShowroomHighlights profiles={relatedShowroom} gridClass="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" cardSize="small" />
-          </div>
-        )}
       </div>
     </div>
   );

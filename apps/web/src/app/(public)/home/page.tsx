@@ -244,11 +244,11 @@ function UpgradeBanner({ onClose }: { onClose?: () => void }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
+          <Button size="md" className="bg-primary hover:bg-primary/90">
             Ativar Trial
           </Button>
           {onClose && (
-            <Button size="sm" variant="ghost" onClick={onClose}>
+            <Button size="md" variant="outline" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           )}
@@ -460,10 +460,10 @@ function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" asChild>
+            <Button variant="outline">
               <a href="/login">Entrar</a>
             </Button>
-            <Button asChild>
+            <Button>
               <a href="/register">Começar</a>
             </Button>
           </div>
@@ -492,10 +492,10 @@ function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
                 <a href="#pricing" className="block text-muted-foreground hover:text-foreground transition-colors">Preços</a>
                 <a href="#faq" className="block text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
                 <div className="flex flex-col space-y-2 pt-4">
-                  <Button variant="ghost" asChild>
+                  <Button variant="outline">
                     <a href="/login">Entrar</a>
                   </Button>
-                  <Button asChild>
+                  <Button>
                     <a href="/register">Começar</a>
                   </Button>
                 </div>
@@ -532,12 +532,12 @@ function LandingHeroSection() {
             Planos flexíveis com sistema de créditos para máxima personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+            <Button size="md">
               <a href="#pricing">
                 Ver Planos <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="md" variant="outline">
               <a href="#benefits">Saiba Mais</a>
             </Button>
           </div>
@@ -1328,11 +1328,11 @@ function WhosDoPricingPlans() {
             Cancele a qualquer momento, sem compromisso.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
+            <Button size="md" className="bg-primary hover:bg-primary/90">
               Começar Gratuitamente
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="md" variant="outline">
               Falar com Vendas
             </Button>
           </div>
@@ -1370,7 +1370,7 @@ function WhosDoPricingPage() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
               Junte-se ao {siteConfig.name} hoje e crie um perfil profissional que se destaca com nosso sistema flexível de créditos.
             </p>
-            <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="md" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <a href="#pricing">
                 Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
               </a>
