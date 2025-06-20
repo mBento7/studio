@@ -156,3 +156,46 @@ export interface SocialLink {
   platform: string;
   url: string;
 }
+
+## 🌐 Exemplos de Rotas
+
+- `/search` — Busca pública de profissionais/serviços (acesso livre)
+- `/profile/[username]` — Perfil público de qualquer usuário (acesso livre)
+- `/dashboard/feed` — Feed privado, exclusivo para usuários logados
+
+> **Nota:** Rotas privadas (como `/dashboard/*`) devem ser protegidas por autenticação. Utilize middleware ou lógica no componente para garantir o acesso apenas de usuários autenticados.
+
+## 🛡️ Recomendações de Melhoria Contínua
+
+1. **Proteção de Rotas Privadas**
+   - Garanta que rotas como `/dashboard/feed` e demais rotas privadas exijam autenticação, usando middleware ou lógica no componente.
+   - Redirecione usuários não autenticados para a página de login.
+
+2. **Padronização de Layouts**
+   - Use layouts distintos para rotas públicas e privadas, reforçando visualmente o contexto do usuário.
+   - Extraia cabeçalhos, sidebars e rodapés em componentes reutilizáveis.
+
+3. **URLs Amigáveis e Consistentes**
+   - Evite rotas profundas desnecessárias.
+   - Garanta que rotas dinâmicas (ex: `/profile/[username]`) tratem casos de usuários inexistentes.
+
+4. **Documentação de Componentes**
+   - Adicione/atualize `README.md` em subpastas importantes explicando a função de cada componente ou feature.
+   - Inclua exemplos de uso dos principais componentes.
+
+5. **Testes**
+   - Implemente testes automatizados para rotas públicas/privadas e componentes críticos.
+
+6. **Acessibilidade e SEO**
+   - Garanta acessibilidade (uso de ARIA, navegação por teclado, contraste, etc.) nas páginas públicas.
+   - Adicione meta tags, títulos e descrições adequadas para SEO.
+
+7. **Performance**
+   - Use lazy loading para componentes pesados.
+   - Otimize imagens (formatos modernos, compressão, etc.).
+
+8. **Rotas Futuras**
+   - Implemente página 404 customizada.
+   - Adicione rotas públicas para termos de uso e política de privacidade.
+
+> Siga essas recomendações para manter o projeto escalável, seguro e fácil de evoluir!

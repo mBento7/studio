@@ -195,3 +195,9 @@ CREATE INDEX idx_layout_templates_name ON public.layout_templates(name);
 -- SELECT * FROM public.profiles WHERE location->>'city' = 'São Paulo';
 -- Buscar perfis por skill:
 -- SELECT * FROM public.profiles WHERE skills ? 'React';
+
+-- As políticas FOR SELECT USING (true) abaixo garantem que perfis, experiências, reviews, etc., possam ser acessados publicamente para exibição em páginas públicas como /profile/[username] e /search.
+-- Exemplo de query pública para buscar perfis por cidade:
+-- SELECT * FROM public.profiles WHERE location->>'city' = 'São Paulo';
+-- Exemplo de query pública para buscar serviços por categoria:
+-- SELECT * FROM public.services WHERE name ILIKE '%design%';

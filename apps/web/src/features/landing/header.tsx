@@ -114,15 +114,17 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
               <span className="hidden sm:inline">Planos</span>
             </button>
           </Link>
-          <button
-            className={cn(
-              navButtonStyles,
-              "bg-primary text-primary-foreground hover:bg-primary/90"
-            )}
-          >
-            <PlusSquare className="h-4 w-4 mr-1 inline-block" />
-            <span className="hidden sm:inline">Criar</span>
-          </button>
+          <Link href="/create" passHref>
+            <button
+              className={cn(
+                navButtonStyles,
+                "bg-teal-500 text-white hover:bg-teal-600"
+              )}
+            >
+              <PlusSquare className="h-4 w-4 mr-1 inline-block" />
+              <span className="hidden sm:inline">Criar</span>
+            </button>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

@@ -94,4 +94,15 @@ O princípio fundamental é a **evolução contínua**. Em vez de uma única gra
 
 ---
 
+## Separação de Rotas Públicas e Privadas
+
+- Rotas públicas: `/search`, `/profile/[username]`, `/home`, etc.
+- Rotas privadas: `/dashboard/*`, `/dashboard/feed`, etc.
+
+> Garanta que rotas privadas estejam sempre protegidas por autenticação.
+
+Padronize a nomenclatura de rotas e pastas conforme o padrão `(public)`, `(app)`, etc.
+
+---
+
 > Criado por Micael Bento | Estrutura recomendada por ChatGPT (OpenAI) 

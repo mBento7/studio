@@ -39,6 +39,8 @@ Este documento detalha os próximos passos e o roadmap para o desenvolvimento e 
 
 - [ ] **Checklist de Produção**: Manter checklist atualizado conforme evolução do projeto.
 - [ ] **Documentar Políticas e Migrations**: Garantir que toda alteração relevante no banco esteja documentada e versionada.
+- [ ] **Revisar e Proteger Rotas Privadas:** Garantir que rotas como `/dashboard/feed` só sejam acessíveis por usuários autenticados, usando middleware ou lógica de proteção.
+- [ ] **Documentar Rotas Públicas e Privadas:** Manter documentação clara sobre quais rotas são públicas (ex: `/search`, `/profile/[username]`) e quais são privadas (ex: `/dashboard/*`).
 
 ---
 

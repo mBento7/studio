@@ -11,7 +11,7 @@ export const mockUserProfiles: UserProfile[] = [
     profilePictureUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
     coverPhotoUrl: 'https://picsum.photos/seed/cover-placeholder/1200/300',
     socialLinks: [],
-    location: { city: 'Curitiba', country: 'BR' },
+    location: { city: 'Curitiba', state: 'PR', country: 'BR' },
     services: [],
     portfolio: [],
     skills: [],
@@ -36,7 +36,7 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'github', url: 'https://github.com/brunominimal' },
       { id: '2', platform: 'linkedin', url: 'https://linkedin.com/in/brunominimal' }
     ],
-    location: { city: 'São Paulo', country: 'BR' },
+    location: { city: 'São Paulo', state: 'SP', country: 'BR' },
     services: [],
     portfolio: [
       { id: 'p1', imageUrl: 'https://picsum.photos/seed/minimal1/400/300', caption: 'Projeto Minimalista', description: 'Exemplo de portfólio para layout minimalista.' }
@@ -63,7 +63,7 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/carlamodern' },
       { id: '2', platform: 'twitter', url: 'https://twitter.com/carlamodern' }
     ],
-    location: { city: 'Belo Horizonte', country: 'BR' },
+    location: { city: 'Belo Horizonte', state: 'MG', country: 'BR' },
     services: [
       { id: 's1', name: 'Consultoria Web', description: 'Consultoria para sites institucionais.' }
     ],
@@ -96,7 +96,7 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'behance', url: 'https://behance.net/daniloportfolio' },
       { id: '2', platform: 'dribbble', url: 'https://dribbble.com/daniloportfolio' }
     ],
-    location: { city: 'Recife', country: 'BR' },
+    location: { city: 'Recife', state: 'PE', country: 'BR' },
     services: [
       { id: 's1', name: 'Ilustração', description: 'Ilustrações digitais para campanhas.' }
     ],
@@ -130,7 +130,7 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'instagram', url: 'https://instagram.com/elisaadvanced' },
       { id: '2', platform: 'github', url: 'https://github.com/elisaadvanced' }
     ],
-    location: { city: 'Florianópolis', country: 'BR', address: 'Rua das Flores, 100' },
+    location: { city: 'Florianópolis', state: 'SC', country: 'BR', address: 'Rua das Flores, 100' },
     services: [
       { id: 's1', name: 'Mentoria em Tech', description: 'Acompanhamento de carreira para devs.' },
       { id: 's2', name: 'Palestras', description: 'Palestras sobre inovação e tecnologia.' }
@@ -175,7 +175,7 @@ export const mockUserProfiles: UserProfile[] = [
       { id: '1', platform: 'linkedin', url: 'https://linkedin.com/in/felipepro' },
       { id: '2', platform: 'website', url: 'https://felipepro.com' }
     ],
-    location: { city: 'Brasília', country: 'BR' },
+    location: { city: 'Brasília', state: 'DF', country: 'BR' },
     services: [
       { id: 's1', name: 'Consultoria SEO', description: 'Otimização avançada para buscadores.' },
       { id: 's2', name: 'Agendamento Online', description: 'Sessões de consultoria via Calendly.' }
@@ -232,4 +232,51 @@ export function updateUserProfileInMockData(updatedUser: UserProfile): UserProfi
     console.warn('User not found in mockUserProfiles for update:', updatedUser.id);
   }
   return updatedUser;
-} 
+}
+
+export const feedMockCards = [
+  { 
+    id: 1, 
+    title: "Serviço de Limpeza Premium", 
+    description: "Deixe sua casa brilhando com nosso serviço de limpeza detalhado.",
+    category: "Limpeza",
+    author: {
+      name: "CleanPro",
+      avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+      role: "Especialista em Limpeza"
+    }
+  },
+  { 
+    id: 2, 
+    title: "Consultoria em Marketing Digital", 
+    description: "Alavanque seu negócio com estratégias de marketing digital personalizadas.",
+    category: "Marketing",
+    author: {
+      name: "DigitalMax",
+      avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+      role: "Consultor de Marketing"
+    }
+  },
+  { 
+    id: 3, 
+    title: "Aulas de Yoga Personalizadas", 
+    description: "Encontre seu equilíbrio com aulas de yoga adaptadas para você.",
+    category: "Saúde",
+    author: {
+      name: "YogaLife",
+      avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+      role: "Instrutora de Yoga"
+    }
+  },
+  { 
+    id: 4, 
+    title: "Desenvolvimento de Apps", 
+    description: "Transforme sua ideia em um aplicativo incrível e funcional.",
+    category: "Tecnologia",
+    author: {
+      name: "TechSolutions",
+      avatar: "https://randomuser.me/api/portraits/men/4.jpg",
+      role: "Desenvolvedor de Software"
+    }
+  },
+]; 

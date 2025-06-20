@@ -10,7 +10,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import SearchShowcase, { SearchBannerCarousel } from '../../../search/SearchShowcase';
 import { FeedCard } from '@/components/feed/FeedCard';
 import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
 import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
@@ -752,88 +751,75 @@ export default function FeedPage() {
       {/* TODO: Certifique-se de que não há grid/flex duplicado aqui */}
       {/* Exemplo: */}
       <div className="w-full">
-        {/* Banner de busca */}
-        {tab === 'search' && (
-          <div className="px-2 mb-3">
-            <SearchBannerCarousel banners={searchBanners} />
-          </div>
-        )}
         {/* Stories */}
-        {tab === 'feed' && (
-          <section className="flex flex-col items-center w-full">
-            <div className="w-full max-w-3xl mx-auto p-0 sm:p-0">
-              {/* Stories */}
-              <div className="space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0 px-2 py-2">
-                <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
-                <StoriesCarouselWithOverflow />
-              </div>
-              {/* Seção de filtros por ícone */}
-              <div className="flex flex-wrap gap-3 my-6 justify-center">
-                {cardFilters.map(f => {
-                  // Definir cor do texto do label
-                  let labelColor = '';
-                  if (f.key === 'oferta_servico') labelColor = 'text-blue-500';
-                  else if (f.key === 'oferta_produto') labelColor = 'text-green-500';
-                  else if (f.key === 'solicitacao_servico') labelColor = 'text-orange-500';
-                  else if (f.key === 'solicitacao_produto') labelColor = 'text-amber-500';
-                  else if (f.key === 'patrocinado') labelColor = 'text-yellow-500';
-                  else labelColor = 'text-primary';
-                  return (
-                    <button
-                      key={f.key}
-                      onClick={() => setCardFilter(f.key as typeof cardFilter)}
-                      className={`group flex flex-col items-center justify-center p-3 rounded-full transition border shadow-sm text-lg relative
-                        ${cardFilter === f.key
-                          ? 'bg-primary text-white border-primary shadow-md scale-110'
-                          : 'bg-card text-foreground border-border hover:bg-muted/60'}`}
-                      aria-label={f.label}
-                    >
-                      {f.icon}
-                      <span className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-0.5 rounded text-xs font-medium bg-background/90 shadow transition-all duration-200
-                        ${cardFilter === f.key ? `${labelColor} opacity-100 h-auto` : `opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto ${labelColor}`}`}
-                        style={{ pointerEvents: 'none' }}
-                      >
-                        {f.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              {/* Feed de Descobertas */}
-              <div className="max-w-3xl mx-auto py-6 px-2 sm:px-0">
-                <h1 className="text-2xl font-bold mb-4">Feed de Descobertas</h1>
-                {/* Editor de Postagens */}
-                <FeedPostEditor onPost={(data) => {
-                  setPosts(prev => [
-                    {
-                      tipo: 'oferta_servico', // ou outro tipo padrão
-                      titulo: data.texto.substring(0, 50) || 'Nova postagem',
-                      descricao: data.texto,
-                      imagem: data.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
-                      preco: '',
-                      localizacao: '',
-                      patrocinado: false,
-                      usuario: { nome: 'Usuário Demo', avatar: 'https://github.com/shadcn.png' },
-                      curtidas: 0,
-                      comentarios: 0,
-                      tags: [],
-                      whatsappUrl: '',
-                    },
-                    ...prev,
-                  ]);
-                }} />
-                {filteredPosts.map((post, idx) => (
-                  <FeedCard key={idx} {...post} />
-                ))}
-              </div>
+        <section className="flex flex-col items-center w-full">
+          <div className="w-full max-w-3xl mx-auto p-0 sm:p-0">
+            {/* Stories */}
+            <div className="space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0 px-2 py-2">
+              <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
+              <StoriesCarouselWithOverflow />
             </div>
-          </section>
-        )}
-        {tab === 'search' && (
-          <div className="bg-white dark:bg-neutral-900 rounded-b shadow p-2 sm:p-3 mt-4 transition-colors duration-200">
-            <SearchShowcase />
+            {/* Seção de filtros por ícone */}
+            <div className="flex flex-wrap gap-3 my-6 justify-center">
+              {cardFilters.map(f => {
+                // Definir cor do texto do label
+                let labelColor = '';
+                if (f.key === 'oferta_servico') labelColor = 'text-blue-500';
+                else if (f.key === 'oferta_produto') labelColor = 'text-green-500';
+                else if (f.key === 'solicitacao_servico') labelColor = 'text-orange-500';
+                else if (f.key === 'solicitacao_produto') labelColor = 'text-amber-500';
+                else if (f.key === 'patrocinado') labelColor = 'text-yellow-500';
+                else labelColor = 'text-primary';
+                return (
+                  <button
+                    key={f.key}
+                    onClick={() => setCardFilter(f.key as typeof cardFilter)}
+                    className={`group flex flex-col items-center justify-center p-3 rounded-full transition border shadow-sm text-lg relative
+                      ${cardFilter === f.key
+                        ? 'bg-primary text-white border-primary shadow-md scale-110'
+                        : 'bg-card text-foreground border-border hover:bg-muted/60'}`}
+                    aria-label={f.label}
+                  >
+                    {f.icon}
+                    <span className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-0.5 rounded text-xs font-medium bg-background/90 shadow transition-all duration-200
+                      ${cardFilter === f.key ? `${labelColor} opacity-100 h-auto` : `opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto ${labelColor}`}`}
+                      style={{ pointerEvents: 'none' }}
+                    >
+                      {f.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {/* Feed de Descobertas */}
+            <div className="max-w-3xl mx-auto py-6 px-2 sm:px-0">
+              <h1 className="text-2xl font-bold mb-4">Feed de Descobertas</h1>
+              {/* Editor de Postagens */}
+              <FeedPostEditor onPost={(data) => {
+                setPosts(prev => [
+                  {
+                    tipo: 'oferta_servico', // ou outro tipo padrão
+                    titulo: data.texto.substring(0, 50) || 'Nova postagem',
+                    descricao: data.texto,
+                    imagem: data.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
+                    preco: '',
+                    localizacao: '',
+                    patrocinado: false,
+                    usuario: { nome: 'Usuário Demo', avatar: 'https://github.com/shadcn.png' },
+                    curtidas: 0,
+                    comentarios: 0,
+                    tags: [],
+                    whatsappUrl: '',
+                  },
+                  ...prev,
+                ]);
+              }} />
+              {filteredPosts.map((post, idx) => (
+                <FeedCard key={idx} {...post} />
+              ))}
+            </div>
           </div>
-        )}
+        </section>
         <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setIsCouponModalOpen} />
       </div>
     </>

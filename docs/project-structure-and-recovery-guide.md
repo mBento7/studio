@@ -110,3 +110,15 @@ Para restaurar o projeto em uma máquina nova do zero, siga estes passos:
 - O projeto está organizado em `apps/web`, `infra`, `db`, `docs` e `supabase` na raiz do monorepo.
 - Cada app ou serviço tem seu próprio `package.json` e configuração (para `apps/web`).
 - Documentação, scripts e exemplos de deploy estão em `docs/` e `infra/`.
+
+## Checklist de Segurança e Estrutura de Rotas
+
+- [ ] Rotas públicas claramente documentadas (`/search`, `/profile/[username]`, etc.)
+- [ ] Rotas privadas protegidas por autenticação (`/dashboard/*`, etc.)
+- [ ] Estrutura de pastas segue o padrão `(public)` para rotas públicas e `(app)` para privadas
+
+### Exemplo de Estrutura de Rotas
+
+- `/search` — público
+- `/profile/[username]` — público
+- `/dashboard/feed` — privado

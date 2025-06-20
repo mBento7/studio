@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { cn } from '../../lib/utils';
 
 export type ButtonVariant = 'nav' | 'tab' | 'default' | 'gradient' | 'outline';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -40,6 +40,7 @@ const sizeStyles: Record<ButtonSize, string> = {
   sm: 'text-sm px-3 py-1.5',
   md: 'text-base px-4 py-2',
   lg: 'text-lg px-5 py-3',
+  icon: 'h-10 w-10',
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
