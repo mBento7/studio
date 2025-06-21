@@ -41,8 +41,40 @@ Este diretório reúne toda a documentação técnica, de design, UX, infraestru
 - [Plano de Refatoração Arquitetural](./architectural-refactoring-plan.md): Estratégia para refatoração do código.
 - [Roteiro de Reestruturação](./roteiro-reestruturacao.md): Passo a passo para mudanças estruturais.
 - [Guia de Hosting e Deploy](./hosting-and-deployment-strategy.md): Estratégias de hospedagem e publicação.
+- [Tipos e Modelos de Anúncios](./tipos-de-anuncios.md): Detalhamento dos formatos de anúncio, incluindo novos tipos inspirados em redes sociais.
 
 ## Como contribuir
 - Sempre que alterar algo fundamental (visual, regras de negócio, infraestrutura), atualize a documentação correspondente.
 - Use os READMEs das subpastas como ponto de partida para entender cada área.
-- Em caso de dúvida, consulte este índice ou pergunte ao time responsável. 
+- Em caso de dúvida, consulte este índice ou pergunte ao time responsável.
+
+## Acompanhamento de Progresso e Próximos Passos
+
+Para garantir a evolução contínua e organizada do projeto, mantenha sempre um documento de acompanhamento de progresso (como o `NEXT_STEPS.md` na raiz do projeto). Utilize este espaço para registrar:
+
+- Revisões periódicas da documentação e do código.
+- Pendências identificadas em revisões (ex: pontos a atualizar em README, docs, scripts, rotas, migrations, etc).
+- Checklist de produção e deploy.
+- Itens concluídos e próximos passos.
+- Responsáveis por cada tarefa ou revisão.
+
+### Revisão mais recente (exemplo)
+
+**Data:** [Preencher data da revisão]
+
+**Principais pontos identificados:**
+- README.md (raiz): precisa de instruções de instalação, links para docs detalhadas e referência ao monorepo.
+- README.md (apps/web): alinhar links, exemplos de estrutura e instruções para pnpm.
+- /docs: garantir índice atualizado e READMEs em todas as áreas.
+- project-structure-and-recovery-guide.md: atualizar se houver mudanças na estrutura.
+- NEXT_STEPS.md: marcar progresso e detalhar passos de documentação.
+- db/, infra/, supabase/: garantir versionamento e documentação de migrations, políticas e scripts.
+
+**Orientação:**
+- Sempre que concluir ou iniciar uma tarefa relevante, registre no `NEXT_STEPS.md` e atualize esta seção.
+- Realize revisões mensais (ou a cada sprint) para manter a documentação e o roadmap alinhados com o estado real do projeto.
+- Incentive todos do time a contribuir com atualizações e revisões.
+
+> **Dica:** Use o `NEXT_STEPS.md` como referência viva e central de progresso. Atualize-o sempre que houver mudanças importantes, e registre um resumo das revisões nesta seção do README de documentação.
+
+> **Importante:** Certifique-se de que todas as subpastas de documentação possuem um README explicativo, seguindo o modelo em `README-modelo.md`. Sempre que possível, inclua exemplos práticos e reais para facilitar o entendimento. 

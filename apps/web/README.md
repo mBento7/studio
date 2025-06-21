@@ -108,7 +108,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 2.  **Instale as Dependências**
     ```bash
-    npm install
+    pnpm install
     ```
 
 3.  **Configure as Variáveis de Ambiente**
@@ -121,7 +121,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 4.  **Execute o Servidor de Desenvolvimento**
     ```bash
-    npm run dev
+    pnpm dev
     ```
     A aplicação estará disponível em `http://localhost:3000` (ou na porta definida).
 
@@ -140,9 +140,8 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 Este projeto é guiado por uma documentação estratégica detalhada para garantir alinhamento e visão de longo prazo.
 
-*   **[Plano de Arquitetura e Refatoração](./docs/architectural-refactoring-plan.md):** Descreve as fases da evolução da nossa base de código.
-*   **[Estratégia de Monetização](./docs/monetization-strategy.md):** Detalha os modelos de receita e as funcionalidades chave para o crescimento.
-*   **[Guia de Infraestrutura e Operações](./docs/infrastructure-and-operations-guide.md):** Documenta a configuração de servidores, Supabase e o processo de deploy.
+*   **[Plano de Arquitetura e Refatoração](../../docs/architectural-refactoring-plan.md):** Descreve as fases da evolução da nossa base de código.
+*   **[Guia de Infraestrutura e Operações](../../docs/infrastructure-and-operations-guide.md):** Documenta a configuração de servidores, Supabase e o processo de deploy.
 
 ---
 

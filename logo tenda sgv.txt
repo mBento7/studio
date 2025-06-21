@@ -1,0 +1,14 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .tone1 { fill: #14532d; }
+      .tone2 { fill: #15803d; }
+      .tone3 { fill: #22c55e; }
+      .tone4 { fill: #bbf7d0; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="500" height="500" class="tone4"/>
+  <circle cx="250" cy="250" r="200" class="tone3"/>
+  <polygon points="100,400 250,100 400,400" class="tone2"/>
+  <circle cx="250" cy="250" r="100" class="tone1"/>
+</svg>

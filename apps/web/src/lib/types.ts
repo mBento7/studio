@@ -10,6 +10,7 @@ export interface Service {
   id: string;
   name: string;
   description: string;
+  price?: string;
 }
 
 export interface PortfolioItem {
@@ -52,6 +53,22 @@ export interface PremiumBanner {
   ctaLink?: string;
 }
 
+export interface Coupon {
+  id: string;
+  code: string;
+  description: string;
+  discountValue?: number;
+  discountType?: 'percentage' | 'fixed';
+  expiresAt?: string;
+}
+
+export interface Story {
+  id: string;
+  imageUrl: string;
+  title?: string;
+  link?: string;
+}
+
 export interface UserProfile {
   id: string;
   username: string;
@@ -89,6 +106,9 @@ export interface UserProfile {
   isProfileComplete?: boolean;
   reviews?: Review[];
   premiumBanner?: PremiumBanner;
+  coupons?: Coupon[];
+  stories?: Story[];
+  calendlyUrl?: string;
 }
 
 export interface ProfileLayoutProps {

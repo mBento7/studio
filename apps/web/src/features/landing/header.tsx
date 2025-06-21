@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 import { useAuth } from "@/hooks/use-auth";
 import {
   Home,
@@ -26,10 +27,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { WhosdoLogo } from "@/components/common/whosdo-logo";
 
 export function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
   const { user, loading, signOutUser, currentUserProfile } = useAuth();
+  const pathname = usePathname();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -68,68 +69,46 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
     }
   );
 
-  const navButtonStyles =
-    "px-4 py-2 rounded-full font-semibold text-sm shadow-sm transition hover:brightness-110";
+  const navLinks = [
+    { href: "/dashboard/feed", label: "Home", icon: Home },
+    { href: "/search", label: "Buscar", icon: Search },
+    { href: "/planos", label: "Planos", icon: Crown },
+    { href: "/create", label: "Criar", icon: PlusSquare },
+  ];
 
   return (
     <header className={headerClasses}>
-      <div className="relative max-w-screen-2xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+      <div className="relative max-w-screen-xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-4">
           <Link href="/home" aria-label="Página Inicial" className="flex items-center gap-2 font-bold text-green-600 hover:scale-105 transition-transform">
-            <WhosdoLogo />
+            <Logo className="h-12 w-auto" />
           </Link>
         </div>
 
         <nav className="flex-1 flex justify-center items-center gap-2 sm:gap-4">
-          <Link href="/dashboard/feed">
-            <button
-              className={cn(
-                navButtonStyles,
-                "bg-emerald-600 text-white hover:bg-emerald-700"
-              )}
-            >
-              <Home className="h-4 w-4 mr-1 inline-block" />
-              <span className="hidden sm:inline">Home</span>
-            </button>
-          </Link>
-          <Link href="/search">
-            <button
-              className={cn(
-                navButtonStyles,
-                "bg-muted text-muted-foreground hover:bg-muted-foreground/10"
-              )}
-            >
-              <Search className="h-4 w-4 mr-1 inline-block" />
-              <span className="hidden sm:inline">Buscar</span>
-            </button>
-          </Link>
-          <Link href="/planos">
-            <button
-              className={cn(
-                navButtonStyles,
-                "bg-amber-500 text-white hover:bg-amber-600"
-              )}
-            >
-              <Crown className="h-4 w-4 mr-1 inline-block" />
-              <span className="hidden sm:inline">Planos</span>
-            </button>
-          </Link>
-          <Link href="/create" passHref>
-            <button
-              className={cn(
-                navButtonStyles,
-                "bg-teal-500 text-white hover:bg-teal-600"
-              )}
-            >
-              <PlusSquare className="h-4 w-4 mr-1 inline-block" />
-              <span className="hidden sm:inline">Criar</span>
-            </button>
-          </Link>
+          {navLinks.map(({ href, label, icon: Icon }) => {
+            const isActive = pathname === href;
+            return (
+              <Link href={href} key={href}>
+                <button
+                  className={cn(
+                    "flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-in-out shadow-sm",
+                    isActive
+                      ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md"
+                      : "bg-transparent text-[#0e9094] border border-[#0e9094]/50 hover:bg-[#0e9094]/10"
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{label}</span>
+                </button>
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
           <button
-            className="rounded-full p-2 bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
+            className="rounded-full p-2 text-muted-foreground hover:bg-[#0e9094]/10 hover:text-[#0e9094] transition"
             onClick={toggleTheme}
             aria-label="Alternar tema"
           >
@@ -137,7 +116,7 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
           </button>
 
           <button
-            className="rounded-full p-2 bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
+            className="rounded-full p-2 text-muted-foreground hover:bg-[#0e9094]/10 hover:text-[#0e9094] transition"
             aria-label="Notificações"
           >
             <Bell className="h-5 w-5" />
@@ -182,8 +161,8 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
             <Link href="/login">
               <button
                 className={cn(
-                  navButtonStyles,
-                  "bg-white text-foreground border border-border hover:bg-muted"
+                  "rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-in-out shadow-sm",
+                  "bg-transparent text-[#0e9094] border border-[#0e9094]/50 hover:bg-[#0e9094]/10"
                 )}
               >
                 Entrar

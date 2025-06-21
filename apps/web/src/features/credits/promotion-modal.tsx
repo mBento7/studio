@@ -19,6 +19,10 @@ export interface PromotionOption {
   description: string;
   cost: number;
   icon: React.ReactNode;
+  type: string;
+  highlight?: boolean;
+  badge?: React.ReactNode;
+  iconButton?: React.ReactNode;
 }
 
 interface PromotionModalProps {

@@ -1,7 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Image, MapPin, Smile, User, Tag, DollarSign, Zap, Star, Phone } from "lucide-react";
+import { Image, MapPin, Smile, User, Tag, DollarSign, Zap, Star, Phone, X } from "lucide-react";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { tipoConfig } from "@/config/feed";
 
 interface FeedPostEditorProps {
   onPost?: (data: {
@@ -9,9 +13,8 @@ interface FeedPostEditorProps {
     imagem?: string | null;
     preco?: string;
     localizacao?: string;
-    tags?: string[];
+    tipo: 'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto';
     urgente?: boolean;
-    patrocinado?: boolean;
     whatsappUrl?: string;
   }) => void;
 }
@@ -21,19 +24,19 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   const [image, setImage] = useState<string | null>(null);
   const [showPreco, setShowPreco] = useState(false);
   const [showLocalizacao, setShowLocalizacao] = useState(false);
-  const [showTags, setShowTags] = useState(false);
   const [showUrgente, setShowUrgente] = useState(false);
-  const [showPatrocinado, setShowPatrocinado] = useState(false);
   const [showWhatsapp, setShowWhatsapp] = useState(false);
   const [preco, setPreco] = useState("");
   const [localizacao, setLocalizacao] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
+  const [tipoPost, setTipoPost] = useState<'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto'>('oferta_servico');
   const [urgente, setUrgente] = useState(false);
-  const [patrocinado, setPatrocinado] = useState(false);
   const [whatsappUrl, setWhatsappUrl] = useState("");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+
+  const postTypes = (Object.keys(tipoConfig) as Array<keyof typeof tipoConfig>)
+    .filter(key => key !== 'patrocinado'); // Excluir patrocinado das opções
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -44,45 +47,64 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
     }
   };
 
-  const handleAddTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
-    }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    setTags(tags.filter(t => t !== tag));
+  const onEmojiClick = (emojiData: EmojiClickData) => {
+    if (!textRef.current) return;
+    
+    const { selectionStart, selectionEnd } = textRef.current;
+    const newText = 
+      postText.substring(0, selectionStart) + 
+      emojiData.emoji + 
+      postText.substring(selectionEnd);
+      
+    setPostText(newText);
+    
+    // Move o cursor para depois do emoji inserido
+    setTimeout(() => {
+      if (textRef.current) {
+        textRef.current.selectionStart = textRef.current.selectionEnd = selectionStart + emojiData.emoji.length;
+        textRef.current.focus();
+      }
+    }, 0);
   };
 
   const handlePost = () => {
-    // [FUTURO] Aqui será feita a integração para salvar a postagem no banco de dados via API/Backend
+    if (!postText.trim()) {
+      toast({ title: "Oops!", description: "A postagem não pode estar vazia.", variant: "destructive" });
+      return;
+    }
+
+    let finalWhatsappUrl = "";
+    if (showWhatsapp && whatsappUrl.trim()) {
+      const cleanedNumber = whatsappUrl.replace(/[\s-()]/g, '');
+      if (/^\+?\d{10,}$/.test(cleanedNumber)) {
+        const digitsOnly = cleanedNumber.replace('+', '');
+        finalWhatsappUrl = `https://wa.me/${digitsOnly}`;
+      } else {
+        finalWhatsappUrl = whatsappUrl;
+      }
+    }
+
     if (onPost) {
       onPost({
         texto: postText,
         imagem: image,
         preco: showPreco ? preco : undefined,
         localizacao: showLocalizacao ? localizacao : undefined,
-        tags: showTags ? tags : undefined,
-        urgente: showUrgente ? urgente : undefined,
-        patrocinado: showPatrocinado ? patrocinado : undefined,
-        whatsappUrl: showWhatsapp ? whatsappUrl : undefined,
+        tipo: tipoPost,
+        urgente: urgente,
+        whatsappUrl: finalWhatsappUrl || undefined,
       });
     }
     setPostText("");
     setImage(null);
     setPreco("");
     setLocalizacao("");
-    setTags([]);
-    setTagInput("");
+    setTipoPost('oferta_servico');
     setUrgente(false);
-    setPatrocinado(false);
     setWhatsappUrl("");
     setShowPreco(false);
     setShowLocalizacao(false);
-    setShowTags(false);
     setShowUrgente(false);
-    setShowPatrocinado(false);
     setShowWhatsapp(false);
     toast({
       title: "Post publicado!",
@@ -92,120 +114,124 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow p-6 flex flex-col gap-4 mb-8">
-      <div className="flex items-start gap-4">
-        {/* Avatar do usuário */}
-        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-muted flex items-center justify-center border border-border">
-          <User className="w-7 h-7 text-muted-foreground" />
+    <Card className="w-full p-3 shadow-lg rounded-md bg-card/90 border-0 mb-8">
+      <div className="w-full bg-card rounded-md shadow-lg overflow-hidden border border-black/5 dark:border-white/10 p-6 flex flex-col gap-4">
+        <div className="flex items-start gap-4">
+          {/* Avatar e pré-visualização da imagem (se houver) */}
+          <div className="flex-shrink-0 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 bg-muted flex items-center justify-center border border-border">
+              <User className="w-7 h-7 text-muted-foreground" />
+            </div>
+            {/* Preview da imagem */}
+            {image && (
+              <div className="relative w-24 h-24 border overflow-hidden">
+                <img src={image} alt="Preview" className="w-full h-full object-cover" />
+                <button
+                  onClick={() => setImage(null)}
+                  className="absolute top-1 right-1 bg-black bg-opacity-50 text-white p-1 hover:bg-opacity-75 transition-colors"
+                  aria-label="Remover imagem"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
+          
+          {/* Campo de texto principal */}
+          <div className="flex-1 flex flex-col">
+            <textarea
+              ref={textRef}
+              className="w-full resize-none border-none outline-none bg-transparent text-base text-foreground placeholder:text-muted-foreground min-h-[48px] flex-grow"
+              placeholder="Escreva uma nova postagem..."
+              value={postText}
+              onChange={e => setPostText(e.target.value)}
+              rows={image ? 5 : 2} // Aumenta a altura quando a imagem está presente
+            />
+          </div>
         </div>
-        {/* Campo de texto */}
-        <textarea
-          className="flex-1 resize-none border-none outline-none bg-transparent text-base text-foreground placeholder:text-muted-foreground min-h-[48px] max-h-32"
-          placeholder="Escreva uma nova postagem..."
-          value={postText}
-          onChange={e => setPostText(e.target.value)}
-          rows={2}
-        />
-      </div>
-      {/* Preview da imagem */}
-      {image && (
-        <div className="flex items-center gap-2">
-          <img src={image} alt="Preview" className="max-h-32 rounded-lg border" />
-          <button onClick={() => setImage(null)} className="text-xs text-red-500 ml-2">Remover</button>
+        {/* Seletor de Tipo de Post */}
+        <div className="flex flex-col gap-3 border-t pt-4 mt-2">
+          <span className="text-sm font-medium text-muted-foreground">Qual o tipo da sua postagem?</span>
+          <div className="flex flex-wrap gap-3 items-center">
+            {postTypes.map(typeKey => {
+              const config = tipoConfig[typeKey];
+              return (
+                <button
+                  key={typeKey}
+                  onClick={() => setTipoPost(typeKey)}
+                  className={cn(
+                    "flex items-center gap-2 text-xs px-3 py-1.5 border transition-colors font-semibold",
+                    tipoPost === typeKey
+                      ? `${config.bg} ${config.text} ${config.border}`
+                      : "bg-transparent hover:bg-muted"
+                  )}
+                >
+                  {React.cloneElement(config.icon, { className: "w-4 h-4" })}
+                  {config.badge}
+                </button>
+              )
+            })}
+          </div>
         </div>
-      )}
-      {/* Campos extras dinâmicos */}
-      <div className="flex flex-wrap gap-3">
-        {showPreco && (
-          <div className="flex items-center gap-2">
-            <DollarSign className="w-4 h-4 text-green-600" />
-            <input
-              type="text"
-              className="border rounded px-2 py-1 text-sm"
-              placeholder="Preço"
-              value={preco}
-              onChange={e => setPreco(e.target.value)}
+        {/* Campos extras dinâmicos */}
+        {(showPreco || showLocalizacao || showWhatsapp || urgente) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 pt-4 border-t">
+            {showPreco && (
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
+                  placeholder="Preço (ex: 200,00)"
+                  value={preco}
+                  onChange={e => setPreco(e.target.value)}
+                />
+                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowPreco(false)}>Remover</button>
+              </div>
+            )}
+            {showLocalizacao && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
+                  placeholder="Localização"
+                  value={localizacao}
+                  onChange={e => setLocalizacao(e.target.value)}
+                />
+                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowLocalizacao(false)}>Remover</button>
+              </div>
+            )}
+            {showWhatsapp && (
+              <div className="flex items-center gap-2">
+                <Phone className="w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
+                  placeholder="Link ou número de WhatsApp"
+                  value={whatsappUrl}
+                  onChange={e => setWhatsappUrl(e.target.value)}
+                />
+                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowWhatsapp(false)}>Remover</button>
+              </div>
+            )}
+            {urgente && (
+              <div className="flex items-center gap-2 text-red-600">
+                <Zap className="w-5 h-5" />
+                <span className="text-sm font-semibold">Marcado como Urgente</span>
+                <button className="text-xs text-red-500 hover:underline ml-auto" onClick={() => setUrgente(false)}>Remover</button>
+              </div>
+            )}
+          </div>
+        )}
+        {/* Barra de ícones de ação */}
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+            <ActionButton
+              icon={Image}
+              label="Imagem"
+              onClick={() => fileInputRef.current?.click()}
             />
-            <button className="text-xs text-red-500" onClick={() => setShowPreco(false)}>Remover</button>
-          </div>
-        )}
-        {showLocalizacao && (
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-blue-600" />
-            <input
-              type="text"
-              className="border rounded px-2 py-1 text-sm"
-              placeholder="Localização"
-              value={localizacao}
-              onChange={e => setLocalizacao(e.target.value)}
-            />
-            <button className="text-xs text-red-500" onClick={() => setShowLocalizacao(false)}>Remover</button>
-          </div>
-        )}
-        {showTags && (
-          <div className="flex items-center gap-2 flex-wrap">
-            <Tag className="w-4 h-4 text-purple-600" />
-            <input
-              type="text"
-              className="border rounded px-2 py-1 text-sm"
-              placeholder="Adicionar tag"
-              value={tagInput}
-              onChange={e => setTagInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); } }}
-            />
-            <button className="text-xs text-green-600" onClick={handleAddTag}>Adicionar</button>
-            {tags.map(tag => (
-              <span key={tag} className="bg-primary/10 text-primary border-primary/20 text-xs rounded px-2 py-0.5 ml-1 flex items-center gap-1">
-                #{tag}
-                <button className="ml-1 text-red-500" onClick={() => handleRemoveTag(tag)}>x</button>
-              </span>
-            ))}
-            <button className="text-xs text-red-500 ml-2" onClick={() => setShowTags(false)}>Remover</button>
-          </div>
-        )}
-        {showUrgente && (
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-red-600" />
-            <label className="flex items-center gap-1 text-sm">
-              <input type="checkbox" checked={urgente} onChange={e => setUrgente(e.target.checked)} /> Urgente
-            </label>
-            <button className="text-xs text-red-500" onClick={() => setShowUrgente(false)}>Remover</button>
-          </div>
-        )}
-        {showPatrocinado && (
-          <div className="flex items-center gap-2">
-            <Star className="w-4 h-4 text-yellow-500" />
-            <label className="flex items-center gap-1 text-sm">
-              <input type="checkbox" checked={patrocinado} onChange={e => setPatrocinado(e.target.checked)} /> Patrocinado
-            </label>
-            <button className="text-xs text-red-500" onClick={() => setShowPatrocinado(false)}>Remover</button>
-          </div>
-        )}
-        {showWhatsapp && (
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-green-600" />
-            <input
-              type="text"
-              className="border rounded px-2 py-1 text-sm"
-              placeholder="Link WhatsApp"
-              value={whatsappUrl}
-              onChange={e => setWhatsappUrl(e.target.value)}
-            />
-            <button className="text-xs text-red-500" onClick={() => setShowWhatsapp(false)}>Remover</button>
-          </div>
-        )}
-      </div>
-      {/* Barra de ícones de ação */}
-      <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center gap-4 flex-wrap">
-          {/* Botão de imagem */}
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="p-2 rounded-full hover:bg-primary/10 text-primary transition-colors"
-            title="Adicionar imagem"
-          >
-            <Image className="w-5 h-5" />
             <input
               type="file"
               accept="image/*"
@@ -213,81 +239,79 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               className="hidden"
               onChange={handleImageChange}
             />
-          </button>
-          {/* Botão de GIF (apenas visual, sem funcionalidade real) */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors p-2"
+                  aria-label="Emoji"
+                >
+                  <Smile className="w-5 h-5" />
+                  <span className="hidden sm:inline">Emoji</span>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 border-none">
+                <EmojiPicker onEmojiClick={onEmojiClick} />
+              </PopoverContent>
+            </Popover>
+            <ActionButton
+              icon={DollarSign}
+              label="Preço"
+              isActive={showPreco}
+              onClick={() => setShowPreco(!showPreco)}
+            />
+            <ActionButton
+              icon={MapPin}
+              label="Local"
+              isActive={showLocalizacao}
+              onClick={() => setShowLocalizacao(!showLocalizacao)}
+            />
+            <ActionButton
+              icon={Phone}
+              label="Contato"
+              isActive={showWhatsapp}
+              onClick={() => setShowWhatsapp(!showWhatsapp)}
+            />
+            <ActionButton
+              icon={Zap}
+              label="Urgente"
+              isActive={urgente}
+              onClick={() => setUrgente(!urgente)}
+            />
+          </div>
           <button
-            type="button"
-            className="p-2 rounded-full hover:bg-primary/10 text-primary transition-colors"
-            title="Adicionar GIF"
+            onClick={handlePost}
+            className="px-6 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#14b8a6] to-[#0e9094] rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!postText.trim()}
           >
-            <Smile className="w-5 h-5" />
-          </button>
-          {/* Botão de localização */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showLocalizacao ? "bg-blue-100 text-blue-600" : "hover:bg-primary/10 text-primary")}
-            title="Adicionar localização"
-            onClick={() => setShowLocalizacao(v => !v)}
-          >
-            <MapPin className="w-5 h-5" />
-          </button>
-          {/* Botão de preço */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showPreco ? "bg-green-100 text-green-600" : "hover:bg-primary/10 text-primary")}
-            title="Adicionar preço"
-            onClick={() => setShowPreco(v => !v)}
-          >
-            <DollarSign className="w-5 h-5" />
-          </button>
-          {/* Botão de tags */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showTags ? "bg-purple-100 text-purple-600" : "hover:bg-primary/10 text-primary")}
-            title="Adicionar tags"
-            onClick={() => setShowTags(v => !v)}
-          >
-            <Tag className="w-5 h-5" />
-          </button>
-          {/* Botão de urgente */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showUrgente ? "bg-red-100 text-red-600" : "hover:bg-primary/10 text-primary")}
-            title="Marcar como urgente"
-            onClick={() => setShowUrgente(v => !v)}
-          >
-            <Zap className="w-5 h-5" />
-          </button>
-          {/* Botão de patrocinado */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showPatrocinado ? "bg-yellow-100 text-yellow-600" : "hover:bg-primary/10 text-primary")}
-            title="Marcar como patrocinado"
-            onClick={() => setShowPatrocinado(v => !v)}
-          >
-            <Star className="w-5 h-5" />
-          </button>
-          {/* Botão de WhatsApp */}
-          <button
-            type="button"
-            className={cn("p-2 rounded-full transition-colors", showWhatsapp ? "bg-green-100 text-green-600" : "hover:bg-primary/10 text-primary")}
-            title="Adicionar WhatsApp"
-            onClick={() => setShowWhatsapp(v => !v)}
-          >
-            <Phone className="w-5 h-5" />
+            Postar
           </button>
         </div>
-        <button
-          className={cn(
-            "px-6 py-2 rounded-full bg-primary text-white font-semibold text-base shadow hover:bg-primary/90 transition-all",
-            !postText && "opacity-60 cursor-not-allowed"
-          )}
-          disabled={!postText}
-          onClick={handlePost}
-        >
-          Postar
-        </button>
       </div>
-    </div>
+    </Card>
+  );
+}
+
+interface ActionButtonProps {
+  icon: React.ElementType;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+}
+
+function ActionButton({ icon: Icon, label, isActive, onClick }: ActionButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors p-2",
+        isActive && "text-primary"
+      )}
+      aria-label={label}
+    >
+      <Icon className="w-5 h-5" />
+      <span className="hidden sm:inline">{label}</span>
+    </button>
   );
 } 

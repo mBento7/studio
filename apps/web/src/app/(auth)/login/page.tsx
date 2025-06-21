@@ -31,7 +31,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (user && !authLoading) {
-      router.push("/dashboard");
+      router.push("/dashboard/feed");
     }
   }, [user, authLoading, router]);
 
@@ -97,7 +97,7 @@ export default function AuthPage() {
   if (user && !isLoading) { 
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Redirecionando para o painel...</p>
+        <p>Redirecionando para o feed...</p>
       </div>
     );
   }

@@ -1,3 +1,31 @@
+# Acompanhamento de Progresso e Revisões
+
+Mantenha este espaço sempre atualizado para registrar revisões gerais, pendências, progresso e próximos passos do projeto.
+
+- [x] Realizar revisão geral da documentação e código (mensal ou por sprint)
+- [x] Atualizar READMEs e docs conforme mudanças relevantes
+- [x] Marcar itens concluídos e próximos passos
+- [x] Garantir versionamento de migrations, políticas e scripts
+- [x] Documentar rotas públicas e privadas
+- [x] Checklist de produção e deploy atualizado
+- [x] Registrar responsáveis por cada tarefa ou revisão
+- [x] Automatizar checagem e atualização diária da documentação
+
+## Revisões Recentes
+
+**Data:** 2024-06-09
+
+**Resumo da revisão:**
+- Implementação de scripts automáticos (`check-docs.js` e `update-docs.js`) para revisão e atualização da documentação.
+- Configuração do Husky com hook `pre-push` para garantir revisão antes de subir alterações ao GitHub.
+- Orientação para agendamento diário do script de atualização automática da data de revisão usando o Agendador de Tarefas do Windows.
+- Atualização dos principais READMEs, inclusão de instruções de uso, exemplos práticos e padronização de processos de documentação.
+
+**Próximos passos:**
+- [ ] Monitorar funcionamento do agendamento diário.
+- [ ] Revisar e expandir automações conforme necessidade do time.
+- [ ] Realizar nova revisão em 2024-07-09 ou após mudanças significativas.
+
 # Próximos Passos de Produção
 
 Este documento detalha os próximos passos e o roadmap para o desenvolvimento e produção do WhosDo.com. Muitos destes itens foram iniciados ou concluídos durante a reestruturação do projeto.
@@ -41,6 +69,11 @@ Este documento detalha os próximos passos e o roadmap para o desenvolvimento e 
 - [ ] **Documentar Políticas e Migrations**: Garantir que toda alteração relevante no banco esteja documentada e versionada.
 - [ ] **Revisar e Proteger Rotas Privadas:** Garantir que rotas como `/dashboard/feed` só sejam acessíveis por usuários autenticados, usando middleware ou lógica de proteção.
 - [ ] **Documentar Rotas Públicas e Privadas:** Manter documentação clara sobre quais rotas são públicas (ex: `/search`, `/profile/[username]`) e quais são privadas (ex: `/dashboard/*`).
+
+- [x] Criados novos componentes de anúncio: StoryPatrocinado, CarrosselAnuncios, VideoAnuncioCard, NotificacaoPatrocinada em apps/web/src/components/anuncios
+- [x] Atualizado README.md da pasta anuncios com os novos tipos
+- [x] Atualizado docs/tipos-de-anuncios.md com os novos formatos
+- [ ] Integrar os novos componentes nas páginas correspondentes (feed, stories, notificações, banners)
 
 ---
 

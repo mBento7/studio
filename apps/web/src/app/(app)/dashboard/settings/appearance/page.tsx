@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { mockCurrentUser, updateMockCurrentUser } from "@/lib/mock-data";
 import type { UserProfile, AccentColor, LayoutTemplate } from "@/lib/types";
 import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 // Constantes de configuração
 const accentColors: AccentColor[] = [
@@ -32,7 +33,8 @@ const layoutTemplates: LayoutTemplate[] = [
 
 export default function AppearanceSettingsPage() {
     const { toast } = useToast();
-    const { currentUserProfile, updateUserProfile } = useAuth();
+    const { currentUserProfile, updateUserProfile, user, loading } = useAuth();
+    const router = useRouter();
     
     const [isLoading, setIsLoading] = useState(true);
     const [activeProfile, setActiveProfile] = useState<UserProfile | null>(null);
@@ -41,6 +43,12 @@ export default function AppearanceSettingsPage() {
     const [selectedAccentColor, setSelectedAccentColor] = useState<AccentColor>(accentColors[0]);
     const [userPlan, setUserPlan] = useState<'free' | 'standard' | 'premium'>('free');
     const [selectedLayoutTemplate, setSelectedLayoutTemplate] = useState<string>('default');
+
+    useEffect(() => {
+        if (!loading && !user) {
+            router.replace('/login');
+        }
+    }, [user, loading, router]);
 
     useEffect(() => {
         const profileToLoad = currentUserProfile || mockCurrentUser;
@@ -95,6 +103,10 @@ export default function AppearanceSettingsPage() {
         applyAccentColor(selectedAccentColor);
         toast({ title: "Aparência salva com sucesso!" });
     };
+
+    if (loading || !user) {
+        return null;
+    }
 
     if (isLoading) {
         return <div className="flex h-full items-center justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>;

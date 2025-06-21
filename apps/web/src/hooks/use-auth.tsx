@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (event === 'SIGNED_IN' && supabaseUser) {
         toast({ title: 'Login bem-sucedido!', description: `Bem-vindo(a) de volta!` });
         fetchUserProfile(supabaseUser);
-        router.push('/dashboard');
+        router.push('/dashboard/feed');
       } else if (event === 'SIGNED_OUT') {
         setCurrentUserProfile(null);
         router.push('/login');

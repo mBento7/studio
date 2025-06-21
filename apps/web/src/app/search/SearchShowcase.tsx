@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { mockUserProfiles, feedMockCards } from '@/lib/mock-data';
 import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
+import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
 
 const BANNERS = [
     { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
@@ -22,68 +23,13 @@ const cities = Array.from(new Set(mockUserProfiles.map(p => p.location?.city).fi
 const states = Array.from(new Set(mockUserProfiles.map(p => p.location?.state).filter((s): s is string => s !== undefined && s.trim() !== ""))).sort();
 const ALL_VALUE = "all";
 
-interface PublicProfileCardProps {
-  profile: UserProfile;
-}
-
-const PublicProfileCard: React.FC<PublicProfileCardProps> = ({ profile }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const isPremium = profile.plan === 'premium';
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group"
-    >
-      <div className={cn(
-        "relative rounded-xl overflow-hidden shadow-md bg-card group hover:shadow-xl transition border border-border/20 flex flex-col min-h-[300px]",
-        isPremium && "ring-2 ring-yellow-400 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/40"
-      )}>
-        <div className="relative h-40 flex-shrink-0 z-0">
-          {profile.coverPhotoUrl && (
-            <img
-              src={profile.coverPhotoUrl}
-              alt="Capa do perfil"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-          )}
-          <div className="absolute inset-0 bg-black/40" />
-          <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-semibold shadow">
-            {profile.category}
-          </span>
-          {isPremium && (
-            <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs px-2 py-1 rounded font-bold shadow animate-pulse">PREMIUM</span>
-          )}
-        </div>
-        <div className="flex flex-col items-center -mt-12 relative z-10">
-          <img
-            src={profile.profilePictureUrl}
-            alt={profile.name}
-            className="w-14 h-14 rounded-full border-2 border-white shadow bg-white object-cover"
-          />
-        </div>
-        <div className="px-3 pt-2 pb-1 text-center flex-1">
-          <h3 className="font-semibold text-base text-foreground truncate">{profile.name}</h3>
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-tight min-h-[32px]">{profile.bio}</p>
-        </div>
-        <div className="flex justify-between items-center px-3 pb-2 text-xs text-muted-foreground mt-1">
-          <span className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-400" />
-            {profile.plan?.toUpperCase()}
-          </span>
-          <div className="flex gap-2">
-            <button onClick={() => setIsBookmarked(b => !b)} className={cn("rounded-full p-1 transition", isBookmarked ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100 dark:hover:bg-gray-800")}> <Bookmark className={cn("w-4 h-4", isBookmarked ? "fill-blue-600" : "")}/></button>
-            <button className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition"><Share2 className="w-4 h-4" /></button>
-            <Link href={`/profile/${profile.username}`} className="rounded-full p-1 hover:bg-blue-100 transition"><ExternalLink className="w-4 h-4 text-blue-600" /></Link>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+// A função getLayoutComponent agora pode ser mais genérica
+const getLayoutComponent = (layoutId?: string): ProfileLayout | undefined => {
+  if (!layoutId) {
+    // Retorna o layout 'basic' como padrão se nenhum for especificado
+    return profileLayouts.find(layout => layout.id === 'basic');
+  }
+  return profileLayouts.find(layout => layout.id === layoutId);
 };
 
 interface Banner {
@@ -141,59 +87,56 @@ function SocialCard({ item }: { item: any }) {
   };
 
   return (
-    <Card className="hover:shadow-2xl transition-all duration-300 border bg-card/90 rounded-2xl overflow-hidden group flex flex-col">
-      <div className={cn(
-        "relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex-shrink-0",
-        isBookmarked 
-          ? "bg-yellow-500/10" 
-          : "bg-background/80"
-      )}>
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('https://picsum.photos/seed/${item.id}/400/200')` }} />
-        <div className="relative p-3 h-full flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="px-2 py-1 bg-background/80 rounded-full text-xs font-medium">
-              {item.category}
-            </span>
-            <button
-              onClick={handleBookmark}
-              className={cn(
-                "p-2 rounded-full transition-all",
-                isBookmarked 
-                  ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
-                  : "text-muted-foreground hover:bg-background/50"
-              )}
-            >
-              <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")} />
-            </button>
-          </div>
-          <div>
-            <h3 className="font-semibold text-base text-foreground mb-1 truncate">{item.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+    <Card className="w-full p-2 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-xl bg-card/90 border-0">
+      <div className="w-full bg-card rounded-md shadow-xl shadow-black/10 dark:shadow-teal-500/10 overflow-hidden border border-black/5 dark:border-white/10">
+        <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex-shrink-0">
+          <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('https://picsum.photos/seed/${item.id}/400/200')` }} />
+          <div className="relative p-3 h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <span className="px-2 py-1 bg-background/80 rounded-full text-xs font-medium">
+                {item.category}
+              </span>
+              <button
+                onClick={handleBookmark}
+                className={cn(
+                  "p-2 rounded-full transition-all",
+                  isBookmarked 
+                    ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
+                    : "text-muted-foreground hover:bg-background/50"
+                )}
+              >
+                <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")} />
+              </button>
+            </div>
+            <div>
+              <h3 className="font-semibold text-base text-foreground mb-1 truncate">{item.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <CardContent className="p-3 flex-grow">
-        <div className="flex items-center gap-3">
-          <img src={item.author.avatar} alt={item.author.name} className="w-8 h-8 rounded-full" />
-          <div>
-            <p className="font-semibold text-sm">{item.author.name}</p>
-            <p className="text-xs text-muted-foreground">{item.author.role}</p>
+        <CardContent className="p-3 flex-grow">
+          <div className="flex items-center gap-3">
+            <img src={item.author.avatar} alt={item.author.name} className="w-8 h-8 rounded-full" />
+            <div>
+              <p className="font-semibold text-sm">{item.author.name}</p>
+              <p className="text-xs text-muted-foreground">{item.author.role}</p>
+            </div>
           </div>
-        </div>
-      </CardContent>
-      <div className="px-3 pb-3 border-t border-border/10 pt-2 flex items-center justify-between text-muted-foreground">
-        <button 
-          onClick={handleLike} 
-          className={cn(
-            "flex items-center gap-1.5 text-xs hover:text-red-500 transition-colors",
-            isLiked && "text-red-500"
-          )}
-        >
-          <Heart className={cn("w-4 h-4", isLiked && "fill-current")} /> {likes}
-        </button>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MessageCircle className="w-4 h-4" /> Comentar</button>
-          <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MoreHorizontal className="w-4 h-4" /></button>
+        </CardContent>
+        <div className="px-3 pb-3 border-t border-border/10 pt-2 flex items-center justify-between text-muted-foreground">
+          <button 
+            onClick={handleLike} 
+            className={cn(
+              "flex items-center gap-1.5 text-xs hover:text-red-500 transition-colors",
+              isLiked && "text-red-500"
+            )}
+          >
+            <Heart className={cn("w-4 h-4", isLiked && "fill-current")} /> {likes}
+          </button>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MessageCircle className="w-4 h-4" /> Comentar</button>
+            <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MoreHorizontal className="w-4 h-4" /></button>
+          </div>
         </div>
       </div>
     </Card>
@@ -228,23 +171,37 @@ function SearchHeader({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="sticky top-0 z-30 py-4 bg-background/80 backdrop-blur-md -mx-4 px-4 mb-4"
+      className="py-4 px-2 md:px-6 bg-transparent"
     >
-      <div className="flex flex-col md:flex-row md:items-center gap-4">
-        <div className="flex-1 relative">
+      <form className="flex flex-col items-center justify-center gap-4 w-full" onSubmit={e => { e.preventDefault(); }}>
+        <div className="flex items-center w-full max-w-xl rounded-full bg-card border border-border/30 shadow-sm p-1 pr-1.5">
+          <label htmlFor="search-input" className="sr-only">Buscar</label>
+          <SearchIcon className="h-5 w-5 text-muted-foreground ml-4 mr-2 flex-shrink-0" />
           <Input
+            id="search-input"
             type="text"
             placeholder="Busque por nome, habilidade, serviço..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="pl-12 h-12 text-base border-border/30 bg-card focus:bg-background transition-all pr-24"
+            className="flex-grow bg-transparent border-none focus:ring-0 h-10 text-base"
           />
-          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
-          <Button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 h-9 px-4 rounded-full bg-primary text-primary-foreground shadow hover:bg-primary/90 transition-all">Buscar</Button>
+          <Button
+            type="submit"
+            className="h-10 px-6 rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md flex-shrink-0"
+            style={{ minWidth: 110 }}
+          >
+            Buscar
+          </Button>
         </div>
-        <div className="flex gap-2">
+        
+        {/* Botões de filtro com quebra de linha e centralizados */}
+        <div className="flex items-center justify-center gap-2">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="rounded-full px-4 h-12 bg-card border border-border/30">
+            <SelectTrigger className={cn(
+              "rounded-full px-4 h-10 text-base transition-colors border",
+              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
+              selectedCategory !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
+            )}>
               <SelectValue placeholder="Categoria" />
             </SelectTrigger>
             <SelectContent>
@@ -255,7 +212,11 @@ function SearchHeader({
             </SelectContent>
           </Select>
           <Select value={selectedState} onValueChange={setSelectedState}>
-            <SelectTrigger className="rounded-full px-4 h-12 bg-card border border-border/30">
+            <SelectTrigger className={cn(
+              "rounded-full px-4 h-10 text-base transition-colors border",
+              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
+              selectedState !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
+            )}>
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
@@ -266,7 +227,11 @@ function SearchHeader({
             </SelectContent>
           </Select>
           <Select value={selectedCity} onValueChange={setSelectedCity}>
-            <SelectTrigger className="rounded-full px-4 h-12 bg-card border border-border/30">
+            <SelectTrigger className={cn(
+              "rounded-full px-4 h-10 text-base transition-colors border",
+              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
+              selectedCity !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
+            )}>
               <SelectValue placeholder="Cidade" />
             </SelectTrigger>
             <SelectContent>
@@ -277,12 +242,17 @@ function SearchHeader({
             </SelectContent>
           </Select>
           {hasActiveFilters && (
-            <Button variant="outline" onClick={clearFilters} className="rounded-full h-12 px-4" type="button">
+            <Button
+              variant="ghost"
+              onClick={clearFilters}
+              className="rounded-full h-10 px-4 bg-muted/50 hover:bg-muted font-semibold dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              type="button"
+            >
               <X className="w-4 h-4 mr-1" /> Limpar
             </Button>
           )}
         </div>
-      </div>
+      </form>
     </motion.div>
   );
 }
@@ -292,11 +262,10 @@ export default function SearchShowcase() {
   const [selectedCategory, setSelectedCategory] = useState(ALL_VALUE);
   const [selectedCity, setSelectedCity] = useState(ALL_VALUE);
   const [selectedState, setSelectedState] = useState(ALL_VALUE);
-  const [isPremium, setIsPremium] = useState(false);
-  const [filteredProfiles, setFilteredProfiles] = useState<UserProfile[]>(mockUserProfiles);
-  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
-
-  const hasActiveFilters = selectedCategory !== ALL_VALUE || selectedCity !== ALL_VALUE || selectedState !== ALL_VALUE || isPremium;
+  const [filteredProfiles, setFilteredProfiles] = useState<UserProfile[]>([]);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'social'>('grid');
+  const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
   useEffect(() => {
     let results = mockUserProfiles;
@@ -316,75 +285,106 @@ export default function SearchShowcase() {
     if (selectedCity !== ALL_VALUE) {
       results = results.filter(p => p.location?.city === selectedCity);
     }
-    if (isPremium) {
-      results = results.filter(p => p.plan === 'premium');
-    }
     setFilteredProfiles(results);
-  }, [searchTerm, selectedCategory, selectedCity, selectedState, isPremium]);
+    setHasActiveFilters(
+      searchTerm !== '' ||
+      selectedCategory !== ALL_VALUE ||
+      selectedCity !== ALL_VALUE ||
+      selectedState !== ALL_VALUE
+    );
+  }, [searchTerm, selectedCategory, selectedCity, selectedState]);
 
   const clearFilters = () => {
     setSelectedCategory(ALL_VALUE);
     setSelectedCity(ALL_VALUE);
     setSelectedState(ALL_VALUE);
-    setIsPremium(false);
     setSearchTerm("");
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="bg-gray-50 dark:bg-black min-h-screen">
       <BannerCarousel banners={BANNERS} />
-      <main className="flex-grow">
-        <div className="container mx-auto px-2 sm:px-4">
-          <SearchHeader 
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedCity={selectedCity}
-            setSelectedCity={setSelectedCity}
-            selectedState={selectedState}
-            setSelectedState={setSelectedState}
-            hasActiveFilters={hasActiveFilters}
-            clearFilters={clearFilters}
-          />
-          
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-muted-foreground">
-              {filteredProfiles.length} resultado{filteredProfiles.length === 1 ? '' : 's'} encontrado{filteredProfiles.length === 1 ? '' : 's'}
-            </p>
+
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6 -mt-16 relative z-20">
+        <SearchHeader
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
+          selectedState={selectedState}
+          setSelectedState={setSelectedState}
+          hasActiveFilters={hasActiveFilters}
+          clearFilters={clearFilters}
+        />
+        <div className="my-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+              Resultados da Busca
+            </h2>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon" onClick={() => setLayout('grid')} className={cn(layout === 'grid' && 'bg-muted')}>
-                <LayoutGrid className="w-5 h-5" />
-              </Button>
-              <Button variant="outline" size="icon" onClick={() => setLayout('list')} className={cn(layout === 'list' && 'bg-muted')}>
-                <List className="w-5 h-5" />
+              <Button variant="ghost" size="icon" onClick={() => setIsFiltersVisible(!isFiltersVisible)}>
+                <SlidersHorizontal className="w-5 h-5" />
               </Button>
             </div>
           </div>
 
           <div className={cn(
-            "grid gap-6",
-            layout === 'grid' 
-              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" 
-              : "grid-cols-1"
+            "grid gap-4 md:gap-6",
+            "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           )}>
             <AnimatePresence>
-              {(() => {
-                const result: React.ReactNode[] = [];
-                let feedIdx = 0;
-                filteredProfiles.forEach((profile, idx) => {
-                  result.push(<PublicProfileCard key={profile.id} profile={profile} />);
-                  if ((idx + 1) % 4 === 0 && feedIdx < feedMockCards.length) {
-                    result.push(<SocialCard key={`feed-${feedMockCards[feedIdx].id}`} item={feedMockCards[feedIdx]} />);
-                    feedIdx++;
+              {filteredProfiles.map(profile => {
+                  const Layout = getLayoutComponent(profile.layoutTemplateId);
+                  const SearchResultComponent = Layout?.SearchResultComponent;
+                  
+                  if (SearchResultComponent) {
+                    return (
+                        <motion.div
+                          key={profile.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                            <SearchResultComponent user={profile} />
+                        </motion.div>
+                    );
                   }
-                });
-                return result;
-              })()}
+
+                  // Fallback para um card genérico caso o layout não seja encontrado
+                  return (
+                    <motion.div
+                      key={profile.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Card>
+                          <CardContent className="p-4">
+                              <Link href={`/profile/${profile.username}`}>
+                                  <h3 className="font-bold">{profile.name}</h3>
+                                  <p className="text-sm text-muted-foreground">{profile.category}</p>
+                              </Link>
+                          </CardContent>
+                      </Card>
+                    </motion.div>
+                  );
+              })}
             </AnimatePresence>
           </div>
+          {filteredProfiles.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-muted-foreground">Nenhum resultado encontrado.</p>
+              <p className="mt-2 text-muted-foreground">Tente ajustar seus filtros ou buscar por outros termos.</p>
+            </div>
+          )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

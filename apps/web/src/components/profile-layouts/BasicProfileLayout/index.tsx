@@ -4,12 +4,11 @@ import React from 'react';
 import type { UserProfile, PortfolioItem } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { platformIcons } from "@/lib/types";
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, MapPin, Mail, Phone, Maximize } from 'lucide-react';
-import { DigitalBusinessCard } from "@/features/profile/digital-business-card";
+import { Globe, MapPin, Mail, Phone, Edit, MessageSquare } from 'lucide-react';
 
 /*
  * BasicProfileLayout
@@ -39,140 +38,124 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
   user,
   isCurrentUserProfile,
   qrCodeUrl,
-  onPortfolioItemClick,
-  toast,
-  mounted,
 }) => {
-  // Fallbacks seguros
-  const skills = user.skills || [];
-  const experience = user.experience || [];
-  const education = user.education || [];
-  const portfolio = user.portfolio || [];
-  const services = user.services || [];
   const socialLinks = user.socialLinks || [];
   const location = user.location || { city: '', country: '' };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-0 overflow-hidden">
-        {/* Capa */}
-        {user.coverPhotoUrl && (
-          <div className="relative w-full h-32 bg-gray-200">
-            <img src={user.coverPhotoUrl} alt="Capa do perfil" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-          </div>
-        )}
-        <div className="flex flex-col items-center p-6">
-          {/* Foto de perfil */}
-          <div className="w-full flex justify-center -mt-16 mb-4">
-            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center">
-              <Avatar className="w-full h-full">
-                <AvatarImage src={user.profilePictureUrl} alt={user.name} className="object-cover" />
-                <AvatarFallback className="text-xl font-semibold">{user.name.charAt(0)}</AvatarFallback>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 p-4 flex items-center justify-center">
+      <Card className="w-full max-w-lg shadow-2xl rounded-2xl overflow-hidden border-0">
+        <CardHeader className="p-0">
+          <div className="relative">
+            {/* Cover Image */}
+            <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
+              {user.coverPhotoUrl && (
+                <img
+                  src={user.coverPhotoUrl}
+                  alt="Capa do perfil"
+                  className="w-full h-full object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50" />
+            </div>
+
+            {/* Profile Picture */}
+            <div className="absolute top-24 left-1/2 -translate-x-1/2">
+              <Avatar className="w-32 h-32 border-4 border-white dark:border-slate-900 shadow-xl">
+                <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                <AvatarFallback className="text-3xl font-bold">
+                  {user.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
               </Avatar>
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-1 text-center">{user.name}</h1>
-          <p className="text-gray-600 mb-2 text-center">{user.category}</p>
-          <p className="text-gray-700 text-sm mb-4 text-center whitespace-pre-line px-2">{user.bio}</p>
-          {/* Contatos */}
-          <div className="flex space-x-4 mb-4">
+        </CardHeader>
+        <CardContent className="pt-20 text-center flex flex-col items-center">
+          <h1 className="text-3xl font-bold text-foreground">{user.name}</h1>
+          <p className="text-primary font-medium mt-1">{user.category}</p>
+          <p className="text-muted-foreground mt-4 max-w-md mx-auto text-sm leading-relaxed">
+            {user.bio}
+          </p>
+
+          <div className="w-full border-t my-6" />
+
+          {/* Contact Info */}
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-sm text-muted-foreground mb-6">
+            {location.city && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-primary" />
+                <span>{location.city}, {location.country}</span>
+              </div>
+            )}
             {user.email && (
-              <a href={`mailto:${user.email}`} className="text-blue-500 hover:text-blue-700" aria-label="Email"><Mail className="w-5 h-5" /></a>
+              <a href={`mailto:${user.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                <Mail className="w-4 h-4 text-primary" />
+                <span>{user.email}</span>
+              </a>
             )}
             {user.phone && (
-              <a href={`tel:${user.phone}`} className="text-blue-500 hover:text-blue-700" aria-label="Telefone"><Phone className="w-5 h-5" /></a>
-            )}
-            {location.city && location.country && (
-              <span className="text-gray-500 flex items-center"><MapPin className="w-5 h-5 mr-1" /> {location.city}, {location.country}</span>
+              <a href={`tel:${user.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                <Phone className="w-4 h-4 text-primary" />
+                <span>{user.phone}</span>
+              </a>
             )}
           </div>
-          {/* Links sociais */}
+
+          {/* Social Links */}
           {socialLinks.length > 0 && (
-            <div className="flex justify-center flex-wrap gap-3 mb-6">
-              {socialLinks.map(link => {
-                const IconComponent = platformIcons[link.platform as keyof typeof platformIcons] || Globe;
+            <div className="flex justify-center gap-2 mb-6">
+              {socialLinks.map((link) => {
+                const Icon = platformIcons[link.platform] || Globe;
                 return (
-                  <Button key={link.id} variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-full w-8 h-8 hover:bg-primary/10">
-                    <Link href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
-                      <IconComponent className="w-4 h-4" />
-                    </Link>
+                  <Button key={link.id} variant="outline" size="icon" className="rounded-full" asChild>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
+                      <Icon className="w-4 h-4" />
+                    </a>
                   </Button>
                 );
               })}
             </div>
           )}
-          {/* Banner/Placeholder */}
-          <div className="w-full mb-4">
-            <div className="rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 text-blue-900 p-3 text-center text-xs font-semibold shadow-inner">
-              Complete seu perfil para liberar mais recursos e layouts!
-            </div>
-          </div>
-          <div className="text-gray-700 text-sm w-full text-left mt-4">
-            <h2 className="text-lg font-semibold mb-2">Serviços</h2>
-            {services.length > 0 ? (
-              <ul className="list-disc list-inside mb-4 pl-4">
-                {services.map((service, index) => (
-                  <li key={index}>{service.name} - {service.description}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground">Nenhum serviço listado.</p>
-            )}
 
-            <h2 className="text-lg font-semibold mb-2">Portfólio</h2>
-            {portfolio.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {portfolio.slice(0, 4).map((item, index) => (
-                  <div key={index} className="relative w-full h-24 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center cursor-pointer" onClick={() => onPortfolioItemClick(item)}>
-                    <Image src={item.imageUrl} alt={item.caption || 'Portfólio'} layout="fill" objectFit="cover" />
-                    <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Maximize className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground">Nenhum item de portfólio listado.</p>
-            )}
-
-            <h2 className="text-lg font-semibold mb-2">Experiência</h2>
-            {experience.length > 0 ? (
-              <ul className="list-disc list-inside mb-4 pl-4">
-                {experience.map((exp, index) => (
-                  <li key={index}><strong>{exp.title}</strong> em {exp.company} ({exp.years})</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground">Nenhuma experiência listada.</p>
-            )}
-
-            <h2 className="text-lg font-semibold mb-2">Educação</h2>
-            {education.length > 0 ? (
-              <ul className="list-disc list-inside mb-4 pl-4">
-                {education.map((edu, index) => (
-                  <li key={index}><strong>{edu.degree}</strong> de {edu.institution} ({edu.years})</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground">Nenhuma formação listada.</p>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm mx-auto">
+            <Button size="lg" className="flex-1">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Entrar em Contato
+            </Button>
+            {isCurrentUserProfile && (
+              <Button size="lg" variant="outline" className="flex-1" asChild>
+                <Link href="/dashboard/my-profile">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Editar Perfil
+                </Link>
+              </Button>
             )}
           </div>
-          
+
+          {/* QR Code Section */}
           {qrCodeUrl && (
-            <div className="mt-6 flex flex-col items-center">
+            <div className="mt-8 flex flex-col items-center">
               <Image
                 src={qrCodeUrl}
                 alt={`QR Code de ${user.name}`}
-                width={100}
-                height={100}
-                className="rounded-md border p-1 bg-white shadow-sm"
+                width={120}
+                height={120}
+                className="rounded-lg border p-1 bg-white shadow-md"
               />
-              <p className="mt-2 text-xs text-muted-foreground">Escaneie para visualizar o perfil completo</p>
+              <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
             </div>
           )}
-        </div>
-      </div>
+
+          {isCurrentUserProfile && (
+            <div className="w-full mt-6">
+              <div className="rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 text-blue-900 p-3 text-center text-xs font-semibold shadow-inner dark:bg-gradient-to-r dark:from-blue-900/50 dark:to-purple-900/50 dark:text-blue-200">
+                Complete seu perfil para liberar mais recursos e layouts!
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -182,7 +165,7 @@ export default BasicProfileLayout;
 export const config = {
   id: 'basic-profile',
   name: 'Perfil Básico',
-  description: 'Layout básico para perfis simples.',
+  description: 'Um layout limpo e moderno para apresentar suas informações essenciais.',
   imageUrl: 'https://picsum.photos/seed/layout-basic/300/200',
   plan: 'free',
 }; 

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -31,14 +30,14 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
         id={id}
         ref={ref}
         className={cn(
-          "bg-white text-black p-4 flex flex-col justify-between shadow-lg rounded-lg w-[336px] h-[192px] overflow-hidden border border-gray-200",
+          "bg-card text-foreground p-4 flex flex-col justify-between shadow-xl rounded-xl w-[336px] h-[192px] overflow-hidden border border-black/5 dark:border-white/10",
           className
         )}
         {...props}
       >
         {/* Top section: User Info */}
         <div className="flex items-center space-x-3">
-          <div className="w-16 h-16 rounded-md overflow-hidden border-2 border-gray-100 flex-shrink-0">
+          <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-white/10 flex-shrink-0">
             <Image
               src={user.profilePictureUrl}
               alt={`Foto de ${user.name}`}
@@ -51,7 +50,7 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
           <div className="flex-grow">
             <h2 className="text-xl font-bold leading-tight truncate" style={{ color: `#${primaryColorHex}` }}>{user.name}</h2>
             {user.category && (
-              <div className="flex items-center gap-1.5 text-xs text-gray-600 mt-1">
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
                  <Briefcase className="w-3 h-3"/>
                  <p className="leading-tight truncate">{user.category}</p>
               </div>
@@ -71,8 +70,8 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
                 rel="noopener noreferrer"
                 className="flex items-center space-x-1.5 group"
               >
-                <item.icon className="w-3 h-3 text-gray-500 group-hover:text-black transition-colors flex-shrink-0" />
-                <span className="text-[10px] text-gray-700 group-hover:text-black transition-colors leading-tight truncate">
+                <item.icon className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
+                <span className="text-[10px] text-muted-foreground group-hover:text-foreground transition-colors leading-tight truncate">
                   {item.text}
                 </span>
               </a>
@@ -82,7 +81,7 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
           {/* QR Code */}
           <div className="flex flex-col items-center flex-shrink-0">
             {qrCodeUrl && (
-              <div className="p-0.5 bg-white rounded-sm shadow-md border border-gray-100">
+              <div className="p-0.5 bg-white rounded-md shadow-md border border-gray-200">
                 <Image
                   src={qrCodeUrl}
                   alt={`QR Code para ${user.name}`}

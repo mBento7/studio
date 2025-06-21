@@ -17,26 +17,25 @@ export function MainGridLayout({
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
 }) {
+  const hasLeft = !!leftSidebar;
+  const hasRight = !!rightSidebar;
+
+  let gridCols = 'grid-cols-1';
+  if (hasLeft && hasRight) gridCols = 'lg:grid-cols-[16rem_1fr_16rem]';
+  else if (hasLeft) gridCols = 'lg:grid-cols-[16rem_1fr]';
+  else if (hasRight) gridCols = 'lg:grid-cols-[1fr_16rem]';
+
   return (
-    <div className="max-w-full mx-auto grid grid-cols-1 lg:grid-cols-[16rem_1fr_16rem] gap-1 p-0 md:p-2 px-0 items-stretch min-h-[calc(100vh-4rem)]">
-      {/* Coluna esquerda (sidebar) */}
-      <div className="hidden lg:block sticky top-20 h-full self-stretch">
-        {leftSidebar}
-      </div>
-      {/* Conteúdo principal */}
-      <div className="min-w-0 h-full self-stretch flex flex-col">
-        {children}
-      </div>
-      {/* Coluna direita (widgets) */}
-      <div className="hidden lg:block sticky top-20 h-full self-stretch">
-        {rightSidebar}
-      </div>
+    <div className={`max-w-full mx-auto grid ${gridCols} gap-6 p-0 md:p-2 px-0 items-stretch min-h-[calc(100vh-4rem)]`}>
+      {hasLeft && <div className="hidden lg:block sticky top-20 h-full self-stretch">{leftSidebar}</div>}
+      <div className="min-w-0 h-full self-stretch flex flex-col">{children}</div>
+      {hasRight && <div className="hidden lg:block sticky top-20 h-full self-stretch">{rightSidebar}</div>}
     </div>
   );
 }
 
 export function AppContainer({ children }: { children: React.ReactNode }) {
-  const { loading } = useAuth();
+  const { loading, user, currentUserProfile } = useAuth();
 
   // Mock de dados do usuário (substitua por dados reais do contexto/auth futuramente)
   const mockProfile = {
@@ -61,7 +60,7 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
       <PublicHeader />
       <main className="flex-1 overflow-x-hidden pt-16">
         <MainGridLayout
-          leftSidebar={<LeftProfileSidebar profile={mockProfile} />}
+          leftSidebar={user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
           rightSidebar={<RightWidgetsColumn />}
         >
           {children}

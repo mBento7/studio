@@ -1,137 +1,179 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { UserProfile, PortfolioItem, Service } from "@/lib/types";
-import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrCode, Download, Edit3, MessageSquare, Briefcase, ArrowRight, Loader2, Building, GraduationCap, Star, Palette, Facebook, Twitch, Save, Eye, Link as LinkIcon, Maximize } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import type { ProfileLayoutProps } from "@/lib/types";
+import { platformIcons } from "@/lib/types";
+import { Youtube, Globe, Mail, MessageSquare, Edit, Eye, Maximize, Phone, MapPin, Briefcase, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { PremiumBannerDisplay } from "@/features/landing/premium-banner-display";
-import { ProfileLayoutProps, platformIcons } from "@/lib/types";
 
-/*
- * PortfolioFocusLayout
- *
- * Plano: standard
- * Gatilho: user.plan === 'standard' && user.layoutTemplateId === 'portfolio-focus'
- *
- * Itens/Seções liberados:
- * - Todas as funcionalidades do ModernProfileLayout
- * - Ênfase visual maior nas galerias de portfólio
- * - Mais itens de portfólio e serviços
- * - Funcionalidades de cupons
- */
-
-const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({ user, primaryColorHex, isCurrentUserProfile, qrCodeUrl, onPortfolioItemClick, toast, mounted }) => {
-  const skills = user.skills || [];
-  const experience = user.experience || [];
-  const education = user.education || [];
+const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
+  user,
+  isCurrentUserProfile,
+  qrCodeUrl,
+  onPortfolioItemClick,
+}) => {
   const portfolio = user.portfolio || [];
   const services = user.services || [];
   const socialLinks = user.socialLinks || [];
   const location = user.location || { city: '', country: '' };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-zinc-900 dark:to-zinc-800">
-      <Card className="max-w-3xl w-full shadow-2xl overflow-hidden border-primary/20 relative">
-        {/* Capa */}
-        {user.coverPhotoUrl && (
-          <div className="relative w-full h-40 bg-gray-200">
-            <Image src={user.coverPhotoUrl} alt="Capa do perfil" fill style={{objectFit:'cover'}} className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-          </div>
-        )}
-        <div className="flex flex-col md:flex-row items-center gap-6 p-6 -mt-16">
-          {/* Foto de perfil */}
-          <div className="flex-shrink-0">
-            <Image src={user.profilePictureUrl} alt={user.name} width={120} height={120} className="rounded-full border-4 border-white shadow-lg object-cover bg-white" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{user.name}</h1>
-            <p className="text-purple-700 dark:text-purple-200 mt-1">{user.category}</p>
-            <p className="text-sm mt-3 max-w-xl text-gray-700 dark:text-gray-200">{user.bio}</p>
-            {/* Localização */}
-            {user.location?.city && (
-              <p className="text-xs mt-2 flex items-center gap-1 text-gray-500 dark:text-gray-300">
-                <span className="inline-block w-2 h-2 bg-green-400 rounded-full" />
-                {user.location.city}{user.location.state ? `, ${user.location.state}` : ''} - {user.location.country}
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="relative">
+          <div className="h-56 w-full rounded-2xl overflow-hidden shadow-2xl">
+            {user.coverPhotoUrl ? (
+              <Image
+                src={user.coverPhotoUrl}
+                alt="Capa do perfil"
+                layout="fill"
+                objectFit="cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-r from-gray-300 to-gray-400" />
             )}
-            {/* Contatos */}
-            <div className="flex flex-wrap gap-3 mt-3">
-              {user.email && (
-                <a href={`mailto:${user.email}`} className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200 transition">{user.email}</a>
-              )}
-              {user.phone && (
-                <a href={`tel:${user.phone}`} className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200 transition">{user.phone}</a>
-              )}
-              {user.whatsappNumber && (
-                <a href={`https://wa.me/${user.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 transition">WhatsApp</a>
-              )}
-              {user.website && (
-                <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200 transition">Site</a>
-              )}
-            </div>
-            {/* Links sociais */}
-            {socialLinks.length > 0 && (
-              <div className="flex gap-2 mt-3">
-                {socialLinks.map((link) => {
-                  const Icon = platformIcons[link.platform] || Globe;
-                  return (
-                    <a
-                      key={link.id}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-purple-100 hover:bg-purple-200 p-2 rounded-full transition"
-                      title={link.platform}
-                    >
-                      <Icon className="w-5 h-5 text-purple-700" />
-                    </a>
-                  );
-                })}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          </div>
+          <div className="absolute top-32 left-1/2 -translate-x-1/2 md:left-12 md:-translate-x-0 w-full md:w-auto">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <Avatar className="w-36 h-36 border-4 border-white dark:border-slate-800 shadow-2xl">
+                <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                <AvatarFallback className="text-4xl font-bold">
+                  {user.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div className="mt-2 md:mt-12 text-center md:text-left">
+                <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">{user.name}</h1>
+                <p className="text-lg text-white/90 drop-shadow-md">{user.category}</p>
               </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="pt-20 md:pt-8" />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Column: Portfolio */}
+          <div className="lg:col-span-2 space-y-8">
+            <Card className="shadow-xl rounded-2xl border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                  <Star className="w-6 h-6 text-primary" />
+                  Portfólio em Destaque
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {portfolio.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {portfolio.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="aspect-square rounded-xl overflow-hidden border shadow-sm cursor-pointer group relative hover:shadow-lg transition-all duration-300"
+                        onClick={() => onPortfolioItemClick(item)}
+                      >
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.caption || 'Portfólio'}
+                          layout="fill"
+                          objectFit="cover"
+                          className="group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                           <h3 className="font-bold text-white text-lg drop-shadow-md">{item.caption}</h3>
+                           <p className="text-white/90 text-sm drop-shadow-md">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-center py-12">
+                    Nenhum projeto no portfólio ainda.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Sidebar Column */}
+          <div className="lg:col-span-1 space-y-8">
+             <Card className="shadow-xl rounded-2xl border-0">
+                <CardHeader>
+                   <CardTitle className="text-xl">Sobre</CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <p className="text-muted-foreground text-base leading-relaxed">{user.bio}</p>
+                   {socialLinks.length > 0 && (
+                     <div className="flex gap-2 mt-4">
+                       {socialLinks.map((link) => {
+                         const Icon = platformIcons[link.platform] || Globe;
+                         return (
+                           <Button key={link.id} variant="outline" size="icon" className="rounded-full" asChild>
+                             <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
+                               <Icon className="w-4 h-4" />
+                             </a>
+                           </Button>
+                         );
+                       })}
+                     </div>
+                   )}
+                </CardContent>
+             </Card>
+             
+             {services.length > 0 && (
+               <Card className="shadow-xl rounded-2xl border-0">
+                  <CardHeader>
+                     <CardTitle className="text-xl flex items-center gap-2"><Briefcase className="w-5 h-5 text-primary" /> Serviços</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                     {services.map((service, idx) => (
+                       <div key={idx} className="p-3 rounded-lg border bg-slate-50 dark:bg-slate-800/50">
+                          <h3 className="font-semibold text-foreground">{service.name}</h3>
+                          <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+                       </div>
+                     ))}
+                  </CardContent>
+               </Card>
+             )}
+             
+             <Card className="shadow-xl rounded-2xl border-0">
+               <CardHeader>
+                 <CardTitle className="text-xl">Contato Rápido</CardTitle>
+               </CardHeader>
+                <CardContent className="space-y-3">
+                   <Button className="w-full" asChild>
+                      <a href={`https://wa.me/${user.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
+                         <MessageSquare className="w-4 h-4 mr-2" /> WhatsApp
+                      </a>
+                   </Button>
+                   <Button variant="outline" className="w-full" asChild>
+                      <a href={`mailto:${user.email}`}>
+                         <Mail className="w-4 h-4 mr-2" /> E-mail
+                      </a>
+                   </Button>
+                </CardContent>
+             </Card>
+
+             {qrCodeUrl && (
+              <Card className="shadow-xl rounded-2xl border-0 flex flex-col items-center p-6">
+                 <Image
+                    src={qrCodeUrl}
+                    alt={`QR Code de ${user.name}`}
+                    width={120}
+                    height={120}
+                    className="rounded-lg border p-1 bg-white shadow-md"
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
+              </Card>
             )}
           </div>
         </div>
-        <CardContent className="p-6">
-          {/* Portfólio em destaque */}
-          <h2 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-200">Portfólio em Destaque</h2>
-          {portfolio.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-              {portfolio.map((item, idx) => (
-                <div key={idx} className="rounded-lg border overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group relative" onClick={() => onPortfolioItemClick?.(item)}>
-                  <Image src={item.imageUrl} alt={item.caption || 'Portfólio'} fill className="object-cover w-full h-40" />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                    <Maximize className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-white text-xs font-semibold">{item.caption}</div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted-foreground">Nenhum item de portfólio listado.</p>
-          )}
-          {/* Serviços */}
-          <h2 className="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-200">Serviços</h2>
-          {services.length > 0 ? (
-            <ul className="list-disc list-inside mb-4 pl-4">
-              {services.map((service, index) => (
-                <li key={index}>{service.name} - {service.description}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground">Nenhum serviço listado.</p>
-          )}
-          {/* Banner/Placeholder */}
-          <div className="w-full mt-8">
-            <div className="rounded-lg bg-gradient-to-r from-purple-100 to-blue-100 text-purple-900 p-3 text-center text-xs font-semibold shadow-inner">
-              Conheça todos os recursos do nosso showroom!
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      </div>
     </div>
   );
 };
@@ -141,7 +183,7 @@ export default PortfolioFocusLayout;
 export const config = {
   id: 'portfolio-focus',
   name: 'Foco em Portfólio',
-  description: 'Destaque seu portfólio de projetos.',
+  description: 'Um layout visual que coloca seus projetos em primeiro plano.',
   imageUrl: 'https://picsum.photos/seed/layout-portfolio/300/200',
   plan: 'standard',
 }; 

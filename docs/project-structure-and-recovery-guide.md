@@ -78,6 +78,17 @@ Para restaurar o projeto em uma máquina nova do zero, siga estes passos:
     ```
     Abra seu navegador em `http://localhost:3000` (ou a porta indicada) e a aplicação deverá estar funcionando perfeitamente.
 
+## 4.1 Restaurando o Banco de Dados a partir de Migrations
+
+Se o projeto já utiliza migrations versionadas (em `db/schemas/` e `db/policies/`), siga as instruções abaixo para restaurar o banco de dados:
+
+1. Acesse o painel do Supabase ou seu banco local.
+2. Aplique as migrations na ordem correta, conforme a numeração dos arquivos.
+3. Certifique-se de aplicar também as políticas de segurança (RLS) presentes em `db/policies/`.
+4. Em caso de dúvidas, consulte a documentação do Supabase CLI ou peça orientação ao responsável pelo banco.
+
+> **Importante:** Sempre mantenha a estrutura do projeto e as instruções deste guia atualizadas conforme novas pastas, apps ou serviços forem adicionados ao monorepo.
+
 ## 5. 🛡️ Pontos Críticos de Segurança
 
 *   **NUNCA** faça commit do arquivo `.env.local` ou de qualquer outro arquivo que contenha senhas, chaves de API ou outros segredos.

@@ -8,13 +8,16 @@
     "lint": "pnpm --filter nextn lint",
     "typecheck": "pnpm --filter nextn typecheck",
     "genkit:dev": "pnpm --filter nextn genkit:dev",
-    "genkit:watch": "pnpm --filter nextn genkit:watch"
+    "genkit:watch": "pnpm --filter nextn genkit:watch",
+    "check-docs": "node scripts/check-docs.js",
+    "update-docs": "node scripts/update-docs.js"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "devDependencies": {
+    "husky": "^9.1.7",
     "pnpm": "^9.0.0"
   }
-} 
+}

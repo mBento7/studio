@@ -103,4 +103,28 @@ O perfil do usuário é a principal forma de anúncio. A sua aparência e os rec
     -   `ModernProfileLayout`
     -   `PortfolioFocusLayout`
     -   `AdvancedProfileLayout`
-    -   `PremiumProLayout` 
+    -   `PremiumProLayout`
+
+---
+
+## Novos Tipos de Anúncios Inspirados em Redes Sociais
+
+### Story Patrocinado
+- **O que é:** Anúncio em formato de story (imagem ou vídeo curto).
+- **Onde aparece:** No topo do feed, em carrossel de stories.
+- **Como Ativar:** Serviço de impulsionamento específico ou pacote premium.
+
+### Carrossel de Anúncios
+- **O que é:** Vários anúncios em sequência, deslizando horizontalmente.
+- **Onde aparece:** No feed ou em banners de destaque.
+- **Como Ativar:** Serviço de impulsionamento ou destaque especial.
+
+### Anúncio em Vídeo
+- **O que é:** Anúncio em vídeo curto, com autoplay e destaque visual.
+- **Onde aparece:** No feed, banners ou página inicial.
+- **Como Ativar:** Serviço de vídeo patrocinado.
+
+### Notificação Patrocinada
+- **O que é:** Notificação enviada ao usuário, destacando promoções ou perfis.
+- **Onde aparece:** Lista de notificações do usuário.
+- **Como Ativar:** Serviço de notificação patrocinada. 

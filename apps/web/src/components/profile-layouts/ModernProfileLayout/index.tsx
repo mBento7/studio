@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React from 'react';
+import type { ProfileLayoutProps } from "@/lib/types";
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Mail,
   Phone,
@@ -17,26 +19,19 @@ import {
   Globe,
   GraduationCap,
   Briefcase,
-  ImageIcon,
+  Star,
+  Edit,
+  MessageSquare
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { platformIcons } from "@/lib/types";
+import Image from "next/image";
+import Link from "next/link";
 
-const ModernProfileLayout = ({
+const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
   user,
-  primaryColorHex = "#6366f1",
   isCurrentUserProfile,
   qrCodeUrl,
   onPortfolioItemClick,
-  toast,
-  mounted,
-}: {
-  user: any;
-  primaryColorHex?: string;
-  isCurrentUserProfile?: boolean;
-  qrCodeUrl?: string;
-  onPortfolioItemClick?: (item: any) => void;
-  toast?: any;
-  mounted?: boolean;
 }) => {
   const skills = user.skills || [];
   const experience = user.experience || [];
@@ -47,177 +42,207 @@ const ModernProfileLayout = ({
   const location = user.location || { city: "", country: "" };
 
   return (
-    <div
-      className="min-h-screen px-4 py-10 bg-gradient-to-br from-zinc-100 to-zinc-300 dark:from-zinc-900 dark:to-zinc-800 flex items-center justify-center"
-      style={{
-        backgroundImage: `radial-gradient(circle at top left, ${primaryColorHex}20, transparent)`,
-      }}
-    >
-      <div className="w-full max-w-5xl backdrop-blur-xl bg-white/60 dark:bg-zinc-900/60 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-        <div
-          className="w-full px-6 py-8 flex flex-col items-center text-center bg-cover bg-center relative"
-          style={{
-            backgroundImage:
-              user.coverPhotoUrl
-                ? `url('${user.coverPhotoUrl}')`
-                : "url('https://www.transparenttextures.com/patterns/cubes.png')",
-            backgroundColor: primaryColorHex,
-            color: "white",
-          }}
-        >
-          <div className="absolute inset-0 bg-black/30" style={{zIndex:1}} />
-          <img
-            src={user.profilePictureUrl || "/default-avatar.png"}
-            alt={user.name}
-            className="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover mb-4 relative z-10"
-          />
-          <h1 className="text-3xl font-bold relative z-10">{user.name}</h1>
-          <p className="opacity-90 relative z-10">{user.category}</p>
-          {/* Contatos */}
-          <div className="flex flex-wrap justify-center gap-2 mt-2 relative z-10">
-            {user.email && (
-              <a href={`mailto:${user.email}`} className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">{user.email}</a>
-            )}
-            {user.phone && (
-              <a href={`tel:${user.phone}`} className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">{user.phone}</a>
-            )}
-            {user.whatsappNumber && (
-              <a href={`https://wa.me/${user.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 transition">WhatsApp</a>
-            )}
-            {user.website && (
-              <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20 transition">Site</a>
-            )}
-          </div>
-          {/* Links sociais */}
-          {socialLinks.length > 0 && (
-            <div className="flex justify-center flex-wrap gap-3 mt-3 relative z-10">
-              {socialLinks.map(link => {
-                const IconComponent = require('@/lib/types').platformIcons[link.platform] || Globe;
-                return (
-                  <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 p-2 rounded-full transition" title={link.platform}>
-                    <IconComponent className="w-5 h-5 text-white" />
-                  </a>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <CardContent className="p-6 space-y-8">
-          {/* Bio + Contatos */}
-          <section>
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2 text-zinc-700 dark:text-zinc-100">
-              <Globe className="w-5 h-5" />
-              Sobre
-            </h2>
-            <p className="text-zinc-600 dark:text-zinc-300 whitespace-pre-line mb-4">
-              {user.bio || "Nenhuma biografia fornecida."}
-            </p>
-
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2 text-sm text-zinc-600 dark:text-zinc-300">
-              {user.email && (
-                <span className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  {user.email}
-                </span>
-              )}
-              {user.phone && (
-                <span className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  {user.phone}
-                </span>
-              )}
-              {location.city && (
-                <span className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  {location.city}, {location.country}
-                </span>
-              )}
-            </div>
-          </section>
-
-          {/* Skills */}
-          {skills.length > 0 && (
-            <section>
-              <h2 className="text-xl font-semibold mb-2 text-zinc-700 dark:text-zinc-100">
-                Habilidades
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill: string, idx: number) => (
-                  <Badge key={idx} variant="outline" className="text-sm">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Portfólio */}
-          {portfolio.length > 0 && (
-            <section>
-              <h2 className="text-xl font-semibold mb-2 text-zinc-700 dark:text-zinc-100">
-                Portfólio
-              </h2>
-              <div className="grid grid-cols-3 gap-4">
-                {portfolio.slice(0, 6).map((item: any, idx: number) => (
-                  <div
-                    key={idx}
-                    className="relative group rounded-lg overflow-hidden shadow-md cursor-pointer"
-                    onClick={() => onPortfolioItemClick?.(item)}
-                  >
-                    <img
-                      src={item.imageUrl}
-                      alt={item.caption || "Portfólio"}
-                      className="object-cover w-full h-28"
-                    />
-                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                      <Maximize className="w-5 h-5 text-white" />
-                    </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Header Section */}
+        <Card className="shadow-xl rounded-2xl overflow-hidden border-0">
+          <CardContent className="p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+              {/* Left Column: Avatar & Basic Info */}
+              <div className="md:col-span-1 flex flex-col items-center md:items-start text-center md:text-left">
+                <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white dark:border-slate-800 shadow-lg">
+                  <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                  <AvatarFallback className="text-4xl font-bold">
+                    {user.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
+                <h1 className="text-3xl font-bold mt-4 text-foreground">{user.name}</h1>
+                <p className="text-primary font-semibold text-lg mt-1">{user.category}</p>
+                {socialLinks.length > 0 && (
+                  <div className="flex justify-center md:justify-start gap-2 mt-4">
+                    {socialLinks.map((link) => {
+                      const Icon = platformIcons[link.platform] || Globe;
+                      return (
+                        <Button key={link.id} variant="outline" size="icon" className="rounded-full" asChild>
+                          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
+                            <Icon className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      );
+                    })}
                   </div>
-                ))}
+                )}
               </div>
-            </section>
-          )}
+              
+              {/* Right Column: Bio & Actions */}
+              <div className="md:col-span-2 space-y-4">
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  {user.bio}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                  {location.city && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      <span>{location.city}, {location.country}</span>
+                    </div>
+                  )}
+                  {user.email && (
+                    <a href={`mailto:${user.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <Mail className="w-4 h-4" />
+                      <span>{user.email}</span>
+                    </a>
+                  )}
+                  {user.phone && (
+                    <a href={`tel:${user.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <Phone className="w-4 h-4" />
+                      <span>{user.phone}</span>
+                    </a>
+                  )}
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Button size="lg">
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Entrar em Contato
+                  </Button>
+                  {isCurrentUserProfile && (
+                    <Button size="lg" variant="outline" asChild>
+                      <Link href="/dashboard/my-profile">
+                        <Edit className="w-4 h-4 mr-2" />
+                        Editar Perfil
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Experiência e Educação */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section>
-              <h2 className="text-xl font-semibold mb-2 flex items-center gap-2 text-zinc-700 dark:text-zinc-100">
-                <Briefcase className="w-5 h-5" />
-                Experiência
-              </h2>
-              {experience.length > 0 ? (
-                <ul className="space-y-2 text-zinc-600 dark:text-zinc-300">
-                  {experience.map((exp: any, idx: number) => (
-                    <li key={idx}>
-                      <strong>{exp.title}</strong> – {exp.company} ({exp.years})
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-zinc-500">Nenhuma experiência registrada.</p>
-              )}
-            </section>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content Column */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Skills */}
+            {skills.length > 0 && (
+              <Card className="shadow-lg rounded-xl border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg"><Star className="w-5 h-5 text-primary" /> Habilidades</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {skills.map((skill: string, idx: number) => (
+                      <Badge key={idx} variant="secondary" className="text-sm px-3 py-1">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-            <section>
-              <h2 className="text-xl font-semibold mb-2 flex items-center gap-2 text-zinc-700 dark:text-zinc-100">
-                <GraduationCap className="w-5 h-5" />
-                Educação
-              </h2>
-              {education.length > 0 ? (
-                <ul className="space-y-2 text-zinc-600 dark:text-zinc-300">
-                  {education.map((edu: any, idx: number) => (
-                    <li key={idx}>
-                      <strong>{edu.degree}</strong> – {edu.institution} ({edu.years})
-                    </li>
+            {/* Portfolio */}
+            {portfolio.length > 0 && (
+              <Card className="shadow-lg rounded-xl border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg"><Globe className="w-5 h-5 text-primary" /> Portfólio</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {portfolio.slice(0, 6).map((item: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="relative group rounded-lg overflow-hidden shadow-sm cursor-pointer aspect-square"
+                        onClick={() => onPortfolioItemClick?.(item)}
+                      >
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.caption || "Portfólio"}
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Maximize className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Services */}
+            {services.length > 0 && (
+              <Card className="shadow-lg rounded-xl border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg"><Briefcase className="w-5 h-5 text-primary" /> Serviços</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {services.map((service: any, idx: number) => (
+                    <div key={idx} className="p-4 rounded-lg border bg-slate-50 dark:bg-slate-800/50">
+                      <h3 className="font-semibold text-foreground">{service.name}</h3>
+                      <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+                    </div>
                   ))}
-                </ul>
-              ) : (
-                <p className="text-zinc-500">Nenhuma formação registrada.</p>
-              )}
-            </section>
+                </CardContent>
+              </Card>
+            )}
           </div>
-        </CardContent>
+
+          {/* Sidebar Column */}
+          <div className="lg:col-span-1 space-y-8">
+            {/* Experience */}
+            {experience.length > 0 && (
+              <Card className="shadow-lg rounded-xl border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg"><Briefcase className="w-5 h-5 text-primary" /> Experiência</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {experience.map((exp: any, idx: number) => (
+                    <div key={idx} className="relative pl-6">
+                      <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-primary" />
+                      <div className="absolute left-[3px] top-2 h-full w-px bg-primary/20" />
+                      <p className="font-semibold">{exp.title}</p>
+                      <p className="text-sm text-muted-foreground">{exp.company}</p>
+                      <p className="text-xs text-muted-foreground">{exp.years}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Education */}
+            {education.length > 0 && (
+              <Card className="shadow-lg rounded-xl border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg"><GraduationCap className="w-5 h-5 text-primary" /> Educação</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {education.map((edu: any, idx: number) => (
+                    <div key={idx} className="relative pl-6">
+                      <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-primary" />
+                      <div className="absolute left-[3px] top-2 h-full w-px bg-primary/20" />
+                      <p className="font-semibold">{edu.degree}</p>
+                      <p className="text-sm text-muted-foreground">{edu.institution}</p>
+                      <p className="text-xs text-muted-foreground">{edu.years}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+            
+            {qrCodeUrl && (
+              <Card className="shadow-lg rounded-xl border-0 flex flex-col items-center p-6">
+                 <Image
+                    src={qrCodeUrl}
+                    alt={`QR Code de ${user.name}`}
+                    width={120}
+                    height={120}
+                    className="rounded-lg border p-1 bg-white shadow-md"
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
+              </Card>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -226,9 +251,9 @@ const ModernProfileLayout = ({
 export default ModernProfileLayout;
 
 export const config = {
-  id: 'modern-profile',
-  name: 'Perfil Moderno',
-  description: 'Layout moderno e visualmente atraente.',
-  imageUrl: 'https://picsum.photos/seed/layout-modern/300/200',
-  plan: 'standard',
+  id: "modern-profile",
+  name: "Perfil Moderno",
+  description: "Layout com design moderno, ideal para profissionais criativos.",
+  imageUrl: "https://picsum.photos/seed/layout-modern/300/200",
+  plan: "paid",
 };

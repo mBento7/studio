@@ -27,6 +27,7 @@ import AdvancedProfileLayout from "@/components/profile-layouts/AdvancedProfileL
 import MinimalistCardLayout from "@/components/profile-layouts/MinimalistCardLayout";
 import PortfolioFocusLayout from "@/components/profile-layouts/PortfolioFocusLayout";
 import PremiumProLayout from "@/components/profile-layouts/PremiumProLayout";
+import { LeftProfileSidebar } from "@/components/layout/left-profile-sidebar";
 
 interface ProfileClientPageProps {
   userProfile: UserProfile;

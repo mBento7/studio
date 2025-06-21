@@ -1,55 +1,61 @@
 import React from 'react';
+import { GradientButton } from '@/components/ui/gradient-button';
 import { Button } from '@/components/ui/button';
 import { Clock, Percent, Megaphone } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { Card } from '@/components/ui/card';
 
 // UserAdExample
 export function UserAdExample() {
   return (
-    <div className="relative bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-md rounded-2xl shadow-lg border border-blue-500/20 overflow-hidden">
-      <div className="absolute top-3 right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">PATROCINADO</div>
-      <div className="relative h-32 bg-gradient-to-r from-blue-600 to-purple-600 overflow-hidden">
-        <img src="https://picsum.photos/seed/useradexample/400/150" alt="TechSolutions Banner" className="w-full h-full object-cover opacity-80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-      </div>
-      <div className="p-4 space-y-3">
-        <div className="flex items-start gap-3">
-          <img src="https://picsum.photos/seed/useradlogo/50/50" alt="TechSolutions" className="w-12 h-12 rounded-full object-cover border-2 border-background shadow-md" />
-          <div className="flex-1">
-            <h4 className="font-bold text-base">TechSolutions</h4>
-            <p className="text-sm text-muted-foreground">Desenvolvimento de Apps</p>
-            <div className="flex items-center gap-1 mt-1">
-              <div className="flex text-yellow-400">{'★'.repeat(5)}</div>
-              <span className="text-xs text-muted-foreground">(4.9)</span>
+    <Card className="w-full p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="relative bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-sky-500/10 backdrop-blur-md rounded-md shadow-lg shadow-black/10 dark:shadow-amber-500/20 border border-teal-500/20 overflow-hidden">
+        <div className="absolute top-3 right-3 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">PATROCINADO</div>
+        <div className="relative h-32 bg-gradient-to-r from-teal-600 to-cyan-600 overflow-hidden">
+          <img src="https://picsum.photos/seed/useradexample/400/150" alt="TechSolutions Banner" className="w-full h-full object-cover opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </div>
+        <div className="p-4 space-y-3">
+          <div className="flex items-start gap-3">
+            <img src="https://picsum.photos/seed/useradlogo/50/50" alt="TechSolutions" className="w-12 h-12 rounded-md object-cover border-2 border-background shadow-md" />
+            <div className="flex-1">
+              <h4 className="font-bold text-base">TechSolutions</h4>
+              <p className="text-sm text-muted-foreground">Desenvolvimento de Apps</p>
+              <div className="flex items-center gap-1 mt-1">
+                <div className="flex text-yellow-400">{'★'.repeat(5)}</div>
+                <span className="text-xs text-muted-foreground">(4.9)</span>
+              </div>
             </div>
           </div>
+          <p className="text-sm text-muted-foreground">Transforme sua ideia em realidade! Apps iOS e Android com qualidade profissional e suporte completo.</p>
+          <div className="flex items-center gap-2">
+            <span className="text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full font-medium">20% OFF</span>
+            <span className="text-sm text-muted-foreground">até 31/12</span>
+          </div>
+          <GradientButton className="w-full">Ver Oferta Completa</GradientButton>
         </div>
-        <p className="text-sm text-muted-foreground">Transforme sua ideia em realidade! Apps iOS e Android com qualidade profissional e suporte completo.</p>
-        <div className="flex items-center gap-2">
-          <span className="text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full font-medium">20% OFF</span>
-          <span className="text-sm text-muted-foreground">até 31/12</span>
-        </div>
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md">Ver Oferta Completa</Button>
       </div>
-    </div>
+    </Card>
   );
 }
 
 // PremiumAdCard
 export function PremiumAdCard() {
   return (
-    <div className="relative p-6 bg-gradient-to-br from-yellow-500/20 via-orange-500/20 to-red-500/20 backdrop-blur-md rounded-2xl shadow-xl border border-yellow-500/30 overflow-hidden">
-      <div className="absolute top-2 right-2 bg-yellow-500 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">PREMIUM</div>
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold text-foreground">Destaque seu Negócio</h3>
-        <p className="text-sm text-muted-foreground">Alcance mais clientes com anúncios premium e apareça no topo dos resultados.</p>
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-green-600 font-semibold">+300%</span>
-          <span className="text-muted-foreground">mais visualizações</span>
+    <Card className="w-full p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="relative p-6 bg-gradient-to-br from-yellow-500/20 via-orange-500/20 to-red-500/20 backdrop-blur-md rounded-md shadow-xl shadow-black/20 dark:shadow-amber-500/30 border border-yellow-500/30 overflow-hidden">
+        <div className="absolute top-2 right-2 bg-yellow-500 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">PREMIUM</div>
+        <div className="space-y-3">
+          <h3 className="text-lg font-bold text-foreground">Destaque seu Negócio</h3>
+          <p className="text-sm text-muted-foreground">Alcance mais clientes com anúncios premium e apareça no topo dos resultados.</p>
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-green-600 font-semibold">+300%</span>
+            <span className="text-muted-foreground">mais visualizações</span>
+          </div>
+          <GradientButton className="w-full">Começar Agora</GradientButton>
         </div>
-        <Button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold shadow-lg">Começar Agora</Button>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -71,20 +77,22 @@ export function TrendingHashtags() {
     { tag: "#fitness", posts: 432 },
   ];
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
-      <h3 className="text-lg font-semibold">Trending</h3>
-      <div className="space-y-2">
-        {hashtags.map((item, index) => (
-          <div key={item.tag} className="flex items-center justify-between p-2 hover:bg-muted/50 rounded-md cursor-pointer transition-colors">
-            <div>
-              <p className="font-medium text-primary">{item.tag}</p>
-              <p className="text-xs text-muted-foreground">{item.posts} posts</p>
+    <Card className="p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="p-4 bg-card backdrop-blur-sm rounded-md shadow-lg shadow-black/10 dark:shadow-teal-500/10 space-y-3 border border-black/5 dark:border-white/10">
+        <h3 className="text-lg font-semibold">Trending</h3>
+        <div className="space-y-2">
+          {hashtags.map((item, index) => (
+            <div key={item.tag} className="flex items-center justify-between p-2 hover:bg-muted rounded-md cursor-pointer transition-colors">
+              <div>
+                <p className="font-medium text-[#0e9094] dark:text-teal-400">{item.tag}</p>
+                <p className="text-xs text-muted-foreground">{item.posts} posts</p>
+              </div>
+              <span className="text-xs text-muted-foreground">#{index + 1}</span>
             </div>
-            <span className="text-xs text-muted-foreground">#{index + 1}</span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -95,21 +103,23 @@ export function UserSuggestions() {
     { id: 3, name: "DesignStudio", category: "Design", followers: "3.1k", avatar: "https://picsum.photos/seed/suggest3/40/40" },
   ];
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
-      <h3 className="text-lg font-semibold">Sugestões para Você</h3>
-      <div className="space-y-3">
-        {suggestions.map((user) => (
-          <div key={user.id} className="flex items-center gap-3">
-            <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{user.name}</p>
-              <p className="text-xs text-muted-foreground">{user.category} • {user.followers} seguidores</p>
+    <Card className="p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="p-4 bg-card backdrop-blur-sm rounded-md shadow-lg shadow-black/10 dark:shadow-teal-500/10 space-y-3 border border-black/5 dark:border-white/10">
+        <h3 className="text-lg font-semibold">Sugestões para Você</h3>
+        <div className="space-y-3">
+          {suggestions.map((user) => (
+            <div key={user.id} className="flex items-center gap-3">
+              <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm truncate">{user.name}</p>
+                <p className="text-xs text-muted-foreground">{user.category} • {user.followers} seguidores</p>
+              </div>
+              <Button size="sm" variant="outline" className="text-xs border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-md">Seguir</Button>
             </div>
-            <Button size="sm" variant="outline" className="text-xs">Seguir</Button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -120,17 +130,19 @@ export function TrendingAds() {
     { id: 3, title: "Design em Alta", img: "https://picsum.photos/seed/ad3/200/80" },
   ];
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
-      <h3 className="text-lg font-semibold">Anúncios em Alta</h3>
-      {ads.map((ad) => (
-        <div key={ad.id} className="relative h-24 rounded-lg overflow-hidden group cursor-pointer">
-          <img src={ad.img} alt={ad.title} className="w-full h-full object-cover opacity-75 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2">
-            <p className="text-sm text-white">{ad.title}</p>
+    <Card className="p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="p-4 bg-card backdrop-blur-sm rounded-md shadow-lg shadow-black/10 dark:shadow-teal-500/10 space-y-3 border border-black/5 dark:border-white/10">
+        <h3 className="text-lg font-semibold">Anúncios em Alta</h3>
+        {ads.map((ad) => (
+          <div key={ad.id} className="relative h-24 rounded-md overflow-hidden group cursor-pointer">
+            <img src={ad.img} alt={ad.title} className="w-full h-full object-cover opacity-75 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2">
+              <p className="text-sm text-white">{ad.title}</p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </Card>
   );
 }
 
@@ -140,18 +152,20 @@ export function CouponsWidget() {
     { id: 2, code: "FRETEGRATIS", desc: "Frete grátis acima de R$100" },
   ];
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
-      <h3 className="text-lg font-semibold">Cupons Ativos</h3>
-      {coupons.map((c) => (
-        <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-md">
-          <div>
-            <p className="font-semibold text-primary">{c.code}</p>
-            <p className="text-xs text-muted-foreground">{c.desc}</p>
+    <Card className="p-3 shadow-lg rounded-md bg-card/90 border-0">
+      <div className="p-4 bg-card backdrop-blur-sm rounded-md shadow-lg shadow-black/10 dark:shadow-teal-500/10 space-y-3 border border-black/5 dark:border-white/10">
+        <h3 className="text-lg font-semibold">Cupons Ativos</h3>
+        {coupons.map((c) => (
+          <div key={c.id} className="flex justify-between items-center p-3 bg-muted/80 dark:bg-muted/30 rounded-md">
+            <div>
+              <p className="font-semibold text-[#0e9094] dark:text-teal-400">{c.code}</p>
+              <p className="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+            <Button size="sm" variant="outline" className="shadow-sm border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-md">Copiar</Button>
           </div>
-          <Button size="sm" variant="outline" className="shadow-sm">Copiar</Button>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </Card>
   );
 }
 

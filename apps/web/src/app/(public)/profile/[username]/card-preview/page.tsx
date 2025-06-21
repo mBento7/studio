@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
 import { getMockUserByUsername } from '@/lib/mock-data';
 import type { UserProfile } from '@/lib/types';
-import { PrintableBusinessCard } from '@/features/public/printable-business-card';
+import { PrintableBusinessCard } from '@/features/profile/printable-business-card';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -108,8 +108,8 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
           }
         }
       `}</style>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
-        <div className="no-print mb-8 p-4 bg-card rounded-lg shadow-md">
+      <div className="min-h-screen bg-muted/40 dark:bg-muted/20 flex flex-col items-center justify-center p-4">
+        <div className="no-print mb-8 p-6 bg-card rounded-xl shadow-lg border border-black/5 dark:border-white/10 max-w-md w-full">
           <h1 className="text-xl font-semibold text-center">Pré-visualização do Cartão</h1>
           <p className="text-sm text-muted-foreground text-center mt-1">Este é o seu cartão de visita para impressão.</p>
         </div>
@@ -124,8 +124,11 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
           />
         </div>
 
-        <div className="no-print mt-8">
-          <Button onClick={handlePrint}>
+        <div className="no-print mt-8 flex items-center justify-center">
+          <Button 
+            onClick={handlePrint}
+            className="bg-gradient-to-r from-orange-500 to-red-600 hover:brightness-110 text-white font-semibold shadow-md rounded-lg py-3 px-6 text-base"
+          >
             Imprimir / Salvar como PDF
           </Button>
         </div>

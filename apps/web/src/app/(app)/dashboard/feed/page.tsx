@@ -1,7 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Search, Flame, Sparkles, Handshake, Clock, Percent, Megaphone, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, ChevronLeft, ChevronRight, Tag, Star, Hand } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Search,
+  Flame,
+  Sparkles,
+  Handshake,
+  Clock,
+  Percent,
+  Megaphone,
+  Heart,
+  MessageCircle,
+  Share2,
+  Bookmark,
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  ConciergeBell,
+  Box,
+  Siren,
+  ShoppingCart,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -15,6 +34,8 @@ import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
 import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
 import './feed-scrollbar.css';
 import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 // Mock data
 const stories = [
@@ -154,11 +175,11 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-card rounded-xl shadow-lg border border-black/5 dark:border-white/10">
         <DialogHeader>
           <DialogTitle>Criar Novo Cupom</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="space-y-2">
             <Label htmlFor="code">Código do Cupom</Label>
             <Input
@@ -177,36 +198,41 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
               onChange={(e) => setCouponData(prev => ({ ...prev, description: e.target.value }))}
               placeholder="Descreva o cupom..."
               required
+              className="rounded-lg"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="discount">Desconto (%)</Label>
-            <Input
-              id="discount"
-              type="number"
-              value={couponData.discount}
-              onChange={(e) => setCouponData(prev => ({ ...prev, discount: e.target.value }))}
-              placeholder="20"
-              min="1"
-              max="100"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="discount">Desconto (%)</Label>
+              <Input
+                id="discount"
+                type="number"
+                value={couponData.discount}
+                onChange={(e) => setCouponData(prev => ({ ...prev, discount: e.target.value }))}
+                placeholder="20"
+                min="1"
+                max="100"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="validUntil">Válido até</Label>
+              <Input
+                id="validUntil"
+                type="date"
+                value={couponData.validUntil}
+                onChange={(e) => setCouponData(prev => ({ ...prev, validUntil: e.target.value }))}
+                required
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="validUntil">Válido até</Label>
-            <Input
-              id="validUntil"
-              type="date"
-              value={couponData.validUntil}
-              onChange={(e) => setCouponData(prev => ({ ...prev, validUntil: e.target.value }))}
-              required
-            />
-          </div>
-          <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="rounded-lg">
               Cancelar
             </Button>
-            <Button type="submit">Criar Cupom</Button>
+            <Button type="submit" className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md rounded-lg">
+              Criar Cupom
+            </Button>
           </div>
         </form>
       </DialogContent>
@@ -236,9 +262,9 @@ function StoriesCarousel() {
   };
 
   return (
-    <section className="px-4">
-      <div className="p-4 space-y-4 bg-card/50 backdrop-blur-sm rounded-2xl border relative z-0">
-        <h2 className="text-lg font-bold text-foreground mb-2 relative z-0">Destaques 24h</h2>
+    <section className="w-full mb-4">
+      <h2 className="text-lg font-bold text-foreground mb-3">Destaques 24h</h2>
+      <div className="relative z-0">
         <div className="relative w-full">
           {/* Botões de seta */}
           {currentIndex > 0 && (
@@ -251,7 +277,7 @@ function StoriesCarousel() {
               <ChevronRight className="w-6 h-6" />
             </button>
           )}
-          <div className="overflow-x-hidden overflow-y-hidden w-full px-8 py-4 scrollbar-none">
+          <div className="overflow-x-hidden overflow-y-hidden w-full py-4 scrollbar-none">
             <div
               className="flex space-x-4 transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 6.5}rem)` }}
@@ -266,7 +292,7 @@ function StoriesCarousel() {
                       {Math.floor(s.timeLeft / 100 * 24)}h
                     </div>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+                  <p className="mt-2 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
                 </div>
               )).slice(currentIndex, currentIndex + storiesPerView)}
             </div>
@@ -295,65 +321,40 @@ function TabButton({ icon: Icon, label, active, onClick }: { icon: React.Element
 }
 
 function SocialCard({ item }: { item: any }) {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [likes, setLikes] = useState(Math.floor(Math.random() * 100) + 10);
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes(prev => isLiked ? prev - 1 : prev + 1);
-  };
-
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-  };
+  const handleLike = () => setLiked(!liked);
+  const handleBookmark = () => setBookmarked(!bookmarked);
 
   return (
-    <Card className="w-full p-6 rounded-2xl shadow bg-card/90 border mx-auto flex flex-row items-center gap-6">
-      {/* Imagem à esquerda */}
-      <div className="flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-        <img src={item.imagem || `https://picsum.photos/seed/${item.id}/400/200`} alt={item.title || item.titulo} className="object-cover w-full h-full" />
-      </div>
-      {/* Conteúdo à direita */}
-      <div className="flex-1 min-w-0">
-        <div className="relative">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="font-semibold text-lg text-foreground truncate">{item.titulo || item.title}</span>
-            {item.patrocinado && (
-              <span className="ml-2 px-2 py-0.5 bg-yellow-200 text-yellow-800 text-xs rounded-full">Patrocinado</span>
-            )}
+    <div className="bg-card border border-black/5 dark:border-white/10 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden">
+      <div className="p-4">
+        <div className="flex items-center gap-3">
+          <img src={`https://picsum.photos/seed/${item.user}/40/40`} alt={item.user} className="w-10 h-10 rounded-full" />
+          <div>
+            <p className="font-semibold">{item.user}</p>
+            <p className="text-xs text-muted-foreground">{item.category}</p>
           </div>
-          <p className="text-sm text-muted-foreground truncate">{item.descricao || item.category}</p>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handleLike}
-              className={cn(
-                "flex items-center gap-1 text-sm transition-colors",
-                isLiked
-                  ? "text-rose-600"
-                  : "text-muted-foreground hover:text-rose-600"
-              )}
-            >
-              <Heart className={cn("w-4 h-4", isLiked && "fill-current")} />
-              <span>{likes}</span>
-            </button>
-            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-blue-500 transition-colors">
-              <MessageCircle className="w-4 h-4" />
-              <span>{Math.floor(Math.random() * 20) + 5}</span>
-            </button>
-            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-green-500 transition-colors">
-              <Share2 className="w-4 h-4" />
-              <span>{Math.floor(Math.random() * 10) + 2}</span>
-            </button>
-          </div>
-          <button className="p-2 hover:bg-muted rounded-full transition-colors">
-            <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+        <p className="mt-3 text-base text-foreground">{item.title}</p>
+      </div>
+      <div className="px-4 pb-3 pt-2 border-t border-border/50 flex justify-between items-center">
+        <div className="flex gap-4 items-center">
+          <button onClick={handleLike} className={cn("flex items-center gap-1.5 text-sm transition-colors", liked ? "text-red-500" : "text-muted-foreground hover:text-red-500")}>
+            <Heart className={cn("w-4 h-4", liked && "fill-current")} />
+            <span className="text-xs">Gostar</span>
+          </button>
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-sky-500 transition-colors">
+            <MessageCircle className="w-4 h-4" />
+            <span className="text-xs">Comentar</span>
           </button>
         </div>
+        <button onClick={handleBookmark} className={cn("text-muted-foreground transition-colors", bookmarked ? "text-orange-500" : "hover:text-orange-500")}>
+          <Bookmark className={cn("w-5 h-5", bookmarked && "fill-current")} />
+        </button>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -604,10 +605,10 @@ function ActivityStats() {
 
 function CouponsWidget() {
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-2xl shadow-lg space-y-3">
+    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-none shadow-lg space-y-3">
       <h3 className="text-lg font-semibold">Cupons Ativos</h3>
       {coupons.map((c) => (
-        <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-md">
+        <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-none">
           <div>
             <p className="font-semibold text-primary">{c.code}</p>
             <p className="text-xs text-muted-foreground">{c.desc}</p>
@@ -619,209 +620,179 @@ function CouponsWidget() {
   );
 }
 
-// Novo componente para carrossel de stories com detecção de overflow
 function StoriesCarouselWithOverflow() {
-  const [showLeft, setShowLeft] = React.useState(false);
-  const [showRight, setShowRight] = React.useState(false);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
-  React.useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+  useEffect(() => {
     const checkOverflow = () => {
-      setShowLeft(el.scrollLeft > 0);
-      setShowRight(el.scrollWidth > el.clientWidth + el.scrollLeft + 1);
+      if (containerRef.current) {
+        setIsOverflowing(containerRef.current.scrollWidth > containerRef.current.clientWidth);
+      }
     };
+
     checkOverflow();
-    el.addEventListener('scroll', checkOverflow);
     window.addEventListener('resize', checkOverflow);
-    return () => {
-      el.removeEventListener('scroll', checkOverflow);
-      window.removeEventListener('resize', checkOverflow);
-    };
+
+    return () => window.removeEventListener('resize', checkOverflow);
   }, []);
 
   const scrollBy = (amount: number) => {
-    const el = scrollRef.current;
-    if (el) el.scrollBy({ left: amount, behavior: 'smooth' });
+    containerRef.current?.scrollBy({ left: amount, behavior: 'smooth' });
   };
 
   return (
-    <div className="relative flex items-center justify-center">
-      {showLeft && (
-        <button
-          onClick={() => scrollBy(-120)}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition hidden sm:block"
-          style={{ left: 4 }}
-          aria-label="Scroll left"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-      )}
+    <div className="relative w-full mb-8">
       <div
-        ref={scrollRef}
-        className="flex space-x-5 overflow-x-auto px-2 py-1 hide-scrollbar"
-        style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
+        ref={containerRef}
+        className="flex items-center gap-6 p-4 overflow-x-auto stories-scrollbar bg-card/50 backdrop-blur-sm border"
       >
-        {stories.map((s) => (
-          <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer w-20 sm:w-24">
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50 group-hover:z-30 group-hover:relative">
-              <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
-                <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
+        {stories.map((story) => (
+          <div key={story.id} className="flex-shrink-0 w-24 text-center">
+            <div className="relative w-24 h-24 p-1 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500">
+              <div className="bg-background p-0.5 w-full h-full">
+                <img src={story.avatar} alt={story.user} className="w-full h-full object-cover" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
-                {Math.floor(s.timeLeft / 100 * 24)}h
+              <div
+                className="absolute bottom-0 right-0 bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 border-2 border-background"
+              >
+                {`${story.timeLeft}m`}
               </div>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+            <span className="block text-xs font-medium text-muted-foreground mt-2 truncate">{story.user}</span>
           </div>
         ))}
       </div>
-      {showRight && (
-        <button
-          onClick={() => scrollBy(120)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition hidden sm:block"
-          style={{ right: 4 }}
-          aria-label="Scroll right"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
+      {isOverflowing && (
+        <>
+          <Button
+            onClick={() => scrollBy(-200)}
+            className="absolute top-1/2 left-0 -translate-y-1/2 bg-background/50 hover:bg-background/80 w-8 h-8 z-10"
+            variant="outline"
+            size="icon"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <Button
+            onClick={() => scrollBy(200)}
+            className="absolute top-1/2 right-0 -translate-y-1/2 bg-background/50 hover:bg-background/80 w-8 h-8 z-10"
+            variant="outline"
+            size="icon"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </>
       )}
     </div>
   );
 }
 
+interface FilterButtonProps {
+  icon: React.ElementType;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function FilterButton({ icon: Icon, label, isActive, onClick }: FilterButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-in-out shadow-sm",
+        isActive
+          ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md"
+          : "bg-card text-[#0e9094] border border-[#0e9094]/50 hover:bg-[#0e9094]/10"
+      )}
+    >
+      <Icon className="h-5 w-5" />
+      <span>{label}</span>
+    </button>
+  );
+}
+
 export default function FeedPage() {
-  const [tab, setTab] = useState<'feed' | 'search'>('feed');
-  const [activeFeedTab, setActiveFeedTab] = useState<'trending'|'new'|'recommended'>('trending');
-  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
-  // Filtro de cards
-  const [cardFilter, setCardFilter] = useState<'all'|'oferta_servico'|'oferta_produto'|'solicitacao_servico'|'solicitacao_produto'|'patrocinado'>('all');
-  // Substituir postsMock por estado local
-  const [posts, setPosts] = useState([...postsMock]);
+  const router = useRouter();
+  const { user, loading } = useAuth();
+  
+  const [posts, setPosts] = useState(postsMock);
+  const [activeFilter, setActiveFilter] = useState<'servicos' | 'produtos' | 'solicitacoes' | 'todos'>('todos');
+  const [isCouponModalOpen, setCouponModalOpen] = useState(false);
 
-  // Definição dos botões principais
-  const mainTabs = [
-    { key: 'feed', label: 'Em Alta', icon: Flame },
-    { key: 'search', label: 'Buscar Profissionais', icon: Search },
-  ];
+  useEffect(() => {
+    if (!user) {
+      // router.push('/login');
+    }
+  }, [user, router]);
 
-  // Definição dos tabs internos do feed (remover 'Em Alta')
-  const feedTabs = [
-    { key: 'new', label: 'Novidades', icon: Sparkles },
-    { key: 'recommended', label: 'Recomendados', icon: Handshake },
-  ];
+  const handlePost = (newPostData: {
+    texto: string;
+    imagem?: string | null;
+    preco?: string;
+    localizacao?: string;
+    tipo: 'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto';
+    urgente?: boolean;
+    whatsappUrl?: string;
+  }) => {
+    const newPost = {
+      ...newPostData,
+      titulo: newPostData.texto.substring(0, 50) || "Nova Postagem",
+      descricao: newPostData.texto,
+      imagem: newPostData.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
+      usuario: {
+        nome: user?.user_metadata.name || 'Usuário Anônimo',
+        avatar: user?.user_metadata.avatar_url || 'https://github.com/shadcn.png',
+      },
+      curtidas: 0,
+      comentarios: 0,
+      tags: [],
+      patrocinado: false,
+    };
 
-  // Array de banners mockados para o carrossel
-  const searchBanners = [
-    { id: 1, image: 'https://placehold.co/600x200/2563eb/fff?text=Oferta+Especial+20%25+OFF', link: '/promo', type: 'promo', title: 'Oferta Especial: 20% OFF!' },
-    { id: 2, image: 'https://placehold.co/600x200/facc15/222?text=TechSolutions+Apps+sob+medida', link: '/profile/techsolutions', type: 'patrocinado', title: 'TechSolutions - Apps sob medida' },
-    { id: 3, image: 'https://placehold.co/600x200/22d3ee/222?text=Ganhe+créditos+indicando+amigos!', link: '/creditos', type: 'institucional', title: 'Ganhe créditos indicando amigos!' },
-    { id: 4, image: 'https://placehold.co/600x200/6366f1/fff?text=WhosDo.com+Conecte-se+e+conquiste+clientes', link: 'https://whosdo.com', type: 'institucional', title: 'WhosDo.com: Conecte-se, destaque-se e conquiste mais clientes! Descubra todos os benefícios.' },
-  ];
-
-  // ...mockProfile ou dados reais...
-  const mockProfile = {
-    name: 'João Silva',
-    email: 'joao@exemplo.com',
-    profilePictureUrl: '',
-    username: 'joaosilva',
-    progress: 85,
-    stats: { views: 1234, connections: 89, projects: 12 },
+    setPosts(prevPosts => [newPost as typeof postsMock[number], ...prevPosts]);
   };
 
-  // Filtros disponíveis com ícones
-  const cardFilters = [
-    { key: 'all', label: 'Todos', icon: <Flame className="w-5 h-5" /> },
-    { key: 'oferta_servico', label: 'Serviços', icon: <Tag className="w-5 h-5 text-blue-500" /> },
-    { key: 'oferta_produto', label: 'Produtos', icon: <Star className="w-5 h-5 text-green-500" /> },
-    { key: 'solicitacao_servico', label: 'Solicitações de Serviço', icon: <Hand className="w-5 h-5 text-orange-500" /> },
-    { key: 'solicitacao_produto', label: 'Solicitações de Produto', icon: <Hand className="w-5 h-5 text-amber-500" /> },
-    { key: 'patrocinado', label: 'Patrocinados', icon: <Sparkles className="w-5 h-5 text-yellow-500" /> },
-  ];
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p>Carregando seu feed...</p>
+      </div>
+    );
+  }
 
-  // Atualizar filteredPosts para usar posts
-  const filteredPosts = cardFilter === 'all'
-    ? posts
-    : posts.filter(post => post.tipo === cardFilter);
+  const filteredPosts = posts.filter(post => {
+    if (activeFilter === 'todos') return true;
+    if (activeFilter === 'servicos') return post.tipo.includes('servico');
+    if (activeFilter === 'produtos') return post.tipo.includes('produto');
+    if (activeFilter === 'solicitacoes') return post.tipo.includes('solicitacao');
+    return false;
+  });
 
   return (
     <>
-      {/* Conteúdo principal do feed (tabs, stories, cards, etc.) */}
-      {/* TODO: Certifique-se de que não há grid/flex duplicado aqui */}
-      {/* Exemplo: */}
-      <div className="w-full">
-        {/* Stories */}
-        <section className="flex flex-col items-center w-full">
-          <div className="w-full max-w-3xl mx-auto p-0 sm:p-0">
-            {/* Stories */}
-            <div className="space-y-2 bg-card/60 backdrop-blur-sm rounded-2xl border min-h-0 px-2 py-2">
-              <h2 className="text-base font-bold text-foreground mb-1 tracking-tight">Destaques 24h</h2>
-              <StoriesCarouselWithOverflow />
-            </div>
-            {/* Seção de filtros por ícone */}
-            <div className="flex flex-wrap gap-3 my-6 justify-center">
-              {cardFilters.map(f => {
-                // Definir cor do texto do label
-                let labelColor = '';
-                if (f.key === 'oferta_servico') labelColor = 'text-blue-500';
-                else if (f.key === 'oferta_produto') labelColor = 'text-green-500';
-                else if (f.key === 'solicitacao_servico') labelColor = 'text-orange-500';
-                else if (f.key === 'solicitacao_produto') labelColor = 'text-amber-500';
-                else if (f.key === 'patrocinado') labelColor = 'text-yellow-500';
-                else labelColor = 'text-primary';
-                return (
-                  <button
-                    key={f.key}
-                    onClick={() => setCardFilter(f.key as typeof cardFilter)}
-                    className={`group flex flex-col items-center justify-center p-3 rounded-full transition border shadow-sm text-lg relative
-                      ${cardFilter === f.key
-                        ? 'bg-primary text-white border-primary shadow-md scale-110'
-                        : 'bg-card text-foreground border-border hover:bg-muted/60'}`}
-                    aria-label={f.label}
-                  >
-                    {f.icon}
-                    <span className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-0.5 rounded text-xs font-medium bg-background/90 shadow transition-all duration-200
-                      ${cardFilter === f.key ? `${labelColor} opacity-100 h-auto` : `opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto ${labelColor}`}`}
-                      style={{ pointerEvents: 'none' }}
-                    >
-                      {f.label}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            {/* Feed de Descobertas */}
-            <div className="max-w-3xl mx-auto py-6 px-2 sm:px-0">
-              <h1 className="text-2xl font-bold mb-4">Feed de Descobertas</h1>
-              {/* Editor de Postagens */}
-              <FeedPostEditor onPost={(data) => {
-                setPosts(prev => [
-                  {
-                    tipo: 'oferta_servico', // ou outro tipo padrão
-                    titulo: data.texto.substring(0, 50) || 'Nova postagem',
-                    descricao: data.texto,
-                    imagem: data.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
-                    preco: '',
-                    localizacao: '',
-                    patrocinado: false,
-                    usuario: { nome: 'Usuário Demo', avatar: 'https://github.com/shadcn.png' },
-                    curtidas: 0,
-                    comentarios: 0,
-                    tags: [],
-                    whatsappUrl: '',
-                  },
-                  ...prev,
-                ]);
-              }} />
-              {filteredPosts.map((post, idx) => (
-                <FeedCard key={idx} {...post} />
-              ))}
-            </div>
+      <div className="mx-auto w-full max-w-5xl">
+        <StoriesCarousel />
+        
+        <div className="shadow-lg rounded-xl shadow-black/5 dark:shadow-white/5">
+          <FeedPostEditor onPost={handlePost} />
+        </div>
+
+        <Card className="my-8 p-3 shadow-lg rounded-xl bg-card/90 border-0 shadow-black/5 dark:shadow-black/20">
+          <div className="flex flex-wrap items-center justify-center gap-3 rounded-md bg-card p-3 shadow-xl shadow-black/10 dark:shadow-teal-500/10 border border-black/5 dark:border-white/10">
+            <FilterButton icon={ConciergeBell} label="Serviços" isActive={activeFilter === 'servicos'} onClick={() => setActiveFilter('servicos')} />
+            <FilterButton icon={Box} label="Produtos" isActive={activeFilter === 'produtos'} onClick={() => setActiveFilter('produtos')} />
+            <FilterButton icon={Siren} label="Solicitações" isActive={activeFilter === 'solicitacoes'} onClick={() => setActiveFilter('solicitacoes')} />
+            <FilterButton icon={Sparkles} label="Todos" isActive={activeFilter === 'todos'} onClick={() => setActiveFilter('todos')} />
           </div>
-        </section>
-        <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setIsCouponModalOpen} />
+        </Card>
+
+        <div className="space-y-8">
+          {filteredPosts.map((post, index) => (
+            <FeedCard key={`${post.titulo}-${index}`} {...post} />
+          ))}
+        </div>
       </div>
+      <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />
     </>
   );
 }

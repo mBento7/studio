@@ -1,0 +1,45 @@
+<svg
+  width="100%"
+  height="100%"
+  viewBox="0 0 200 215"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-label="WhosDo Logo"
+>
+  <g>
+    <!-- Left Face -->
+    <path d="M100 95 L35 60 L35 155 L100 190Z" fill="#2E955E" />
+
+    <!-- Right Face -->
+    <path d="M100 95 L165 60 L165 155 L100 190Z" fill="#36AE6F" />
+
+    <!-- Top Face with notch -->
+    <path d="M100 25 L165 60 L115 88 L100 95 L85 88 L35 60Z" fill="#48C9B0" />
+
+    <!-- Location Pin -->
+    <g>
+      <path
+        d="M100 0 C83.4 0 70 13.4 70 30 C70 46.6 100 88 100 88 S130 46.6 130 30 C130 13.4 116.6 0 100 0Z"
+        fill="#2E955E"
+      >
+        <title>Location Pin</title>
+      </path>
+      <circle cx="100" cy="30" r="10" fill="white" />
+    </g>
+
+    <!-- User Icon on Left Face -->
+    <g transform="translate(-15, 3) skewY(30) scale(0.9)">
+      <circle cx="67.5" cy="80" r="10" fill="white" />
+      <path d="M52.5 95 A15 15 0 0 1 82.5 95 Z" fill="white" />
+      <title>User Profile Icon</title>
+    </g>
+
+    <!-- Star Icon on Right Face -->
+    <g transform="translate(15, 3) skewY(-30) scale(0.9)">
+      <polygon
+        points="132.5,100 138.5,112.5 152.5,112.5 142,120 146,133 132.5,125 119,133 123,120 112.5,112.5 126.5,112.5"
+        fill="white"
+      />
+      <title>Star Icon</title>
+    </g>
+  </g>
+</svg> 
