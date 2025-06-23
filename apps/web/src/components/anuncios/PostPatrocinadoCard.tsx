@@ -8,7 +8,7 @@ interface PostPatrocinadoCardProps {
 }
 
 export const PostPatrocinadoCard: React.FC<PostPatrocinadoCardProps> = ({ usuario, conteudo, imagem, link }) => (
-  <div className="post-patrocinado-card border rounded p-4 bg-white shadow mb-4">
+  <div className="post-patrocinado-card advertisement-shadow border rounded p-4 bg-white shadow mb-4">
     <div className="flex items-center mb-2">
       <span className="font-bold mr-2">{usuario}</span>
       <span className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded">Patrocinado</span>

@@ -36,6 +36,8 @@ import './feed-scrollbar.css';
 import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
+import { Button as UIButton } from '@/components/ui/button';
+import { FilterButton } from '@/components/ui/filter-button';
 
 // Mock data
 const stories = [
@@ -227,10 +229,10 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
             </div>
           </div>
           <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="rounded-lg">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="rounded-full">
               Cancelar
             </Button>
-            <Button type="submit" className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md rounded-lg">
+            <Button type="submit" className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md rounded-full">
               Criar Cupom
             </Button>
           </div>
@@ -308,14 +310,15 @@ function TabButton({ icon: Icon, label, active, onClick }: { icon: React.Element
     <button
       onClick={onClick}
       className={cn(
-        "glass-btn sm flex items-center gap-2 px-4 py-2 rounded-full transition font-semibold shadow-sm",
-        active ? "tab-active" : "tab-inactive"
+        "flex items-center justify-center gap-2 h-10 px-4 rounded-full text-sm font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-dark focus:ring-accent",
+        "border",
+        active
+          ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md border-transparent"
+          : "border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] bg-transparent"
       )}
-      aria-current={active ? "page" : undefined}
-      style={{ margin: '0 0.5rem', minWidth: 120 }}
     >
-      <Icon className="w-5 h-5 mr-2" />
-      {label}
+      <Icon className="w-4 h-4" />
+      <span>{label}</span>
     </button>
   );
 }
@@ -358,25 +361,40 @@ function SocialCard({ item }: { item: any }) {
   );
 }
 
-function FeedContent({ activeTab, setActiveTab }: { activeTab: 'trending'|'new'|'recommended', setActiveTab: (tab: 'trending'|'new'|'recommended') => void }) {
-  const tabs = [
-    { key: 'trending', label: 'Em Alta', icon: Flame },
-    { key: 'new', label: 'Novidades', icon: Sparkles },
-    { key: 'recommended', label: 'Recomendados', icon: Handshake },
+function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTab: string, setActiveTab: (tab: string) => void, posts: any[], userProfile: any }) {
+  const filters = [
+    { label: 'Todos', icon: Sparkles },
+    { label: 'Servicos', icon: ConciergeBell },
+    { label: 'Produtos', icon: Box },
+    { label: 'Solicitacoes', icon: Siren, premium: true },
   ];
-  // Os tabs agora são controlados externamente
+
   return (
-    <section className="space-y-8">
-      <div className="flex justify-center w-full">
-        <div className="w-full max-w-2xl">
-          <div className="grid grid-cols-1 gap-8">
-            {feedItems[activeTab].map((item) => (
-              <SocialCard key={item.id} item={item} />
-            ))}
-          </div>
+    <div className="space-y-4">
+      <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-around sm:flex-wrap">
+          {filters.map(({ label, icon, premium }) => (
+            <FilterButton
+              key={label}
+              icon={icon}
+              label={label}
+              isActive={activeTab === label.toLowerCase()}
+              onClick={() => {
+                if (premium && userProfile?.plan !== 'premium') return;
+                setActiveTab(label.toLowerCase());
+              }}
+              premium={premium}
+              disabled={premium && userProfile?.plan !== 'premium'}
+            />
+          ))}
         </div>
       </div>
-    </section>
+      <div className="space-y-4">
+        {posts.map((post, index) => (
+          <FeedCard key={`${post.titulo}-${index}`} {...post} />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -687,43 +705,18 @@ function StoriesCarouselWithOverflow() {
   );
 }
 
-interface FilterButtonProps {
-  icon: React.ElementType;
-  label: string;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-function FilterButton({ icon: Icon, label, isActive, onClick }: FilterButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-200 ease-in-out shadow-sm",
-        isActive
-          ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md"
-          : "bg-card text-[#0e9094] border border-[#0e9094]/50 hover:bg-[#0e9094]/10"
-      )}
-    >
-      <Icon className="h-5 w-5" />
-      <span>{label}</span>
-    </button>
-  );
-}
-
 export default function FeedPage() {
+  const { user, loading, currentUserProfile } = useAuth();
   const router = useRouter();
-  const { user, loading } = useAuth();
-  
-  const [posts, setPosts] = useState(postsMock);
-  const [activeFilter, setActiveFilter] = useState<'servicos' | 'produtos' | 'solicitacoes' | 'todos'>('todos');
+  const [activeTab, setActiveTab] = useState('todos');
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
+  const [posts, setPosts] = useState(postsMock);
 
   useEffect(() => {
-    if (!user) {
-      // router.push('/login');
+    if (!loading && !user) {
+      router.replace('/home');
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   const handlePost = (newPostData: {
     texto: string;
@@ -735,62 +728,52 @@ export default function FeedPage() {
     whatsappUrl?: string;
   }) => {
     const newPost = {
-      ...newPostData,
-      titulo: newPostData.texto.substring(0, 50) || "Nova Postagem",
+      tipo: newPostData.tipo,
+      titulo: 'Novo Post', // Placeholder
       descricao: newPostData.texto,
-      imagem: newPostData.imagem || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
-      usuario: {
-        nome: user?.user_metadata.name || 'Usuário Anônimo',
-        avatar: user?.user_metadata.avatar_url || 'https://github.com/shadcn.png',
+      imagem: newPostData.imagem || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
+      preco: newPostData.preco,
+      localizacao: newPostData.localizacao,
+      patrocinado: false,
+      urgente: newPostData.urgente,
+      usuario: { 
+        nome: user?.user_metadata.full_name || 'Usuário', 
+        avatar: user?.user_metadata.avatar_url || 'https://randomuser.me/api/portraits/men/1.jpg' 
       },
       curtidas: 0,
       comentarios: 0,
       tags: [],
-      patrocinado: false,
+      whatsappUrl: newPostData.whatsappUrl,
     };
-
-    setPosts(prevPosts => [newPost as typeof postsMock[number], ...prevPosts]);
+    setPosts((prevPosts: any[]) => [newPost, ...prevPosts]);
   };
 
-  if (!user) {
+  const filteredPosts = posts.filter(post => {
+    if (activeTab === 'todos') return true;
+    if (activeTab === 'servicos') return post.tipo.endsWith('_servico');
+    if (activeTab === 'produtos') return post.tipo.endsWith('_produto');
+    if (activeTab === 'solicitacoes') return post.tipo.includes('solicitacao');
+    return false;
+  });
+
+  if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <p>Carregando seu feed...</p>
+      <div className="flex items-center justify-center h-screen">
+        <div>Carregando...</div>
       </div>
     );
   }
 
-  const filteredPosts = posts.filter(post => {
-    if (activeFilter === 'todos') return true;
-    if (activeFilter === 'servicos') return post.tipo.includes('servico');
-    if (activeFilter === 'produtos') return post.tipo.includes('produto');
-    if (activeFilter === 'solicitacoes') return post.tipo.includes('solicitacao');
-    return false;
-  });
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
-      <div className="mx-auto w-full max-w-5xl">
+      <div className="w-full max-w-2xl mx-auto space-y-6">
         <StoriesCarousel />
-        
-        <div className="shadow-lg rounded-xl shadow-black/5 dark:shadow-white/5">
-          <FeedPostEditor onPost={handlePost} />
-        </div>
-
-        <Card className="my-8 p-3 shadow-lg rounded-xl bg-card/90 border-0 shadow-black/5 dark:shadow-black/20">
-          <div className="flex flex-wrap items-center justify-center gap-3 rounded-md bg-card p-3 shadow-xl shadow-black/10 dark:shadow-teal-500/10 border border-black/5 dark:border-white/10">
-            <FilterButton icon={ConciergeBell} label="Serviços" isActive={activeFilter === 'servicos'} onClick={() => setActiveFilter('servicos')} />
-            <FilterButton icon={Box} label="Produtos" isActive={activeFilter === 'produtos'} onClick={() => setActiveFilter('produtos')} />
-            <FilterButton icon={Siren} label="Solicitações" isActive={activeFilter === 'solicitacoes'} onClick={() => setActiveFilter('solicitacoes')} />
-            <FilterButton icon={Sparkles} label="Todos" isActive={activeFilter === 'todos'} onClick={() => setActiveFilter('todos')} />
-          </div>
-        </Card>
-
-        <div className="space-y-8">
-          {filteredPosts.map((post, index) => (
-            <FeedCard key={`${post.titulo}-${index}`} {...post} />
-          ))}
-        </div>
+        <FeedPostEditor onPost={handlePost} />
+        <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={filteredPosts} userProfile={currentUserProfile} />
       </div>
       <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />
     </>

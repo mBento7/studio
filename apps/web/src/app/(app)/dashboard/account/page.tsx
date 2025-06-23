@@ -31,7 +31,7 @@ import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileInMockData } from '@/lib/mock-data';
 
 export default function AccountPage() {
-  const { signOutUser, currentUserProfile, updateCurrentUserProfile } = useAuth();
+  const { signOutUser, currentUserProfile, updateUserProfile } = useAuth();
   const { toast } = useToast();
 
   const handleLogout = async () => {
@@ -48,7 +48,7 @@ export default function AccountPage() {
     });
 
     // Atualiza o estado do usuário na sessão (via useAuth)
-    updateCurrentUserProfile(updatedUser);
+    updateUserProfile(updatedUser);
 
     toast({
       title: "Plano Atualizado",

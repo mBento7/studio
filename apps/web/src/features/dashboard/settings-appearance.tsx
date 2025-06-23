@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -64,12 +63,44 @@ export function AppearanceSettings({
           <Switch id="darkMode" checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
           <Label htmlFor="darkMode">Modo Escuro (Interface)</Label>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="accentColor">Cor de Destaque</Label>
-          <Select value={selectedAccentColor?.name} onValueChange={(name) => setSelectedAccentColor(accentColors.find(c => c.name === name) || accentColors[0])} disabled={isFreeUser}>
-            <SelectTrigger id="accentColor" className="w-full md:w-1/2"><SelectValue placeholder="Selecione uma cor..." /></SelectTrigger>
-            <SelectContent><SelectGroup><SelectLabel>Cores</SelectLabel>{accentColors.map(color => <SelectItem key={color.name} value={color.name}><div className="flex items-center gap-2"><span className="w-4 h-4 rounded-full" style={{ backgroundColor: `hsl(${color.value})` }}></span>{color.name}</div></SelectItem>)}</SelectGroup></SelectContent>
-          </Select>
+        <div className="space-y-4">
+          <Label>Cor de Destaque</Label>
+          <RadioGroup
+            value={selectedAccentColor?.name}
+            onValueChange={(name) => {
+              if (isFreeUser) return;
+              const color = accentColors.find(c => c.name === name);
+              if (color) setSelectedAccentColor(color);
+            }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+            disabled={isFreeUser}
+          >
+            {accentColors.map(color => (
+              <Label
+                key={color.name}
+                htmlFor={`color-${color.name.replace(/\s+/g, '-')}`}
+                className={cn(
+                  "flex items-center justify-center rounded-md border-2 px-4 py-3 cursor-pointer transition-all",
+                  selectedAccentColor?.name === color.name
+                    ? `border-white/80 ring-2 ring-offset-2 ring-offset-background ring-[hsl(${color.value})]`
+                    : "border-transparent",
+                  isFreeUser && "cursor-not-allowed opacity-60"
+                )}
+                style={{ 
+                    backgroundColor: `hsl(${color.value})`,
+                    color: `hsl(${color.foreground})` 
+                }}
+              >
+                <span className="text-sm font-medium">{color.name}</span>
+                <RadioGroupItem
+                  value={color.name}
+                  id={`color-${color.name.replace(/\s+/g, '-')}`}
+                  className="sr-only"
+                  disabled={isFreeUser}
+                />
+              </Label>
+            ))}
+          </RadioGroup>
           {isFreeUser && <p className="text-xs text-muted-foreground">Personalização de cor disponível nos planos Padrão e Premium.</p>}
         </div>
         <div className="space-y-4 pt-6 border-t">

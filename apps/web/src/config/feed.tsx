@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, ConciergeBell, ShoppingCart, Siren } from "lucide-react";
+import { Box, ConciergeBell, ShoppingCart, Siren, Star } from "lucide-react";
 
 export const tipoConfig = {
   oferta_servico: {
@@ -9,6 +9,7 @@ export const tipoConfig = {
     shadow: "shadow-blue-500/20",
     badge: "Oferta de Serviço",
     icon: <ConciergeBell className="w-4 h-4" />,
+    gradient: "from-blue-500 to-blue-600",
   },
   oferta_produto: {
     bg: "bg-green-50 dark:bg-green-900/30",
@@ -17,6 +18,7 @@ export const tipoConfig = {
     shadow: "shadow-green-500/20",
     badge: "Oferta de Produto",
     icon: <Box className="w-4 h-4" />,
+    gradient: "from-green-500 to-green-600",
   },
   solicitacao_servico: {
     bg: "bg-orange-50 dark:bg-orange-900/30",
@@ -25,6 +27,7 @@ export const tipoConfig = {
     shadow: "shadow-orange-500/20",
     badge: "Solicitação de Serviço",
     icon: <Siren className="w-4 h-4" />,
+    gradient: "from-orange-500 to-orange-600",
   },
   solicitacao_produto: {
     bg: "bg-amber-50 dark:bg-amber-900/30",
@@ -33,6 +36,7 @@ export const tipoConfig = {
     shadow: "shadow-amber-500/20",
     badge: "Solicitação de Produto",
     icon: <ShoppingCart className="w-4 h-4" />,
+    gradient: "from-amber-500 to-amber-600",
   },
   patrocinado: {
     bg: "bg-yellow-50 dark:bg-yellow-900/30",
@@ -40,6 +44,7 @@ export const tipoConfig = {
     border: "border-yellow-200 dark:border-yellow-800",
     shadow: "shadow-yellow-500/20",
     badge: "Patrocinado",
-    icon: <Box className="w-4 h-4" />,
+    icon: <Star className="w-4 h-4" />,
+    gradient: "from-yellow-400 to-yellow-500",
   },
 }; 

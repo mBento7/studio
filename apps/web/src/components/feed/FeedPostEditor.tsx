@@ -1,11 +1,16 @@
-import React, { useRef, useState } from "react";
-import { Image, MapPin, Smile, User, Tag, DollarSign, Zap, Star, Phone, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Image, MapPin, Smile, User, DollarSign, Zap, Phone, X, Tag } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { tipoConfig } from "@/config/feed";
+import { WhosdoIcon } from "@/components/icons/whosdo-icon";
 
 interface FeedPostEditorProps {
   onPost?: (data: {
@@ -35,12 +40,19 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const postTypes = (Object.keys(tipoConfig) as Array<keyof typeof tipoConfig>)
-    .filter(key => key !== 'patrocinado'); // Excluir patrocinado das opções
+  useEffect(() => {
+    const textarea = textRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      const { scrollHeight } = textarea;
+      textarea.style.height = `${scrollHeight}px`;
+    }
+  }, [postText]);
+
+  const postTypes = (Object.keys(tipoConfig) as Array<keyof typeof tipoConfig>).filter(key => key !== 'patrocinado');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      // [FUTURO] Aqui pode ser feita a integração para upload da imagem para o backend ou storage (ex: S3, Supabase Storage, etc.)
       const reader = new FileReader();
       reader.onload = (ev) => setImage(ev.target?.result as string);
       reader.readAsDataURL(e.target.files[0]);
@@ -58,7 +70,6 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
       
     setPostText(newText);
     
-    // Move o cursor para depois do emoji inserido
     setTimeout(() => {
       if (textRef.current) {
         textRef.current.selectionStart = textRef.current.selectionEnd = selectionStart + emojiData.emoji.length;
@@ -95,6 +106,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         whatsappUrl: finalWhatsappUrl || undefined,
       });
     }
+    
     setPostText("");
     setImage(null);
     setPreco("");
@@ -106,6 +118,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
     setShowLocalizacao(false);
     setShowUrgente(false);
     setShowWhatsapp(false);
+    
     toast({
       title: "Post publicado!",
       description: "Sua postagem foi enviada com sucesso.",
@@ -113,205 +126,189 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
     });
   };
 
+  const toggleOption = (option: string) => {
+    switch (option) {
+      case 'preco': setShowPreco(!showPreco); break;
+      case 'localizacao': setShowLocalizacao(!showLocalizacao); break;
+      case 'whatsapp': setShowWhatsapp(!showWhatsapp); break;
+      case 'urgente': setUrgente(!urgente); break;
+    }
+  };
+
+  const activeOptions = [
+    showPreco && 'preco',
+    showLocalizacao && 'localizacao', 
+    showWhatsapp && 'whatsapp',
+    urgente && 'urgente'
+  ].filter(Boolean);
+
   return (
-    <Card className="w-full p-3 shadow-lg rounded-md bg-card/90 border-0 mb-8">
-      <div className="w-full bg-card rounded-md shadow-lg overflow-hidden border border-black/5 dark:border-white/10 p-6 flex flex-col gap-4">
-        <div className="flex items-start gap-4">
-          {/* Avatar e pré-visualização da imagem (se houver) */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-4">
-            <div className="w-12 h-12 bg-muted flex items-center justify-center border border-border">
-              <User className="w-7 h-7 text-muted-foreground" />
-            </div>
-            {/* Preview da imagem */}
-            {image && (
-              <div className="relative w-24 h-24 border overflow-hidden">
-                <img src={image} alt="Preview" className="w-full h-full object-cover" />
-                <button
-                  onClick={() => setImage(null)}
-                  className="absolute top-1 right-1 bg-black bg-opacity-50 text-white p-1 hover:bg-opacity-75 transition-colors"
-                  aria-label="Remover imagem"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            )}
-          </div>
-          
-          {/* Campo de texto principal */}
-          <div className="flex-1 flex flex-col">
-            <textarea
-              ref={textRef}
-              className="w-full resize-none border-none outline-none bg-transparent text-base text-foreground placeholder:text-muted-foreground min-h-[48px] flex-grow"
-              placeholder="Escreva uma nova postagem..."
-              value={postText}
-              onChange={e => setPostText(e.target.value)}
-              rows={image ? 5 : 2} // Aumenta a altura quando a imagem está presente
-            />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-2xl mx-auto"
+    >
+      <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-6 space-y-6">
+        <div className="relative">
+          <Textarea
+            ref={textRef}
+            rows={2}
+            className="resize-none overflow-hidden border bg-background/50 focus-visible:ring-1 focus-visible:ring-primary/50 text-base placeholder:text-muted-foreground/60 p-4"
+            placeholder="O que você gostaria de compartilhar hoje?"
+            value={postText}
+            onChange={e => setPostText(e.target.value)}
+            maxLength={500}
+          />
+          <div className="absolute bottom-2 right-3 flex justify-end">
+            <span className={cn(
+              "text-xs transition-colors",
+              postText.length > 500 ? "text-destructive" : "text-muted-foreground"
+            )}>
+              {postText.length}/500
+            </span>
           </div>
         </div>
-        {/* Seletor de Tipo de Post */}
-        <div className="flex flex-col gap-3 border-t pt-4 mt-2">
-          <span className="text-sm font-medium text-muted-foreground">Qual o tipo da sua postagem?</span>
-          <div className="flex flex-wrap gap-3 items-center">
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Tag className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">Tipo de postagem</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
             {postTypes.map(typeKey => {
               const config = tipoConfig[typeKey];
+              const isActive = tipoPost === typeKey;
               return (
-                <button
+                <motion.button
                   key={typeKey}
                   onClick={() => setTipoPost(typeKey)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className={cn(
-                    "flex items-center gap-2 text-xs px-3 py-1.5 border transition-colors font-semibold",
-                    tipoPost === typeKey
-                      ? `${config.bg} ${config.text} ${config.border}`
-                      : "bg-transparent hover:bg-muted"
+                    "flex items-center gap-2 text-sm px-3 py-2 border rounded-lg transition-all font-medium text-left",
+                    isActive
+                      ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white font-semibold shadow-md border-transparent"
+                      : "bg-transparent border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10"
                   )}
                 >
-                  {React.cloneElement(config.icon, { className: "w-4 h-4" })}
-                  {config.badge}
-                </button>
-              )
+                  {React.cloneElement(config.icon, { 
+                    className: cn("w-4 h-4", isActive ? "text-white" : "text-[#0e9094]") 
+                  })}
+                  <span className="flex-1">{config.badge}</span>
+                </motion.button>
+              );
             })}
           </div>
         </div>
-        {/* Campos extras dinâmicos */}
-        {(showPreco || showLocalizacao || showWhatsapp || urgente) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 pt-4 border-t">
-            {showPreco && (
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
-                  placeholder="Preço (ex: 200,00)"
-                  value={preco}
-                  onChange={e => setPreco(e.target.value)}
-                />
-                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowPreco(false)}>Remover</button>
-              </div>
-            )}
-            {showLocalizacao && (
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
-                  placeholder="Localização"
-                  value={localizacao}
-                  onChange={e => setLocalizacao(e.target.value)}
-                />
-                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowLocalizacao(false)}>Remover</button>
-              </div>
-            )}
-            {showWhatsapp && (
-              <div className="flex items-center gap-2">
-                <Phone className="w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  className="flex-1 bg-transparent border-b outline-none focus:border-primary transition-colors text-sm"
-                  placeholder="Link ou número de WhatsApp"
-                  value={whatsappUrl}
-                  onChange={e => setWhatsappUrl(e.target.value)}
-                />
-                <button className="text-xs text-red-500 hover:underline" onClick={() => setShowWhatsapp(false)}>Remover</button>
-              </div>
-            )}
-            {urgente && (
-              <div className="flex items-center gap-2 text-red-600">
-                <Zap className="w-5 h-5" />
-                <span className="text-sm font-semibold">Marcado como Urgente</span>
-                <button className="text-xs text-red-500 hover:underline ml-auto" onClick={() => setUrgente(false)}>Remover</button>
-              </div>
-            )}
-          </div>
-        )}
-        {/* Barra de ícones de ação */}
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
-            <ActionButton
-              icon={Image}
-              label="Imagem"
-              onClick={() => fileInputRef.current?.click()}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleImageChange}
-            />
+
+        <AnimatePresence>
+          {image && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="relative rounded-xl overflow-hidden border bg-muted/20"
+            >
+              <img src={image} alt="Preview" className="w-full h-auto max-h-72 object-cover" />
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => setImage(null)}
+                className="absolute top-3 right-3 h-8 w-8 rounded-full shadow-lg"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {activeOptions.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-4 p-4 bg-muted/20 rounded-xl border"
+            >
+              {showPreco && (
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                  <DollarSign className="w-5 h-5 text-green-600" />
+                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Preço (ex: R$ 200,00)" value={preco} onChange={e => setPreco(e.target.value)} />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowPreco(false)}><X className="w-4 h-4" /></Button>
+                </motion.div>
+              )}
+              
+              {showLocalizacao && (
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-blue-600" />
+                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Localização" value={localizacao} onChange={e => setLocalizacao(e.target.value)} />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowLocalizacao(false)}><X className="w-4 h-4" /></Button>
+                </motion.div>
+              )}
+              
+              {showWhatsapp && (
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-green-600" />
+                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="WhatsApp (número ou link)" value={whatsappUrl} onChange={e => setWhatsappUrl(e.target.value)} />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowWhatsapp(false)}><X className="w-4 h-4" /></Button>
+                </motion.div>
+              )}
+              
+              {urgente && (
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3 text-orange-600">
+                  <Zap className="w-5 h-5" />
+                  <span className="text-sm font-medium flex-1">Marcado como urgente</span>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setUrgente(false)}><X className="w-4 h-4" /></Button>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center justify-between pt-4 border-t border-border/50">
+          <div className="flex items-center gap-0.5">
+            <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-muted-foreground hover:text-primary"><Image className="w-5 h-5" /></Button>
+            <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageChange} />
+
             <Popover>
               <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors p-2"
-                  aria-label="Emoji"
-                >
-                  <Smile className="w-5 h-5" />
-                  <span className="hidden sm:inline">Emoji</span>
-                </button>
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary"><Smile className="w-5 h-5" /></Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 border-none">
+              <PopoverContent className="p-0 border-none w-auto">
                 <EmojiPicker onEmojiClick={onEmojiClick} />
               </PopoverContent>
             </Popover>
-            <ActionButton
-              icon={DollarSign}
-              label="Preço"
-              isActive={showPreco}
-              onClick={() => setShowPreco(!showPreco)}
-            />
-            <ActionButton
-              icon={MapPin}
-              label="Local"
-              isActive={showLocalizacao}
-              onClick={() => setShowLocalizacao(!showLocalizacao)}
-            />
-            <ActionButton
-              icon={Phone}
-              label="Contato"
-              isActive={showWhatsapp}
-              onClick={() => setShowWhatsapp(!showWhatsapp)}
-            />
-            <ActionButton
-              icon={Zap}
-              label="Urgente"
-              isActive={urgente}
-              onClick={() => setUrgente(!urgente)}
-            />
+
+            <div className="h-6 w-px bg-border/50 mx-2"></div>
+
+            {[
+              { key: 'preco', icon: DollarSign, active: showPreco },
+              { key: 'localizacao', icon: MapPin, active: showLocalizacao },
+              { key: 'whatsapp', icon: Phone, active: showWhatsapp },
+              { key: 'urgente', icon: Zap, active: urgente },
+            ].map(({ key, icon: Icon, active }) => (
+              <Button
+                key={key}
+                variant="ghost"
+                size="icon"
+                onClick={() => toggleOption(key)}
+                className={cn("transition-colors", active ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
+              >
+                <Icon className="w-5 h-5" />
+              </Button>
+            ))}
           </div>
-          <button
-            onClick={handlePost}
-            className="px-6 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#14b8a6] to-[#0e9094] rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!postText.trim()}
+
+          <Button 
+            onClick={handlePost} 
+            disabled={!postText.trim()} 
+            className="px-8 rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md"
           >
-            Postar
-          </button>
+            Publicar
+          </Button>
         </div>
       </div>
-    </Card>
-  );
-}
-
-interface ActionButtonProps {
-  icon: React.ElementType;
-  label: string;
-  isActive?: boolean;
-  onClick?: () => void;
-}
-
-function ActionButton({ icon: Icon, label, isActive, onClick }: ActionButtonProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors p-2",
-        isActive && "text-primary"
-      )}
-      aria-label={label}
-    >
-      <Icon className="w-5 h-5" />
-      <span className="hidden sm:inline">{label}</span>
-    </button>
+    </motion.div>
   );
 } 

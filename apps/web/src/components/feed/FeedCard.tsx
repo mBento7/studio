@@ -138,16 +138,16 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
   const config = tipoConfig[tipo] || tipoConfig['oferta_produto'];
 
   return (
-    <Card
+    <div
       ref={ref}
       className={cn(
-        "w-full mx-auto p-3 shadow-lg rounded-md bg-card/90 border-0 mb-6 hover:shadow-xl transition-all"
+        "w-full"
       )}
       {...props}
     >
       <div
         className={cn(
-          "w-full bg-card rounded-md shadow-xl overflow-hidden border border-black/5 dark:border-white/10",
+          "w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10",
           "flex flex-row items-start gap-5 p-5",
           config.shadow,
           patrocinado && "bg-gradient-to-tr from-yellow-50/50 via-orange-50/50 to-red-50/50 dark:from-yellow-900/10 dark:via-orange-900/10 dark:to-red-900/10"
@@ -182,7 +182,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
             </div>
 
             <div className="mt-2 mb-3 flex items-center gap-2">
-              <img src={usuario.avatar} alt={usuario.nome} className="w-8 h-8 object-cover rounded-md border border-border" />
+              <img src={usuario.avatar} alt={usuario.nome} className="w-8 h-8 object-cover rounded border border-border" />
               <span className="text-sm font-medium text-muted-foreground">{usuario.nome}</span>
             </div>
 
@@ -217,17 +217,22 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
                 <span>{comentarios}</span>
               </button>
             </div>
-            
-            <button 
-              onClick={handleWhatsApp}
-              className="flex items-center gap-2 py-2 px-4 bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white font-semibold text-sm rounded-lg shadow-md hover:shadow-lg hover:brightness-110 transition-all"
-            >
-              Entrar em contato
-            </button>
+            {/* Botão de contato só para ofertas */}
+            {tipo.startsWith('oferta') && (
+              <button 
+                onClick={handleWhatsApp}
+                className={cn(
+                  "flex items-center gap-2 py-2 px-4 bg-gradient-to-r text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all",
+                  config.gradient || 'from-[#14b8a6] to-[#0e9094]'
+                )}
+              >
+                Entrar em contato
+              </button>
+            )}
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 });
 

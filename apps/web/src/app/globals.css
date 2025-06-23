@@ -4,52 +4,85 @@
 
 @layer base {
   :root {
-    --background-start-rgb: 245, 245, 245; /* branco suave */
-    --background-end-rgb: 235, 240, 245;   /* cinza muito claro */
+    --background-start-rgb: 248, 250, 252; /* slate-50, um cinza-azulado muito claro */
+    --background-end-rgb: 241, 245, 249;   /* slate-100, um pouco mais escuro */
     
     --foreground: 220 13% 18%; /* cinza carvão */
     --card: 0 0% 100%;
     --card-foreground: 220 13% 18%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 13% 18%;
-    --primary: 210 80% 36%; /* azul escuro */
-    --primary-foreground: 0 0% 98%;
-    --accent: 174 100% 28%; /* teal */
+
+    /* Cores mais vibrantes inspiradas no tema dark */
+    --primary: 174 80% 40%; /* #14c9bd - teal vibrante (principal) */
+    --primary-foreground: 0 0% 10%; /* Preto para melhor contraste com o teal */
+    --accent: 210 80% 50%; /* Azul vibrante (secundário) */
     --accent-foreground: 0 0% 98%;
-    --ring: 174 100% 28%;
+    --ring: 174 80% 40%; /* teal para o anel de foco */
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 16% 90%;
     --muted-foreground: 220 13% 40%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 16% 85%;
-    --input: 210 16% 93%;
+
+    --border: 210 20% 88%; /* Borda um pouco mais visível (slate-300) */
+    --input: 210 20% 94%; /* slate-200 */
     --radius: 0.75rem; /* bordas mais suaves */
   }
 
   .dark {
-    --background-start-rgb: 25, 28, 34;
-    --background-end-rgb: 18, 20, 24;
+    /* Fundo principal em tom escuro de cinza */
+    --background-start-rgb: 17, 17, 17;   /* #111111 - Quase preto */
+    --background-end-rgb: 24, 24, 24;     /* #181818 - Cinza muito escuro */
 
-    --foreground: 0 0% 90%;
-    --card: 220 13% 13%;
-    --card-foreground: 0 0% 90%;
-    --popover: 220 13% 13%;
-    --popover-foreground: 0 0% 90%;
-    --primary: 210 80% 46%;
-    --primary-foreground: 0 0% 10%;
-    --accent: 174 100% 38%;
-    --accent-foreground: 0 0% 10%;
-    --ring: 174 100% 38%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 210 16% 20%;
-    --muted-foreground: 0 0% 60%;
-    --destructive: 0 70% 50.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 210 16% 25%;
-    --input: 210 16% 22%;
+    /* Cores de texto e elementos principais */
+    --foreground: 0 0% 98%;               /* #fafafa - Branco suave */
+    --card: 0 0% 10%;                     /* #1a1a1a - Cinza escuro para cards */
+    --card-foreground: 0 0% 98%;          /* #fafafa - Texto em cards */
+
+    --popover: 0 0% 10%;                  /* #1a1a1a - Fundo de popovers */
+    --popover-foreground: 0 0% 98%;       /* #fafafa - Texto em popovers */
+
+    /* Cores de ação e destaque */
+    --primary: 0 0% 90%;                  /* #e6e6e6 - Branco suave para ações principais */
+    --primary-foreground: 0 0% 10%;       /* #1a1a1a - Texto em elementos primários */
+
+    --secondary: 0 0% 15%;                /* #262626 - Cinza escuro para elementos secundários */
+    --secondary-foreground: 0 0% 85%;     /* #d9d9d9 - Texto em elementos secundários */
+
+    /* Elementos de interface */
+    --muted: 0 0% 15%;                    /* #262626 - Fundo para elementos mudos */
+    --muted-foreground: 0 0% 65%;         /* #a6a6a6 - Texto mudo/desativado */
+
+    --accent: 0 0% 20%;                   /* #333333 - Destaque sutil */
+    --accent-foreground: 0 0% 98%;        /* #fafafa - Texto em destaques */
+
+    /* Elementos de feedback */
+    --destructive: 0 84% 60%;             /* Vermelho para ações destrutivas */
+    --destructive-foreground: 0 0% 98%;   /* #fafafa - Texto em elementos destrutivos */
+
+    /* Bordas e inputs */
+    --border: 0 0% 20%;                   /* #333333 - Bordas sutis */
+    --input: 0 0% 15%;                    /* #262626 - Fundo de inputs */
+    --ring: 0 0% 25%;                     /* #404040 - Anel de foco */
+  }
+}
+
+@layer utilities {
+  /* No modo Light, as sombras são pretas */
+  *, ::before, ::after {
+    --tw-shadow-color: 0 0 0;
+    --tw-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* No modo Dark, as sombras são definidas como preto com 50% de opacidade */
+  .dark {
+    *, ::before, ::after {
+      --tw-shadow-color: 0 0 0; /* Preto */
+      --tw-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
   }
 }
 
@@ -89,11 +122,7 @@
   left: 0;
   direction: rtl;
   z-index: -1;
-  box-shadow:
-   -7px -7px 20px 0px #fff9,
-   -4px -4px 5px 0px #fff9,
-   7px 7px 20px 0px #0002,
-   4px 4px 5px 0px #0001;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transition: all 0.3s ease;
 }
 .btn-16:hover {
@@ -121,9 +150,7 @@
   transition: all 0.3s ease;
   position: relative;
   display: inline-block;
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-   7px 7px 20px 0px rgba(0,0,0,.1),
-   4px 4px 5px 0px rgba(0,0,0,.1);
+   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   outline: none;
 }
 
@@ -136,7 +163,7 @@
   font-size: 1rem;
   color: #e0e6ed;
   background: rgba(127,90,240,0.13);
-  box-shadow: 0 2px 12px 0 rgba(127,90,240,0.10), 0 1.5px 8px 0 #fff2;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   margin: 0 8px;
   display: inline-flex;
   align-items: center;
@@ -155,7 +182,7 @@
   background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
   color: #fff;
   border: 2.5px solid #fff;
-  box-shadow: 0 8px 40px 0 #7f5af0cc, 0 2px 12px 0 #fff6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transform: scale(1.08);
   z-index: 2;
 }
@@ -164,7 +191,7 @@
   color: #5b5b7a;
   border: 1.5px solid #a259f7;
   opacity: 1;
-  box-shadow: 0 2px 12px 0 rgba(127,90,240,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   filter: none;
   transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
 }
@@ -172,7 +199,7 @@
   background: linear-gradient(90deg, #ede9fe 0%, #e0fdfa 100%);
   color: #7f5af0;
   border: 2px solid #7f5af0;
-  box-shadow: 0 4px 20px 0 #a259f7cc;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transform: scale(1.04);
 }
 
@@ -185,7 +212,7 @@
 
 /* Aperfeiçoamento UX para botões de abas do feed */
 .glass-btn.tab-active {
-  box-shadow: 0 8px 40px 0 #7f5af0cc, 0 2px 12px 0 #fff6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   border: 2.5px solid #fff;
   background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
   color: #fff;
@@ -193,6 +220,7 @@
   z-index: 2;
 }
 .glass-btn.tab-inactive {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   opacity: 0.85;
   filter: blur(0.2px);
 }

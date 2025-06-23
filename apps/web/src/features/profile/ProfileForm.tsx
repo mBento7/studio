@@ -34,7 +34,11 @@ import {
   Mail,
   Camera,
   Save,
-  Eye
+  Eye,
+  Star,
+  Sparkles,
+  Wrench,
+  GraduationCap
 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -42,6 +46,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ActionButton } from '@/components/ui/action-button';
 import { ImageUploadField } from '@/components/ui/image-upload-field';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 // Simulação de dados do usuário (substituir por dados reais do backend)
 const mockCurrentUser = {
@@ -72,14 +77,6 @@ const mockCurrentUser = {
   plan: "premium",
   isAvailable: true,
   layoutTemplateId: "modern",
-  services: [
-    { id: "serv1", name: "Desenvolvimento Web", description: "Criação de websites responsivos e aplicativos web." },
-    { id: "serv2", name: "Consultoria de Software", description: "Orientação e soluções para projetos de software." },
-  ],
-  portfolio: [
-    { id: "port1", title: "E-commerce Moderno", description: "Desenvolvimento de plataforma de e-commerce utilizando Next.js e Stripe.", imageUrl: "/images/mock-project1.jpg", link: "https://example.com/ecommerce" },
-    { id: "port2", title: "App de Produtividade", description: "Aplicativo móvel para gerenciamento de tarefas com sincronização em tempo real.", imageUrl: "/images/mock-project2.jpg", link: "https://example.com/app" },
-  ],
   skills: ["React", "Node.js", "TypeScript", "SQL", "Cloud Computing"],
   experience: [
     { id: "exp1", title: "Desenvolvedor Sênior", company: "Tech Solutions Inc.", duration: "2020 - Atualmente", description: "Liderança de equipe no desenvolvimento de novas features." },
@@ -109,20 +106,6 @@ type SocialLink = {
   id?: string | number;
   platform: string;
   url: string;
-};
-
-type Service = {
-  id?: string | number;
-  name: string;
-  description?: string;
-};
-
-type PortfolioItem = {
-  id?: string | number;
-  title: string;
-  description?: string;
-  imageUrl?: string;
-  link?: string;
 };
 
 type Experience = {
@@ -163,8 +146,6 @@ type ProfileFormData = {
   plan: string;
   isAvailable: boolean;
   layoutTemplateId: string;
-  services: Service[];
-  portfolio: PortfolioItem[];
   skills: string[];
   experience: Experience[];
   education: Education[];
@@ -191,6 +172,7 @@ export function ProfileForm() {
   const [coverUploading, setCoverUploading] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [usernameTouched, setUsernameTouched] = useState(false);
+  const [activeTab, setActiveTab] = useState('basic-info');
 
   const getInitialFormValues = useCallback((): ProfileFormData => {
     const baseProfile = mockCurrentUser;
@@ -219,8 +201,6 @@ export function ProfileForm() {
       plan: baseProfile.plan,
       isAvailable: baseProfile.isAvailable,
       layoutTemplateId: baseProfile.layoutTemplateId,
-      services: Array.isArray(baseProfile.services) ? baseProfile.services : [],
-      portfolio: Array.isArray(baseProfile.portfolio) ? baseProfile.portfolio : [],
       skills: Array.isArray(baseProfile.skills) ? baseProfile.skills : [],
       experience: Array.isArray(baseProfile.experience) ? baseProfile.experience : [],
       education: Array.isArray(baseProfile.education) ? baseProfile.education : [],
@@ -259,8 +239,6 @@ export function ProfileForm() {
   }, [getInitialFormValues, reset, checkUsernameAvailability]);
 
   const { fields: socialLinkFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({ control, name: "socialLinks" });
-  const { fields: serviceFields, append: appendService, remove: removeService } = useFieldArray({ control, name: "services" });
-  const { fields: portfolioFields, append: appendPortfolio, remove: removePortfolio } = useFieldArray({ control, name: "portfolio" });
   const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({ control, name: "experience" });
   const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({ control, name: "education" });
 
@@ -319,8 +297,8 @@ export function ProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen bg-white py-12 px-2 sm:px-4">
+      <div className="container mx-auto px-0 py-0 max-w-2xl">
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -329,289 +307,333 @@ export function ProfileForm() {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">Editar Perfil</h1>
-              <p className="text-muted-foreground">Personalize suas informações e torne seu perfil único</p>
+              <h1 className="text-3xl font-bold text-foreground dark:text-white mb-2">Editar Perfil</h1>
+              <p className="text-muted-foreground dark:text-slate-300">Personalize suas informações e torne seu perfil único</p>
             </div>
-            <Badge variant="secondary" className="px-3 py-1">
+            <Badge variant="secondary" className="px-3 py-1 dark:bg-slate-800 dark:text-slate-100">
               <Eye className="w-4 h-4 mr-1" />
               Visualizar Perfil
             </Badge>
           </div>
-          <Separator />
+          <Separator className="dark:bg-slate-700" />
         </motion.div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {/* Basic Info */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Informações Básicas</CardTitle>
-              <CardDescription>
-                Configure suas informações principais que aparecerão no seu perfil
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium">Nome Completo</Label>
-                  <InputWithFeedback
-                    id="name"
-                    {...register("name", { required: "Nome é obrigatório" })}
-                    placeholder="Seu nome completo"
-                    error={errors.name?.message}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="username" className="text-sm font-medium">Nome de Usuário</Label>
-                  <InputWithFeedback
-                    id="username"
-                    {...register("username", { 
-                      required: "Nome de usuário é obrigatório",
-                      minLength: { value: 3, message: "Nome de usuário deve ter no mínimo 3 caracteres" }
-                    })}
-                    placeholder="ex: joao.silva"
-                    onChange={handleUsernameChange}
-                    error={errors.username?.message}
-                    success={usernameTouched && usernameAvailable === true ? "Disponível!" : undefined}
-                  />
-                  {usernameTouched && usernameAvailable === false && (
-                    <p className="text-sm text-destructive">Nome de usuário já em uso.</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="bio" className="text-sm font-medium">Bio</Label>
-                <Textarea
-                  id="bio"
-                  {...register("bio")}
-                  placeholder="Conte-nos sobre você em poucas palavras..."
-                  rows={4}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="category" className="text-sm font-medium">Categoria</Label>
-                <InputWithFeedback
-                  id="category"
-                  {...register("category")}
-                  placeholder="Ex: Desenvolvedor de Software, Designer Gráfico"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Contact Info */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Informações de Contato</CardTitle>
-              <CardDescription>
-                Seus contatos para que as pessoas possam interagir com você
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputWithFeedback
-                  label="Telefone"
-                  id="phone"
-                  type="tel"
-                  {...register("phone")}
-                  placeholder="(00) 00000-0000"
-                />
-                <InputWithFeedback
-                  label="WhatsApp"
-                  id="whatsappNumber"
-                  type="tel"
-                  {...register("whatsappNumber")}
-                  placeholder="(00) 00000-0000"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Profile Images */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Imagens do Perfil</CardTitle>
-              <CardDescription>
-                Gerencie sua foto de perfil e capa
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ImageUploadField
-                label="Foto de Perfil"
-                name="profilePictureUrl"
-                control={control}
-                setValue={setValue}
-                currentImageUrl={watchedProfilePictureUrl}
-                uploading={profileUploading}
-                setUploading={setProfileUploading}
-              />
-              <ImageUploadField
-                label="Foto de Capa"
-                name="coverPhotoUrl"
-                control={control}
-                setValue={setValue}
-                currentImageUrl={watchedCoverPhotoUrl}
-                uploading={coverUploading}
-                setUploading={setCoverUploading}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Social Links */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Redes Sociais</CardTitle>
-              <CardDescription>
-                Adicione links para suas redes sociais e outras plataformas
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {socialLinkFields.map((field, index) => (
-                <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-end">
-                  <Controller
-                    name={`socialLinks.${index}.platform`}
-                    control={control}
-                    render={({ field: controllerField }) => (
-                      <div className="space-y-2 flex-grow sm:flex-grow-0 w-full sm:w-auto">
-                        <Label>Plataforma</Label>
-                        <Select onValueChange={controllerField.onChange} value={controllerField.value}>
-                          <SelectTrigger className="w-full sm:w-[180px]">
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {platformOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>
-                                <div className="flex items-center">
-                                  <option.icon className="w-4 h-4 mr-2" />
-                                  {option.label}
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+        <div className="bg-card rounded shadow-xl shadow-black/20 border border-black/5 p-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="flex h-auto w-full flex-wrap justify-center gap-x-2 gap-y-3 rounded-lg bg-white border border-black/10 shadow-sm p-2 mb-4">
+                {[
+                  { value: 'basic-info', label: 'Básico', icon: User },
+                  { value: 'contact', label: 'Contato', icon: Phone },
+                  { value: 'images', label: 'Imagens', icon: ImageIcon },
+                  { value: 'social-links', label: 'Sociais', icon: Globe },
+                  { value: 'location', label: 'Localização', icon: MapPin },
+                  { value: 'experience', label: 'Experiência', icon: Briefcase },
+                  { value: 'education', label: 'Educação', icon: GraduationCap },
+                  { value: 'skills', label: 'Habilidades', icon: Star },
+                ].map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className={cn(
+                      "flex items-center gap-2 h-9 px-4 rounded-full text-sm font-medium transition-all whitespace-nowrap border border-transparent",
+                      activeTab === tab.value && "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md border-none"
                     )}
-                  />
-                  <div className="space-y-2 flex-grow w-full">
-                    <Label>URL</Label>
-                    <Input
-                      {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
-                      placeholder={platformOptions.find(opt => opt.value === watch(`socialLinks.${index}.platform`))?.placeholder || "https://"}
+                  >
+                    <tab.icon className={cn("w-4 h-4", activeTab === tab.value ? "text-white" : "text-[#0e9094]")}/>
+                    <span className={activeTab === tab.value ? "text-white" : "text-[#0e9094]"}>{tab.label}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+            <div className="p-6 dark:bg-slate-900">
+              <TabsContent value="basic-info" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="grid gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Nome Completo</Label>
+                    <InputWithFeedback
+                      id="name"
+                      {...register("name", { required: "Nome é obrigatório" })}
+                      placeholder="Seu nome completo"
+                      error={errors.name?.message}
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
-                    {errors.socialLinks?.[index]?.url && (
-                      <p className="text-sm text-destructive">{errors.socialLinks[index]?.url?.message}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Nome de Usuário</Label>
+                    <InputWithFeedback
+                      id="username"
+                      {...register("username", { 
+                        required: "Nome de usuário é obrigatório",
+                        minLength: { value: 3, message: "Nome de usuário deve ter no mínimo 3 caracteres" }
+                      })}
+                      placeholder="ex: joao.silva"
+                      onChange={handleUsernameChange}
+                      error={errors.username?.message}
+                      success={usernameTouched && usernameAvailable === true ? "Disponível!" : undefined}
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    {usernameTouched && usernameAvailable === false && (
+                      <p className="text-sm text-destructive dark:text-red-400">Nome de usuário já em uso.</p>
                     )}
                   </div>
-                  <Button type="button" variant="ghost" size="icon" onClick={() => removeSocialLink(index)} className="mt-2 sm:mt-0">
-                    <Trash2 className="w-5 h-5" />
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      {...register("bio")}
+                      placeholder="Conte-nos sobre você em poucas palavras..."
+                      rows={4}
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 min-h-[100px] dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Categoria</Label>
+                    <InputWithFeedback
+                      id="category"
+                      {...register("category")}
+                      placeholder="Ex: Desenvolvedor de Software, Designer Gráfico"
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="contact" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="grid gap-6">
+                  <InputWithFeedback
+                    label="Telefone"
+                    id="phone"
+                    type="tel"
+                    {...register("phone")}
+                    placeholder="(00) 00000-0000"
+                    className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                  />
+                  <InputWithFeedback
+                    label="WhatsApp"
+                    id="whatsappNumber"
+                    type="tel"
+                    {...register("whatsappNumber")}
+                    placeholder="(00) 00000-0000"
+                    className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                  />
+                </div>
+              </TabsContent>
+              <TabsContent value="images" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="grid gap-8">
+                  <ImageUploadField
+                    label="Foto de Perfil"
+                    name="profilePictureUrl"
+                    control={control}
+                    setValue={setValue as (name: string, value: any, options?: any) => void}
+                    currentImageUrl={watchedProfilePictureUrl}
+                    uploading={profileUploading}
+                    setUploading={setProfileUploading}
+                  />
+                  <ImageUploadField
+                    label="Foto de Capa"
+                    name="coverPhotoUrl"
+                    control={control}
+                    setValue={setValue as (name: string, value: any, options?: any) => void}
+                    currentImageUrl={watchedCoverPhotoUrl}
+                    uploading={coverUploading}
+                    setUploading={setCoverUploading}
+                  />
+                </div>
+              </TabsContent>
+              <TabsContent value="social-links" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="space-y-4">
+                  {socialLinkFields.map((field, index) => (
+                    <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-end">
+                      <Controller
+                        name={`socialLinks.${index}.platform`}
+                        control={control}
+                        render={({ field: controllerField }) => (
+                          <div className="space-y-2 flex-grow sm:flex-grow-0 w-full sm:w-auto">
+                            <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Plataforma</Label>
+                            <Select onValueChange={controllerField.onChange} value={controllerField.value}>
+                              <SelectTrigger className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700">
+                                <SelectValue placeholder="Selecione" />
+                              </SelectTrigger>
+                              <SelectContent className="dark:bg-slate-800 dark:text-white">
+                                {platformOptions.map(option => (
+                                  <SelectItem key={option.value} value={option.value} className="dark:bg-slate-800 dark:text-white">
+                                    <div className="flex items-center">
+                                      <option.icon className="w-4 h-4 mr-2" />
+                                      {option.label}
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                      />
+                      <div className="space-y-2 flex-grow w-full">
+                        <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">URL</Label>
+                        <Input
+                          {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
+                          placeholder={platformOptions.find(opt => opt.value === watch(`socialLinks.${index}.platform`))?.placeholder || "https://"}
+                          className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                        />
+                        {errors.socialLinks?.[index]?.url && (
+                          <p className="text-sm text-destructive dark:text-red-400">{errors.socialLinks[index]?.url?.message}</p>
+                        )}
+                      </div>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeSocialLink(index)} className="mt-2 sm:mt-0 dark:bg-slate-700 dark:text-white">
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" onClick={() => appendSocialLink({ platform: '', url: '' })} className="dark:bg-slate-800 dark:text-white dark:border-slate-700">
+                    <PlusCircle className="w-4 h-4 mr-2" />
+                    Adicionar Link Social
                   </Button>
                 </div>
-              ))}
-              <Button type="button" variant="outline" onClick={() => appendSocialLink({ platform: '', url: '' })}>
-                <PlusCircle className="w-4 h-4 mr-2" />
-                Adicionar Link Social
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Location Info */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Localização</CardTitle>
-              <CardDescription>
-                Onde você está localizado ou atua
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputWithFeedback
-                  label="Cidade"
-                  id="locationCity"
-                  {...register("locationCity")}
-                  placeholder="Ex: São Paulo"
-                />
-                <InputWithFeedback
-                  label="Estado/Província"
-                  id="locationState"
-                  {...register("locationState")}
-                  placeholder="Ex: SP"
-                />
-                <InputWithFeedback
-                  label="País"
-                  id="locationCountry"
-                  {...register("locationCountry")}
-                  placeholder="Ex: Brasil"
-                />
-                <InputWithFeedback
-                  label="Endereço (opcional)"
-                  id="locationAddress"
-                  {...register("locationAddress")}
-                  placeholder="Ex: Av. Paulista, 1000"
-                />
-                <InputWithFeedback
-                  label="Link Google Maps (opcional)"
-                  id="locationGoogleMapsUrl"
-                  {...register("locationGoogleMapsUrl")}
-                  placeholder="https://maps.app.goo.gl/..."
-                />
-              </div>
-              {googleMapsLink && (
-                <div className="text-sm text-muted-foreground flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
-                    Ver no Google Maps
-                  </a>
+              </TabsContent>
+              <TabsContent value="location" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InputWithFeedback
+                      label="Cidade"
+                      id="locationCity"
+                      {...register("locationCity")}
+                      placeholder="Ex: São Paulo"
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    <InputWithFeedback
+                      label="Estado/Província"
+                      id="locationState"
+                      {...register("locationState")}
+                      placeholder="Ex: SP"
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    <InputWithFeedback
+                      label="País"
+                      id="locationCountry"
+                      {...register("locationCountry")}
+                      placeholder="Ex: Brasil"
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    <InputWithFeedback
+                      label="Endereço (opcional)"
+                      id="locationAddress"
+                      {...register("locationAddress")}
+                      placeholder="Ex: Av. Paulista, 1000"
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    <InputWithFeedback
+                      label="Link Google Maps (opcional)"
+                      id="locationGoogleMapsUrl"
+                      {...register("locationGoogleMapsUrl")}
+                      placeholder="https://maps.app.goo.gl/..."
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                  </div>
+                  {googleMapsLink && (
+                    <div className="text-sm text-muted-foreground dark:text-slate-300 flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary dark:text-blue-400">
+                        Ver no Google Maps
+                      </a>
+                    </div>
+                  )}
                 </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Skills (as a simple text input for now) */}
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle>Habilidades</CardTitle>
-              <CardDescription>
-                Liste suas habilidades principais (separadas por vírgula)
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="skills" className="text-sm font-medium">Suas Habilidades</Label>
-                <Textarea
-                  id="skills"
-                  {...register("skills", {
-                    setValueAs: (value: string) => value.split(',').map(s => s.trim()).filter(Boolean),
-                    // For display, you might want to join them back:
-                    // value: watch('skills')?.join(', ')
-                  })}
-                  placeholder="Ex: React, Node.js, TypeScript, SQL"
-                  rows={3}
-                />
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {watch('skills')?.map((skill, index) => (
-                    <Badge key={index} variant="secondary" className="px-3 py-1">
-                      {skill}
-                    </Badge>
+              </TabsContent>
+              <TabsContent value="experience" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="space-y-4">
+                  {experienceFields.map((field, index) => (
+                    <div key={field.id} className="relative space-y-4 rounded-xl border p-4 dark:bg-slate-800 dark:border-slate-700">
+                      <Input {...register(`experience.${index}.title`)} placeholder="Cargo" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                      <Input {...register(`experience.${index}.company`)} placeholder="Empresa" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                      <Input {...register(`experience.${index}.duration`)} placeholder="Duração (Ex: 2020 - Atualmente)" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                      <Textarea {...register(`experience.${index}.description`)} placeholder="Descrição das atividades" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 min-h-[100px] dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeExperience(index)} className="absolute top-2 right-2 dark:bg-slate-700 dark:text-white">
+                        <Trash2 className="w-5 h-5 text-destructive dark:text-red-400" />
+                      </Button>
+                    </div>
                   ))}
+                  <Button type="button" variant="outline" onClick={() => appendExperience({ title: '', company: '', duration: '', description: '' })} className="dark:bg-slate-800 dark:text-white dark:border-slate-700">
+                    <PlusCircle className="w-4 h-4 mr-2" />
+                    Adicionar Experiência
+                  </Button>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </TabsContent>
+              <TabsContent value="education" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="space-y-4">
+                  {educationFields.map((field, index) => (
+                    <div key={field.id} className="relative rounded-xl border p-4 dark:bg-slate-800 dark:border-slate-700">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input {...register(`education.${index}.degree`)} placeholder="Grau (Ex: Bacharel em Ciência da Computação)" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                        <Input {...register(`education.${index}.institution`)} placeholder="Instituição de Ensino" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                        <Input {...register(`education.${index}.duration`)} placeholder="Período (Ex: 2014 - 2018)" className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                        <Textarea {...register(`education.${index}.description`)} placeholder="Descrição (Opcional)" className="md:col-span-2 rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 min-h-[100px] dark:bg-slate-700 dark:text-white dark:border-slate-600" />
+                      </div>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeEducation(index)} className="absolute top-2 right-2 dark:bg-slate-700 dark:text-white">
+                        <Trash2 className="w-5 h-5 text-destructive dark:text-red-400" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" onClick={() => appendEducation({ degree: '', institution: '', duration: '', description: '' })} className="dark:bg-slate-800 dark:text-white dark:border-slate-700">
+                    <PlusCircle className="w-4 h-4 mr-2" />
+                    Adicionar Formação
+                  </Button>
+                </div>
+              </TabsContent>
+              <TabsContent value="skills" className="space-y-6 p-6 dark:bg-slate-900">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Suas Habilidades</Label>
+                    <p className="text-sm text-muted-foreground dark:text-slate-300">Liste suas habilidades separadas por vírgula.</p>
+                    <Textarea
+                      id="skills"
+                      {...register("skills", {
+                        setValueAs: (value: any) => {
+                          if (Array.isArray(value)) return value;
+                          if (typeof value === "string") return value.split(',').map(s => s.trim()).filter(Boolean);
+                          return [];
+                        },
+                      })}
+                      placeholder="Ex: React, Node.js, TypeScript, SQL"
+                      rows={3}
+                      className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 min-h-[100px] dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    />
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {watch('skills')?.map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="px-3 py-1 dark:bg-slate-700 dark:text-white">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </div>
+          </Tabs>
+        </div>
 
-          {/* Submit Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex justify-end"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-end mt-8"
+        >
+          <Button 
+            type="submit" 
+            disabled={isSubmitting || isSaveDisabled()}
+            className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white font-semibold text-base rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all px-8 py-2 h-auto"
           >
-            <ActionButton type="submit" loading={isSubmitting} disabled={isSaveDisabled()}>
-              <Save className="w-4 h-4 mr-2" />
-              Salvar Alterações
-            </ActionButton>
-          </motion.div>
-        </form>
+            {isSubmitting ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Salvar Alterações
+              </>
+            )}
+          </Button>
+        </motion.div>
       </div>
     </div>
   );

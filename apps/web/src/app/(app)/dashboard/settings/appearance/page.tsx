@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 // Constantes de configuração
 const accentColors: AccentColor[] = [
   { name: "Verde Padrão", value: "149 94% 36%", foreground: "0 0% 98%", accent: "149 90% 40%" },
+  { name: "Azul Whosdo", value: "217 91% 60%", foreground: "0 0% 98%", accent: "217 91% 65%" },
   { name: "Azul", value: "210 100% 50%", foreground: "0 0% 98%", accent: "210 100% 55%" },
   { name: "Roxo", value: "270 70% 55%", foreground: "0 0% 98%", accent: "270 70% 60%" },
   { name: "Laranja", value: "25 95% 53%", foreground: "0 0% 15%", accent: "25 95% 58%" },

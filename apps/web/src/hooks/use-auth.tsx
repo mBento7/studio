@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(supabaseUser);
 
       if (event === 'SIGNED_IN' && supabaseUser) {
-        toast({ title: 'Login bem-sucedido!', description: `Bem-vindo(a) de volta!` });
+        toast({ title: 'Login bem-sucedido!', description: `Bem-vindo(a) de volta!`, variant: 'success', duration: 2000 });
         fetchUserProfile(supabaseUser);
         router.push('/dashboard/feed');
       } else if (event === 'SIGNED_OUT') {
@@ -139,7 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (error) {
       handleAuthError(error, "Cadastro com Email");
     } else {
-      toast({ title: 'Cadastro bem-sucedido!', description: 'Enviamos um email de confirmação para sua caixa de entrada.' });
+      toast({ title: 'Cadastro bem-sucedido!', description: 'Enviamos um email de confirmação para sua caixa de entrada.', variant: 'success', duration: 2000 });
     }
     setLoading(false);
   };
@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (error) {
       handleAuthError(error, "Redefinição de Senha");
     } else {
-      toast({ title: "Email de Redefinição Enviado", description: "Verifique sua caixa de entrada para o link." });
+      toast({ title: "Email de Redefinição Enviado", description: "Verifique sua caixa de entrada para o link.", variant: 'success', duration: 2000 });
     }
     setLoading(false);
   };
@@ -170,7 +170,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     const { error } = await supabase.auth.signOut();
     if (error) handleAuthError(error, "Logout");
-    else toast({ title: 'Logout bem-sucedido' });
+    else toast({ title: 'Logout bem-sucedido', variant: 'success', duration: 2000 });
     setLoading(false);
   };
 

@@ -45,7 +45,7 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header Section */}
-        <Card className="shadow-xl rounded-2xl overflow-hidden border-0">
+        <Card className="shadow-xl rounded-2xl overflow-hidden border-0 bg-white dark:bg-slate-900 dark:border-slate-700">
           <CardContent className="p-6 md:p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
               {/* Left Column: Avatar & Basic Info */}
@@ -56,7 +56,7 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
-                <h1 className="text-3xl font-bold mt-4 text-foreground">{user.name}</h1>
+                <h1 className="text-3xl font-bold mt-4 text-foreground dark:text-white">{user.name}</h1>
                 <p className="text-primary font-semibold text-lg mt-1">{user.category}</p>
                 {socialLinks.length > 0 && (
                   <div className="flex justify-center md:justify-start gap-2 mt-4">
@@ -77,25 +77,25 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
               {/* Right Column: Bio & Actions */}
               <div className="md:col-span-2 space-y-4">
                 <p className="text-muted-foreground text-base leading-relaxed">
-                  {user.bio}
+                  <span className="dark:text-slate-300">{user.bio}</span>
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
                   {location.city && (
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
-                      <span>{location.city}, {location.country}</span>
+                      <span className="dark:text-slate-300">{location.city}, {location.country}</span>
                     </div>
                   )}
                   {user.email && (
                     <a href={`mailto:${user.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
                       <Mail className="w-4 h-4" />
-                      <span>{user.email}</span>
+                      <span className="dark:text-slate-300">{user.email}</span>
                     </a>
                   )}
                   {user.phone && (
                     <a href={`tel:${user.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
                       <Phone className="w-4 h-4" />
-                      <span>{user.phone}</span>
+                      <span className="dark:text-slate-300">{user.phone}</span>
                     </a>
                   )}
                 </div>

@@ -96,9 +96,9 @@ export default function PlanosPage() {
       
       <div className="flex flex-col md:flex-row gap-8 justify-center items-stretch mb-12">
         {plans.map((plan) => (
-          <Card key={plan.id} className="relative flex-1 flex flex-col p-3 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-xl bg-card/90 border-0 transition-transform duration-300 hover:scale-105">
+          <Card key={plan.id} className="relative flex-1 flex flex-col p-5 shadow-xl shadow-black/20 rounded-lg bg-card border border-black/5 transition-transform duration-300 hover:scale-105">
             {plan.highlight && <Badge className="absolute top-4 right-4 bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white animate-pulse z-10 shadow-lg">Recomendado</Badge>}
-            <div className="w-full h-full p-6 flex flex-col items-center bg-card rounded-md shadow-xl shadow-black/10 dark:shadow-teal-500/10 overflow-hidden border border-black/5 dark:border-white/10">
+            <div className="w-full h-full p-6 flex flex-col items-center bg-card rounded-lg shadow-xl shadow-black/10 overflow-hidden border border-black/5">
               <div className="mb-4">{plan.icon}</div>
               <CardTitle className="text-2xl font-bold mb-2">{plan.name}</CardTitle>
               <p className="text-4xl font-bold mb-2">{plan.price === 0 ? 'Grátis' : `R$ ${plan.price}`}</p>
@@ -107,11 +107,11 @@ export default function PlanosPage() {
                 {plan.features.map((f, i) => <li key={i} className="flex items-start gap-2"><Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" /> <span>{f}</span></li>)}
               </ul>
               {plan.highlight ? (
-                <Button className="w-full mt-auto flex items-center justify-center gap-2 text-lg py-3 rounded-xl bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md" size="lg">
+                <Button className="w-full mt-auto flex items-center justify-center gap-2 text-lg py-3 rounded-lg bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md" size="lg">
                   {plan.iconButton} {plan.cta}
                 </Button>
               ) : (
-                <Button variant="outline" className="w-full mt-auto flex items-center justify-center gap-2 text-lg py-3 rounded-xl border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]" size="lg">
+                <Button variant="outline" className="w-full mt-auto flex items-center justify-center gap-2 text-lg py-3 rounded-lg border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]" size="lg">
                   {plan.iconButton} {plan.cta}
                 </Button>
               )}
@@ -127,8 +127,8 @@ export default function PlanosPage() {
       </div>
 
       {/* Tabela de comparação visual */}
-      <Card className="my-12 p-3 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-xl bg-card/90 border-0">
-        <div className="w-full bg-card rounded-md shadow-xl shadow-black/10 dark:shadow-teal-500/10 overflow-hidden border border-black/5 dark:border-white/10">
+      <Card className="my-12 p-5 shadow-xl shadow-black/20 rounded-lg bg-card border border-black/5">
+        <div className="w-full bg-card rounded-lg shadow-xl shadow-black/10 overflow-hidden border border-black/5">
           <div className="overflow-x-auto">
             <h2 className="text-2xl font-bold text-center p-6">Comparativo de Recursos</h2>
             <table className="w-full text-center">
@@ -156,8 +156,8 @@ export default function PlanosPage() {
       </Card>
 
       {/* FAQ em accordion animado */}
-      <Card className="my-12 max-w-4xl mx-auto p-3 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-xl bg-card/90 border-0">
-        <div className="w-full bg-card rounded-md shadow-xl shadow-black/10 dark:shadow-teal-500/10 overflow-hidden border border-black/5 dark:border-white/10 p-4 md:p-6">
+      <Card className="my-12 max-w-4xl mx-auto p-5 shadow-xl shadow-black/20 rounded-lg bg-card border border-black/5">
+        <div className="w-full bg-card rounded-lg shadow-xl shadow-black/10 overflow-hidden border border-black/5 p-4 md:p-6">
           <h2 className="text-2xl font-bold text-center mb-6">Dúvidas Frequentes</h2>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
@@ -181,7 +181,7 @@ export default function PlanosPage() {
       </Card>
       
       <div className="flex justify-center mt-12">
-        <Button asChild size="lg" variant="outline" className="px-8 py-4 text-lg border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]">
+        <Button asChild size="lg" variant="outline" className="px-8 py-4 text-lg rounded-lg border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] shadow-md">
           <Link href="/dashboard/credits" className="flex items-center gap-2">
             <Zap className="w-5 h-5" /> Acessar Painel de Créditos
           </Link>

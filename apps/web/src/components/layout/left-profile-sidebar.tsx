@@ -19,8 +19,8 @@ function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
         <div className="space-y-3">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105">
-                <Clock className="w-4 h-4" />
+              <Button variant="outline" className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full">
+                <Clock className="w-4 h-4 mr-2" />
                 Status (24h)
               </Button>
             </TooltipTrigger>
@@ -30,8 +30,8 @@ function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105" onClick={onCouponClick}>
-                <Percent className="w-4 h-4" />
+              <Button variant="outline" className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full" onClick={onCouponClick}>
+                <Percent className="w-4 h-4 mr-2" />
                 Cupom / Oferta
               </Button>
             </TooltipTrigger>
@@ -41,8 +41,8 @@ function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105">
-                <Megaphone className="w-4 h-4" />
+              <Button variant="outline" className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full">
+                <Megaphone className="w-4 h-4 mr-2" />
                 Anúncio Patrocinado
               </Button>
             </TooltipTrigger>
@@ -58,7 +58,7 @@ function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
 
 function ActivityStats() {
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-lg shadow-lg shadow-black/10 dark:shadow-green-500/10 space-y-3">
+    <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-4 space-y-3">
       <h3 className="text-lg font-semibold">Sua Atividade</h3>
       <div className="space-y-3">
         <div className="flex justify-between items-center">
@@ -73,7 +73,7 @@ function ActivityStats() {
           <span className="text-sm text-muted-foreground">Engajamento</span>
           <span className="font-semibold text-blue-600">8.4%</span>
         </div>
-        <Button variant="outline" size="sm" className="w-full mt-2 rounded-lg border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]">Ver Relatório Completo</Button>
+        <Button variant="outline" size="sm" className="w-full mt-2 rounded-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]">Ver Relatório Completo</Button>
       </div>
     </div>
   );
@@ -88,7 +88,7 @@ function AchievementsCard() {
     { icon: '💬', label: 'Primeira Avaliação', desc: 'Recebeu sua primeira avaliação.' },
   ];
   return (
-    <div className="p-4 bg-card/90 backdrop-blur-sm rounded-lg shadow-lg shadow-black/10 dark:shadow-green-500/10 space-y-3">
+    <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-4 space-y-3">
       <h3 className="text-lg font-semibold mb-2">Minhas Conquistas</h3>
       <div className="space-y-2">
         {achievements.map((a, i) => (
@@ -128,8 +128,8 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
   const publicProfileLink = userProfile.username ? `/profile/${userProfile.username}` : '/dashboard';
   return (
     <aside className="flex flex-col gap-3 max-w-[350px] w-full">
-      <Card className="w-full max-w-[350px] p-3 shadow-lg rounded-md bg-card/90 border-0">
-        <div className="w-full flex flex-col items-center bg-card rounded-md shadow-lg shadow-black/10 dark:shadow-green-500/10 overflow-hidden border border-black/5 dark:border-white/10">
+      <div className="w-full max-w-[350px]">
+        <div className="w-full flex flex-col items-center bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10">
           {/* Capa do perfil */}
           {userProfile.coverPhotoUrl ? (
             <div className="w-full h-20 bg-cover bg-center" style={{ backgroundImage: `url(${userProfile.coverPhotoUrl})` }} />
@@ -140,12 +140,12 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
           {/* Conteúdo do Card */}
           <div className="w-full flex flex-col items-center p-4 space-y-4">
             {/* Camada da Foto de Perfil */}
-            <div className="-mt-16 bg-background/50 dark:bg-muted/20 rounded-lg p-2 border border-black/5 dark:border-white/10 inline-block shadow-lg shadow-black/10 dark:shadow-teal-500/20">
-              <Avatar className="w-24 h-24 rounded-md bg-muted overflow-hidden">
+            <div className="-mt-20 bg-background/50 dark:bg-muted/20 rounded-full p-2 border border-black/5 dark:border-white/10 inline-block shadow-lg shadow-black/30">
+              <Avatar className="w-32 h-32 rounded-full bg-muted overflow-hidden">
                 {userProfile.profilePictureUrl ? (
-                  <AvatarImage src={userProfile.profilePictureUrl} alt={userProfile.name || 'User'} className="object-cover w-full h-full rounded-md" />
+                  <AvatarImage src={userProfile.profilePictureUrl} alt={userProfile.name || 'User'} className="object-cover w-full h-full rounded-full" />
                 ) : (
-                  <AvatarFallback className="text-2xl rounded-md">
+                  <AvatarFallback className="text-3xl rounded-full">
                     {userProfile.name?.substring(0, 2) || 'U'}
                   </AvatarFallback>
                 )}
@@ -163,13 +163,13 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
             {/* Botões de Ação */}
             {userProfile.username && (
                 <div className="w-full flex flex-col gap-3">
-                  <Button asChild className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md">
+                  <Button asChild className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md rounded-full">
                     <Link href={publicProfileLink}>
                       <Eye className="w-4 h-4 mr-2" />
                       Ver Perfil Público
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] hover:border-[#0e9094]">
+                  <Button asChild variant="outline" className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] hover:border-[#0e9094] rounded-full">
                     <Link href="/dashboard">
                       <Pencil className="w-4 h-4 mr-2" />
                       Editar Perfil
@@ -179,13 +179,9 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
             )}
           </div>
         </div>
-      </Card>
-      <Card className="w-full max-w-[350px] p-3 shadow-lg rounded-md bg-card/90 border-0">
-        <AchievementsCard />
-      </Card>
-      <Card className="w-full max-w-[350px] p-3 shadow-lg rounded-md bg-card/90 border-0">
-        <ActivityStats />
-      </Card>
+      </div>
+      <AchievementsCard />
+      <ActivityStats />
     </aside>
   );
 } 

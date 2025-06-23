@@ -21,15 +21,15 @@ export function MainGridLayout({
   const hasRight = !!rightSidebar;
 
   let gridCols = 'grid-cols-1';
-  if (hasLeft && hasRight) gridCols = 'lg:grid-cols-[16rem_1fr_16rem]';
-  else if (hasLeft) gridCols = 'lg:grid-cols-[16rem_1fr]';
-  else if (hasRight) gridCols = 'lg:grid-cols-[1fr_16rem]';
+  if (hasLeft && hasRight) gridCols = 'lg:grid-cols-[280px_1fr_320px]';
+  else if (hasLeft) gridCols = 'lg:grid-cols-[280px_1fr]';
+  else if (hasRight) gridCols = 'lg:grid-cols-[1fr_320px]';
 
   return (
-    <div className={`max-w-full mx-auto grid ${gridCols} gap-6 p-0 md:p-2 px-0 items-stretch min-h-[calc(100vh-4rem)]`}>
-      {hasLeft && <div className="hidden lg:block sticky top-20 h-full self-stretch">{leftSidebar}</div>}
-      <div className="min-w-0 h-full self-stretch flex flex-col">{children}</div>
-      {hasRight && <div className="hidden lg:block sticky top-20 h-full self-stretch">{rightSidebar}</div>}
+    <div className={`max-w-screen-xl mx-auto grid ${gridCols} gap-6 p-4 items-start min-h-[calc(100vh-4rem)]`}>
+      {hasLeft && <div className="order-2 lg:order-1 h-full self-start lg:sticky lg:top-20">{leftSidebar}</div>}
+      <div className="min-w-0 h-full self-stretch flex flex-col order-1 lg:order-2">{children}</div>
+      {hasRight && <div className="order-3 lg:order-3 h-full self-start lg:sticky lg:top-20">{rightSidebar}</div>}
     </div>
   );
 }
@@ -58,7 +58,7 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <main className="flex-1 overflow-x-hidden pt-16">
+      <main className="flex-1 pt-16 bg-transparent">
         <MainGridLayout
           leftSidebar={user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
           rightSidebar={<RightWidgetsColumn />}

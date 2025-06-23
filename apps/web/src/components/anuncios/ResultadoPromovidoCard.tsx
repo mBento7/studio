@@ -8,7 +8,7 @@ interface ResultadoPromovidoCardProps {
 }
 
 export const ResultadoPromovidoCard: React.FC<ResultadoPromovidoCardProps> = ({ avatar, nome, linkPerfil, destaque }) => (
-  <div className={`resultado-promovido-card border rounded p-4 flex items-center bg-white shadow ${destaque ? 'border-yellow-400' : ''}`}>
+  <div className={`resultado-promovido-card advertisement-shadow border rounded p-4 flex items-center bg-white shadow ${destaque ? 'border-yellow-400' : ''}`}>
     <img src={avatar} alt={nome} className="w-12 h-12 rounded-full mr-4" />
     <div className="flex-1">
       <a href={linkPerfil} target="_blank" rel="noopener noreferrer" className="font-bold text-blue-600">{nome}</a>

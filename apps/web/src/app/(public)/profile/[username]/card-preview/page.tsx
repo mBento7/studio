@@ -16,7 +16,6 @@ interface CardPreviewPageProps {
 }
 
 export default function CardPreviewPage({ params }: CardPreviewPageProps) {
-  const { username } = params;
   const [user, setUser] = useState<UserProfile | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [primaryColorHex, setPrimaryColorHex] = useState('008080'); // Cor padrão
@@ -25,13 +24,14 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const { username } = params;
     const profileData = getMockUserByUsername(username);
     if (profileData) {
       setUser(profileData);
     } else {
       notFound();
     }
-  }, [username]);
+  }, [params]);
 
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
@@ -109,7 +109,7 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
         }
       `}</style>
       <div className="min-h-screen bg-muted/40 dark:bg-muted/20 flex flex-col items-center justify-center p-4">
-        <div className="no-print mb-8 p-6 bg-card rounded-xl shadow-lg border border-black/5 dark:border-white/10 max-w-md w-full">
+        <div className="no-print mb-8 p-6 bg-card rounded shadow-lg border border-black/5 dark:border-white/10 max-w-md w-full">
           <h1 className="text-xl font-semibold text-center">Pré-visualização do Cartão</h1>
           <p className="text-sm text-muted-foreground text-center mt-1">Este é o seu cartão de visita para impressão.</p>
         </div>
@@ -127,7 +127,7 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
         <div className="no-print mt-8 flex items-center justify-center">
           <Button 
             onClick={handlePrint}
-            className="bg-gradient-to-r from-orange-500 to-red-600 hover:brightness-110 text-white font-semibold shadow-md rounded-lg py-3 px-6 text-base"
+            className="bg-gradient-to-r from-orange-500 to-red-600 hover:brightness-110 text-white font-semibold shadow-md rounded py-3 px-6 text-base"
           >
             Imprimir / Salvar como PDF
           </Button>

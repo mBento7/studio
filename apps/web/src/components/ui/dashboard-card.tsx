@@ -22,7 +22,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
 }) => {
   return (
     <Card
-      className={`p-6 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+      className={`p-6 bg-card rounded-xl shadow-xl shadow-black/20 border border-black/5 hover:shadow-2xl transition-shadow cursor-pointer ${className}`}
       onClick={onClick}
       tabIndex={0}
       role={onClick ? "button" : undefined}

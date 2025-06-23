@@ -87,8 +87,8 @@ function SocialCard({ item }: { item: any }) {
   };
 
   return (
-    <Card className="w-full p-2 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-xl bg-card/90 border-0">
-      <div className="w-full bg-card rounded-md shadow-xl shadow-black/10 dark:shadow-teal-500/10 overflow-hidden border border-black/5 dark:border-white/10">
+    <Card className="w-full p-5 shadow-xl shadow-black/20 rounded-lg bg-white dark:bg-zinc-800 border border-black/5 dark:border-zinc-700">
+      <div className="w-full bg-white dark:bg-zinc-800 rounded-lg shadow-xl shadow-black/10 overflow-hidden border border-black/5 dark:border-zinc-700">
         <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex-shrink-0">
           <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('https://picsum.photos/seed/${item.id}/400/200')` }} />
           <div className="relative p-3 h-full flex flex-col justify-between">
@@ -99,13 +99,13 @@ function SocialCard({ item }: { item: any }) {
               <button
                 onClick={handleBookmark}
                 className={cn(
-                  "p-2 rounded-full transition-all",
+                  "p-2 rounded-lg transition-all",
                   isBookmarked 
                     ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
                     : "text-muted-foreground hover:bg-background/50"
                 )}
               >
-                <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")} />
+                <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")}/>
               </button>
             </div>
             <div>
@@ -131,7 +131,7 @@ function SocialCard({ item }: { item: any }) {
               isLiked && "text-red-500"
             )}
           >
-            <Heart className={cn("w-4 h-4", isLiked && "fill-current")} /> {likes}
+            <Heart className={cn("w-4 h-4", isLiked && "fill-current")}/> {likes}
           </button>
           <div className="flex items-center gap-2">
             <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MessageCircle className="w-4 h-4" /> Comentar</button>
@@ -174,7 +174,7 @@ function SearchHeader({
       className="py-4 px-2 md:px-6 bg-transparent"
     >
       <form className="flex flex-col items-center justify-center gap-4 w-full" onSubmit={e => { e.preventDefault(); }}>
-        <div className="flex items-center w-full max-w-xl rounded-full bg-card border border-border/30 shadow-sm p-1 pr-1.5">
+        <div className="flex items-center w-full max-w-xl rounded-lg bg-card border border-black/5 shadow-sm p-1 pr-1.5">
           <label htmlFor="search-input" className="sr-only">Buscar</label>
           <SearchIcon className="h-5 w-5 text-muted-foreground ml-4 mr-2 flex-shrink-0" />
           <Input
@@ -183,11 +183,11 @@ function SearchHeader({
             placeholder="Busque por nome, habilidade, serviço..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="flex-grow bg-transparent border-none focus:ring-0 h-10 text-base"
+            className="flex-grow bg-transparent border-none focus:ring-0 h-10 text-base rounded-lg"
           />
           <Button
             type="submit"
-            className="h-10 px-6 rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md flex-shrink-0"
+            className="h-10 px-6 rounded-lg bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md flex-shrink-0"
             style={{ minWidth: 110 }}
           >
             Buscar
@@ -198,7 +198,7 @@ function SearchHeader({
         <div className="flex items-center justify-center gap-2">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className={cn(
-              "rounded-full px-4 h-10 text-base transition-colors border",
+              "rounded-lg px-2 h-8 text-xs transition-colors border",
               "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
               selectedCategory !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
             )}>
@@ -213,7 +213,7 @@ function SearchHeader({
           </Select>
           <Select value={selectedState} onValueChange={setSelectedState}>
             <SelectTrigger className={cn(
-              "rounded-full px-4 h-10 text-base transition-colors border",
+              "rounded-lg px-2 h-8 text-xs transition-colors border",
               "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
               selectedState !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
             )}>
@@ -228,7 +228,7 @@ function SearchHeader({
           </Select>
           <Select value={selectedCity} onValueChange={setSelectedCity}>
             <SelectTrigger className={cn(
-              "rounded-full px-4 h-10 text-base transition-colors border",
+              "rounded-lg px-2 h-8 text-xs transition-colors border",
               "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
               selectedCity !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
             )}>
@@ -245,7 +245,7 @@ function SearchHeader({
             <Button
               variant="ghost"
               onClick={clearFilters}
-              className="rounded-full h-10 px-4 bg-muted/50 hover:bg-muted font-semibold dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              className="rounded-lg h-8 px-2 text-xs bg-muted/50 hover:bg-muted font-semibold dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
               type="button"
             >
               <X className="w-4 h-4 mr-1" /> Limpar
@@ -302,10 +302,10 @@ export default function SearchShowcase() {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-black min-h-screen">
+    <div className="bg-gray-50 dark:bg-card min-h-screen">
       <BannerCarousel banners={BANNERS} />
 
-      <div className="container mx-auto px-2 sm:px-4 lg:px-6 -mt-16 relative z-20">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6 pt-8 bg-white dark:bg-card rounded-xl shadow-lg">
         <SearchHeader
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -332,7 +332,7 @@ export default function SearchShowcase() {
 
           <div className={cn(
             "grid gap-4 md:gap-6",
-            "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            "grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 auto-rows-fr"
           )}>
             <AnimatePresence>
               {filteredProfiles.map(profile => {
@@ -348,6 +348,7 @@ export default function SearchShowcase() {
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.9 }}
                           transition={{ duration: 0.3 }}
+                          className="h-full"
                         >
                             <SearchResultComponent user={profile} />
                         </motion.div>
@@ -363,15 +364,46 @@ export default function SearchShowcase() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.3 }}
+                      className="h-full"
                     >
-                      <Card>
-                          <CardContent className="p-4">
-                              <Link href={`/profile/${profile.username}`}>
-                                  <h3 className="font-bold">{profile.name}</h3>
-                                  <p className="text-sm text-muted-foreground">{profile.category}</p>
-                              </Link>
+                      <Link href={`/profile/${profile.username}`} className="block group h-full focus:outline-none focus:ring-2 focus:ring-primary rounded-xl">
+                        <Card className="relative h-full transition-transform duration-200 group-hover:scale-105 group-hover:shadow-2xl cursor-pointer border border-transparent group-hover:border-primary bg-white dark:bg-zinc-800">
+                          {/* Imagem de capa/banner */}
+                          <div className="h-24 w-full bg-gray-200 dark:bg-zinc-700 rounded-t-xl overflow-hidden">
+                            <img
+                              src={profile.coverPhotoUrl || '/avatar-default.png'}
+                              alt="Banner do perfil"
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                          <CardContent className="p-4 flex flex-col items-center">
+                            {/* Avatar */}
+                            <img
+                              src={profile.profilePictureUrl || '/avatar-default.png'}
+                              alt={profile.name}
+                              className="w-16 h-16 rounded-full -mt-8 border-4 border-white dark:border-zinc-800 shadow"
+                            />
+                            {/* Nome e profissão */}
+                            <h3 className="mt-2 font-bold text-lg text-center text-foreground">{profile.name}</h3>
+                            <p className="text-sm text-muted-foreground text-center">{profile.category}</p>
+                            {/* Localização */}
+                            {profile.location?.city && (
+                              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                                <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 0c-4 0-7 2.239-7 5v2h14v-2c0-2.761-3-5-7-5z" /></svg>
+                                {profile.location.city}{profile.location.state ? `, ${profile.location.state}` : ''}
+                              </p>
+                            )}
+                            {/* Serviço principal */}
+                            {profile.services && profile.services.length > 0 && (
+                              <div className="mt-2 text-xs text-center text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full">
+                                {profile.services[0].name}
+                              </div>
+                            )}
+                            {/* Botão Ver Perfil */}
+                            <Button className="mt-4 w-full" variant="secondary" tabIndex={-1}>Ver Perfil</Button>
                           </CardContent>
-                      </Card>
+                        </Card>
+                      </Link>
                     </motion.div>
                   );
               })}

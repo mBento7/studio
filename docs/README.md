@@ -1,27 +1,58 @@
-# Documentação do Projeto
+# Documentação WhosDo
 
-Este diretório reúne toda a documentação técnica, de design, UX, infraestrutura e processos do projeto.
+Bem-vindo à documentação do projeto WhosDo! Aqui você encontra guias, padrões, processos e referências para desenvolvimento, design, operação e evolução do sistema.
+
+## Índice Geral
+
+- **Visual, Design e UX**
+  - [Guia Visual Unificado](./guia-visual/guia-visual-unificado.md)
+  - [Padronização de Botões](./guia-visual/padronizacao-botoes.md)
+  - [Modelos de Documentação](./guia-visual/README-modelo.md)
+  - [Modelo de Automação](./guia-visual/README-modelo-automacao.md)
+  - [Análise UX Frontend](./guia-visual/frontend-ux-visual-analysis.md)
+- **Produto e Domínio**
+  - [Apresentação do Produto](./apresentacao/whosdo-apresentacao.md)
+  - [Tipos de Anúncios](./anuncios/tipos-de-anuncios.md)
+  - [Planejamento de Layout de Perfil](./planejamento/profile-layout-planning.md)
+  - [Blueprint do Projeto](./planejamento/blueprint.md)
+- **Arquitetura e Estrutura**
+  - [Guia de Estrutura e Recuperação do Projeto](./planejamento/project-structure-and-recovery-guide.md)
+  - [Plano de Refatoração Arquitetural](./planejamento/architectural-refactoring-plan.md)
+- **Infraestrutura e Deploy**
+  - [Guia de Infraestrutura e Operações](./infraestrutura/infrastructure-and-operations-guide.md)
+  - [Estratégia de Hospedagem e Deploy](./infraestrutura/hosting-and-deployment-strategy.md)
+- **Processos e Melhoria Contínua**
+  - [Roteiro de Reestruturação](./planejamento/roteiro-reestruturacao.md)
+- **Pagamentos e Créditos**
+  - [Documentação de Pagamentos e Créditos](./pagamentos-e-creditos/README.md)
+
+---
+
+## Como navegar
+- Use o índice acima para encontrar rapidamente o documento desejado.
+- Consulte o [Guia Visual Unificado](./guia-visual/guia-visual-unificado.md) para qualquer dúvida sobre padrões visuais, tokens, temas ou componentes de UI.
+- Para dúvidas sobre processos, arquitetura ou domínio, consulte a seção correspondente.
+- Sempre que atualizar um padrão, processo ou estrutura, lembre-se de atualizar a documentação!
+
+---
+
+> Dúvidas, sugestões ou contribuições? Consulte o arquivo CONTRIBUTING.md (se disponível) ou entre em contato com o time responsável.
 
 ## Objetivo
 - Centralizar o conhecimento do projeto para facilitar onboarding, manutenção e evolução.
 - Garantir que cada área (visual, pagamentos, infraestrutura, UX, etc) tenha documentação clara e atualizada.
 
 ## Estrutura dos Arquivos
-- `edicao-visual/`: Edição de aparência, temas, componentes e layouts.
+- `guia-visual/`: Guias visuais, padronização de componentes, modelos e análise UX.
 - `pagamentos-e-creditos/`: Sistema de créditos, monetização e pagamentos.
-- `padronizacao-botoes.md`: Guia visual e técnico para botões.
-- `blueprint.md`: Visão geral, objetivos e arquitetura.
-- `profile-layout-planning.md`: Estratégias e exemplos de layouts de perfil.
-- `frontend-ux-visual-analysis.md`: Avaliação e recomendações de UX/UI.
-- `project-structure-and-recovery-guide.md`: Organização e recuperação do projeto.
-- `infrastructure-and-operations-guide.md`: Deploy, monitoramento e operações.
-- `architectural-refactoring-plan.md`: Estratégia de refatoração.
-- `roteiro-reestruturacao.md`: Passo a passo para mudanças estruturais.
-- `hosting-and-deployment-strategy.md`: Estratégias de hospedagem e publicação.
+- `anuncios/`: Tipos e modelos de anúncios.
+- `planejamento/`: Planejamento, estrutura, roteiros e blueprints do projeto.
+- `infraestrutura/`: Deploy, monitoramento e operações.
+- `apresentacao/`: Apresentação institucional do produto.
 
 ## Como usar
 - Consulte o README de cada subpasta para entender o objetivo e estrutura de cada área.
-- Sempre que criar uma nova área, utilize o modelo `README-modelo.md`.
+- Sempre que criar uma nova área, utilize o modelo `README-modelo.md` em `guia-visual/`.
 - Atualize a documentação sempre que houver mudanças relevantes no código.
 
 ## Boas práticas
@@ -30,18 +61,21 @@ Este diretório reúne toda a documentação técnica, de design, UX, infraestru
 - Incentive o time a documentar mudanças imediatamente após alterações no código.
 
 ## Índice de Documentação
-- [Edição Visual](./edicao-visual/): Como editar a aparência das páginas, componentes e temas do sistema.
-- [Pagamentos e Créditos](./pagamentos-e-creditos/): Planejamento, regras e integrações do sistema de créditos e monetização.
-- [Padronização de Botões](./padronizacao-botoes.md): Guia visual e técnico para botões.
-- [Blueprint do Projeto](./blueprint.md): Visão geral, objetivos e arquitetura.
-- [Planejamento de Layouts de Perfil](./profile-layout-planning.md): Estratégias e exemplos de layouts de perfil.
-- [Frontend: Análise Visual e UX](./frontend-ux-visual-analysis.md): Avaliação e recomendações de UX/UI.
-- [Guia de Estrutura e Recuperação](./project-structure-and-recovery-guide.md): Como o projeto está organizado e como recuperar.
-- [Infraestrutura e Operações](./infrastructure-and-operations-guide.md): Deploy, monitoramento e boas práticas de operação.
-- [Plano de Refatoração Arquitetural](./architectural-refactoring-plan.md): Estratégia para refatoração do código.
-- [Roteiro de Reestruturação](./roteiro-reestruturacao.md): Passo a passo para mudanças estruturais.
-- [Guia de Hosting e Deploy](./hosting-and-deployment-strategy.md): Estratégias de hospedagem e publicação.
-- [Tipos e Modelos de Anúncios](./tipos-de-anuncios.md): Detalhamento dos formatos de anúncio, incluindo novos tipos inspirados em redes sociais.
+- [Guia Visual Unificado](./guia-visual/guia-visual-unificado.md): Diretrizes visuais, tokens, temas, componentes e boas práticas de UI/UX.
+- [Padronização de Botões](./guia-visual/padronizacao-botoes.md): Guia visual e técnico para botões.
+- [Modelos de Documentação](./guia-visual/README-modelo.md): Estrutura sugerida para novos documentos.
+- [Modelo de Automação](./guia-visual/README-modelo-automacao.md): Exemplo de automação de documentação.
+- [Análise UX Frontend](./guia-visual/frontend-ux-visual-analysis.md): Avaliação e recomendações de UX/UI.
+- [Apresentação do Produto](./apresentacao/whosdo-apresentacao.md): Visão institucional do projeto.
+- [Tipos de Anúncios](./anuncios/tipos-de-anuncios.md): Detalhamento dos formatos de anúncio.
+- [Planejamento de Layouts de Perfil](./planejamento/profile-layout-planning.md): Estratégias e exemplos de layouts de perfil.
+- [Blueprint do Projeto](./planejamento/blueprint.md): Visão geral, objetivos e arquitetura.
+- [Guia de Estrutura e Recuperação](./planejamento/project-structure-and-recovery-guide.md): Organização e recuperação do projeto.
+- [Plano de Refatoração Arquitetural](./planejamento/architectural-refactoring-plan.md): Estratégia para refatoração do código.
+- [Roteiro de Reestruturação](./planejamento/roteiro-reestruturacao.md): Passo a passo para mudanças estruturais.
+- [Guia de Infraestrutura e Operações](./infraestrutura/infrastructure-and-operations-guide.md): Deploy, monitoramento e boas práticas de operação.
+- [Estratégia de Hospedagem e Deploy](./infraestrutura/hosting-and-deployment-strategy.md): Estratégias de hospedagem e publicação.
+- [Documentação de Pagamentos e Créditos](./pagamentos-e-creditos/README.md): Planejamento, regras e integrações do sistema de créditos e monetização.
 
 ## Como contribuir
 - Sempre que alterar algo fundamental (visual, regras de negócio, infraestrutura), atualize a documentação correspondente.
@@ -77,4 +111,4 @@ Para garantir a evolução contínua e organizada do projeto, mantenha sempre um
 
 > **Dica:** Use o `NEXT_STEPS.md` como referência viva e central de progresso. Atualize-o sempre que houver mudanças importantes, e registre um resumo das revisões nesta seção do README de documentação.
 
-> **Importante:** Certifique-se de que todas as subpastas de documentação possuem um README explicativo, seguindo o modelo em `README-modelo.md`. Sempre que possível, inclua exemplos práticos e reais para facilitar o entendimento. 
+> **Importante:** Certifique-se de que todas as subpastas de documentação possuem um README explicativo, seguindo o modelo em `guia-visual/README-modelo.md`. Sempre que possível, inclua exemplos práticos e reais para facilitar o entendimento. 
