@@ -78,4 +78,4 @@ Este documento detalha os próximos passos e o roadmap para o desenvolvimento e 
 ---
 
 > **Dica:** Use os documentos existentes em `/docs` como referência viva. Atualize-os conforme as decisões de arquitetura e infraestrutura evoluírem.  
-> **Importante:** Sempre versionar migrations e políticas de segurança para garantir rastreabilidade e facilitar auditorias. 
+> **Importante:** Sempre versionar migrations e políticas de segurança para garantir rastreabilidade e facilitar auditorias. Atualização automática: documentação revisada em  
