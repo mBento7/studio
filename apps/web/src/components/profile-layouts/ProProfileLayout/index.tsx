@@ -36,77 +36,10 @@ import {
   Users,
   TrendingUp,
   CheckCircle,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
-
-interface UserProfile {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-  phone?: string;
-  bio: string;
-  category: string;
-  profilePictureUrl?: string;
-  coverPhotoUrl?: string;
-  website?: string;
-  whatsappNumber?: string;
-  location?: {
-    city: string;
-    state?: string;
-    country: string;
-    address?: string;
-    googleMapsUrl?: string;
-  };
-  skills?: string[];
-  experience?: Array<{
-    title: string;
-    company: string;
-    years: string;
-  }>;
-  education?: Array<{
-    degree: string;
-    institution: string;
-    years: string;
-  }>;
-  portfolio?: PortfolioItem[];
-  services?: Array<{
-    name: string;
-    description: string;
-    price?: string;
-  }>;
-  socialLinks?: Array<{
-    id: string;
-    platform: string;
-    url: string;
-  }>;
-  youtubeVideoUrl?: string;
-  youtubeVideoTitle?: string;
-  youtubeVideoDescription?: string;
-  stories?: Array<{
-    imageUrl: string;
-    title: string;
-  }>;
-  premiumBanner?: {
-    imageUrl: string;
-    title: string;
-    description: string;
-    ctaText?: string;
-    ctaLink?: string;
-  };
-  coupons?: Array<{
-    code: string;
-    description: string;
-  }>;
-  plan?: string;
-}
-
-interface PortfolioItem {
-  id: string;
-  imageUrl: string;
-  caption?: string;
-  description?: string;
-}
+import type { ProfileLayoutProps, UserProfile } from "@/lib/types";
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const platformIcons: Record<string, any> = {
   youtube: Youtube,
@@ -119,58 +52,18 @@ const platformIcons: Record<string, any> = {
   website: Globe,
 };
 
-interface PremiumProLayoutProps {
-  user?: UserProfile;
-  isCurrentUserProfile?: boolean;
-  qrCodeUrl?: string | null;
-  onPortfolioItemClick?: (item: PortfolioItem) => void;
-}
-
-const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
-  user = {
-    id: "1",
-    name: "Dr. Maria Silva",
-    username: "mariasilva",
-    email: "maria@exemplo.com",
-    phone: "+55 11 99999-9999",
-    bio: "Especialista em Marketing Digital com mais de 10 anos de experiência. Ajudo empresas a crescerem online através de estratégias inovadoras e resultados comprovados.",
-    category: "Consultora de Marketing Digital",
-    profilePictureUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
-    coverPhotoUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop",
-    website: "https://mariasilva.com",
-    whatsappNumber: "5511999999999",
-    location: {
-      city: "São Paulo",
-      state: "SP",
-      country: "Brasil",
-      address: "Av. Paulista, 1000"
-    },
-    skills: ["Marketing Digital", "SEO", "Google Ads", "Analytics", "Estratégia", "Consultoria"],
-    experience: [
-      { title: "Diretora de Marketing", company: "TechCorp", years: "2020-2024" },
-      { title: "Gerente de Marketing", company: "StartupXYZ", years: "2018-2020" }
-    ],
-    education: [
-      { degree: "MBA em Marketing", institution: "FGV", years: "2018" },
-      { degree: "Bacharelado em Administração", institution: "USP", years: "2016" }
-    ],
-    portfolio: [
-      { id: "1", imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=300&fit=crop", caption: "Projeto A" },
-      { id: "2", imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=300&fit=crop", caption: "Projeto B" }
-    ],
-    services: [
-      { name: "Consultoria em Marketing Digital", description: "Análise completa e estratégia personalizada", price: "R$ 2.500" },
-      { name: "Gestão de Campanhas", description: "Criação e otimização de campanhas publicitárias", price: "R$ 1.800" }
-    ],
-    socialLinks: [
-      { id: "1", platform: "linkedin", url: "https://linkedin.com/in/mariasilva" },
-      { id: "2", platform: "instagram", url: "https://instagram.com/mariasilva" }
-    ],
-    plan: "premium"
-  },
-  isCurrentUserProfile = false,
-  qrCodeUrl = null,
-  onPortfolioItemClick = () => {}
+const ProProfileLayout: React.FC<ProfileLayoutProps & {
+  primaryColor?: string;
+  secondaryColor?: string;
+  font?: string;
+}> = ({
+  user,
+  isCurrentUserProfile,
+  qrCodeUrl,
+  onPortfolioItemClick,
+  primaryColor,
+  secondaryColor,
+  font,
 }) => {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -242,111 +135,93 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
     </div>
   );
 
+  // Adicionar tipagem temporária para user.faq como any
+  const faq = (user as any).faq;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900">
+    <div
+      className="min-h-screen bg-background text-foreground"
+      style={{
+        background: secondaryColor || undefined,
+        color: primaryColor || undefined,
+      }}
+    >
       {/* Hero Section */}
       <div className="relative">
-        {/* Cover Image */}
-        {user.coverPhotoUrl && (
-          <div className="h-80 relative overflow-hidden">
-            <img 
-              src={user.coverPhotoUrl} 
-              alt="Cover" 
+        {/* Imagem de capa */}
+        {user.cover_photo_url && (
+          <div className="h-80 w-full relative">
+            <img
+              src={user.cover_photo_url}
+              alt="Capa"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-transparent" />
           </div>
         )}
-        
-        {/* Profile Header */}
-        <div className="relative">
-          <div className="container mx-auto px-6 py-8">
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-              {/* Profile Picture */}
-              <div className="relative -mt-20 lg:-mt-16">
-                <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-white">
-                  <img
-                    src={user.profilePictureUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'}
-                    alt={user.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-white" />
-                </div>
+
+        {/* Card flutuante */}
+        <div className="absolute left-1/2 top-56 transform -translate-x-1/2 w-full max-w-5xl px-4 z-10">
+          <div className="bg-white/90 dark:bg-slate-900/90 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center md:items-end gap-8 p-8 relative">
+            {/* Badge PREMIUM */}
+            {user.plan === 'premium' && (
+              <span className="absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-bold px-4 py-1 rounded-full shadow-lg text-sm flex items-center gap-2 z-20">
+                <Star className="w-4 h-4" /> PREMIUM
+              </span>
+            )}
+            {/* Foto de perfil circular */}
+            <div className="relative -mt-24 md:-mt-32">
+              <img
+                src={user.profile_picture_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'}
+                alt={user.name}
+                className="w-40 h-40 rounded-full border-4 border-primary shadow-lg object-cover"
+              />
+              <span className="absolute bottom-2 right-2 bg-green-500 rounded-full p-1 border-2 border-white">
+                <CheckCircle className="w-5 h-5 text-white" />
+              </span>
+            </div>
+            {/* Infos */}
+            <div className="flex-1 text-center md:text-left min-w-0">
+              <h1
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-2"
+                style={{ fontFamily: font && font !== 'default' ? font : undefined }}
+              >
+                {user.name}
+              </h1>
+              <p className="text-lg text-primary font-semibold">{user.category}</p>
+              <p className="text-muted-foreground mt-2 break-words">{user.bio}</p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
+                {/* Social links */}
+                {socialLinks.map(link => {
+                  const Icon = platformIcons[link.platform] || Globe;
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-primary/10 hover:bg-primary/20 rounded-full p-3 transition focus:outline-none focus:ring-2 focus:ring-primary"
+                      aria-label={`Acessar ${link.platform}`}
+                    >
+                      <Icon className="w-6 h-6 text-primary" />
+                    </a>
+                  );
+                })}
               </div>
-
-              {/* Profile Info */}
-              <div className="flex-1 lg:mt-4">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                  <div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-                      {user.name}
-                    </h1>
-                    <p className="text-xl text-primary font-semibold mb-3">
-                      {user.category}
-                    </p>
-                    <p className="text-muted-foreground leading-relaxed max-w-2xl mb-4">
-                      {user.bio}
-                    </p>
-                    
-                    {/* Contact Info */}
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                      {user.email && (
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          <span>{user.email}</span>
-                        </div>
-                      )}
-                      {user.phone && (
-                        <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          <span>{user.phone}</span>
-                        </div>
-                      )}
-                      {location.city && (
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          <span>{location.city}, {location.country}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button size="lg" className="px-8">
-                      <MessageSquare className="w-5 h-5 mr-2" />
-                      Entrar em Contato
-                    </Button>
-                    <Button variant="outline" size="lg">
-                      <Download className="w-5 h-5 mr-2" />
-                      Download QR
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Social Links */}
-                {socialLinks.length > 0 && (
-                  <div className="flex gap-3 mt-6">
-                    {socialLinks.map((link) => {
-                      const Icon = platformIcons[link.platform] || Globe;
-                      return (
-                        <Button
-                          key={link.id}
-                          variant="outline"
-                          size="sm"
-                          className="rounded-full w-10 h-10 p-0"
-                          asChild
-                        >
-                          <a href={link.url} target="_blank" rel="noopener noreferrer">
-                            <Icon className="w-4 h-4" />
-                          </a>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                )}
+              <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center md:justify-start flex-wrap">
+                <Button size="lg" className="px-8" aria-label="Entrar em Contato">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  Entrar em Contato
+                </Button>
+                <Button variant="outline" size="lg" aria-label="Download QR">
+                  <Download className="w-5 h-5 mr-2" />
+                  Download QR
+                </Button>
+                {/* Botão Compartilhar */}
+                <Button variant="ghost" size="lg" className="border border-primary text-primary hover:bg-primary/10" aria-label="Compartilhar Perfil" onClick={() => navigator.share ? navigator.share({ title: user.name, url: window.location.href }) : navigator.clipboard.writeText(window.location.href)}>
+                  <LinkIcon className="w-5 h-5 mr-2" />
+                  Compartilhar
+                </Button>
               </div>
             </div>
           </div>
@@ -354,33 +229,32 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-8">
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-          <StatCard 
-            icon={Users} 
-            label="Clientes Atendidos" 
-            value="150+" 
-            trend="+12% este mês"
-          />
-          <StatCard 
-            icon={Star} 
-            label="Avaliação Média" 
-            value="4.9" 
-          />
-          <StatCard 
-            icon={Award} 
-            label="Projetos Concluídos" 
-            value="85" 
-          />
-          <StatCard 
-            icon={Calendar} 
-            label="Anos de Experiência" 
-            value="10+" 
-          />
-        </div>
+      <div className="container mx-auto px-6 py-8 pt-48">
+        {/* Banner Premium */}
+        {user.premiumBanner && (
+          <Card className="mb-8 border-0 shadow-xl bg-gradient-to-r from-yellow-400 via-primary to-yellow-500 text-white relative overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center gap-6 p-8">
+              <img src={user.premiumBanner.imageUrl} alt={user.premiumBanner.title} className="w-32 h-32 rounded-xl object-cover shadow-lg border-4 border-white" />
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                  <Star className="w-6 h-6 text-yellow-300" /> {user.premiumBanner.title}
+                </h2>
+                <p className="mb-4 text-lg">{user.premiumBanner.description}</p>
+                {user.premiumBanner.ctaText && user.premiumBanner.ctaLink && (
+                  <a href={user.premiumBanner.ctaLink} className="inline-block bg-white text-primary font-semibold px-6 py-2 rounded-full shadow hover:bg-primary hover:text-white transition focus:outline-none focus:ring-2 focus:ring-primary">
+                    {user.premiumBanner.ctaText}
+                  </a>
+                )}
+              </div>
+            </div>
+            {/* Selo PREMIUM flutuante */}
+            <span className="absolute top-4 right-4 bg-yellow-500 text-white font-bold px-4 py-1 rounded-full shadow-lg text-sm flex items-center gap-2 z-20">
+              <Star className="w-4 h-4" /> PREMIUM
+            </span>
+          </Card>
+        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Skills Section */}
@@ -395,7 +269,7 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
                 <div className="flex flex-wrap gap-3">
                   {skills.map((skill, idx) => (
                     <Badge 
-                      key={idx} 
+                      key={skill + idx} 
                       variant="secondary" 
                       className="px-4 py-2 text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
                     >
@@ -415,9 +289,9 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   {services.map((service, idx) => (
-                    <ServiceCard key={idx} service={service} />
+                    <ServiceCard key={service + idx} service={service} />
                   ))}
                 </div>
               </CardContent>
@@ -433,12 +307,12 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {portfolio.map((item, idx) => (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
+                    {portfolio.slice(0, 6).map((item, idx) => (
                       <div 
-                        key={idx} 
+                        key={item.id} 
                         className="aspect-square rounded-xl overflow-hidden border shadow-sm cursor-pointer group relative hover:shadow-lg transition-all duration-300"
-                        onClick={() => onPortfolioItemClick(item)}
+                        onClick={() => onPortfolioItemClick && onPortfolioItemClick(item)}
                       >
                         <img 
                           src={item.imageUrl} 
@@ -469,7 +343,7 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
               <CardContent className="space-y-4">
                 {experience.length > 0 ? (
                   experience.map((exp, idx) => (
-                    <div key={idx} className="border-l-2 border-primary/20 pl-4">
+                    <div key={exp.id} className="border-l-2 border-primary/20 pl-4">
                       <h4 className="font-semibold text-foreground">{exp.title}</h4>
                       <p className="text-sm text-muted-foreground">{exp.company}</p>
                       <p className="text-xs text-muted-foreground">{exp.years}</p>
@@ -492,7 +366,7 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
               <CardContent className="space-y-4">
                 {education.length > 0 ? (
                   education.map((edu, idx) => (
-                    <div key={idx} className="border-l-2 border-primary/20 pl-4">
+                    <div key={edu.id} className="border-l-2 border-primary/20 pl-4">
                       <h4 className="font-semibold text-foreground">{edu.degree}</h4>
                       <p className="text-sm text-muted-foreground">{edu.institution}</p>
                       <p className="text-xs text-muted-foreground">{edu.years}</p>
@@ -541,6 +415,28 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
                 </div>
               </CardContent>
             </Card>
+
+            {/* FAQ */}
+            {faq && Array.isArray(faq) && faq.length > 0 && (
+              <Card className="mb-8 border-0 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-2xl font-semibold">
+                    <MessageSquare className="w-6 h-6 text-primary" />
+                    Perguntas Frequentes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {faq.map((item, idx) => (
+                      <div key={item.id} className="border-b pb-4">
+                        <h4 className="font-semibold text-lg mb-1">{item.question}</h4>
+                        <p className="text-muted-foreground">{item.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
@@ -548,12 +444,12 @@ const PremiumProLayout: React.FC<PremiumProLayoutProps> = ({
   );
 };
 
-export default PremiumProLayout;
+export default ProProfileLayout;
 
-export const config = {
-  id: 'premium-pro',
-  name: 'Premium Pro',
-  description: 'Layout profissional para um perfil detalhado e completo.',
-  imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&h=200&fit=crop',
+export const segmentConfig = {
+  id: 'pro-profile',
+  name: 'Pro',
+  description: 'Layout avançado para profissionais premium.',
+  imageUrl: 'https://picsum.photos/seed/layout-pro/300/200',
   plan: 'premium',
 };

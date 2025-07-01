@@ -367,41 +367,22 @@ export default function SearchShowcase() {
                       className="h-full"
                     >
                       <Link href={`/profile/${profile.username}`} className="block group h-full focus:outline-none focus:ring-2 focus:ring-primary rounded-xl">
-                        <Card className="relative h-full transition-transform duration-200 group-hover:scale-105 group-hover:shadow-2xl cursor-pointer border border-transparent group-hover:border-primary bg-white dark:bg-zinc-800">
-                          {/* Imagem de capa/banner */}
-                          <div className="h-24 w-full bg-gray-200 dark:bg-zinc-700 rounded-t-xl overflow-hidden">
-                            <img
-                              src={profile.coverPhotoUrl || '/avatar-default.png'}
-                              alt="Banner do perfil"
-                              className="object-cover w-full h-full"
-                            />
+                        <Card className="flex flex-col items-center justify-center h-full w-full p-5 rounded-xl bg-white dark:bg-slate-900 shadow border border-slate-200 dark:border-slate-800 transition-all duration-200 hover:shadow-lg hover:border-primary/60 cursor-pointer">
+                          <img
+                            src={profile.profile_picture_url && profile.profile_picture_url.trim() !== '' ? profile.profile_picture_url : '/avatar-default.png'}
+                            alt={profile.name}
+                            className="w-16 h-16 rounded-full mb-2 border-2 border-white dark:border-zinc-800 shadow bg-white"
+                          />
+                          <h3 className="text-base font-semibold text-foreground text-center mt-1">{profile.name || 'Usuário'}</h3>
+                          <p className="text-xs text-primary font-medium text-center mb-1">{profile.category}</p>
+                          {profile.bio && (
+                            <p className="text-xs text-muted-foreground text-center mb-2 line-clamp-2">{profile.bio}</p>
+                          )}
+                          <div className="flex flex-wrap gap-1 justify-center mt-1">
+                            {(profile.skills || []).slice(0, 2).map(skill => (
+                              <span key={skill} className="border border-primary/20 text-primary/80 px-2 py-0.5 rounded text-xs bg-primary/5">{skill}</span>
+                            ))}
                           </div>
-                          <CardContent className="p-4 flex flex-col items-center">
-                            {/* Avatar */}
-                            <img
-                              src={profile.profilePictureUrl || '/avatar-default.png'}
-                              alt={profile.name}
-                              className="w-16 h-16 rounded-full -mt-8 border-4 border-white dark:border-zinc-800 shadow"
-                            />
-                            {/* Nome e profissão */}
-                            <h3 className="mt-2 font-bold text-lg text-center text-foreground">{profile.name}</h3>
-                            <p className="text-sm text-muted-foreground text-center">{profile.category}</p>
-                            {/* Localização */}
-                            {profile.location?.city && (
-                              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                                <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 0c-4 0-7 2.239-7 5v2h14v-2c0-2.761-3-5-7-5z" /></svg>
-                                {profile.location.city}{profile.location.state ? `, ${profile.location.state}` : ''}
-                              </p>
-                            )}
-                            {/* Serviço principal */}
-                            {profile.services && profile.services.length > 0 && (
-                              <div className="mt-2 text-xs text-center text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full">
-                                {profile.services[0].name}
-                              </div>
-                            )}
-                            {/* Botão Ver Perfil */}
-                            <Button className="mt-4 w-full" variant="secondary" tabIndex={-1}>Ver Perfil</Button>
-                          </CardContent>
                         </Card>
                       </Link>
                     </motion.div>

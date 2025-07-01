@@ -29,13 +29,12 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   const [image, setImage] = useState<string | null>(null);
   const [showPreco, setShowPreco] = useState(false);
   const [showLocalizacao, setShowLocalizacao] = useState(false);
-  const [showUrgente, setShowUrgente] = useState(false);
-  const [showWhatsapp, setShowWhatsapp] = useState(false);
   const [preco, setPreco] = useState("");
   const [localizacao, setLocalizacao] = useState("");
   const [tipoPost, setTipoPost] = useState<'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto'>('oferta_servico');
-  const [urgente, setUrgente] = useState(false);
-  const [whatsappUrl, setWhatsappUrl] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+  const [showTagInput, setShowTagInput] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -84,17 +83,6 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
       return;
     }
 
-    let finalWhatsappUrl = "";
-    if (showWhatsapp && whatsappUrl.trim()) {
-      const cleanedNumber = whatsappUrl.replace(/[\s-()]/g, '');
-      if (/^\+?\d{10,}$/.test(cleanedNumber)) {
-        const digitsOnly = cleanedNumber.replace('+', '');
-        finalWhatsappUrl = `https://wa.me/${digitsOnly}`;
-      } else {
-        finalWhatsappUrl = whatsappUrl;
-      }
-    }
-
     if (onPost) {
       onPost({
         texto: postText,
@@ -102,8 +90,6 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         preco: showPreco ? preco : undefined,
         localizacao: showLocalizacao ? localizacao : undefined,
         tipo: tipoPost,
-        urgente: urgente,
-        whatsappUrl: finalWhatsappUrl || undefined,
       });
     }
     
@@ -112,12 +98,8 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
     setPreco("");
     setLocalizacao("");
     setTipoPost('oferta_servico');
-    setUrgente(false);
-    setWhatsappUrl("");
-    setShowPreco(false);
-    setShowLocalizacao(false);
-    setShowUrgente(false);
-    setShowWhatsapp(false);
+    setTags([]);
+    setTagInput("");
     
     toast({
       title: "Post publicado!",
@@ -130,16 +112,14 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
     switch (option) {
       case 'preco': setShowPreco(!showPreco); break;
       case 'localizacao': setShowLocalizacao(!showLocalizacao); break;
-      case 'whatsapp': setShowWhatsapp(!showWhatsapp); break;
-      case 'urgente': setUrgente(!urgente); break;
+      case 'tag': setShowTagInput(!showTagInput); break;
     }
   };
 
   const activeOptions = [
     showPreco && 'preco',
-    showLocalizacao && 'localizacao', 
-    showWhatsapp && 'whatsapp',
-    urgente && 'urgente'
+    showLocalizacao && 'localizacao',
+    showTagInput && 'tag',
   ].filter(Boolean);
 
   return (
@@ -170,6 +150,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           </div>
         </div>
 
+        {/* Tipo de postagem */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Tag className="w-4 h-4 text-primary" />
@@ -246,26 +227,11 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowLocalizacao(false)}><X className="w-4 h-4" /></Button>
                 </motion.div>
               )}
-              
-              {showWhatsapp && (
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-green-600" />
-                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="WhatsApp (número ou link)" value={whatsappUrl} onChange={e => setWhatsappUrl(e.target.value)} />
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowWhatsapp(false)}><X className="w-4 h-4" /></Button>
-                </motion.div>
-              )}
-              
-              {urgente && (
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3 text-orange-600">
-                  <Zap className="w-5 h-5" />
-                  <span className="text-sm font-medium flex-1">Marcado como urgente</span>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setUrgente(false)}><X className="w-4 h-4" /></Button>
-                </motion.div>
-              )}
             </motion.div>
           )}
         </AnimatePresence>
 
+        {/* Botões de opções e input/tag na parte inferior */}
         <div className="flex items-center justify-between pt-4 border-t border-border/50">
           <div className="flex items-center gap-0.5">
             <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-muted-foreground hover:text-primary"><Image className="w-5 h-5" /></Button>
@@ -282,12 +248,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
 
             <div className="h-6 w-px bg-border/50 mx-2"></div>
 
-            {[
-              { key: 'preco', icon: DollarSign, active: showPreco },
-              { key: 'localizacao', icon: MapPin, active: showLocalizacao },
-              { key: 'whatsapp', icon: Phone, active: showWhatsapp },
-              { key: 'urgente', icon: Zap, active: urgente },
-            ].map(({ key, icon: Icon, active }) => (
+            {[{ key: 'preco', icon: DollarSign, active: showPreco }, { key: 'localizacao', icon: MapPin, active: showLocalizacao }, { key: 'tag', icon: Tag, active: showTagInput }].map(({ key, icon: Icon, active }) => (
               <Button
                 key={key}
                 variant="ghost"
@@ -299,6 +260,40 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               </Button>
             ))}
           </div>
+
+          {/* Input de tag e tags visuais */}
+          {(tags.length > 0 || showTagInput) && (
+            <div className="flex flex-col gap-2 mb-2 w-full">
+              {tags.length > 0 && (
+                <div className="flex gap-2 flex-wrap">
+                  {tags.map((tag, idx) => (
+                    <span key={idx} className="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/50 text-xs rounded px-2 py-0.5 flex items-center gap-1">
+                      #{tag}
+                      <button type="button" className="ml-1 text-xs" onClick={() => setTags(tags.filter((_, i) => i !== idx))}>×</button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              {showTagInput && (
+                <input
+                  type="text"
+                  className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="Digite uma tag e pressione Enter"
+                  value={tagInput}
+                  onChange={e => setTagInput(e.target.value.replace(/[^\wÀ-ÿ0-9 ]/gi, ''))}
+                  onKeyDown={e => {
+                    if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
+                      e.preventDefault();
+                      if (!tags.includes(tagInput.trim())) {
+                        setTags([...tags, tagInput.trim()]);
+                      }
+                      setTagInput("");
+                    }
+                  }}
+                />
+              )}
+            </div>
+          )}
 
           <Button 
             onClick={handlePost} 

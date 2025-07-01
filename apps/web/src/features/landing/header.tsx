@@ -29,12 +29,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { IoHomeOutline, IoSearchOutline, IoAddCircleOutline, IoCameraOutline, IoShareSocialOutline, IoHeartOutline, IoNotificationsOutline, IoSunnyOutline, IoMoonOutline, IoLogInOutline, IoDiamondOutline, IoVideocam, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 
 export function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
   const { user, loading, signOutUser, currentUserProfile } = useAuth();
   const pathname = usePathname();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (isTransparent) {
@@ -50,6 +52,18 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
     const initTheme = stored || system;
     setThemeMode(initTheme);
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const fetchUnread = async () => {
+      // Busca conversas onde há mensagens não lidas para o usuário logado
+      // Supondo que a tabela messages tenha um campo 'read_by' (array de user_id)
+      // Se não existir, só conta mensagens onde sender_id != user.id
+      const { data, error } = await fetch(`/api/unread-messages?userId=${user.id}`).then(r => r.json());
+      if (!error && data) setUnreadCount(data.count);
+    };
+    fetchUnread();
+  }, [user?.id]);
 
   const setThemeMode = (newTheme: "light" | "dark") => {
     setTheme(newTheme);
@@ -70,102 +84,103 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
   const profileLink = currentUserProfile ? `/profile/${currentUserProfile.username}` : "/dashboard";
 
   const headerClasses = cn(
-    "fixed top-0 z-50 w-full transition-all duration-300",
+    "fixed top-0 z-50 w-full transition-all duration-500",
     {
-      "border-b border-border/40 bg-background/80 backdrop-blur-md": !isTransparent || isScrolled,
-      "bg-transparent border-none": isTransparent && !isScrolled,
+      "border-b border-border/40 bg-background/80 backdrop-blur-lg shadow-lg": !isTransparent || isScrolled,
+      "bg-transparent border-none backdrop-blur-lg": isTransparent && !isScrolled,
     }
   );
 
   const navLinks = [
-    { href: "/dashboard/feed", label: "Home", icon: Home },
-    { href: "/search", label: "Buscar", icon: Search },
-    { href: "/create", label: "Criar", icon: PlusSquare },
+    { href: "/dashboard/feed", label: "Home", icon: IoHomeOutline },
+    { href: "/search", label: "Buscar", icon: IoSearchOutline },
+    { href: "/create", label: "Criar", icon: IoAddCircleOutline },
   ];
 
   return (
-    <header className={headerClasses}>
+    <header id="whosdo-header" className={headerClasses}>
       <div className="relative max-w-screen-xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-4">
-          <Link href="/home" aria-label="Página Inicial" className="flex items-center gap-2 font-bold text-green-600 hover:scale-105 transition-transform">
+          <Link href="/home" aria-label="Página Inicial" className="flex items-center gap-2 font-bold text-green-600 hover:scale-105 transition-transform duration-300">
             <Logo className="h-12 w-auto" />
           </Link>
         </div>
 
-        <nav className="flex-1 flex justify-center items-center gap-2 sm:gap-4">
+        <nav className="flex-1 flex justify-center items-center gap-4">
           {navLinks.map(({ href, label, icon: Icon }) => {
             const isActive = pathname === href;
             return (
-              <Button key={href} asChild variant={isActive ? "default" : "outline"} className={cn(
-                "rounded-full transition-all duration-300 ease-in-out",
-                isActive
-                  ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md"
-                  : "border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094]"
-              )}>
-                <Link href={href}>
-                  <Icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{label}</span>
+              <Button
+                key={href}
+                asChild
+                variant="ghost"
+                className="flex items-center gap-2 h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 font-semibold text-xs text-black dark:text-white uppercase tracking-wide"
+              >
+                <Link href={href} className="flex items-center gap-2">
+                  <Icon className="h-5 w-5" />
+                  <span>{label}</span>
+                  <span className="sr-only">{label}</span>
                 </Link>
               </Button>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <Button
             asChild
-            variant={pathname === "/planos" ? "premium" : "premium"}
-            className={cn(
-              "rounded-full font-semibold px-4 py-2 mr-2 transition-all duration-300 ease-in-out group overflow-hidden",
-              pathname === "/planos" && "ring-2 ring-yellow-400"
-            )}
+            variant="ghost"
+            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2"
           >
-            <Link href="/planos" className="flex items-center justify-center">
-              <Crown className="h-4 w-4 transition-all duration-300" />
-              <span
-                className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 hidden sm:inline"
-                style={{ display: 'inline-block' }}
-              >
-                Planos
-              </span>
+            <Link href="/planos" className="flex items-center gap-2">
+              <IoDiamondOutline className="h-5 w-5 text-yellow-500" />
+              <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Planos</span>
             </Link>
           </Button>
 
           <Button
             variant="ghost"
-            size="icon"
-            className="rounded-full text-muted-foreground hover:bg-[#0e9094]/10 hover:text-[#0e9094]"
+            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2"
             onClick={toggleTheme}
             aria-label="Alternar tema claro/escuro"
           >
-            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            {theme === "light" ? <IoMoonOutline className="h-5 w-5" /> : <IoSunnyOutline className="h-5 w-5" />}
+            <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Tema</span>
           </Button>
 
           <Button
             variant="ghost"
-            size="icon"
-            className="rounded-full text-muted-foreground hover:bg-[#0e9094]/10 hover:text-[#0e9094]"
-            aria-label="Notificações"
+            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2 relative"
+            aria-label="Mensagens"
+            asChild
           >
-            <Bell className="h-5 w-5" />
+            <Link href="/dashboard/messages" className="flex items-center gap-2">
+              <IoChatbubbleEllipsesOutline className="h-5 w-5" />
+              <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Mensagens</span>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
+                  {unreadCount}
+                </span>
+              )}
+            </Link>
           </Button>
 
           {loading ? (
-            <div className="w-8 h-8 bg-muted rounded-full animate-pulse" />
+            <div className="w-10 h-10 rounded-full bg-muted animate-pulse" />
           ) : user && currentUserProfile ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="h-8 w-8 rounded-full focus:outline-none">
-                <Avatar className="h-8 w-8">
+              <DropdownMenuTrigger className="h-10 w-10 rounded-full focus:outline-none hover:ring-2 hover:ring-[#0e9094]/50 transition-all">
+                <Avatar className="h-10 w-10 ring-2 ring-transparent hover:ring-[#0e9094]/30 transition-all">
                   <AvatarImage
-                    src={currentUserProfile.profilePictureUrl}
+                    src={currentUserProfile.profile_picture_url}
                     alt={currentUserProfile.name}
                   />
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-[#0e9094]/10 text-[#0e9094]">
                     {currentUserProfile.name?.charAt(0).toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuContent className="w-56 rounded-lg border border-border bg-popover shadow-md" align="end">
                 <DropdownMenuLabel>
                   <div className="space-y-1">
                     <p className="text-sm font-medium">{currentUserProfile.name}</p>
@@ -174,33 +189,34 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={profileLink}>
+                  <Link href={profileLink} className="flex items-center hover:text-[#0e9094]">
                     <User className="mr-2 h-4 w-4" />
                     Ver Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard">
+                  <Link href="/dashboard" className="flex items-center hover:text-[#0e9094]">
                     <UserCog className="mr-2 h-4 w-4" />
                     Editar Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/account">
+                  <Link href="/dashboard/account" className="flex items-center hover:text-[#0e9094]">
                     <Settings className="mr-2 h-4 w-4" />
                     Conta
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={handleLogout} className="flex items-center hover:text-red-500">
                   <LogOut className="mr-2 h-4 w-4" />
                   Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="outline" className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full">
-              <Link href="/login">
+            <Button asChild variant="outline" className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-colors duration-300">
+              <Link href="/login" className="flex items-center gap-2">
+                <IoLogInOutline className="h-5 w-5" />
                 Entrar
               </Link>
             </Button>
@@ -208,5 +224,43 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
         </div>
       </div>
     </header>
+  );
+}
+
+const menuItems = [
+  { title: 'Home', icon: <IoHomeOutline />, gradientFrom: '#a955ff', gradientTo: '#ea51ff' },
+  { title: 'Video', icon: <IoVideocam />, gradientFrom: '#56CCF2', gradientTo: '#2F80ED' },
+  { title: 'Photo', icon: <IoCameraOutline />, gradientFrom: '#FF9966', gradientTo: '#FF5E62' },
+  { title: 'Share', icon: <IoShareSocialOutline />, gradientFrom: '#80FF72', gradientTo: '#7EE8FA' },
+  { title: 'Tym', icon: <IoHeartOutline />, gradientFrom: '#ffa9c6', gradientTo: '#f434e2' }
+];
+
+export function GradientMenu() {
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-dark">
+      <ul className="flex gap-6">
+        {menuItems.map(({ title, icon, gradientFrom, gradientTo }, idx) => (
+          <li
+            key={idx}
+            className="relative w-[60px] h-[60px] bg-white shadow-lg rounded-full flex items-center justify-center cursor-pointer"
+          >
+            {/* Gradient background (fixo, sem hover) */}
+            <span className="absolute inset-0 rounded-full bg-[linear-gradient(45deg,var(--gradient-from),var(--gradient-to))] opacity-100"></span>
+            {/* Blur glow (fixo, sem hover) */}
+            <span className="absolute top-[10px] inset-x-0 h-full rounded-full bg-[linear-gradient(45deg,var(--gradient-from),var(--gradient-to))] blur-[15px] opacity-50 -z-10"></span>
+
+            {/* Icon sempre visível */}
+            <span className="relative z-10">
+              <span className="text-2xl text-gray-500">{icon}</span>
+            </span>
+
+            {/* Title sempre visível ao lado do ícone */}
+            <span className="ml-2 relative z-10 text-white uppercase tracking-wide text-sm">
+              {title}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

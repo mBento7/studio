@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import type { ProfileLayoutProps } from "@/lib/types";
 import { platformIcons } from "@/lib/types";
-import { Youtube, Globe, Mail, MessageSquare, Edit, Eye, Maximize, Phone, MapPin, Briefcase, Star } from "lucide-react";
+import { Youtube, Globe, Mail, MessageSquare, Edit, Eye, Maximize, Phone, MapPin, Briefcase, Star, GraduationCap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,9 +27,9 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
         {/* Header Section */}
         <div className="relative">
           <div className="h-56 w-full rounded-2xl overflow-hidden shadow-2xl">
-            {user.coverPhotoUrl ? (
+            {user.cover_photo_url ? (
               <Image
-                src={user.coverPhotoUrl}
+                src={user.cover_photo_url}
                 alt="Capa do perfil"
                 layout="fill"
                 objectFit="cover"
@@ -42,7 +42,7 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
           <div className="absolute top-32 left-1/2 -translate-x-1/2 md:left-12 md:-translate-x-0 w-full md:w-auto">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <Avatar className="w-36 h-36 border-4 border-white dark:border-slate-800 shadow-2xl">
-                <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                <AvatarImage src={user.profile_picture_url} alt={user.name} />
                 <AvatarFallback className="text-4xl font-bold">
                   {user.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
@@ -71,7 +71,7 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
               <CardContent>
                 {portfolio.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {portfolio.map((item, idx) => (
+                    {portfolio.slice(0, 6).map((item, idx) => (
                       <div
                         key={idx}
                         className="aspect-square rounded-xl overflow-hidden border shadow-sm cursor-pointer group relative hover:shadow-lg transition-all duration-300"
@@ -141,6 +141,53 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
                </Card>
              )}
              
+             {user.skills && user.skills.length > 0 && (
+               <Card className="shadow-xl rounded-2xl border-0">
+                 <CardHeader>
+                   <CardTitle className="text-xl flex items-center gap-2"><Star className="w-5 h-5 text-primary" /> Habilidades</CardTitle>
+                 </CardHeader>
+                 <CardContent className="flex flex-wrap gap-2">
+                   {user.skills.map((skill, idx) => (
+                     <span key={idx} className="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-full">{skill}</span>
+                   ))}
+                 </CardContent>
+               </Card>
+             )}
+             
+             {user.experience && user.experience.length > 0 && (
+               <Card className="shadow-xl rounded-2xl border-0">
+                 <CardHeader>
+                   <CardTitle className="text-xl flex items-center gap-2"><Briefcase className="w-5 h-5 text-primary" /> Experiência</CardTitle>
+                 </CardHeader>
+                 <CardContent className="space-y-3">
+                   {user.experience.map((exp, idx) => (
+                     <div key={idx} className="border-l-2 border-primary/20 pl-4">
+                       <h4 className="font-semibold text-foreground">{exp.title}</h4>
+                       <p className="text-sm text-muted-foreground">{exp.company}</p>
+                       <p className="text-xs text-muted-foreground">{exp.years}</p>
+                     </div>
+                   ))}
+                 </CardContent>
+               </Card>
+             )}
+             
+             {user.education && user.education.length > 0 && (
+               <Card className="shadow-xl rounded-2xl border-0">
+                 <CardHeader>
+                   <CardTitle className="text-xl flex items-center gap-2"><GraduationCap className="w-5 h-5 text-primary" /> Educação</CardTitle>
+                 </CardHeader>
+                 <CardContent className="space-y-3">
+                   {user.education.map((edu, idx) => (
+                     <div key={idx} className="border-l-2 border-primary/20 pl-4">
+                       <h4 className="font-semibold text-foreground">{edu.degree}</h4>
+                       <p className="text-sm text-muted-foreground">{edu.institution}</p>
+                       <p className="text-xs text-muted-foreground">{edu.years}</p>
+                     </div>
+                   ))}
+                 </CardContent>
+               </Card>
+             )}
+             
              <Card className="shadow-xl rounded-2xl border-0">
                <CardHeader>
                  <CardTitle className="text-xl">Contato Rápido</CardTitle>
@@ -180,7 +227,7 @@ const PortfolioFocusLayout: React.FC<ProfileLayoutProps> = ({
 
 export default PortfolioFocusLayout;
 
-export const config = {
+export const segmentConfig = {
   id: 'portfolio-focus',
   name: 'Foco em Portfólio',
   description: 'Um layout visual que coloca seus projetos em primeiro plano.',

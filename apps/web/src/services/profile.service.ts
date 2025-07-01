@@ -6,9 +6,14 @@ import { mockCurrentUser, mockUserProfiles } from "@/lib/mock-data";
 
 // Esta função substitui 'getMockUserByUsername'
 export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
-  const supabase = await createClient();
+  // Fallback para mock SEMPRE em dev
+  if (process.env.NODE_ENV !== 'production') {
+    const mockUser = mockUserProfiles.find(u => u.username === username);
+    if (mockUser) return mockUser;
+  }
 
-  // 1. Busca o perfil principal na tabela 'profiles', incluindo o profile_snapshot
+  // Busca real no Supabase (produção)
+  const supabase = await createClient();
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*, profile_snapshot') // Incluindo o novo campo snapshot
@@ -16,11 +21,6 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     .single();
 
   if (profileError || !profile) {
-    // Fallback para qualquer usuário mock em desenvolvimento
-    if (process.env.NODE_ENV !== 'production') {
-      const mockUser = mockUserProfiles.find(u => u.username === username);
-      if (mockUser) return mockUser;
-    }
     console.error(`Perfil não encontrado para o username: ${username}`, profileError);
     return null;
   }
@@ -66,6 +66,131 @@ export async function refreshProfileSnapshot(profileId: string) {
     console.error("Erro ao atualizar snapshot do perfil:", error);
     throw error;
   }
+}
+
+// Busca perfil completo por ID, incluindo dados relacionados
+export async function getUserProfileById(userId: string): Promise<UserProfile | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*, social_links(*), services(*), portfolio_items(*), experience(*), education(*), reviews(*)')
+    .eq('id', userId)
+    .single();
+
+  if (error || !data) {
+    console.error('Erro ao buscar perfil por ID:', error);
+    return null;
+  }
+
+  // Padroniza o objeto para UserProfile
+  const userProfile: UserProfile = {
+    ...data,
+    name: data.full_name,
+    isAvailable: data.is_available,
+    profilePictureUrl: data.profile_picture_url,
+    coverPhotoUrl: data.cover_photo_url,
+    whatsappNumber: data.whatsapp_number,
+    socialLinks: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
+    services: data.services?.map((service: any) => ({ ...service, id: String(service.id) })) || [],
+    portfolio: data.portfolio_items?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+    experience: data.experience?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+    education: data.education?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+    reviews: data.reviews?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+    skills: data.skills ?? [],
+  };
+
+  return userProfile;
+}
+
+// Atualiza o perfil do usuário e dados relacionados
+export async function updateUserProfile(userId: string, data: Partial<UserProfile>) {
+  const supabase = await createClient();
+
+  // Separa os dados principais dos relacionamentos
+  const {
+    name,
+    isAvailable,
+    profilePictureUrl,
+    coverPhotoUrl,
+    whatsappNumber,
+    socialLinks = [],
+    services = [],
+    portfolio = [],
+    experience = [],
+    education = [],
+    reviews = [],
+    ...rest
+  } = data;
+
+  // Atualiza o perfil principal
+  const updateData = {
+    ...rest,
+    full_name: name,
+    is_available: isAvailable,
+    profile_picture_url: profilePictureUrl,
+    cover_photo_url: coverPhotoUrl,
+    whatsapp_number: whatsappNumber,
+  };
+
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update(updateData)
+    .eq('id', userId);
+
+  if (profileError) {
+    throw profileError;
+  }
+
+  // Atualiza social_links
+  for (const link of socialLinks) {
+    if (link.id) {
+      await supabase.from('social_links').update(link).eq('id', link.id);
+    } else {
+      await supabase.from('social_links').insert({ ...link, profile_id: userId });
+    }
+  }
+  // Atualiza services
+  for (const service of services) {
+    if (service.id) {
+      await supabase.from('services').update(service).eq('id', service.id);
+    } else {
+      await supabase.from('services').insert({ ...service, profile_id: userId });
+    }
+  }
+  // Atualiza portfolio
+  for (const item of portfolio) {
+    if (item.id) {
+      await supabase.from('portfolio_items').update(item).eq('id', item.id);
+    } else {
+      await supabase.from('portfolio_items').insert({ ...item, profile_id: userId });
+    }
+  }
+  // Atualiza experience
+  for (const exp of experience) {
+    if (exp.id) {
+      await supabase.from('experience').update(exp).eq('id', exp.id);
+    } else {
+      await supabase.from('experience').insert({ ...exp, profile_id: userId });
+    }
+  }
+  // Atualiza education
+  for (const edu of education) {
+    if (edu.id) {
+      await supabase.from('education').update(edu).eq('id', edu.id);
+    } else {
+      await supabase.from('education').insert({ ...edu, profile_id: userId });
+    }
+  }
+  // Atualiza reviews
+  for (const review of reviews) {
+    if (review.id) {
+      await supabase.from('reviews').update(review).eq('id', review.id);
+    } else {
+      await supabase.from('reviews').insert({ ...review, profile_id: userId });
+    }
+  }
+
+  return true;
 }
 
 // Futuramente, você pode adicionar outras funções de serviço aqui, como:

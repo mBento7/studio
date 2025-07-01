@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import type { UserProfile, PortfolioItem } from '@/lib/types';
+import type { UserProfile, PortfolioItem, ProfileLayoutProps } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -25,19 +25,13 @@ import { Globe, MapPin, Mail, Phone, Edit, MessageSquare } from 'lucide-react';
  * Não exibe: portfólio, serviços, experiência, educação (ou apenas placeholders)
  */
 
-interface BasicProfileLayoutProps {
-  user: UserProfile;
-  isCurrentUserProfile: boolean;
-  qrCodeUrl: string | null;
-  onPortfolioItemClick: (item: PortfolioItem) => void;
-  toast: any;
-  mounted: boolean;
-}
-
-const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
+const BasicProfileLayout: React.FC<ProfileLayoutProps> = ({
   user,
   isCurrentUserProfile,
   qrCodeUrl,
+  onPortfolioItemClick,
+  toast,
+  mounted,
 }) => {
   const socialLinks = user.socialLinks || [];
   const location = user.location || { city: '', country: '' };
@@ -49,9 +43,9 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
           <div className="relative">
             {/* Cover Image */}
             <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-              {user.coverPhotoUrl && (
+              {user.cover_photo_url && (
                 <img
-                  src={user.coverPhotoUrl}
+                  src={user.cover_photo_url}
                   alt="Capa do perfil"
                   className="w-full h-full object-cover"
                 />
@@ -62,7 +56,7 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
             {/* Profile Picture */}
             <div className="absolute top-24 left-1/2 -translate-x-1/2">
               <Avatar className="w-32 h-32 border-4 border-white dark:border-slate-900 shadow-xl">
-                <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                <AvatarImage src={user.profile_picture_url} alt={user.name} />
                 <AvatarFallback className="text-3xl font-bold">
                   {user.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
@@ -162,7 +156,7 @@ const BasicProfileLayout: React.FC<BasicProfileLayoutProps> = ({
 
 export default BasicProfileLayout;
 
-export const config = {
+export const segmentConfig = {
   id: 'basic-profile',
   name: 'Perfil Básico',
   description: 'Um layout limpo e moderno para apresentar suas informações essenciais.',

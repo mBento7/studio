@@ -111,4 +111,19 @@ Para garantir a evolução contínua e organizada do projeto, mantenha sempre um
 
 > **Dica:** Use o `NEXT_STEPS.md` como referência viva e central de progresso. Atualize-o sempre que houver mudanças importantes, e registre um resumo das revisões nesta seção do README de documentação.
 
-> **Importante:** Certifique-se de que todas as subpastas de documentação possuem um README explicativo, seguindo o modelo em `guia-visual/README-modelo.md`. Sempre que possível, inclua exemplos práticos e reais para facilitar o entendimento. 
+> **Importante:** Certifique-se de que todas as subpastas de documentação possuem um README explicativo, seguindo o modelo em `guia-visual/README-modelo.md`. Sempre que possível, inclua exemplos práticos e reais para facilitar o entendimento.
+
+---
+
+## [ATUALIZAÇÃO 2024-06] – Monetização e Compra de Créditos
+
+### O que já foi implementado:
+- Página `/dashboard/credits/buy` exibe pacotes de créditos e inicia o fluxo de compra via Mercado Pago (frontend funcional, com hooks React liberados por `"use client"`).
+- Página `/dashboard/credits/payment-confirmation` processa o retorno do Mercado Pago, chama a API de validação e exibe o status ao usuário.
+
+### Próximos passos:
+- Implementar as rotas de API `/api/payments/mercadopago/checkout` e `/api/payments/mercadopago/validate`.
+- Criar/atualizar o serviço `credits.service.ts` para registrar transações e atualizar saldo.
+- Criar migration para tabela de transações de créditos.
+
+> Após esses passos, o fluxo de compra estará pronto para testes integrados e homologação. 

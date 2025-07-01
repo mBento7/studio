@@ -11,9 +11,9 @@ interface PremiumProSearchResultCardProps {
   user: UserProfile;
 }
 
-const PremiumProSearchResultCard: React.FC<PremiumProSearchResultCardProps> = ({ user }) => {
-  const backgroundStyle = user.coverPhotoUrl
-    ? { backgroundImage: `linear-gradient(rgba(40,30,10,0.55),rgba(40,30,10,0.7)), url('${user.coverPhotoUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
+const ProProfileSearchResultCard: React.FC<PremiumProSearchResultCardProps> = ({ user }) => {
+  const backgroundStyle = user.cover_photo_url
+    ? { backgroundImage: `linear-gradient(rgba(40,30,10,0.55),rgba(40,30,10,0.7)), url('${user.cover_photo_url}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : { background: 'linear-gradient(135deg, #fbbf24 60%, #f59e42 100%)' };
 
   return (
@@ -26,7 +26,7 @@ const PremiumProSearchResultCard: React.FC<PremiumProSearchResultCardProps> = ({
         </div>
         <div className="z-10 w-full flex flex-col items-center">
           <Avatar className="w-16 h-16 border-4 border-white shadow-lg -mt-8">
-            <AvatarImage src={user.profilePictureUrl || '/avatar-default.png'} alt={user.name || 'Foto de perfil'} />
+            <AvatarImage src={user.profile_picture_url || '/avatar-default.png'} alt={user.name || 'Foto de perfil'} />
             <AvatarFallback className="text-xl font-bold">{(user.name || 'Usuário').split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <h3 className="mt-2 font-bold text-lg text-center text-white drop-shadow">{user.name || 'Usuário'}</h3>
@@ -48,4 +48,4 @@ const PremiumProSearchResultCard: React.FC<PremiumProSearchResultCardProps> = ({
   );
 };
 
-export default PremiumProSearchResultCard; 
+export default ProProfileSearchResultCard; 

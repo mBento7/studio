@@ -31,13 +31,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FeedCard } from '@/components/feed/FeedCard';
 import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
-import { RightWidgetsColumn } from '@/components/layout/right-widgets-column';
 import './feed-scrollbar.css';
 import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { Button as UIButton } from '@/components/ui/button';
 import { FilterButton } from '@/components/ui/filter-button';
+import { useToast } from "@/hooks/use-toast";
+import { createClient } from '@/lib/supabase/client';
+import { feedMocks } from '@/lib/mock-data';
+import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
+import { BannerCard } from '@/components/feed/BannerCard';
+import { CouponCard } from '@/components/feed/CouponCard';
+import { UpdateCard } from '@/components/feed/UpdateCard';
+import { TestimonialCard } from '@/components/feed/TestimonialCard';
+import { InviteCard } from '@/components/feed/InviteCard';
+import { EventCard } from '@/components/feed/EventCard';
+import { LayoutDecider } from '@/components/layout/layout-decider';
 
 // Mock data
 const stories = [
@@ -84,75 +94,6 @@ const coupons = [
   { id: 1, code: "SAVE20", desc: "20% de desconto em limpeza" },
   { id: 2, code: "FIRST10", desc: "10% para novos clientes" },
   { id: 3, code: "PREMIUM15", desc: "15% em serviços premium" },
-];
-
-const postsMock = [
-  {
-    tipo: 'oferta_servico' as const,
-    titulo: 'João Cortes Premium',
-    descricao: 'Cortes masculinos R$ 35 – Atendimento em domicílio até 20h',
-    imagem: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=300&fit=crop',
-    preco: '35',
-    localizacao: 'Vila Mariana',
-    patrocinado: true,
-    usuario: { nome: 'João Cortes', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
-    curtidas: 23,
-    comentarios: 4,
-    tags: ['Barbearia', 'Domicílio'],
-    whatsappUrl: 'https://wa.me/5511999999999',
-  },
-  {
-    tipo: 'oferta_produto' as const,
-    titulo: 'Bolos da Lú – Bolo no pote',
-    descricao: 'R$ 8 cada | Sabores: Chocolate, Morango, Maracujá',
-    imagem: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop',
-    preco: '8',
-    localizacao: 'Centro',
-    usuario: { nome: 'Bolos da Lú', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
-    curtidas: 12,
-    comentarios: 2,
-    tags: ['Confeitaria', 'Delivery'],
-    whatsappUrl: 'https://wa.me/5511988888888',
-  },
-  {
-    tipo: 'solicitacao_servico' as const,
-    titulo: 'Preciso de eletricista urgente',
-    descricao: 'Alguém faz instalação de chuveiro hoje na região do Tatuapé? Pago na hora!',
-    imagem: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&h=300&fit=crop',
-    localizacao: 'Tatuapé',
-    usuario: { nome: 'Carlos Silva', avatar: 'https://randomuser.me/api/portraits/men/65.jpg' },
-    curtidas: 5,
-    comentarios: 3,
-    tags: ['Eletricista', 'Urgente'],
-    whatsappUrl: 'https://wa.me/5511977777777',
-    urgente: true,
-  },
-  {
-    tipo: 'solicitacao_produto' as const,
-    titulo: 'Busco notebook usado até R$ 1500',
-    descricao: 'Preciso de um notebook para estudos, pode ser usado, aceito sugestões e ofertas!',
-    imagem: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
-    localizacao: 'Ipiranga',
-    usuario: { nome: 'Ana Paula', avatar: 'https://randomuser.me/api/portraits/women/68.jpg' },
-    curtidas: 7,
-    comentarios: 1,
-    tags: ['Notebook', 'Usado', 'Estudo'],
-    whatsappUrl: 'https://wa.me/5511966666666',
-  },
-  {
-    tipo: 'patrocinado' as const,
-    titulo: 'Curso de Marketing Digital',
-    descricao: 'Aprenda as melhores estratégias de marketing digital com profissionais do mercado. Certificado incluso e suporte vitalício.',
-    imagem: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
-    preco: '297',
-    localizacao: 'Online',
-    patrocinado: true,
-    usuario: { nome: 'EduTech Academy', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
-    curtidas: 156,
-    comentarios: 45,
-    tags: ['marketing', 'digital', 'curso', 'online'],
-    whatsappUrl: 'https://wa.me/5511999999999',
-  },
 ];
 
 interface CreateCouponModalProps {
@@ -362,6 +303,7 @@ function SocialCard({ item }: { item: any }) {
 }
 
 function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTab: string, setActiveTab: (tab: string) => void, posts: any[], userProfile: any }) {
+  const { toast } = useToast();
   const filters = [
     { label: 'Todos', icon: Sparkles },
     { label: 'Servicos', icon: ConciergeBell },
@@ -380,19 +322,51 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTa
               label={label}
               isActive={activeTab === label.toLowerCase()}
               onClick={() => {
-                if (premium && userProfile?.plan !== 'premium') return;
+                if (premium && userProfile?.plan !== 'premium') {
+                  toast({ title: "Exclusivo para Premium", description: "O filtro de solicitações é exclusivo para assinantes Premium.", variant: "destructive" });
+                  return;
+                }
                 setActiveTab(label.toLowerCase());
               }}
               premium={premium}
-              disabled={premium && userProfile?.plan !== 'premium'}
+              disabled={false}
             />
           ))}
         </div>
       </div>
       <div className="space-y-4">
-        {posts.map((post, index) => (
-          <FeedCard key={`${post.titulo}-${index}`} {...post} />
-        ))}
+        {posts.map((item, idx) => {
+          switch (item.tipo) {
+            case 'oferta_servico':
+            case 'oferta_produto':
+            case 'solicitacao_servico':
+            case 'solicitacao_produto': {
+              // Remover usuarioId das props
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { usuarioId, ...feedCardProps } = item;
+              return <FeedCard key={idx} {...feedCardProps} />;
+            }
+            case 'anuncio_patrocinado':
+              return <SponsoredAdCard key={idx} {...item} />;
+            case 'banner':
+              return <BannerCard key={idx} {...item} />;
+            case 'cupom':
+              return <CouponCard key={idx} {...item} />;
+            case 'atualizacao':
+              return <UpdateCard key={idx} {...item} />;
+            case 'depoimento': {
+              // Remover usuarioId das props
+              const { usuarioId, ...testimonialProps } = item;
+              return <TestimonialCard key={idx} {...testimonialProps} />;
+            }
+            case 'indicacao':
+              return <InviteCard key={idx} {...item} />;
+            case 'evento':
+              return <EventCard key={idx} {...item} />;
+            default:
+              return null;
+          }
+        })}
       </div>
     </div>
   );
@@ -710,13 +684,31 @@ export default function FeedPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('todos');
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
-  const [posts, setPosts] = useState(postsMock);
+  const [posts, setPosts] = useState(feedMocks);
+  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace('/home');
     }
   }, [user, loading, router]);
+
+  // Buscar atividades de atualização de perfil
+  useEffect(() => {
+    async function fetchActivities() {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*, user:profiles!inner(username, full_name, profile_picture_url)')
+        .eq('type', 'profile_update')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      if (!error && data) {
+        setActivities(data);
+      }
+    }
+    fetchActivities();
+  }, []);
 
   const handlePost = (newPostData: {
     texto: string;
@@ -769,13 +761,27 @@ export default function FeedPage() {
   }
 
   return (
-    <>
+    <LayoutDecider>
       <div className="w-full max-w-2xl mx-auto space-y-6">
         <StoriesCarousel />
         <FeedPostEditor onPost={handlePost} />
+        {/* Atividades de atualização de perfil */}
+        {activities.length > 0 && (
+          <div className="space-y-4">
+            {activities.map(activity => (
+              <div key={activity.id} className="bg-blue-50 border border-blue-200 rounded p-4 flex items-center gap-3">
+                <img src={activity.user?.profile_picture_url || 'https://randomuser.me/api/portraits/men/1.jpg'} alt={activity.user?.username} className="w-10 h-10 rounded-full" />
+                <div>
+                  <span className="font-semibold">{activity.user?.full_name || activity.user?.username}</span> atualizou o perfil!
+                  <div className="text-xs text-muted-foreground">{new Date(activity.created_at).toLocaleString('pt-BR')}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={filteredPosts} userProfile={currentUserProfile} />
       </div>
       <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />
-    </>
+    </LayoutDecider>
   );
 }

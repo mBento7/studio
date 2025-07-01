@@ -1,4 +1,4 @@
-export type PremiumProLayoutConfig = {
+export type ProProfileLayoutConfig = {
   showPortfolio?: boolean;
   showSkills?: boolean;
   showExperience?: boolean;
@@ -6,7 +6,7 @@ export type PremiumProLayoutConfig = {
   themeColor?: string;
 };
 
-export const defaultPremiumProLayoutConfig: PremiumProLayoutConfig = {
+export const defaultProProfileLayoutConfig: ProProfileLayoutConfig = {
   showPortfolio: true,
   showSkills: true,
   showExperience: true,

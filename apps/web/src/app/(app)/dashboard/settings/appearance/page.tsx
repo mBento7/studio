@@ -29,7 +29,7 @@ const layoutTemplates: LayoutTemplate[] = [
   { id: 'minimalist-card', name: 'Cartão Minimalista', description: 'Layout elegante e direto. Ideal para começar.', imageUrl: 'https://picsum.photos/seed/layout-minimalist/300/200', dataAiHint: "minimalist design", availableFor: [] },
   { id: 'default', name: 'Perfil Padrão', description: 'Um layout clássico e completo para um perfil profissional.', imageUrl: 'https://picsum.photos/seed/layout-default/300/200', dataAiHint: "profile layout", availableFor: ['standard', 'premium'] },
   { id: 'commercial-web', name: 'Site Comercial', description: 'Aparência de mini-site para apresentar seu negócio.', imageUrl: 'https://picsum.photos/seed/layout-commercial/300/200', dataAiHint: "website template", availableFor: ['premium'] },
-  { id: 'premium-pro', name: 'Premium Pro', description: 'Layout avançado para máximo impacto profissional.', imageUrl: 'https://picsum.photos/seed/layout-premiumpro/300/200', dataAiHint: "professional profile", availableFor: ['premium'] },
+  { id: 'pro-profile', name: 'Pro Profile', description: 'Layout avançado para máximo impacto profissional.', imageUrl: 'https://picsum.photos/seed/layout-proprofile/300/200', dataAiHint: "professional profile", availableFor: ['premium'] },
 ];
 
 export default function AppearanceSettingsPage() {

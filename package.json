@@ -23,6 +23,8 @@
   "dependencies": {
     "emoji-picker-react": "^4.12.2",
     "framer-motion": "^12.18.1",
-    "lucide-react": "^0.522.0"
+    "genkitx-anthropic": "^0.23.0",
+    "lucide-react": "^0.522.0",
+    "react-icons": "^5.5.0"
   }
 }

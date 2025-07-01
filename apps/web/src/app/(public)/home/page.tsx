@@ -244,11 +244,11 @@ function UpgradeBanner({ onClose }: { onClose?: () => void }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="md" className="bg-primary hover:bg-primary/90">
+          <Button size="default" className="bg-primary hover:bg-primary/90">
             Ativar Trial
           </Button>
           {onClose && (
-            <Button size="md" variant="outline" onClick={onClose}>
+            <Button size="default" variant="outline" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           )}
@@ -434,80 +434,6 @@ function ComparisonTable() {
   );
 }
 
-// Header Component
-function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-      isTransparent ? "bg-transparent" : "bg-background/95 backdrop-blur-sm border-b border-border"
-    )}>
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">W</span>
-            </div>
-            <span className="font-bold text-xl text-foreground">{siteConfig.name}</span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#benefits" className="text-muted-foreground hover:text-foreground transition-colors">Benefícios</a>
-            <a href="#templates" className="text-muted-foreground hover:text-foreground transition-colors">Templates</a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Preços</a>
-            <a href="#faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
-          </nav>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline">
-              <a href="/login">Entrar</a>
-            </Button>
-            <Button>
-              <a href="/register">Começar</a>
-            </Button>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border"
-            >
-              <div className="py-4 space-y-4">
-                <a href="#benefits" className="block text-muted-foreground hover:text-foreground transition-colors">Benefícios</a>
-                <a href="#templates" className="block text-muted-foreground hover:text-foreground transition-colors">Templates</a>
-                <a href="#pricing" className="block text-muted-foreground hover:text-foreground transition-colors">Preços</a>
-                <a href="#faq" className="block text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
-                <div className="flex flex-col space-y-2 pt-4">
-                  <Button variant="outline">
-                    <a href="/login">Entrar</a>
-                  </Button>
-                  <Button>
-                    <a href="/register">Começar</a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </header>
-  );
-}
-
 // Hero Section
 function LandingHeroSection() {
   return (
@@ -532,12 +458,12 @@ function LandingHeroSection() {
             Planos flexíveis com sistema de créditos para máxima personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="md">
+            <Button size="default">
               <a href="#pricing">
                 Ver Planos <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="md" variant="outline">
+            <Button size="default" variant="outline">
               <a href="#benefits">Saiba Mais</a>
             </Button>
           </div>
@@ -717,10 +643,6 @@ function PremiumPricing() {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.23, 0.86, 0.39, 0.96] 
-      }
     }
   };
 
@@ -728,10 +650,6 @@ function PremiumPricing() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
     }
   };
 
@@ -740,10 +658,6 @@ function PremiumPricing() {
     hover: { 
       scale: 1.05, 
       y: -10,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut"
-      }
     }
   };
 
@@ -763,7 +677,6 @@ function PremiumPricing() {
           transition={{
             duration: 40,
             repeat: Infinity,
-            ease: "linear"
           }}
           style={{
             backgroundSize: '400% 400%'
@@ -780,7 +693,6 @@ function PremiumPricing() {
           transition={{
             duration: 25,
             repeat: Infinity,
-            ease: "easeInOut"
           }}
         />
         <motion.div
@@ -793,7 +705,6 @@ function PremiumPricing() {
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "easeInOut"
           }}
         />
 
@@ -813,7 +724,6 @@ function PremiumPricing() {
             transition={{
               duration: 4 + Math.random() * 4,
               repeat: Infinity,
-              ease: "easeInOut",
               delay: Math.random() * 2,
             }}
           />
@@ -838,7 +748,7 @@ function PremiumPricing() {
           >
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
               <Sparkles className="h-4 w-4 text-indigo-300" />
             </motion.div>
@@ -864,7 +774,6 @@ function PremiumPricing() {
               transition={{
                 duration: 5,
                 repeat: Infinity,
-                ease: "easeInOut"
               }}
               style={{
                 backgroundSize: '200% 200%'
@@ -972,7 +881,6 @@ function PremiumPricing() {
                   transition={{
                     duration: 15,
                     repeat: Infinity,
-                    ease: "linear"
                   }}
                   style={{
                     backgroundSize: '300% 300%'
@@ -1109,7 +1017,6 @@ function PremiumPricing() {
               transition={{
                 duration: 15,
                 repeat: Infinity,
-                ease: "linear"
               }}
               style={{
                 backgroundSize: '300% 300%'
@@ -1127,7 +1034,7 @@ function PremiumPricing() {
                 Comece gratuitamente hoje mesmo.
               </p>
               
-              <Button size="md" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button size="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <a href="#pricing">
                   Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
@@ -1316,11 +1223,11 @@ function WhosDoPricingPlans() {
             Cancele a qualquer momento, sem compromisso.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="md" className="bg-primary hover:bg-primary/90">
+            <Button size="default" className="bg-primary hover:bg-primary/90">
               Começar Gratuitamente
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="md" variant="outline">
+            <Button size="default" variant="outline">
               Falar com Vendas
             </Button>
           </div>
@@ -1341,7 +1248,6 @@ function WhosDoPricingPlans() {
 function WhosDoPricingPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <PublicHeader isTransparent={true} />
       <main className="flex-grow">
         <LandingHeroSection />
         <LandingBenefitsSection />
@@ -1358,7 +1264,7 @@ function WhosDoPricingPage() {
             <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
               Junte-se ao {siteConfig.name} hoje e crie um perfil profissional que se destaca com nosso sistema flexível de créditos.
             </p>
-            <Button size="md" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <a href="#pricing">
                 Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
               </a>

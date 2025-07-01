@@ -3,7 +3,11 @@
 
 import { notFound } from "next/navigation";
 import { getUserProfileByUsername } from "@/services/profile.service";
-import { ProfileClientPage } from "./ProfileClientPage"; // Criaremos este componente a seguir
+import { ProfileClientPage } from "./ProfileClientPage";
+import { isPremiumLayout, getLayoutTier } from "@/lib/isPremiumLayout";
+import { ProfileLayoutProvider } from '@/contexts/ProfileLayoutContext';
+import { LayoutDecider } from '@/components/layout/layout-decider';
+import Link from 'next/link';
 
 interface ProfilePageProps {
   params: { username: string };
@@ -11,18 +15,52 @@ interface ProfilePageProps {
 
 // A página agora é um Server Component assíncrono
 export default async function ProfileServerPage({ params }: ProfilePageProps) {
-  const { username } = params;
-  
-  // 1. Busca os dados no servidor ANTES de renderizar a página
+  // Aguarde params se necessário (caso seja uma Promise)
+  const resolvedParams = await params;
+  const username = typeof resolvedParams.username === 'string'
+    ? resolvedParams.username
+    : Array.isArray(resolvedParams.username)
+      ? resolvedParams.username[0]
+      : '';
   const userProfile = await getUserProfileByUsername(username);
 
-  // 2. Se o perfil não for encontrado, exibe a página 404
   if (!userProfile) {
     notFound();
   }
 
   console.log('userProfile:', userProfile);
+  console.log('userProfile.plan:', userProfile.plan);
+  console.log('userProfile.layoutTemplateId:', userProfile.layoutTemplateId);
+  console.log('isPremiumLayout:', isPremiumLayout(userProfile));
 
-  // 3. Renderiza o componente de cliente, passando os dados do perfil como prop
-  return <ProfileClientPage userProfile={userProfile} />;
+  return (
+    <ProfileLayoutProvider hideRightSidebar={isPremiumLayout(userProfile)} layoutTier={getLayoutTier(userProfile)}>
+      <LayoutDecider>
+        <ProfileClientPage userProfile={userProfile} />
+        {username === 'lucas.showcase' && (
+          <div style={{ margin: '24px 0' }}>
+            <Link
+              href="/showcase-lucas"
+              style={{
+                background: 'linear-gradient(90deg, #14b8a6 0%, #0e9094 100%)',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '999px',
+                fontWeight: 700,
+                fontSize: '1rem',
+                boxShadow: '0 2px 8px #14b8a633',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'filter 0.2s',
+                display: 'inline-block',
+                textDecoration: 'none'
+              }}
+            >
+              Ver Showcase de Anúncios
+            </Link>
+          </div>
+        )}
+      </LayoutDecider>
+    </ProfileLayoutProvider>
+  );
 }

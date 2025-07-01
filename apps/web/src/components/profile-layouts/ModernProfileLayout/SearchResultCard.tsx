@@ -11,8 +11,8 @@ interface ModernSearchResultCardProps {
 }
 
 const ModernSearchResultCard: React.FC<ModernSearchResultCardProps> = ({ user }) => {
-  const backgroundStyle = user.coverPhotoUrl
-    ? { backgroundImage: `linear-gradient(rgba(40,40,60,0.45),rgba(40,40,60,0.6)), url('${user.coverPhotoUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
+  const backgroundStyle = user.cover_photo_url
+    ? { backgroundImage: `linear-gradient(rgba(40,40,60,0.45),rgba(40,40,60,0.6)), url('${user.cover_photo_url}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : { background: 'linear-gradient(135deg, #6366f1 60%, #a1a1aa 100%)' };
 
   return (
@@ -23,7 +23,7 @@ const ModernSearchResultCard: React.FC<ModernSearchResultCardProps> = ({ user })
       >
         <div className="z-10 w-full flex flex-col items-center">
           <Avatar className="w-16 h-16 border-4 border-white shadow-lg -mt-8">
-            <AvatarImage src={user.profilePictureUrl || '/avatar-default.png'} alt={user.name} />
+            <AvatarImage src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} />
             <AvatarFallback className="text-xl font-bold">{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <h3 className="mt-2 font-bold text-lg text-center text-white drop-shadow">{user.name}</h3>
@@ -45,4 +45,99 @@ const ModernSearchResultCard: React.FC<ModernSearchResultCardProps> = ({ user })
   );
 };
 
-export default ModernSearchResultCard; 
+export default ModernSearchResultCard;
+
+// Exemplo de uso para exibir múltiplos usuários nos resultados de pesquisa:
+/*
+import ModernSearchResultCard from "./SearchResultCard";
+
+const users = [
+  {
+    username: "mariasilva",
+    name: "Maria Silva",
+    profilePictureUrl: "/avatar-default.png",
+    coverPhotoUrl: "/capa-exemplo.png",
+    category: "Designer Gráfico",
+    location: { city: "São Paulo", state: "SP", country: "Brasil" },
+    services: [
+      { name: "Criação de Logotipo", description: "Desenvolvimento de identidade visual profissional." }
+    ]
+  },
+  {
+    username: "joaosouza",
+    name: "João Souza",
+    profilePictureUrl: "/avatar-joao.png",
+    coverPhotoUrl: "/capa-joao.png",
+    category: "Desenvolvedor Full Stack",
+    location: { city: "Rio de Janeiro", state: "RJ", country: "Brasil" },
+    services: [
+      { name: "Desenvolvimento Web", description: "Sites, sistemas e plataformas sob medida." }
+    ]
+  },
+  {
+    username: "moco",
+    name: "Moco Silva",
+    profilePictureUrl: "/avatar-moco.png",
+    coverPhotoUrl: "/capa-moco.png",
+    category: "Fotógrafo Profissional",
+    location: { city: "Belo Horizonte", state: "MG", country: "Brasil" },
+    services: [
+      { name: "Ensaios Fotográficos", description: "Ensaios em estúdio e externos." }
+    ]
+  },
+  {
+    username: "felipealves",
+    name: "Felipe Alves",
+    profilePictureUrl: "/avatar-felipe.png",
+    coverPhotoUrl: "/capa-felipe.png",
+    category: "Consultor de Marketing",
+    location: { city: "Curitiba", state: "PR", country: "Brasil" },
+    services: [
+      { name: "Planejamento de Campanhas", description: "Estratégias para redes sociais e Google Ads." }
+    ]
+  },
+  {
+    username: "anapereira",
+    name: "Ana Pereira",
+    profilePictureUrl: "/avatar-ana.png",
+    coverPhotoUrl: "/capa-ana.png",
+    category: "Arquiteta",
+    location: { city: "Porto Alegre", state: "RS", country: "Brasil" },
+    services: [
+      { name: "Projetos Residenciais", description: "Plantas, 3D e acompanhamento de obra." }
+    ]
+  },
+  {
+    username: "brunoribeiro",
+    name: "Bruno Ribeiro",
+    profilePictureUrl: "/avatar-bruno.png",
+    coverPhotoUrl: "/capa-bruno.png",
+    category: "Personal Trainer",
+    location: { city: "Salvador", state: "BA", country: "Brasil" },
+    services: [
+      { name: "Treinamento Funcional", description: "Aulas presenciais e online." }
+    ]
+  },
+  {
+    username: "carlamartins",
+    name: "Carla Martins",
+    profilePictureUrl: "/avatar-carla.png",
+    coverPhotoUrl: "/capa-carla.png",
+    category: "Advogada Trabalhista",
+    location: { city: "Recife", state: "PE", country: "Brasil" },
+    services: [
+      { name: "Consultoria Jurídica", description: "Atendimento para empresas e trabalhadores." }
+    ]
+  }
+];
+
+export default function SearchResults() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {users.map((user) => (
+        <ModernSearchResultCard key={user.username} user={user} />
+      ))}
+    </div>
+  );
+}
+*/ 

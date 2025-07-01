@@ -58,6 +58,15 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			success: {
+  				DEFAULT: 'hsl(var(--success))'
+  			},
+  			warning: {
+  				DEFAULT: 'hsl(var(--warning))'
+  			},
+  			info: {
+  				DEFAULT: 'hsl(var(--info))'
   			}
   		},
   		borderRadius: {
@@ -86,6 +95,9 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
+  		},
+  		fontFamily: {
+  			'geist-sans': ['var(--font-geist-sans)', 'Inter', 'system-ui', 'sans-serif'],
   		}
   	}
   },

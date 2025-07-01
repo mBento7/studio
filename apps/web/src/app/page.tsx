@@ -20,80 +20,6 @@ const siteConfig = {
   description: "Crie um perfil profissional que se destaca"
 };
 
-// Header Component
-function PublicHeader({ isTransparent = false }: { isTransparent?: boolean }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-      isTransparent ? "bg-transparent" : "bg-background/95 backdrop-blur-sm border-b border-border"
-    )}>
-      <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">P</span>
-            </div>
-            <span className="font-bold text-xl text-foreground">{siteConfig.name}</span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#benefits" className="text-muted-foreground hover:text-foreground transition-colors">Benefícios</a>
-            <a href="#templates" className="text-muted-foreground hover:text-foreground transition-colors">Templates</a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Preços</a>
-            <a href="#faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
-          </nav>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost">
-              <a href="/login">Entrar</a>
-            </Button>
-            <Button>
-              <a href="/register">Começar</a>
-            </Button>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border"
-            >
-              <div className="py-4 space-y-4">
-                <a href="#benefits" className="block text-muted-foreground hover:text-foreground transition-colors">Benefícios</a>
-                <a href="#templates" className="block text-muted-foreground hover:text-foreground transition-colors">Templates</a>
-                <a href="#pricing" className="block text-muted-foreground hover:text-foreground transition-colors">Preços</a>
-                <a href="#faq" className="block text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
-                <div className="flex flex-col space-y-2 pt-4">
-                  <Button variant="ghost">
-                    <a href="/login">Entrar</a>
-                  </Button>
-                  <Button>
-                    <a href="/register">Começar</a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </header>
-  );
-}
-
 // Hero Section
 function LandingHeroSection() {
   return (
@@ -118,12 +44,12 @@ function LandingHeroSection() {
             Templates modernos, fácil personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
+            <Button size="default">
               <a href="/register">
                 Começar Gratuitamente <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="default" variant="outline">
               <a href="#templates">Ver Templates</a>
             </Button>
           </div>

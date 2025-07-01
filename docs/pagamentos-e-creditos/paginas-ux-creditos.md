@@ -185,4 +185,26 @@ flowchart TD
 - O campo `availableFor` nos templates controla a seleção na interface.
 - O componente renderizado depende do plano e do template escolhido pelo usuário.
 
-> Última revisão: 2024. Para sugestões de novos templates ou ajustes, consulte o time de produto/UX. 
+> Última revisão: 2024. Para sugestões de novos templates ou ajustes, consulte o time de produto/UX.
+
+---
+
+## [ATUALIZAÇÃO 2024-06] – Progresso da Integração Mercado Pago
+
+### O que já foi implementado:
+- Página `/dashboard/credits/buy` exibe pacotes de créditos com o componente `CreditPackagesGrid`.
+- Ao clicar em "Comprar", o frontend chama a API `/api/payments/mercadopago/checkout` (a ser implementada) e redireciona o usuário para o checkout do Mercado Pago.
+- Página `/dashboard/credits/payment-confirmation` lê os parâmetros de retorno do Mercado Pago, chama a API `/api/payments/mercadopago/validate` (a ser implementada) e exibe o status do pagamento ao usuário (aprovado, pendente, rejeitado, erro).
+
+### Próximos passos para continuar a integração:
+1. **Backend/API:**
+   - Implementar a rota `/api/payments/mercadopago/checkout` para criar a preferência de pagamento no Mercado Pago e retornar a URL de checkout.
+   - Implementar a rota `/api/payments/mercadopago/validate` para validar o pagamento, registrar a transação e creditar os créditos ao usuário.
+2. **Serviço de Créditos:**
+   - Criar ou expandir `credits.service.ts` para registrar transações, atualizar saldo e consultar histórico.
+3. **Banco de Dados:**
+   - Criar migration para tabela `credit_transactions` (ou similar) para registrar cada compra, status, valor, usuário, etc.
+
+> Após a implementação das APIs e serviço, o fluxo de compra estará completo e pronto para testes integrados.
+
+> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com `"use client"`, permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O fluxo de compra de créditos está funcional no frontend. 

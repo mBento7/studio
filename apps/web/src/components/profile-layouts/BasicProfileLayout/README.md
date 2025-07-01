@@ -13,12 +13,16 @@
 **Não exibe:** portfólio, serviços, experiência, educação (ou apenas placeholders)
 
 ## Props principais
-- `profile`: Objeto de perfil do usuário
-- `config?`: Configurações opcionais de exibição
+- `user`: Objeto de perfil do usuário (obrigatório, tipo `UserProfile`)
+- `isCurrentUserProfile?`: Indica se é o perfil do usuário logado
+- `qrCodeUrl?`: URL do QR Code do perfil
+- `onPortfolioItemClick?`: Função callback ao clicar em um item do portfólio
+- `toast?`: Função de toast para feedbacks
+- `mounted?`: Indica se o componente já foi montado
 
 ## Exemplo de uso
 ```tsx
 import BasicProfileLayout from './BasicProfileLayout';
 
-<BasicProfileLayout profile={profileData} />
+<BasicProfileLayout user={profileData} />
 ``` 

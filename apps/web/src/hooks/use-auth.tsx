@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client'; // Nosso novo cliente Supabase!
+import { getUserProfileById } from '@/services/profile.service';
 
 interface AuthContextType {
   user: SupabaseUser | null;
@@ -34,42 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Função para buscar o perfil do usuário no banco de dados real
     const fetchUserProfile = async (supabaseUser: SupabaseUser) => {
       setLoading(true);
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*, profile_snapshot')
-        .eq('id', supabaseUser.id)
-        .single();
-
-      if (error) {
-        console.error("Erro ao buscar perfil do usuário:", error.message);
-      }
-
-      // Monta o objeto UserProfile igual ao profile.service.ts
-      const userProfile: UserProfile | null = profile ? {
-        id: profile.id,
-        username: profile.username,
-        name: profile.full_name || 'Nome não definido',
-        email: profile.email,
-        phone: profile.phone,
-        whatsappNumber: profile.whatsapp_number,
-        bio: profile.bio || '',
-        profilePictureUrl: profile.profile_picture_url || '',
-        coverPhotoUrl: profile.cover_photo_url || '',
-        category: profile.category || 'Categoria não definida',
-        plan: profile.plan || 'free',
-        layoutTemplateId: profile.layout_template_id,
-        isAvailable: profile.is_available,
-        location: profile.location || { city: '', country: '' },
-        skills: profile.skills || [],
-        premiumBanner: profile.premium_banner || undefined,
-        socialLinks: (profile.profile_snapshot?.social_links || []),
-        services: (profile.profile_snapshot?.services || []),
-        portfolio: (profile.profile_snapshot?.portfolio || []),
-        experience: (profile.profile_snapshot?.experience || []),
-        education: (profile.profile_snapshot?.education || []),
-        reviews: (profile.profile_snapshot?.reviews || []),
-      } : null;
-
+      const userProfile = await getUserProfileById(supabaseUser.id);
       setCurrentUserProfile(userProfile);
       setLoading(false);
     };

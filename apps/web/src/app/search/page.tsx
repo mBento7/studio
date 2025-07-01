@@ -1,5 +1,10 @@
 import SearchShowcase from './SearchShowcase';
+import { LayoutDecider } from '@/components/layout/layout-decider';
 
 export default function SearchPage() {
-  return <SearchShowcase />;
+  return (
+    <LayoutDecider>
+      <SearchShowcase />
+    </LayoutDecider>
+  );
 }

@@ -32,7 +32,7 @@ export function PublicProfileCard({ profile }: PublicProfileCardProps) {
       <Card className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 ease-in-out flex flex-col h-full bg-card group-hover:border-primary">
         <CardHeader className="p-0 relative h-24 sm:h-28">
            <Image
-              src={profile.coverPhotoUrl || `https://picsum.photos/seed/${profile.id}-cover/400/150`}
+              src={profile.cover_photo_url || `https://picsum.photos/seed/${profile.id}-cover/400/150`}
               alt={profile.name ? `${profile.name}'s cover photo` : 'Capa do perfil'}
               fill
               style={{ objectFit: "cover" }}
@@ -42,7 +42,7 @@ export function PublicProfileCard({ profile }: PublicProfileCardProps) {
           {planBadge(profile.plan)}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-lg border-4 border-background group-hover:border-primary/50 transition-colors shadow-lg bg-background overflow-hidden flex items-center justify-center">
                <Image
-                  src={profile.profilePictureUrl || 'https://ui-avatars.com/api/?name=User&background=random'}
+                  src={profile.profile_picture_url || 'https://ui-avatars.com/api/?name=User&background=random'}
                   alt={profile.name || 'Avatar do usuário'}
                   width={96} 
                   height={96} 

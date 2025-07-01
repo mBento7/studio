@@ -58,9 +58,9 @@ const mockCurrentUser = {
   category: "Desenvolvedor de Software",
   phone: "+55 (11) 98765-4321",
   whatsappNumber: "+55 (11) 98765-4321",
-  profilePictureUrl: "/images/mock-profile-pic.jpg",
+  profile_picture_url: "/images/mock-profile-pic.jpg",
   profilePictureDataAiHint: "homem sorrindo, camisa azul",
-  coverPhotoUrl: "/images/mock-cover-pic.jpg",
+  cover_photo_url: "/images/mock-cover-pic.jpg",
   coverPhotoDataAiHint: "abstrato, tons azuis",
   socialLinks: [
     { id: "1", platform: "linkedin", url: "https://www.linkedin.com/in/joaosilva" },
@@ -133,9 +133,9 @@ type ProfileFormData = {
   category: string;
   phone?: string;
   whatsappNumber?: string;
-  profilePictureUrl: string;
+  profile_picture_url: string;
   profilePictureDataAiHint: string;
-  coverPhotoUrl: string;
+  cover_photo_url: string;
   coverPhotoDataAiHint: string;
   socialLinks: SocialLink[];
   locationCity: string;
@@ -184,9 +184,9 @@ export function ProfileForm() {
       category: baseProfile.category || '',
       phone: baseProfile.phone || undefined,
       whatsappNumber: baseProfile.whatsappNumber || undefined,
-      profilePictureUrl: baseProfile.profilePictureUrl || defaultProfilePicUrl,
+      profile_picture_url: baseProfile.profile_picture_url || defaultProfilePicUrl,
       profilePictureDataAiHint: baseProfile.profilePictureDataAiHint || 'user profile',
-      coverPhotoUrl: baseProfile.coverPhotoUrl || defaultCoverPicUrl,
+      cover_photo_url: baseProfile.cover_photo_url || defaultCoverPicUrl,
       coverPhotoDataAiHint: baseProfile.coverPhotoDataAiHint || 'banner image',
       socialLinks: Array.isArray(baseProfile.socialLinks) 
         ? baseProfile.socialLinks.map(link => ({ ...link, id: link.id || Date.now().toString() })) 
@@ -211,8 +211,8 @@ export function ProfileForm() {
     defaultValues: getInitialFormValues(),
   });
 
-  const watchedProfilePictureUrl = watch("profilePictureUrl");
-  const watchedCoverPhotoUrl = watch("coverPhotoUrl");
+  const watchedProfile_picture_url = watch("profile_picture_url");
+  const watchedCover_photo_url = watch("cover_photo_url");
   const watchedLocationAddress = watch("locationAddress");
   const watchedLocationCity = watch("locationCity");
   const watchedLocationState = watch("locationState");
@@ -421,19 +421,19 @@ export function ProfileForm() {
                 <div className="grid gap-8">
                   <ImageUploadField
                     label="Foto de Perfil"
-                    name="profilePictureUrl"
+                    name="profile_picture_url"
                     control={control}
                     setValue={setValue as (name: string, value: any, options?: any) => void}
-                    currentImageUrl={watchedProfilePictureUrl}
+                    currentImageUrl={watchedProfile_picture_url}
                     uploading={profileUploading}
                     setUploading={setProfileUploading}
                   />
                   <ImageUploadField
                     label="Foto de Capa"
-                    name="coverPhotoUrl"
+                    name="cover_photo_url"
                     control={control}
                     setValue={setValue as (name: string, value: any, options?: any) => void}
-                    currentImageUrl={watchedCoverPhotoUrl}
+                    currentImageUrl={watchedCover_photo_url}
                     uploading={coverUploading}
                     setUploading={setCoverUploading}
                   />

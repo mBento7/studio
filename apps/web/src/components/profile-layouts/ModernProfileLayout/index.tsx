@@ -51,7 +51,7 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
               {/* Left Column: Avatar & Basic Info */}
               <div className="md:col-span-1 flex flex-col items-center md:items-start text-center md:text-left">
                 <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white dark:border-slate-800 shadow-lg">
-                  <AvatarImage src={user.profilePictureUrl} alt={user.name} />
+                  <AvatarImage src={user.profile_picture_url} alt={user.name} />
                   <AvatarFallback className="text-4xl font-bold">
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
@@ -150,14 +150,14 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
                     {portfolio.slice(0, 6).map((item: any, idx: number) => (
                       <div
                         key={idx}
-                        className="relative group rounded-lg overflow-hidden shadow-sm cursor-pointer aspect-square"
+                        className="relative group rounded-lg overflow-hidden shadow-sm cursor-pointer w-full h-40"
                         onClick={() => onPortfolioItemClick?.(item)}
                       >
                         <Image
                           src={item.imageUrl}
                           alt={item.caption || "Portfólio"}
-                          layout="fill"
-                          objectFit="cover"
+                          fill
+                          style={{ objectFit: "cover" }}
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Maximize className="w-6 h-6 text-white" />
@@ -250,7 +250,7 @@ const ModernProfileLayout: React.FC<ProfileLayoutProps> = ({
 
 export default ModernProfileLayout;
 
-export const config = {
+export const segmentConfig = {
   id: "modern-profile",
   name: "Perfil Moderno",
   description: "Layout com design moderno, ideal para profissionais criativos.",

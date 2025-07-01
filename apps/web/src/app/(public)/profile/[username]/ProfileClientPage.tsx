@@ -26,14 +26,25 @@ import ModernProfileLayout from "@/components/profile-layouts/ModernProfileLayou
 import AdvancedProfileLayout from "@/components/profile-layouts/AdvancedProfileLayout";
 import MinimalistCardLayout from "@/components/profile-layouts/MinimalistCardLayout";
 import PortfolioFocusLayout from "@/components/profile-layouts/PortfolioFocusLayout";
-import PremiumProLayout from "@/components/profile-layouts/PremiumProLayout";
+import ProProfileLayout from "@/components/profile-layouts/ProProfileLayout";
+import PremiumPlusProfileLayout from "@/components/profile-layouts/PremiumPlusProfileLayout";
+import SuperPremiumProfileLayout from '@/components/profile-layouts/SuperPremiumProfileLayout';
 import { LeftProfileSidebar } from "@/components/layout/left-profile-sidebar";
+import { isPremiumLayout } from "@/lib/isPremiumLayout";
+import { ChatFloatingBox } from '@/components/chat/ChatFloatingBox';
 
 interface ProfileClientPageProps {
   userProfile: UserProfile;
+  hideRightSidebar?: boolean;
 }
 
-export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileClientPageProps) => {
+// Função utilitária para checar se o perfil está realmente completo (ambas imagens)
+function isProfileReallyComplete(user: UserProfile) {
+  return !!user.profile_picture_url && user.profile_picture_url.trim() !== '' &&
+         !!user.cover_photo_url && user.cover_photo_url.trim() !== '';
+}
+
+export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSidebar = false }: ProfileClientPageProps) => {
   const { toast } = useToast();
   const { user: authUser, loading: authLoading, currentUserProfile } = useAuth();
   
@@ -45,6 +56,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
 
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleOpenPortfolioModal = (item: PortfolioItem) => {
     setSelectedPortfolioItem(item);
@@ -115,6 +127,18 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
     }
   }, [userToDisplay, theme]);
 
+  // Listener para abrir chat flutuante ao clicar em conversa no messenger
+  useEffect(() => {
+    const handler = (e: any) => {
+      if (e.detail?.user) {
+        setIsChatOpen(true);
+        setUserToDisplay(e.detail.user);
+      }
+    };
+    window.addEventListener('open-chat', handler);
+    return () => window.removeEventListener('open-chat', handler);
+  }, []);
+
   if (authLoading || !userToDisplay || !mounted) {
     return (
       <div className="flex justify-center items-center min-h-screen text-muted-foreground">
@@ -134,10 +158,17 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
     mounted: mounted,
   };
 
+  // Extrair propriedades de aparência customizadas do perfil
+  const premiumAppearanceProps = {
+    primaryColor: (userToDisplay as any).primaryColor || (userToDisplay as any).data?.primaryColor,
+    secondaryColor: (userToDisplay as any).secondaryColor || (userToDisplay as any).data?.secondaryColor,
+    font: (userToDisplay as any).font || (userToDisplay as any).data?.font,
+  };
+
   const renderProfileLayout = () => {
-    // Lógica para determinar o layout baseado no plano e isProfileComplete
+    // Lógica para determinar o layout baseado no plano e imagens
     if (userToDisplay.plan === 'free') {
-      if (userToDisplay.isProfileComplete) {
+      if (isProfileReallyComplete(userToDisplay)) {
         return <MinimalistCardLayout {...commonLayoutProps} />;
       } else {
         return <BasicProfileLayout {...commonLayoutProps} />;
@@ -149,10 +180,16 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
         return <ModernProfileLayout {...commonLayoutProps} />;
       }
     } else if (userToDisplay.plan === 'premium') {
-      if (userToDisplay.layoutTemplateId === 'premium-pro') {
-        return <PremiumProLayout {...commonLayoutProps} />;
-      } else { // Default para premium
-        return <AdvancedProfileLayout {...commonLayoutProps} />;
+      if (userToDisplay.layoutTemplateId === 'super-premium') {
+        return <SuperPremiumProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else if (userToDisplay.layoutTemplateId === 'premium-plus') {
+        return <PremiumPlusProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else if (userToDisplay.layoutTemplateId === 'pro') {
+        return <ProProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else if (userToDisplay.layoutTemplateId === 'advanced') {
+        return <AdvancedProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else {
+        return <AdvancedProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />; // fallback
       }
     }
     // Fallback para qualquer caso não coberto ou plano desconhecido
@@ -161,12 +198,42 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile }: ProfileCl
 
   return (
     <>
+      {authUser?.id === userToDisplay.id && (
+        <Link href="/dashboard/profile-edit-v2?step=appearance">
+          <Button
+            variant="ghost"
+            className="fixed top-6 right-6 z-50 bg-white/80 hover:bg-white shadow-lg rounded-full p-3 border border-primary"
+            title="Personalizar aparência do perfil"
+          >
+            <Edit3 className="w-6 h-6 text-primary" />
+          </Button>
+        </Link>
+      )}
+      {/* Botão de chat para visitantes logados (não o próprio perfil) */}
+      {authUser && authUser.id !== userToDisplay.id && (
+        <Button
+          variant="default"
+          className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4"
+          onClick={() => setIsChatOpen(true)}
+          title="Chamar no chat"
+        >
+          <MessageSquare className="w-5 h-5 mr-2" /> Chamar no chat
+        </Button>
+      )}
       {renderProfileLayout()}
       <PortfolioItemModal 
         item={selectedPortfolioItem}
         open={isPortfolioModalOpen}
         onOpenChange={setIsPortfolioModalOpen}
       />
+      {/* Caixa de chat flutuante */}
+      {authUser && authUser.id !== userToDisplay.id && (
+        <ChatFloatingBox
+          open={isChatOpen}
+          onOpenChange={setIsChatOpen}
+          otherUser={userToDisplay}
+        />
+      )}
     </>
   );
 }

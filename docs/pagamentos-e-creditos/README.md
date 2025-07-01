@@ -27,4 +27,19 @@ Esta pasta reúne toda a documentação relacionada ao sistema de créditos, mon
 ## Como usar
 - Consulte o arquivo mais relevante para sua dúvida ou tarefa.
 - Sempre que houver mudanças importantes no sistema de créditos/pagamentos, atualize o(s) arquivo(s) correspondente(s).
-- Para dúvidas gerais, consulte este README ou peça orientação ao time responsável. 
+- Para dúvidas gerais, consulte este README ou peça orientação ao time responsável.
+
+## [ATUALIZAÇÃO 2024-06] – Progresso da Integração Mercado Pago
+
+### O que já foi implementado:
+- Página `/dashboard/credits/buy` exibe pacotes de créditos e inicia o fluxo de compra via Mercado Pago.
+- Página `/dashboard/credits/payment-confirmation` processa o retorno do Mercado Pago e exibe o status ao usuário.
+
+### Próximos passos:
+- Implementar as rotas de API `/api/payments/mercadopago/checkout` e `/api/payments/mercadopago/validate`.
+- Criar/atualizar o serviço `credits.service.ts` para registrar transações e atualizar saldo.
+- Criar migration para tabela de transações de créditos.
+
+> Após esses passos, o fluxo de compra estará pronto para testes integrados e homologação.
+
+> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com `"use client"`, permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O frontend está pronto para integração com o backend. 

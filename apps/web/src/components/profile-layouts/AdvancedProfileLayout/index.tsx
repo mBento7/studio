@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Youtube,
@@ -42,7 +42,14 @@ import {
   Share2,
   ChevronRight,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  MessageCircle,
+  Heart,
+  X,
+  Play,
+  Sparkles,
+  Zap,
+  Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -96,16 +103,22 @@ const BGPattern = ({ variant = 'grid', mask = 'fade-edges', className }: {
   );
 };
 
-const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
+const AdvancedProfileLayout: React.FC<ProfileLayoutProps & {
+  primaryColor?: string;
+  secondaryColor?: string;
+  font?: string;
+}> = ({
   user,
   isCurrentUserProfile,
   qrCodeUrl,
   onPortfolioItemClick,
+  primaryColor,
+  secondaryColor,
+  font,
 }) => {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [showQuickNav, setShowQuickNav] = useState(false);
-  const primaryColorHex = user.themeColor || "#4F46E5";
 
   const skills = user.skills || [];
   const experience = user.experience || [];
@@ -142,7 +155,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
     if (!user) return;
     const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${user.username}` : `https://idbox.site/profile/${user.username}`;
     const bgColorForDownload = 'FFFFFF';
-    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorHex.replace("#", "")}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
+    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColor?.replace("#", "")}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
 
     try {
       const response = await fetch(qrCodeUrlForDownload);
@@ -186,16 +199,28 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
     }
   };
 
+  // Adicionar tipagem temporária para user.faq como any
+  const faq = (user as any).faq;
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div
+      className="min-h-screen bg-background text-foreground"
+      style={{
+        background: secondaryColor || undefined,
+        color: primaryColor || undefined,
+      }}
+    >
       <BGPattern variant="grid" mask="fade-edges" />
 
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-b from-primary/10 to-background pb-16">
-        {user.coverPhotoUrl && (
+      <div
+        className="relative bg-gradient-to-b from-primary/10 to-background pb-16"
+        style={{ background: primaryColor ? `${primaryColor}10` : undefined }}
+      >
+        {user.cover_photo_url && (
           <div className="h-64 md:h-80 w-full overflow-hidden relative">
             <img
-              src={user.coverPhotoUrl}
+              src={user.cover_photo_url}
               alt="Cover"
               className="w-full h-full object-cover"
             />
@@ -213,7 +238,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
             <div className="flex-shrink-0">
               <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-background shadow-2xl overflow-hidden bg-background">
                 <img
-                  src={user.profilePictureUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'}
+                  src={user.profile_picture_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'}
                   alt={user.name}
                   className="w-full h-full object-cover"
                 />
@@ -222,7 +247,10 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
 
             <div className="flex-1 space-y-4 text-center lg:text-left pt-4">
               <div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-2">
+                <h1
+                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-2"
+                  style={{ fontFamily: font && font !== 'default' ? font : undefined }}
+                >
                   {user.name}
                 </h1>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-4">{user.category}</p>
@@ -344,7 +372,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
                         {skills.map((skill, idx) => (
-                          <Badge key={idx} variant="secondary" className="px-4 py-2 text-sm rounded-full">
+                          <Badge key={skill + idx} variant="secondary" className="px-4 py-2 text-sm rounded-full">
                             {skill}
                           </Badge>
                         ))}
@@ -364,7 +392,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     <CardContent>
                       <div className="space-y-4">
                         {experience.map((exp, idx) => (
-                          <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
+                          <div key={exp.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
                             <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
                             <div>
                               <h3 className="font-semibold text-lg">{exp.title}</h3>
@@ -389,7 +417,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     <CardContent>
                       <div className="space-y-4">
                         {education.map((edu, idx) => (
-                          <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
+                          <div key={edu.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
                             <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
                             <div>
                               <h3 className="font-semibold text-lg">{edu.degree}</h3>
@@ -403,7 +431,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                   </Card>
                 )}
 
-                {portfolio.length > 0 && (
+                {portfolio.slice(0, 6).length > 0 && (
                   <Card className="border-0 shadow-lg rounded-xl" ref={portfolioRef}>
                     <CardHeader className="pb-4">
                       <CardTitle className="flex items-center gap-2 text-2xl font-semibold">
@@ -413,9 +441,9 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {portfolio.map((item, idx) => (
+                        {portfolio.slice(0, 6).map((item, idx) => (
                           <motion.div
-                            key={idx}
+                            key={item.id || idx}
                             whileHover={{ scale: 1.05 }}
                             className="aspect-square rounded-lg overflow-hidden border shadow-sm cursor-pointer group relative"
                             onClick={() => onPortfolioItemClick(item)}
@@ -447,7 +475,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {services.map((service, idx) => (
                           <motion.div
-                            key={idx}
+                            key={service.id || idx}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
@@ -504,34 +532,75 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                 )}
 
                 {user.premiumBanner && (
-                  <Card className="border-0 shadow-lg rounded-xl overflow-hidden" ref={premiumBannerRef}>
-                    <div className="relative">
-                      <img
-                        src={user.premiumBanner.imageUrl}
-                        alt={user.premiumBanner.title}
-                        className="w-full h-64 object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col items-center justify-center p-6 text-center">
-                        <h3 className="text-3xl font-bold text-white mb-2">
-                          {user.premiumBanner.title}
-                        </h3>
-                        <p className="text-lg text-white/90 mb-4">
-                          {user.premiumBanner.description}
-                        </p>
+                  <Card className="mb-8 border-0 shadow-xl bg-gradient-to-r from-primary/80 to-purple-600 text-white relative overflow-hidden">
+                    <div className="flex flex-col md:flex-row items-center gap-6 p-8">
+                      <img src={user.premiumBanner.imageUrl} alt={user.premiumBanner.title} className="w-32 h-32 rounded-xl object-cover shadow-lg border-4 border-white" />
+                      <div className="flex-1">
+                        <h2 className="text-2xl font-bold mb-2">{user.premiumBanner.title}</h2>
+                        <p className="mb-4 text-lg">{user.premiumBanner.description}</p>
                         {user.premiumBanner.ctaText && user.premiumBanner.ctaLink && (
-                          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 rounded-full">
-                            <a
-                              href={user.premiumBanner.ctaLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {user.premiumBanner.ctaText}
-                              <ExternalLink className="w-4 h-4 ml-2" />
-                            </a>
-                          </Button>
+                          <a href={user.premiumBanner.ctaLink} className="inline-block bg-white text-primary font-semibold px-6 py-2 rounded-full shadow hover:bg-primary hover:text-white transition">
+                            {user.premiumBanner.ctaText}
+                          </a>
                         )}
                       </div>
                     </div>
+                  </Card>
+                )}
+
+                {faq && Array.isArray(faq) && faq.length > 0 && (
+                  <Card className="mb-8 border-0 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-2xl font-semibold">
+                        <MessageSquare className="w-6 h-6 text-primary" />
+                        Perguntas Frequentes
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {faq.map((item, idx) => (
+                          <div key={item.id || idx} className="border-b pb-4">
+                            <h4 className="font-semibold text-lg mb-1">{item.question}</h4>
+                            <p className="text-muted-foreground">{item.answer}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {user.reviews && user.reviews.length > 0 && (
+                  <Card className="mb-8 border-0 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-2xl font-semibold">
+                        <Star className="w-6 h-6 text-primary" />
+                        Avaliações de Clientes
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {user.reviews.map((review, idx) => (
+                          <div key={review.id || idx} className="p-4 rounded-lg bg-muted/50 border border-border flex flex-col md:flex-row gap-4">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="w-12 h-12">
+                                <AvatarImage src={review.authorAvatarUrl || '/avatar-default.png'} alt={review.authorName} />
+                                <AvatarFallback>{review.authorName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="flex items-center gap-1">
+                                  {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" />)}
+                                </div>
+                                <span className="font-semibold">{review.authorName}</span>
+                                <span className="block text-xs text-muted-foreground">{new Date(review.createdAt).toLocaleDateString()}</span>
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-base text-foreground">{review.comment}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
                   </Card>
                 )}
               </div>
@@ -548,7 +617,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     <CardContent>
                       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                         {user.stories.map((story, idx) => (
-                          <div key={idx} className="flex flex-col items-center space-y-2 min-w-[80px] cursor-pointer hover:scale-105 transition-transform">
+                          <div key={story.id || idx} className="flex flex-col items-center space-y-2 min-w-[80px] cursor-pointer hover:scale-105 transition-transform">
                             <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-1">
                               <div className="bg-background p-1 rounded-full w-full h-full">
                                 <img
@@ -576,7 +645,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {user.coupons.map((coupon, idx) => (
-                        <div key={idx} className="p-4 rounded-lg border-2 border-dashed border-primary/50 bg-primary/10">
+                        <div key={coupon.id || idx} className="p-4 rounded-lg border-2 border-dashed border-primary/50 bg-primary/10">
                           <h3 className="font-bold text-lg text-primary">{coupon.code}</h3>
                           <p className="text-sm text-primary/80 mt-1">{coupon.description}</p>
                         </div>
@@ -621,7 +690,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                                 <GraduationCap className="w-5 h-5 mr-2 text-primary" /> Formação
                               </Button>
                             )}
-                            {portfolio.length > 0 && (
+                            {portfolio.slice(0, 6).length > 0 && (
                               <Button variant="ghost" className="justify-start text-base hover:bg-muted/50" onClick={() => scrollToSection(portfolioRef)}>
                                 <Palette className="w-5 h-5 mr-2 text-primary" /> Portfólio
                               </Button>
@@ -670,11 +739,11 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {portfolio.length > 0 ? (
+                {portfolio.slice(0, 6).length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {portfolio.map((item, idx) => (
+                    {portfolio.slice(0, 6).map((item, idx) => (
                       <motion.div
-                        key={idx}
+                        key={item.id || idx}
                         whileHover={{ scale: 1.05 }}
                         className="aspect-square rounded-lg overflow-hidden border shadow-sm cursor-pointer group relative"
                         onClick={() => onPortfolioItemClick(item)}
@@ -712,7 +781,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {services.map((service, idx) => (
                       <motion.div
-                        key={idx}
+                        key={service.id || idx}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.1 }}
@@ -754,7 +823,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                   {experience.length > 0 ? (
                     <div className="space-y-4">
                       {experience.map((exp, idx) => (
-                        <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
+                        <div key={exp.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
                           <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
                           <div>
                             <h3 className="font-semibold text-lg">{exp.title}</h3>
@@ -781,7 +850,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
                   {education.length > 0 ? (
                     <div className="space-y-4">
                       {education.map((edu, idx) => (
-                        <div key={idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
+                        <div key={edu.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 border border-border">
                           <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
                           <div>
                             <h3 className="font-semibold text-lg">{edu.degree}</h3>
@@ -872,7 +941,7 @@ const AdvancedProfileLayout: React.FC<ProfileLayoutProps> = ({
 
 export default AdvancedProfileLayout;
 
-export const config = {
+export const segmentConfig = {
     id: 'advanced',
     name: 'Perfil Avançado',
     description: 'Um layout profissional e completo, com abas e navegação rápida.',

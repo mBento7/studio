@@ -1,10 +1,9 @@
-
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/hooks/use-auth';
-import { LayoutDecider } from '@/components/layout/layout-decider';
+import { MessageRealtimeToastListener } from '@/components/chat/MessageRealtimeToastListener';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,11 +27,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <AuthProvider>
-          <LayoutDecider>
-            {children}
-          </LayoutDecider>
+          {children}
+          <MessageRealtimeToastListener />
         </AuthProvider>
         <Toaster />
       </body>

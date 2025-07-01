@@ -17,6 +17,7 @@ interface ImageUploadFieldProps {
   aiHintName?: string;
   aspectRatio?: '1/1' | '16/9';
   hint?: string;
+  buttonText?: string;
 }
 
 export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
@@ -30,6 +31,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   aiHintName,
   aspectRatio = '1/1',
   hint,
+  buttonText,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragActive, setIsDragActive] = useState(false);
@@ -110,34 +112,35 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
                 aria-label={`Selecionar imagem para ${label}`}
               />
             </div>
-            <div className="flex flex-row md:flex-col gap-2 md:items-end w-full md:w-auto">
+            <div className="flex flex-col items-center gap-2 mt-4">
               <Button
                 type="button"
-                variant="outline"
-                size="sm"
+                variant="default"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="w-full md:w-auto"
-                aria-label={value || currentImageUrl ? `Trocar imagem de ${label}` : `Selecionar imagem para ${label}`}
+                className="w-full"
+                aria-label={value || currentImageUrl ? `Trocar ${label}` : `Enviar ${label}`}
               >
-                <Upload className="w-4 h-4 mr-1" />{value || currentImageUrl ? 'Trocar Imagem' : 'Selecionar Imagem'}
+                <Upload className="w-4 h-4 mr-1" />
+                {value || currentImageUrl
+                  ? (label.toLowerCase().includes('capa') ? 'Trocar Capa' : 'Trocar Foto')
+                  : (label.toLowerCase().includes('capa') ? 'Enviar Capa' : 'Enviar Foto')}
               </Button>
               {(value || currentImageUrl) && (
                 <Button
                   type="button"
-                  variant="outline"
-                  size="sm"
+                  variant="destructive"
                   onClick={() => handleRemove(onChange)}
                   disabled={uploading}
-                  className="text-destructive w-full md:w-auto"
-                  aria-label={`Remover imagem de ${label}`}
+                  className="w-full"
+                  aria-label={`Remover ${label}`}
                 >
                   <Trash2 className="w-4 h-4 mr-1" /> Remover
                 </Button>
               )}
             </div>
           </div>
-          <div className="text-xs text-muted-foreground mt-1">{hint || defaultHint}</div>
+          <div className="text-xs text-muted-foreground mt-1 text-center">{hint || defaultHint}</div>
         </div>
       )}
     />

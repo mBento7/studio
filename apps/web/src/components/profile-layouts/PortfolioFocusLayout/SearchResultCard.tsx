@@ -11,8 +11,8 @@ interface PortfolioFocusSearchResultCardProps {
 }
 
 const PortfolioFocusSearchResultCard: React.FC<PortfolioFocusSearchResultCardProps> = ({ user }) => {
-  const backgroundStyle = user.coverPhotoUrl
-    ? { backgroundImage: `linear-gradient(rgba(40,40,60,0.45),rgba(40,40,60,0.6)), url('${user.coverPhotoUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
+  const backgroundStyle = user.cover_photo_url
+    ? { backgroundImage: `linear-gradient(rgba(40,40,60,0.45),rgba(40,40,60,0.6)), url('${user.cover_photo_url}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : { background: 'linear-gradient(135deg, #6366f1 60%, #a1a1aa 100%)' };
 
   return (
@@ -20,7 +20,7 @@ const PortfolioFocusSearchResultCard: React.FC<PortfolioFocusSearchResultCardPro
       <Card className="flex flex-col items-center justify-center h-full w-full p-6 rounded-2xl border-2 border-gray-400 shadow-md transition-all duration-200 hover:shadow-2xl cursor-pointer relative overflow-hidden hover:scale-105 transition-transform" style={backgroundStyle}>
         <div className="z-10 w-full flex flex-col items-center">
           <Avatar className="w-16 h-16 border-4 border-white shadow-lg -mt-8">
-            <AvatarImage src={user.profilePictureUrl || '/avatar-default.png'} alt={user.name} />
+            <AvatarImage src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} />
             <AvatarFallback className="text-xl font-bold">{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <h3 className="mt-2 font-bold text-lg text-center text-white drop-shadow">{user.name}</h3>

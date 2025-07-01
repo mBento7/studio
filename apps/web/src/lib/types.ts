@@ -65,7 +65,7 @@ export interface Coupon {
 export interface Story {
   id: string;
   imageUrl: string;
-  title?: string;
+  title: string;
   link?: string;
 }
 
@@ -73,14 +73,14 @@ export interface UserProfile {
   id: string;
   username: string;
   name: string;
-  email?: string;
+  email: string;
   phone?: string;
   whatsappNumber?: string;
   website?: string;
   bio: string;
-  profilePictureUrl: string;
+  profile_picture_url: string;
   profilePictureDataAiHint?: string;
-  coverPhotoUrl: string;
+  cover_photo_url: string;
   coverPhotoDataAiHint?: string;
   socialLinks: SocialLink[];
   location?: {
@@ -134,13 +134,6 @@ export const platformIcons: { [key: string]: React.ElementType } = {
   facebook: Facebook,
   twitch: Twitch,
 };
-
-export interface AccentColor {
-  name: string;
-  value: string;
-  foreground: string;
-  accent: string;
-}
 
 export interface LayoutTemplate {
   id: string;

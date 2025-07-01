@@ -24,6 +24,9 @@ export function MainGridLayout({
   if (hasLeft && hasRight) gridCols = 'lg:grid-cols-[280px_1fr_320px]';
   else if (hasLeft) gridCols = 'lg:grid-cols-[280px_1fr]';
   else if (hasRight) gridCols = 'lg:grid-cols-[1fr_320px]';
+  else gridCols = 'grid-cols-1';
+
+  console.log('MainGridLayout', { hasLeft, hasRight, gridCols, rightSidebar });
 
   return (
     <div className={`max-w-screen-xl mx-auto grid ${gridCols} gap-6 p-4 items-start min-h-[calc(100vh-4rem)]`}>
@@ -34,8 +37,10 @@ export function MainGridLayout({
   );
 }
 
-export function AppContainer({ children }: { children: React.ReactNode }) {
+export function AppContainer({ children, hideSidebar = false, hideRightSidebar = false }: { children: React.ReactNode, hideSidebar?: boolean, hideRightSidebar?: boolean }) {
   const { loading, user, currentUserProfile } = useAuth();
+
+  console.log('AppContainer hideRightSidebar:', hideRightSidebar);
 
   // Mock de dados do usuário (substitua por dados reais do contexto/auth futuramente)
   const mockProfile = {
@@ -58,10 +63,10 @@ export function AppContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <main className="flex-1 pt-16 bg-transparent">
+      <main className={`flex-1 bg-transparent ${hideSidebar && hideRightSidebar ? '' : 'pt-16'}`}>
         <MainGridLayout
-          leftSidebar={user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
-          rightSidebar={<RightWidgetsColumn />}
+          leftSidebar={!hideSidebar && user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
+          rightSidebar={!hideRightSidebar && user ? <RightWidgetsColumn /> : null}
         >
           {children}
         </MainGridLayout>

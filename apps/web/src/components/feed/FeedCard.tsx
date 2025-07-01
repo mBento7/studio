@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Heart, MessageCircle, Share2, MapPin, User, Tag, Hand, Star } from "lucide-react";
 import { tipoConfig } from "@/config/feed";
+import { useRouter } from "next/navigation";
 
 // Badge component
 const badgeVariants = "inline-flex items-center justify-center border px-1.5 text-xs font-medium leading-normal transition-colors outline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 border-transparent bg-primary text-primary-foreground";
@@ -119,6 +120,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
 }, ref) => {
   const [isLiked, setIsLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(curtidas);
+  const router = useRouter();
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -126,8 +128,10 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
     onCurtir?.();
   };
 
-  const handleWhatsApp = () => {
-    window.open(whatsappUrl, '_blank');
+  const handleContato = () => {
+    // Gera um slug a partir do nome do usuário
+    const username = usuario.nome?.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    router.push(`/profile/${username}`);
   };
 
   const handleLocation = () => {
@@ -147,14 +151,11 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
     >
       <div
         className={cn(
-          "w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10",
-          "flex flex-row items-start gap-5 p-5",
-          config.shadow,
-          patrocinado && "bg-gradient-to-tr from-yellow-50/50 via-orange-50/50 to-red-50/50 dark:from-yellow-900/10 dark:via-orange-900/10 dark:to-red-900/10"
+          "w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-border flex flex-row items-center gap-5 p-6"
         )}
       >
-        {/* Imagem lateral pequena */}
-        <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg bg-muted">
+        {/* Imagem lateral centralizada verticalmente */}
+        <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg bg-muted flex items-center justify-center">
           <img
             src={imagem}
             alt={titulo}
@@ -169,7 +170,6 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
         <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
           <div className="flex flex-col">
             <div className="flex items-start justify-between">
-               <span className="font-bold text-lg text-foreground truncate block">{titulo}</span>
                <span className={cn(
                 "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full",
                 config.bg,
@@ -186,7 +186,13 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
               <span className="text-sm font-medium text-muted-foreground">{usuario.nome}</span>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-3">{descricao}</p>
+            {/* Preço e descrição */}
+            <div className="mb-3">
+              {preco && (
+                <span className="font-semibold text-emerald-700 mr-2">{preco}</span>
+              )}
+              <span className="text-sm text-muted-foreground">{descricao}</span>
+            </div>
           
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">
@@ -217,18 +223,16 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
                 <span>{comentarios}</span>
               </button>
             </div>
-            {/* Botão de contato só para ofertas */}
-            {tipo.startsWith('oferta') && (
-              <button 
-                onClick={handleWhatsApp}
-                className={cn(
-                  "flex items-center gap-2 py-2 px-4 bg-gradient-to-r text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all",
-                  config.gradient || 'from-[#14b8a6] to-[#0e9094]'
-                )}
-              >
-                Entrar em contato
-              </button>
-            )}
+            {/* Botão de contato agora aparece para todos os tipos de card */}
+            <button 
+              onClick={handleContato}
+              className={cn(
+                "flex items-center gap-2 py-2 px-4 bg-gradient-to-r text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all",
+                config.gradient || 'from-[#14b8a6] to-[#0e9094]'
+              )}
+            >
+              Contato
+            </button>
           </div>
         </div>
       </div>
