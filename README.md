@@ -34,3 +34,5 @@ pnpm lint
 Para mais detalhes, consulte o [README do app web](./apps/web/README.md) e o [índice de documentação](./docs/README.md).
 
 > Este projeto utiliza **monorepo** com pnpm. Os principais apps e pacotes estão em `apps/`, `db/`, `infra/`, `supabase/` e `docs/`. Atualização automática: documentação revisada em  
+
+Atualização rápida: 24/06/2025
