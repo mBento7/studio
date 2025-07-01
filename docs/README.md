@@ -126,4 +126,6 @@ Para garantir a evolução contínua e organizada do projeto, mantenha sempre um
 - Criar/atualizar o serviço `credits.service.ts` para registrar transações e atualizar saldo.
 - Criar migration para tabela de transações de créditos.
 
-> Após esses passos, o fluxo de compra estará pronto para testes integrados e homologação. 
+> Após esses passos, o fluxo de compra estará pronto para testes integrados e homologação.
+
+Atualização rápida: 24/06/2025 
