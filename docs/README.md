@@ -236,4 +236,6 @@ O Messenger do WhosDo é um sistema de mensagens temporárias, voltado para nego
 
 ---
 
-> Para detalhes técnicos, exemplos de código e SQL, consulte a documentação interna dos componentes e o README do app web. 
+> Para detalhes técnicos, exemplos de código e SQL, consulte a documentação interna dos componentes e o README do app web.
+
+Atualizado automaticamente em: 01/07/2025 
