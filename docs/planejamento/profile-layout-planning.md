@@ -1,12 +1,48 @@
 # Documento de Estratégia: Layouts de Perfil, Planos e Recursos Futuros
 
-### 1. Introdução
-
 Este documento descreve a estratégia para a organização dos layouts de perfil de usuário na plataforma, vinculando-os diretamente aos planos de assinatura (`free`, `standard`, `premium`) e delineando os recursos associados a cada um. Também exploramos "extras futuros" potenciais para cada plano, visando a expansão da plataforma.
+
+## 1. Arquitetura Atual de Layout
+
+- O layout das páginas do dashboard (ex: `/dashboard/feed`) é controlado exclusivamente pelo componente `LayoutDecider`, que utiliza internamente o `AppContainer`.
+- O `AppContainer` é responsável por renderizar:
+  - Navbar (`PublicHeader`)
+  - Sidebar esquerda (`LeftProfileSidebar`)
+  - Coluna central (conteúdo)
+  - Sidebar direita (`RightWidgetsColumn`)
+- O layout global do dashboard (`apps/web/src/app/(app)/dashboard/layout.tsx`) **NÃO** deve envolver as páginas com `AppContainer` ou `LayoutDecider`, apenas renderizar `{children}` e componentes globais como o chat.
+
+## 2. Lógica de Layouts de Perfil
+
+- O `LayoutDecider` seleciona o layout de perfil correto com base no plano do usuário (`free`, `standard`, `premium`) e no campo `layoutTemplateId`.
+- Todos os layouts antigos como `BasicProfileLayout`, `ModernProfileLayout`, `AdvancedProfileLayout` foram removidos. Os layouts atuais são:
+  - `FreeProfileLayout` (para plano free)
+  - `StandardProfileLayout` (para plano standard)
+  - `PremiumProfileLayout` (para plano premium)
+- O layout é aplicado automaticamente, sem necessidade de lógica manual nas páginas.
+
+## 3. Feed e Sidebars
+
+- O feed deve ser renderizado dentro de um único `<LayoutDecider>`, sem wrappers de largura máxima (`max-w-2xl mx-auto`), para que o grid de três colunas funcione corretamente.
+- A sidebar esquerda mostra informações do perfil do usuário logado.
+- A sidebar direita mostra widgets e informações contextuais.
+- Ambas são controladas automaticamente pelo `AppContainer` e não devem ser renderizadas manualmente nas páginas.
+
+## 4. Navbar
+
+- A navbar (`PublicHeader`) é renderizada automaticamente pelo `AppContainer`.
+- Não deve ser incluída manualmente em nenhuma página do dashboard.
+
+## 5. Boas práticas
+
+- Sempre utilize `LayoutDecider` no topo das páginas do dashboard.
+- Nunca use `AppContainer` diretamente em páginas do dashboard.
+- Não limite a largura do conteúdo central do feed para garantir que as sidebars apareçam corretamente.
+- Reinicie o servidor de desenvolvimento após alterações estruturais de layout para evitar cache de containers antigos.
 
 ### 2. Visão Geral dos Layouts Atuais e Proposta de Reorganização
 
-Atualmente, dispomos dos layouts: `BasicProfileLayout`, `ModernProfileLayout` e `AdvancedProfileLayout`. A proposta é reorganizá-los e introduzir novos layouts para se adequarem melhor aos planos e à complexidade das informações do perfil.
+Atualmente, dispomos dos layouts: `BasicProfileLayout`, `FreeProfileLayout` e `StandardProfileLayout`. A proposta é reorganizá-los e introduzir novos layouts para se adequarem melhor aos planos e à complexidade das informações do perfil.
 
 #### 2.1. Plano Básico (`free`)
 
@@ -35,7 +71,7 @@ O plano `free` terá dois layouts condicionados à completude das informações 
 
 O plano `standard` oferecerá **dois layouts distintos**, permitindo que o usuário escolha o que melhor se adapta às suas necessidades.
 
-*   **`ModernProfileLayout` (Layout Padrão 1)**
+*   **`FreeProfileLayout` (Layout Padrão 1)**
     *   **Descrição:** Layout limpo e moderno, ideal para profissionais que buscam apresentar serviços e um portfólio de tamanho médio.
     *   **Recursos:**
         *   Todas as funcionalidades do plano `free` (`MinimalistCardLayout`).
@@ -43,12 +79,12 @@ O plano `standard` oferecerá **dois layouts distintos**, permitindo que o usuá
         *   Seções de Experiência e Educação.
         *   Integração de cupons (para ofertas de serviços).
         *   Mais opções de links sociais.
-    *   **Gatilho:** `user.plan === 'standard'` E `user.layoutTemplateId === 'modern'` (ou default para standard se não especificado)
+    *   **Gatilho:** `user.plan === 'standard'` E `user.layoutTemplateId === 'free'` (ou default para standard se não especificado)
 
 *   **`PortfolioFocusLayout` (Layout Padrão 2)**
     *   **Descrição:** Um layout projetado para destacar visualmente o portfólio do usuário, ideal para criativos, designers e artistas.
     *   **Recursos:**
-        *   Similar ao `ModernProfileLayout`, mas com uma ênfase visual maior nas galerias de portfólio.
+        *   Similar ao `FreeProfileLayout`, mas com uma ênfase visual maior nas galerias de portfólio.
         *   Funcionalidades de cupons.
         *   Maior quantidade de itens de portfólio e serviços.
     *   **Gatilho:** `user.plan === 'standard'` E `user.layoutTemplateId === 'portfolio-focus'`
@@ -58,7 +94,7 @@ O plano `standard` oferecerá **dois layouts distintos**, permitindo que o usuá
 
 O plano `premium` oferecerá **dois layouts avançados**, com a gama completa de recursos para profissionais que desejam a máxima personalização e destaque.
 
-*   **`AdvancedProfileLayout` (Layout Premium 1)**
+*   **`StandardProfileLayout` (Layout Premium 1)**
     *   **Descrição:** Um layout robusto e abrangente, ideal para profissionais com vasta experiência, muitos serviços e portfólio extenso.
     *   **Recursos:**
         *   Todas as funcionalidades do plano `standard`.
@@ -67,12 +103,12 @@ O plano `premium` oferecerá **dois layouts avançados**, com a gama completa de
         *   Espaço para **Banner Personalizado** (promoções, anúncios).
         *   Recursos de **Cupons Avançados**.
         *   Funcionalidade de **Stories** (pequenas atualizações visuais/vídeos temporários no perfil).
-    *   **Gatilho:** `user.plan === 'premium'` E `user.layoutTemplateId === 'advanced'` (ou default para premium se não especificado)
+    *   **Gatilho:** `user.plan === 'premium'` E `user.layoutTemplateId === 'standard'` (ou default para premium se não especificado)
 
 *   **`PremiumProLayout` (Layout Premium 2)**
     *   **Descrição:** Um layout de nível profissional, com foco em otimização para negócios e maior controle sobre a apresentação do conteúdo.
     *   **Recursos:**
-        *   Todas as funcionalidades do `AdvancedProfileLayout`.
+        *   Todas as funcionalidades do `StandardProfileLayout`.
         *   Pode incluir opções de **Testemunhos/Depoimentos** em destaque.
         *   Integração com calendários ou ferramentas de agendamento (ex: Calendly).
         *   Recursos avançados de SEO na página do perfil.
@@ -118,7 +154,7 @@ Esta seção sugere recursos adicionais que poderiam ser implementados no futuro
     > A lógica de `switch` em `apps/web/src/app/(public)/profile/[username]/ProfileClientPage.tsx` foi ajustada para incorporar os novos `layoutTemplateId` e as condições (`isProfileComplete`) para os diferentes planos, especialmente o `free`.
 
 3.  **Criar/Atualizar Componentes de Layout**: **(Concluído)**
-    > Todos os componentes de layout (`BasicProfileLayout.tsx`, `ModernProfileLayout.tsx`, `AdvancedProfileLayout.tsx`, `MinimalistCardLayout.tsx`, `PortfolioFocusLayout.tsx`, `PremiumProLayout.tsx`) foram criados ou atualizados para estarem em conformidade com as novas definições de props (`user` em vez de `userProfile`) e estrutura.
+    > Todos os componentes de layout (`BasicProfileLayout.tsx`, `FreeProfileLayout.tsx`, `StandardProfileLayout.tsx`, `MinimalistCardLayout.tsx`, `PortfolioFocusLayout.tsx`, `PremiumProLayout.tsx`) foram criados ou atualizados para estarem em conformidade com as novas definições de props (`user` em vez de `userProfile`) e estrutura.
 
 4.  **Definir `isProfileComplete`**: Implementar uma função ou lógica para determinar se um perfil `free` está "completo" o suficiente para ativar o `MinimalistCardLayout`. Isso pode envolver verificar a presença de `profilePictureUrl`, `coverPhotoUrl`, `bio`, etc.
 
@@ -195,9 +231,9 @@ Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenç
 - **Exemplo de registros:**
   - `basic` (Free, incompleto)
   - `minimalist` (Free, completo)
-  - `modern` (Standard)
+  - `free` (Standard)
   - `portfolio-focus` (Standard)
-  - `advanced` (Premium)
+  - `standard` (Premium)
   - `premium-pro` (Premium)
 
 ---
@@ -214,11 +250,11 @@ Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenç
     }
     if (user.plan === 'standard') {
       if (user.layoutTemplateId === 'portfolio-focus') return <PortfolioFocusLayout user={user} />
-      return <ModernProfileLayout user={user} />
+      return <FreeProfileLayout user={user} />
     }
     if (user.plan === 'premium') {
       if (user.layoutTemplateId === 'premium-pro') return <PremiumProLayout user={user} />
-      return <AdvancedProfileLayout user={user} />
+      return <StandardProfileLayout user={user} />
     }
     return <BasicProfileLayout user={user} /> // fallback seguro
   }
@@ -258,9 +294,9 @@ Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenç
       layouts/
         BasicProfileLayout.tsx
         MinimalistCardLayout.tsx
-        ModernProfileLayout.tsx
+        FreeProfileLayout.tsx
         PortfolioFocusLayout.tsx
-        AdvancedProfileLayout.tsx
+        StandardProfileLayout.tsx
         PremiumProLayout.tsx
       components/
         Avatar.tsx
@@ -279,7 +315,7 @@ Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenç
       "sections": ["bio", "contact"],
       "plan": "free"
     },
-    "advanced": {
+    "standard": {
       "sections": ["bio", "services", "portfolio", "youtube", "banner", "stories"],
       "plan": "premium"
     }
@@ -316,7 +352,7 @@ Essas práticas garantem flexibilidade, escalabilidade e facilidade de manutenç
 ### 1. Escolha o Layout
 - Localize a pasta do layout desejado em:
   `apps/web/src/components/profile-layouts/NOME_DO_LAYOUT/`
-- Exemplo: Para o layout premium, edite `AdvancedProfileLayout/index.tsx` ou `PremiumProLayout/index.tsx`.
+- Exemplo: Para o layout premium, edite `StandardProfileLayout/index.tsx` ou `PremiumProLayout/index.tsx`.
 
 ### 2. Entenda a Estrutura
 - Leia o comentário no início do arquivo e o README da pasta para saber:

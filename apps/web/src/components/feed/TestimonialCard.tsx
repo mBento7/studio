@@ -2,7 +2,7 @@ import React from "react";
 import { Star } from "lucide-react";
 
 interface TestimonialCardProps {
-  usuario: string;
+  usuario: { nome: string; avatar: string };
   nota: number;
   comentario: string;
   servico: string;
@@ -12,10 +12,10 @@ interface TestimonialCardProps {
 export function TestimonialCard({ usuario, nota, comentario, servico, imagem }: TestimonialCardProps) {
   return (
     <div className="rounded-xl border shadow bg-gradient-to-br from-yellow-50 via-yellow-100 to-white p-5 flex items-center gap-4">
-      <img src={imagem} alt={usuario} className="w-16 h-16 rounded-full border-2 border-yellow-300 shadow" />
+      <img src={imagem} alt={usuario.nome} className="w-16 h-16 rounded-full border-2 border-yellow-300 shadow" />
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-bold text-lg text-yellow-900">{usuario}</span>
+          <span className="font-bold text-lg text-yellow-900">{usuario.nome}</span>
           <span className="flex items-center gap-0.5">
             {[...Array(nota)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
           </span>

@@ -1,263 +1,134 @@
+/* ───────────────────────── globals.css ───────────────────────── */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- Variáveis de tema (modo claro) ---------- */
 @layer base {
   :root {
-    --background-start-rgb: 248, 250, 252; /* slate-50, um cinza-azulado muito claro */
-    --background-end-rgb: 241, 245, 249;   /* slate-100, um pouco mais escuro */
-    
-    --foreground: 220 13% 18%; /* cinza carvão */
-    --card: 0 0% 100%;
-    --card-foreground: 220 13% 18%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 18%;
+    --background-start-rgb: 248 250 252;   /* slate‑50  */
+    --background-end-rgb:   241 245 249;   /* slate‑100 */
 
-    /* Cores mais vibrantes inspiradas no tema dark */
-    --primary: 174 80% 40%; /* #14c9bd - teal vibrante (principal) */
-    --primary-foreground: 0 0% 10%; /* Preto para melhor contraste com o teal */
-    --accent: 210 80% 50%; /* Azul vibrante (secundário) */
-    --accent-foreground: 0 0% 98%;
-    --ring: 174 80% 40%; /* teal para o anel de foco */
+    --foreground:           220 13% 18%;
+    --card:                 0 0% 100%;
+    --card-foreground:      220 13% 18%;
+    --popover:              0 0% 100%;
+    --popover-foreground:   220 13% 18%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 16% 90%;
-    --muted-foreground: 220 13% 40%;
-    --destructive: 0 84.2% 60.2%;
+    --primary:              174 80% 40%;  /* teal */
+    --primary-foreground:   0 0% 10%;
+
+    --accent:               210 80% 50%;  /* azul vibrante */
+    --accent-foreground:    0 0% 98%;
+
+    --secondary:            210 40% 96.1%;
+    --secondary-foreground: 222 47% 11.2%;
+    --muted:                210 16% 90%;
+    --muted-foreground:     220 13% 40%;
+
+    --destructive:          0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 210 20% 88%; /* Borda um pouco mais visível (slate-300) */
-    --input: 210 20% 94%; /* slate-200 */
-    --radius: 0.75rem; /* bordas mais suaves */
-    
+    --border: 210 20% 88%;
+    --input:  210 20% 94%;
+    --ring:   174 80% 40%;
+
     --success: 142 72% 29%;
-    --warning: 45 93% 47%;
-    --info: 199 89% 49%;
-    --font-geist-sans: 'Geist Sans', 'Inter', Arial, Helvetica, sans-serif;
+    --warning: 45  93% 47%;
+    --info:    199 89% 49%;
+
+    --radius: 1rem; /* 16 px – bordas padrão de TODOS os cards */
+    --font-geist-sans: 'Geist Sans', 'Inter', system-ui, sans-serif;
+    --font-geist-mono: 'Geist Mono', 'Fira Mono', 'Menlo', 'monospace';
   }
 
   .dark {
-    /* Fundo principal em tom escuro de cinza */
-    --background-start-rgb: 17, 17, 17;   /* #111111 - Quase preto */
-    --background-end-rgb: 24, 24, 24;     /* #181818 - Cinza muito escuro */
+    --background-start-rgb: 17 17 17;
+    --background-end-rgb:   24 24 24;
 
-    /* Cores de texto e elementos principais */
-    --foreground: 0 0% 98%;               /* #fafafa - Branco suave */
-    --card: 0 0% 10%;                     /* #1a1a1a - Cinza escuro para cards */
-    --card-foreground: 0 0% 98%;          /* #fafafa - Texto em cards */
+    --foreground:           0 0% 98%;
+    --card:                 0 0% 10%;
+    --card-foreground:      0 0% 98%;
+    --popover:              0 0% 10%;
+    --popover-foreground:   0 0% 98%;
 
-    --popover: 0 0% 10%;                  /* #1a1a1a - Fundo de popovers */
-    --popover-foreground: 0 0% 98%;       /* #fafafa - Texto em popovers */
+    --primary:              174 80% 60%;
+    --primary-foreground:   0 0% 10%;
 
-    /* Cores de ação e destaque */
-    --primary: 174 80% 60%;                  /* #14c9bd - teal vibrante (principal) */
-    --primary-foreground: 0 0% 10%;       /* #1a1a1a - Texto em elementos primários */
+    --secondary:            0 0% 20%;
+    --secondary-foreground: 0 0% 90%;
+    --muted:                0 0% 15%;
+    --muted-foreground:     0 0% 70%;
 
-    --secondary: 0 0% 20%;                /* #262626 - Cinza escuro para elementos secundários */
-    --secondary-foreground: 0 0% 90%;     /* #d9d9d9 - Texto em elementos secundários */
+    --accent:               0 0% 25%;
+    --accent-foreground:    0 0% 98%;
 
-    /* Elementos de interface */
-    --muted: 0 0% 15%;                    /* #262626 - Fundo para elementos mudos */
-    --muted-foreground: 0 0% 70%;         /* #a6a6a6 - Texto mudo/desativado */
+    --destructive:          0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --accent: 0 0% 25%;                   /* #333333 - Destaque sutil */
-    --accent-foreground: 0 0% 98%;        /* #fafafa - Texto em destaques */
+    --border: 0 0% 25%;
+    --input:  0 0% 20%;
+    --ring:   0 0% 30%;
 
-    /* Elementos de feedback */
-    --destructive: 0 84% 60%;             /* Vermelho para ações destrutivas */
-    --destructive-foreground: 0 0% 98%;   /* #fafafa - Texto em elementos destrutivos */
-
-    /* Bordas e inputs */
-    --border: 0 0% 25%;                   /* #333333 - Bordas sutis */
-    --input: 0 0% 20%;                    /* #262626 - Fundo de inputs */
-    --ring: 0 0% 30%;                     /* #404040 - Anel de foco */
-    
     --success: 142 72% 40%;
     --warning: 45 93% 60%;
-    --info: 199 89% 60%;
-    --font-geist-sans: 'Geist Sans', 'Inter', Arial, Helvetica, sans-serif;
+    --info:    199 89% 60%;
+
+    --font-geist-sans: 'Geist Sans', 'Inter', system-ui, sans-serif;
+    --font-geist-mono: 'Geist Mono', 'Fira Mono', 'Menlo', 'monospace';
   }
 }
 
-@layer utilities {
-  /* No modo Light, as sombras são pretas */
-  *, ::before, ::after {
-    --tw-shadow-color: 0 0 0;
-    --tw-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  }
-
-  /* No modo Dark, as sombras são definidas como preto com 50% de opacidade */
-  .dark {
-    *, ::before, ::after {
-      --tw-shadow-color: 0 0 0; /* Preto */
-      --tw-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
-  }
-}
-
+/* ---------- Reset e tipografia básica ---------- */
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
+  *       { @apply border-border; }
+  body    {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans), 'Inter', Arial, Helvetica, sans-serif;
-    background: linear-gradient(to bottom, 
-      rgb(var(--background-start-rgb)), 
-      rgb(var(--background-end-rgb)));
-    letter-spacing: 0.01em;
+    font-family: var(--font-geist-sans);
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+    letter-spacing: .01em;
     font-size: 1.04rem;
   }
+  h1 { @apply text-4xl sm:text-5xl font-bold tracking-tight; }
+  h2 { @apply text-3xl sm:text-4xl font-semibold tracking-tight; }
 
-  h1 {
-    @apply text-4xl font-bold tracking-tight sm:text-5xl;
-  }
-  
-  h2 {
-    @apply text-3xl font-semibold tracking-tight sm:text-4xl;
-  }
+  a, button { @apply transition-colors duration-200; }
+}
 
-  a, button {
-    @apply transition-colors duration-200;
+/* ---------- Sombra global suave ---------- */
+@layer utilities {
+  .shadow-soft { box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+  .shadow-deep { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+}
+
+/* ---------- Classes de card reutilizáveis ---------- */
+@layer components {
+  .card-base {
+    @apply bg-card text-card-foreground rounded-lg shadow-soft p-4;
+  }
+  .feed-card {
+    @apply card-base border border-border;
   }
 }
 
-/* Esconde scrollbar de forma cross-browser */
+/* ---------- Botões glass / tabs ---------- */
+@layer components {
+  .glass-btn {
+    @apply inline-flex items-center gap-2 h-10 px-5 font-semibold rounded-full border transition
+           shadow-soft bg-[rgba(127,90,240,0.13)] border-primary text-accent-foreground
+           hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:text-white;
+  }
+  .glass-btn.tab-active   { @apply bg-gradient-to-r from-primary to-accent border-2 border-white text-white shadow-deep scale-105 z-10; }
+  .glass-btn.tab-inactive { @apply opacity-85 hover:opacity-100; }
+  .glass-btn.sm           { @apply h-6 text-sm px-2.5; }
+}
+
+/* ---------- Utilitário para ocultar scrollbar ---------- */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; scrollbar-width: none;
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Botão customizado estilo 16 */
-.btn-16 {
-  border: none;
-  color: #000;
-}
-.btn-16:after {
-  position: absolute;
-  content: "";
-  width: 0;
-  height: 100%;
-  top: 0;
-  left: 0;
-  direction: rtl;
-  z-index: -1;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  transition: all 0.3s ease;
-}
-.btn-16:hover {
-  color: #000;
-}
-.btn-16:hover:after {
-  left: auto;
-  right: 0;
-  width: 100%;
-}
-.btn-16:active {
-  top: 2px;
-}
-
-.custom-btn {
-  width: 130px;
-  height: 40px;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  outline: none;
-}
-
-/* Botão estilo glass/AI (inspirado na imagem) */
-.glass-btn {
-  border: 1.5px solid #7f5af0;
-  border-radius: 999px;
-  padding: 0 20px;
-  height: 40px;
-  font-size: 1rem;
-  color: #e0e6ed;
-  background: rgba(127,90,240,0.13);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  margin: 0 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  position: relative;
-  overflow: hidden;
-  transition: 
-    box-shadow 0.2s,
-    background 0.2s,
-    color 0.2s,
-    border 0.2s,
-    transform 0.15s;
-}
-.glass-btn.tab-active {
-  background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
-  color: #fff;
-  border: 2.5px solid #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  transform: scale(1.08);
-  z-index: 2;
-}
-.glass-btn.tab-inactive {
-  background: rgba(127,90,240,0.13);
-  color: #5b5b7a;
-  border: 1.5px solid #a259f7;
-  opacity: 1;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  filter: none;
-  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
-}
-.glass-btn.tab-inactive:hover, .glass-btn.tab-inactive:focus {
-  background: linear-gradient(90deg, #ede9fe 0%, #e0fdfa 100%);
-  color: #7f5af0;
-  border: 2px solid #7f5af0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  transform: scale(1.04);
-}
-
-/* Versão menor para ações secundárias */
-.glass-btn.sm {
-  height: 26px;
-  font-size: 0.85rem;
-  padding: 0 8px;
-}
-
-/* Aperfeiçoamento UX para botões de abas do feed */
-.glass-btn.tab-active {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  border: 2.5px solid #fff;
-  background: linear-gradient(90deg, #7f5af0 0%, #5eead4 100%);
-  color: #fff;
-  transform: scale(1.08);
-  z-index: 2;
-}
-.glass-btn.tab-inactive {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  opacity: 0.85;
-  filter: blur(0.2px);
-}
-.glass-btn:active {
-  filter: brightness(0.95);
-  transform: scale(0.98);
-}
-.glass-btn {
-  margin: 0 0.5rem;
-  min-width: 120px;
-  transition:
-    box-shadow 0.2s,
-    background 0.2s,
-    color 0.2s,
-    transform 0.15s;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }

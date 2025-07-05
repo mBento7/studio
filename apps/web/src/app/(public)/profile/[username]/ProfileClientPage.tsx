@@ -21,17 +21,13 @@ import { platformIcons } from "@/lib/types";
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
 
 // Componentes de layout de perfil
-import BasicProfileLayout from "@/components/profile-layouts/BasicProfileLayout";
-import ModernProfileLayout from "@/components/profile-layouts/ModernProfileLayout";
-import AdvancedProfileLayout from "@/components/profile-layouts/AdvancedProfileLayout";
-import MinimalistCardLayout from "@/components/profile-layouts/MinimalistCardLayout";
-import PortfolioFocusLayout from "@/components/profile-layouts/PortfolioFocusLayout";
-import ProProfileLayout from "@/components/profile-layouts/ProProfileLayout";
-import PremiumPlusProfileLayout from "@/components/profile-layouts/PremiumPlusProfileLayout";
-import SuperPremiumProfileLayout from '@/components/profile-layouts/SuperPremiumProfileLayout';
+import FreeProfileLayout from "@/components/profile-layouts/FreeProfileLayout";
+import StandardProfileLayout from "@/components/profile-layouts/StandardProfileLayout";
+import PremiumProfileLayout from "@/components/profile-layouts/PremiumProfileLayout";
 import { LeftProfileSidebar } from "@/components/layout/left-profile-sidebar";
 import { isPremiumLayout } from "@/lib/isPremiumLayout";
 import { ChatFloatingBox } from '@/components/chat/ChatFloatingBox';
+import { useRouter } from 'next/navigation';
 
 interface ProfileClientPageProps {
   userProfile: UserProfile;
@@ -47,6 +43,7 @@ function isProfileReallyComplete(user: UserProfile) {
 export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSidebar = false }: ProfileClientPageProps) => {
   const { toast } = useToast();
   const { user: authUser, loading: authLoading, currentUserProfile } = useAuth();
+  const router = useRouter();
   
   const [mounted, setMounted] = useState(false);
   const [userToDisplay, setUserToDisplay] = useState<UserProfile | null>(initialUserProfile);
@@ -57,6 +54,8 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const isCurrentUserPremium = currentUserProfile?.plan === 'standard' || currentUserProfile?.plan === 'premium';
 
   const handleOpenPortfolioModal = (item: PortfolioItem) => {
     setSelectedPortfolioItem(item);
@@ -139,6 +138,23 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
     return () => window.removeEventListener('open-chat', handler);
   }, []);
 
+  const handleChatButtonClick = () => {
+    if (!isCurrentUserPremium) {
+      toast({
+        title: "Funcionalidade Premium",
+        description: "Para iniciar um chat, você precisa de um plano Standard ou Premium. Faça upgrade para ter acesso!",
+        variant: "destructive",
+        action: <Link href="/planos"><Button variant="outline">Ver Planos</Button></Link>,
+      });
+      return;
+    }
+    setIsChatOpen(true);
+  };
+
+  const handleUpgradeClick = () => {
+    router.push('/planos');
+  };
+
   if (authLoading || !userToDisplay || !mounted) {
     return (
       <div className="flex justify-center items-center min-h-screen text-muted-foreground">
@@ -168,32 +184,23 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   const renderProfileLayout = () => {
     // Lógica para determinar o layout baseado no plano e imagens
     if (userToDisplay.plan === 'free') {
-      if (isProfileReallyComplete(userToDisplay)) {
-        return <MinimalistCardLayout {...commonLayoutProps} />;
-      } else {
-        return <BasicProfileLayout {...commonLayoutProps} />;
-      }
+      return <FreeProfileLayout {...commonLayoutProps} />;
     } else if (userToDisplay.plan === 'standard') {
-      if (userToDisplay.layoutTemplateId === 'portfolio-focus') {
-        return <PortfolioFocusLayout {...commonLayoutProps} />;
-      } else { // Default para standard
-        return <ModernProfileLayout {...commonLayoutProps} />;
+      if (userToDisplay.layoutTemplateId === 'standard') {
+        return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
       }
+      return <FreeProfileLayout {...commonLayoutProps} />;
     } else if (userToDisplay.plan === 'premium') {
-      if (userToDisplay.layoutTemplateId === 'super-premium') {
-        return <SuperPremiumProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
-      } else if (userToDisplay.layoutTemplateId === 'premium-plus') {
-        return <PremiumPlusProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
-      } else if (userToDisplay.layoutTemplateId === 'pro') {
-        return <ProProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
-      } else if (userToDisplay.layoutTemplateId === 'advanced') {
-        return <AdvancedProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      if (userToDisplay.layoutTemplateId === 'premiumprofile') {
+        return <PremiumProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else if (userToDisplay.layoutTemplateId === 'standard') {
+        return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
       } else {
-        return <AdvancedProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />; // fallback
+        return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />; // fallback
       }
     }
     // Fallback para qualquer caso não coberto ou plano desconhecido
-    return <BasicProfileLayout {...commonLayoutProps} />;
+    return <FreeProfileLayout {...commonLayoutProps} />;
   };
 
   return (
@@ -212,12 +219,13 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
       {/* Botão de chat para visitantes logados (não o próprio perfil) */}
       {authUser && authUser.id !== userToDisplay.id && (
         <Button
-          variant="default"
+          variant={isCurrentUserPremium ? "default" : "outline"}
           className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4"
-          onClick={() => setIsChatOpen(true)}
-          title="Chamar no chat"
+          onClick={handleChatButtonClick}
+          title={isCurrentUserPremium ? "Chamar no chat" : "Recurso premium"}
         >
-          <MessageSquare className="w-5 h-5 mr-2" /> Chamar no chat
+          <MessageSquare className="w-5 h-5 mr-2" />
+          {isCurrentUserPremium ? "Chamar no chat" : "Fazer Upgrade"}
         </Button>
       )}
       {renderProfileLayout()}

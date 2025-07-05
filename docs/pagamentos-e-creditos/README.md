@@ -1,5 +1,8 @@
 # Documentação de Pagamentos e Créditos
 
+> **Última revisão:** 24/06/2025  
+> **Responsável:** Micael Bento
+
 Esta pasta reúne toda a documentação relacionada ao sistema de créditos, monetização e pagamentos do projeto.
 
 ## Objetivo
@@ -18,18 +21,18 @@ Esta pasta reúne toda a documentação relacionada ao sistema de créditos, mon
 - Consulte o arquivo mais relevante para sua dúvida ou tarefa.
 - Sempre que houver mudanças importantes no sistema de créditos/pagamentos, atualize o(s) arquivo(s) correspondente(s).
 - Use exemplos reais e práticos sempre que possível.
+- Para dúvidas gerais, consulte este README ou peça orientação ao time responsável.
 
 ## Boas práticas
 - Documente toda alteração relevante nesta área.
 - Mantenha exemplos práticos e atualizados.
 - Consulte o time de produto/negócios em caso de dúvidas sobre regras ou integrações.
 
-## Como usar
-- Consulte o arquivo mais relevante para sua dúvida ou tarefa.
-- Sempre que houver mudanças importantes no sistema de créditos/pagamentos, atualize o(s) arquivo(s) correspondente(s).
-- Para dúvidas gerais, consulte este README ou peça orientação ao time responsável.
+---
 
-## [ATUALIZAÇÃO 2024-06] – Progresso da Integração Mercado Pago
+## Progresso da Integração Mercado Pago
+
+**Atualização:** 24/06/2025
 
 ### O que já foi implementado:
 - Página `/dashboard/credits/buy` exibe pacotes de créditos e inicia o fluxo de compra via Mercado Pago.
@@ -42,4 +45,12 @@ Esta pasta reúne toda a documentação relacionada ao sistema de créditos, mon
 
 > Após esses passos, o fluxo de compra estará pronto para testes integrados e homologação.
 
-> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com `"use client"`, permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O frontend está pronto para integração com o backend. 
+> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com "use client", permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O frontend está pronto para integração com o backend.
+
+---
+
+## 🤝 Como contribuir
+
+- Para sugerir melhorias, abra uma issue ou pull request no repositório.
+- Sempre que alterar algo fundamental (regras, integrações, UX), atualize este README e os arquivos relacionados.
+- Em caso de dúvida, consulte a documentação central em `/docs` ou pergunte ao time responsável. 

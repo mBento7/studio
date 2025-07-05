@@ -7,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SearchIcon, X, Star, ExternalLink, Share2, Bookmark, Flame, Heart, MessageCircle, MoreHorizontal, SlidersHorizontal, LayoutGrid, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { mockUserProfiles, feedMockCards } from '@/lib/mock-data';
 import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
 import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
+import { createClient } from '@/lib/supabase/client';
 
 const BANNERS = [
     { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
@@ -18,9 +18,9 @@ const BANNERS = [
     { id: 3, image: 'https://picsum.photos/seed/banner-patrocinado/1200/400', link: '/dashboard/credits/promover', type: 'Patrocinado', title: 'Promova seu Perfil e Ganhe Destaque' },
 ];
 
-const categories = Array.from(new Set(mockUserProfiles.map(p => p.category).filter(c => c && c.trim() !== ""))).sort();
-const cities = Array.from(new Set(mockUserProfiles.map(p => p.location?.city).filter((c): c is string => c !== undefined && c.trim() !== ""))).sort();
-const states = Array.from(new Set(mockUserProfiles.map(p => p.location?.state).filter((s): s is string => s !== undefined && s.trim() !== ""))).sort();
+const categories: string[] = [];
+const cities: string[] = [];
+const states: string[] = [];
 const ALL_VALUE = "all";
 
 // A função getLayoutComponent agora pode ser mais genérica
@@ -263,17 +263,43 @@ export default function SearchShowcase() {
   const [selectedCity, setSelectedCity] = useState(ALL_VALUE);
   const [selectedState, setSelectedState] = useState(ALL_VALUE);
   const [filteredProfiles, setFilteredProfiles] = useState<UserProfile[]>([]);
+  const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'social'>('grid');
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
   useEffect(() => {
-    let results = mockUserProfiles;
+    // Busca todos os perfis reais do Supabase ao montar o componente
+    const fetchProfiles = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*');
+      if (!error && data) {
+        // Mapeamento dos campos para garantir compatibilidade com os componentes
+        const mapped = data.map((user: any) => ({
+          ...user,
+          name: user.full_name || user.name || "Usuário",
+          profile_picture_url: user.profile_picture_url || user.avatar_url || "/avatar-default.png",
+          category: user.category || "Categoria Exemplo",
+          bio: user.bio || "",
+          cover_photo_url: user.cover_photo_url || "",
+          // Adicione outros campos se necessário
+        }));
+        setAllProfiles(mapped as UserProfile[]);
+      }
+    };
+    fetchProfiles();
+  }, []);
+
+  useEffect(() => {
+    // Aplica os filtros no array de perfis reais
+    let results = allProfiles;
     if (searchTerm) {
       results = results.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category?.toLowerCase().includes(searchTerm.toLowerCase())
+        p.category?.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
     if (selectedCategory !== ALL_VALUE) {
@@ -292,7 +318,7 @@ export default function SearchShowcase() {
       selectedCity !== ALL_VALUE ||
       selectedState !== ALL_VALUE
     );
-  }, [searchTerm, selectedCategory, selectedCity, selectedState]);
+  }, [searchTerm, selectedCategory, selectedCity, selectedState, allProfiles]);
 
   const clearFilters = () => {
     setSelectedCategory(ALL_VALUE);

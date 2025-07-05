@@ -11,6 +11,26 @@ export interface UserProfileV2 {
   portfolio?: any[];
   skills?: string[];
   plan?: string;
+  website?: string;
+  linkedin?: string;
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  github?: string;
+  whatsapp?: string;
+  social_links?: Array<{
+    type: string; // ex: 'instagram', 'linkedin', 'whatsapp', etc
+    url: string;
+    label?: string;
+  }>;
+  stories?: Array<{
+    id: string;
+    title: string;
+    imageUrl: string;
+    text?: string;
+    createdAt?: string;
+    expiresAt?: string;
+  }>;
 }
 
 export interface ProfileEditPageV2Props {

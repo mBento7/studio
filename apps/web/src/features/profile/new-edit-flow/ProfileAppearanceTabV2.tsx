@@ -12,15 +12,15 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
   // Lista de layouts disponíveis
   const allLayouts = [
     { value: 'minimalist', label: 'Minimalista', tier: 'free' },
-    { value: 'modern', label: 'Moderno', tier: 'standard' },
+    { value: 'free', label: 'Grátis', tier: 'free' },
     { value: 'portfolio', label: 'Portfólio', tier: 'standard' },
     { value: 'pro', label: 'Pro', tier: 'premium' },
-    { value: 'advanced', label: 'Avançado', tier: 'premium' },
-    { value: 'premium-plus', label: 'Premium Plus', tier: 'premium' },
+    { value: 'standard', label: 'Avançado', tier: 'standard' },
+    { value: 'premiumplus', label: 'Premium Plus', tier: 'premium' },
     { value: 'super-premium', label: 'Super Premium', tier: 'premium' },
   ];
   // Lista de layouts premium (hardcoded para garantir funcionamento)
-  const allPremiumLayouts = ['pro', 'advanced', 'premium-plus', 'super-premium'];
+  const allPremiumLayouts = ['pro', 'standard', 'premiumplus', 'super-premium'];
   const layoutsToShow = allLayouts.filter(l => allPremiumLayouts.includes(l.value));
   const isPremiumLayout = allPremiumLayouts.includes(layout);
 

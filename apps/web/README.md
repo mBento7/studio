@@ -1,8 +1,6 @@
 <div align="center">
   <h1>WhosDo.com - Sua Identidade Digital Profissional</h1>
   <p>Uma plataforma de identidade digital onde profissionais, freelancers e criadores de conteúdo mostram seu trabalho, serviços e habilidades em um único hub central.</p>
-
-  <!-- Badges -->
   <p>
     <img src="https://img.shields.io/badge/Next.js-14-black.svg?style=flat-square&logo=next.js" alt="Next.js 14">
     <img src="https://img.shields.io/badge/React-18-blue.svg?style=flat-square&logo=react" alt="React 18">
@@ -10,6 +8,9 @@
     <img src="https://img.shields.io/badge/Tailwind_CSS-3-38B2AC.svg?style=flat-square&logo=tailwind-css" alt="Tailwind CSS 3">
     <img src="https://img.shields.io/badge/Supabase-DB_%26_Auth-3ECF8E.svg?style=flat-square&logo=supabase" alt="Supabase">
     <img src="https://img.shields.io/badge/eslint-8-4B32C3.svg?style=flat-square&logo=eslint" alt="ESLint">
+  </p>
+  <p>
+    <b>Última revisão:</b> 24/06/2025 &nbsp;|&nbsp; <b>Responsável:</b> Micael Bento
   </p>
 </div>
 
@@ -102,8 +103,8 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 1.  **Clone o Repositório**
     ```bash
-    git clone [URL_DO_SEU_REPOSITÓRIO]
-    cd [NOME_DA_PASTA]
+    git clone https://github.com/mBento7/studio.git
+    cd studio/apps/web
     ```
 
 2.  **Instale as Dependências**
@@ -129,10 +130,10 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 ## ⚙️ Scripts Disponíveis
 
-*   `npm run dev`: Inicia o servidor de desenvolvimento com Next.js e Turbopack.
-*   `npm run build`: Gera a build de produção otimizada.
-*   `npm run start`: Inicia um servidor de produção a partir da build gerada.
-*   `npm run lint`: Executa o ESLint para encontrar e corrigir problemas no código.
+*   `pnpm dev`: Inicia o servidor de desenvolvimento com Next.js e Turbopack.
+*   `pnpm build`: Gera a build de produção otimizada.
+*   `pnpm start`: Inicia um servidor de produção a partir da build gerada.
+*   `pnpm lint`: Executa o ESLint para encontrar e corrigir problemas no código.
 
 ---
 
@@ -140,21 +141,14 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
 Este projeto é guiado por uma documentação estratégica detalhada para garantir alinhamento e visão de longo prazo.
 
-*   **[Plano de Arquitetura e Refatoração](../../docs/architectural-refactoring-plan.md):** Descreve as fases da evolução da nossa base de código.
-*   **[Guia de Infraestrutura e Operações](../../docs/infrastructure-and-operations-guide.md):** Documenta a configuração de servidores, Supabase e o processo de deploy.
+*   **[Plano de Arquitetura e Refatoração](../../docs/planejamento/architectural-refactoring-plan.md):** Descreve as fases da evolução da nossa base de código.
+*   **[Guia de Infraestrutura e Operações](../../docs/infraestrutura/infrastructure-and-operations-guide.md):** Documenta a configuração de servidores, Supabase e o processo de deploy.
 
 ---
 
 <div align="center">
   <p>README aperfeiçoado para refletir a arquitetura e visão do projeto. Sinta-se à vontade para expandi-lo.</p>
 </div>
-
-export interface SocialLink {
-  id: string;
-  profile_id: string;
-  platform: string;
-  url: string;
-}
 
 ## 🌐 Exemplos de Rotas
 
@@ -198,3 +192,11 @@ export interface SocialLink {
    - Adicione rotas públicas para termos de uso e política de privacidade.
 
 > Siga essas recomendações para manter o projeto escalável, seguro e fácil de evoluir!
+
+---
+
+## 🤝 Como contribuir
+
+- Para sugerir melhorias, abra uma issue ou pull request no repositório.
+- Sempre que alterar algo fundamental (rotas, estrutura, regras de negócio), atualize este README e a documentação relacionada.
+- Em caso de dúvida, consulte a documentação central em `/docs` ou pergunte ao time responsável.

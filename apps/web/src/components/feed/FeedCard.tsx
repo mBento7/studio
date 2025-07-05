@@ -82,7 +82,7 @@ const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HT
 Button.displayName = "Button";
 
 // FeedCard interface
-interface FeedCardProps {
+export interface FeedCardProps {
   tipo: 'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto' | 'patrocinado';
   titulo: string;
   descricao: string;
@@ -151,11 +151,11 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
     >
       <div
         className={cn(
-          "w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-border flex flex-row items-center gap-5 p-6"
+          "w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-border flex flex-row items-center gap-5 p-6"
         )}
       >
         {/* Imagem lateral centralizada verticalmente */}
-        <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg bg-muted flex items-center justify-center">
+        <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-[var(--radius)] bg-muted flex items-center justify-center">
           <img
             src={imagem}
             alt={titulo}

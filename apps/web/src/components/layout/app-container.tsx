@@ -29,10 +29,10 @@ export function MainGridLayout({
   console.log('MainGridLayout', { hasLeft, hasRight, gridCols, rightSidebar });
 
   return (
-    <div className={`max-w-screen-xl mx-auto grid ${gridCols} gap-6 p-4 items-start min-h-[calc(100vh-4rem)]`}>
-      {hasLeft && <div className="order-2 lg:order-1 h-full self-start lg:sticky lg:top-20">{leftSidebar}</div>}
-      <div className="min-w-0 h-full self-stretch flex flex-col order-1 lg:order-2">{children}</div>
-      {hasRight && <div className="order-3 lg:order-3 h-full self-start lg:sticky lg:top-20">{rightSidebar}</div>}
+    <div className={`max-w-screen-xl mx-auto grid ${gridCols} gap-6 px-4 py-4 items-stretch`}>
+      {hasLeft && <div className="order-2 lg:order-1 h-full lg:sticky lg:top-20">{leftSidebar}</div>}
+      <div className="min-w-0 h-full flex flex-col order-1 lg:order-2">{children}</div>
+      {hasRight && <div className="order-3 lg:order-3 h-full lg:sticky lg:top-20">{rightSidebar}</div>}
     </div>
   );
 }
@@ -63,7 +63,7 @@ export function AppContainer({ children, hideSidebar = false, hideRightSidebar =
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <main className={`flex-1 bg-transparent ${hideSidebar && hideRightSidebar ? '' : 'pt-16'}`}>
+      <main className="flex-1 bg-transparent pt-16">
         <MainGridLayout
           leftSidebar={!hideSidebar && user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
           rightSidebar={!hideRightSidebar && user ? <RightWidgetsColumn /> : null}

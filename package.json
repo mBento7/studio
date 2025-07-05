@@ -17,6 +17,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "husky": "^9.1.7",
     "pnpm": "^9.0.0"
   },

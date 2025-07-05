@@ -114,12 +114,12 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
                 key={href}
                 asChild
                 variant="ghost"
-                className="flex items-center gap-2 h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 font-semibold text-xs text-black dark:text-white uppercase tracking-wide"
+                className={`group flex items-center gap-2 h-[44px] w-[44px] px-0 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 font-semibold text-xs text-black dark:text-white uppercase tracking-wide overflow-hidden hover:w-auto hover:px-6 ${theme === 'light' ? 'bg-white/40' : 'bg-white/70 dark:bg-black/40'}`}
               >
                 <Link href={href} className="flex items-center gap-2">
                   <Icon className="h-5 w-5" />
-                  <span>{label}</span>
                   <span className="sr-only">{label}</span>
+                  <span className="ml-2 hidden group-hover:inline">{label}</span>
                 </Link>
               </Button>
             );
@@ -130,39 +130,24 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
           <Button
             asChild
             variant="ghost"
-            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2"
+            className={`group flex items-center justify-center h-[44px] w-[44px] px-0 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2 overflow-hidden hover:w-auto hover:px-6 ${theme === 'light' ? 'bg-white/40' : 'bg-white/70 dark:bg-black/40'}`}
           >
             <Link href="/planos" className="flex items-center gap-2">
               <IoDiamondOutline className="h-5 w-5 text-yellow-500" />
-              <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Planos</span>
+              <span className="sr-only">Planos</span>
+              <span className="ml-2 hidden group-hover:inline uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Planos</span>
             </Link>
           </Button>
 
           <Button
             variant="ghost"
-            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2"
+            className={`group flex items-center justify-center h-[44px] w-[44px] px-0 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2 overflow-hidden hover:w-auto hover:px-6 ${theme === 'light' ? 'bg-white/40' : 'bg-white/70 dark:bg-black/40'}`}
             onClick={toggleTheme}
             aria-label="Alternar tema claro/escuro"
           >
             {theme === "light" ? <IoMoonOutline className="h-5 w-5" /> : <IoSunnyOutline className="h-5 w-5" />}
-            <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Tema</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex items-center justify-center h-[44px] px-6 bg-white/70 dark:bg-black/40 shadow-lg rounded-full border border-transparent hover:border-primary/40 transition-all duration-300 gap-2 relative"
-            aria-label="Mensagens"
-            asChild
-          >
-            <Link href="/dashboard/messages" className="flex items-center gap-2">
-              <IoChatbubbleEllipsesOutline className="h-5 w-5" />
-              <span className="uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Mensagens</span>
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
-                  {unreadCount}
-                </span>
-              )}
-            </Link>
+            <span className="sr-only">Tema</span>
+            <span className="ml-2 hidden group-hover:inline uppercase tracking-wide text-xs text-black dark:text-white font-semibold">Tema</span>
           </Button>
 
           {loading ? (
@@ -214,10 +199,11 @@ export function PublicHeader({ isTransparent = false }: { isTransparent?: boolea
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="outline" className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-colors duration-300">
+            <Button asChild variant="outline" className={`group border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-colors duration-300 h-[44px] w-[44px] px-0 overflow-hidden hover:w-auto hover:px-6 flex items-center justify-center ${theme === 'light' ? 'bg-white/40' : 'bg-white/70 dark:bg-black/40'}`}>
               <Link href="/login" className="flex items-center gap-2">
                 <IoLogInOutline className="h-5 w-5" />
-                Entrar
+                <span className="sr-only">Entrar</span>
+                <span className="ml-2 hidden group-hover:inline">Entrar</span>
               </Link>
             </Button>
           )}

@@ -27,7 +27,7 @@ Este diretório centraliza todos os layouts de exibição de perfil disponíveis
 - **Gatilho:** `user.plan === 'free' && !user.isProfileComplete`
 - **Diferenciais:** Mostra apenas informações básicas e incentiva o preenchimento do perfil. Não exibe portfólio, serviços, experiência ou educação.
 
-### 3. ModernProfileLayout
+### 3. FreeProfileLayout
 - **Plano:** standard
 - **Gatilho:** `user.plan === 'standard' && (user.layoutTemplateId === 'modern' || !user.layoutTemplateId)`
 - **Diferenciais:** Visual moderno, mais opções de links sociais, seções para serviços, portfólio, experiência e educação (quantidade limitada). Integração de cupons.
@@ -37,15 +37,10 @@ Este diretório centraliza todos os layouts de exibição de perfil disponíveis
 - **Gatilho:** `user.plan === 'standard' && user.layoutTemplateId === 'portfolio-focus'`
 - **Diferenciais:** Ênfase visual em galerias de portfólio, mais itens de portfólio e serviços, ideal para profissionais criativos.
 
-### 5. AdvancedProfileLayout
+### 5. StandardProfileLayout
 - **Plano:** premium
 - **Gatilho:** `user.plan === 'premium' && (user.layoutTemplateId === 'advanced' || !user.layoutTemplateId)`
 - **Diferenciais:** Todas as funcionalidades do plano standard, maior quantidade de serviços e portfólio, integração com YouTube, banner personalizado, cupons avançados e stories.
-
-### 6. ProProfileLayout
-- **Plano:** premium
-- **Gatilho:** `user.plan === 'premium' && user.layoutTemplateId === 'pro-profile'`
-- **Diferenciais:** Todas as funcionalidades do Advanced, mais depoimentos, integração com calendários, recursos avançados de SEO e visual sofisticado.
 
 ## Como usar
 A escolha do layout é feita dinamicamente pelo array `profileLayouts` exportado em `index.ts`. Cada layout pode receber um objeto de perfil e configurações opcionais.

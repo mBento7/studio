@@ -1,6 +1,5 @@
 import React from "react";
 import { Star, Megaphone } from "lucide-react";
-import { mockUserProfiles } from "@/lib/mock-data";
 
 interface SponsoredAdCardProps {
   titulo: string;

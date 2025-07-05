@@ -44,28 +44,6 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
           <ExperienceBlockV2 experience={data.experience || []} onChange={experience => onChange({ ...data, experience })} />
         </ContentBlock>
       </PlanGate>
-      {/* Serviços */}
-      <PlanGate required="standard" plan={plan}>
-        <ContentBlock
-          title="Serviços"
-          description="Adicione ou edite os serviços que você oferece."
-          isLocked={plan === "free"}
-          badgeText={plan === "free" ? "Standard/Premium" : undefined}
-        >
-          <ServicesBlockV2 services={data.services || []} onChange={services => onChange({ ...data, services })} />
-        </ContentBlock>
-      </PlanGate>
-      {/* Portfólio */}
-      <PlanGate required="standard" plan={plan}>
-        <ContentBlock
-          title="Portfólio"
-          description="Mostre seus melhores trabalhos."
-          isLocked={plan === "free"}
-          badgeText={plan === "free" ? "Standard/Premium" : undefined}
-        >
-          <PortfolioBlockV2 portfolio={data.portfolio || []} onChange={portfolio => onChange({ ...data, portfolio })} />
-        </ContentBlock>
-      </PlanGate>
       {/* FAQ */}
       <PlanGate required="standard" plan={plan}>
         <ContentBlock
@@ -77,28 +55,14 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
           <FAQBlockV2 faqs={data.faqs || []} onChange={faqs => onChange({ ...data, faqs })} />
         </ContentBlock>
       </PlanGate>
-      {/* Banner Promocional */}
-      <PlanGate required="premium" plan={plan}>
-        <ContentBlock
-          title="Banner Promocional"
-          description="Destaque uma mensagem ou promoção especial."
-          isLocked={plan !== "premium"}
-          badgeText={plan !== "premium" ? "Premium" : undefined}
-        >
-          <div>Bloco de Banner aqui</div>
-        </ContentBlock>
-      </PlanGate>
-      {/* Vídeo do YouTube */}
-      <PlanGate required="premium" plan={plan}>
-        <ContentBlock
-          title="Vídeo do YouTube"
-          description="Incorpore um vídeo do YouTube em seu perfil."
-          isLocked={plan !== "premium"}
-          badgeText={plan !== "premium" ? "Premium" : undefined}
-        >
-          <div>Bloco de YouTube aqui</div>
-        </ContentBlock>
-      </PlanGate>
     </div>
   );
+}
+
+// Função utilitária para extrair o ID do vídeo do YouTube
+function getYouTubeId(url: string): string | undefined {
+  if (!url) return undefined;
+  const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[1].length === 11 ? match[1] : undefined;
 } 

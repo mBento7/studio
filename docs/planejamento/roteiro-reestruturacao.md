@@ -130,10 +130,56 @@ Após a refatoração das pastas, diversos arquivos de componentes de layout (`a
 
 Foi identificado e corrigido um `TypeError: Cannot read properties of undefined (reading 'coverPhotoUrl')` em componentes de layout devido a uma inconsistência no nome da prop de perfil (`userProfile` vs `user`). A interface `ProfileLayoutProps` em `src/lib/types.ts` já define `user: UserProfile;`. Todos os componentes de layout que recebem dados de perfil foram atualizados para usar a prop `user` consistentemente, incluindo:
 
+-   `StandardProfileLayout.tsx`: `userProfile` renomeado para `user`.
+-   `FreeProfileLayout.tsx`: `userProfile` renomeado para `user`.
 -   `AdvancedProfileLayout.tsx`: `userProfile` renomeado para `user`.
 -   `ModernProfileLayout.tsx`: `userProfile` renomeado para `user`.
 -   `BasicProfileLayout.tsx`: `userProfile` renomeado para `user`.
 -   `MinimalistCardLayout.tsx` e `PortfolioFocusLayout.tsx` e `PremiumProLayout.tsx` já estavam usando `user` corretamente.
+
+### 8. Roteiro de Reestruturação de Layouts
+
+## Arquitetura Atual
+
+- O layout das páginas do dashboard (ex: `/dashboard/feed`) é controlado exclusivamente pelo componente `LayoutDecider`, que utiliza internamente o `AppContainer`.
+- O `AppContainer` é responsável por renderizar a navbar, sidebar esquerda (perfil), coluna central e sidebar direita (widgets).
+- O layout global do dashboard (`apps/web/src/app/(app)/dashboard/layout.tsx`) **NÃO** deve envolver as páginas com `AppContainer` ou `LayoutDecider`, apenas renderizar `{children}` e componentes globais como o chat.
+
+## Padronização de Props e Componentes
+
+- Todos os componentes de layout de perfil devem receber a prop `user` (do tipo `UserProfile`).
+- Os layouts antigos (`BasicProfileLayout`, `ModernProfileLayout`, `AdvancedProfileLayout`) foram removidos.
+- Os layouts atuais são: `FreeProfileLayout`, `StandardProfileLayout`, `PremiumProfileLayout`.
+
+## Feed e Sidebars
+
+- O feed deve ser renderizado dentro de um único `<LayoutDecider>`, sem wrappers de largura máxima, para que o grid de três colunas funcione corretamente.
+- As sidebars são automáticas e não devem ser renderizadas manualmente.
+
+## Navbar
+
+- A navbar (`PublicHeader`) é automática via `AppContainer`.
+- Não deve ser incluída manualmente em nenhuma página do dashboard.
+
+## Exemplo correto de uso
+
+```tsx
+// apps/web/src/app/(app)/dashboard/feed/page.tsx
+export default function FeedPage() {
+  return (
+    <LayoutDecider>
+      {/* conteúdo do feed */}
+    </LayoutDecider>
+  );
+}
+```
+
+## Boas práticas
+
+- Sempre utilize `LayoutDecider` no topo das páginas do dashboard.
+- Nunca use `AppContainer` diretamente em páginas do dashboard.
+- Não limite a largura do conteúdo central do feed para garantir que as sidebars apareçam corretamente.
+- Reinicie o servidor de desenvolvimento após alterações estruturais de layout para evitar cache de containers antigos.
 
 ---
 

@@ -133,7 +133,7 @@ export const superPremiumShowcaseUser = {
     { question: "Como funciona a mentoria?", answer: "Mentoria personalizada, online ou presencial, com foco em resultados." },
     { question: "Atende empresas?", answer: "Sim, ofereço treinamentos e workshops corporativos." }
   ],
-  layoutTemplateId: "premium-plus"
+  layoutTemplateId: "premiumprofile"
 };
 
 // Exemplo de outros usuários mock:
@@ -222,7 +222,7 @@ export const modernUser = {
   premiumBanner: undefined,
   reviews: [],
   faq: [],
-  layoutTemplateId: "modern"
+  layoutTemplateId: "free"
 };
 
 export const basicUserSearchCard = {

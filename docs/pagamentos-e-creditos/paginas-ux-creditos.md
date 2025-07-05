@@ -172,11 +172,11 @@ flowchart TD
 |---------------------|---------------------|------------------|----------------------------|
 | minimalist-card     | Cartão Minimalista  | Free             | MinimalistCardLayout       |
 | (sem id, fallback)  | Básico              | Free             | BasicProfileLayout         |
-| default             | Perfil Padrão       | Standard,Premium | ModernProfileLayout        |
+| default             | Perfil Padrão       | Standard,Premium | FreeProfileLayout        |
 | portfolio-focus     | Portfolio Focus     | Standard         | PortfolioFocusLayout       |
 | commercial-web      | Site Comercial      | Premium          | (a definir)                |
 | premium-pro         | Premium Pro         | Premium          | PremiumProLayout           |
-| (sem id, fallback)  | Avançado            | Premium          | AdvancedProfileLayout      |
+| (sem id, fallback)  | Avançado            | Premium          | StandardProfileLayout      |
 
 ### Observações
 - **Free:** Só pode usar Cartão Minimalista (perfil completo) ou Básico (perfil incompleto).

@@ -76,7 +76,7 @@ const mockCurrentUser = {
   },
   plan: "premium",
   isAvailable: true,
-  layoutTemplateId: "modern",
+  layoutTemplateId: "free",
   skills: ["React", "Node.js", "TypeScript", "SQL", "Cloud Computing"],
   experience: [
     { id: "exp1", title: "Desenvolvedor Sênior", company: "Tech Solutions Inc.", duration: "2020 - Atualmente", description: "Liderança de equipe no desenvolvimento de novas features." },

@@ -31,7 +31,7 @@ export function FilterButton({
         disabled={disabled}
         variant="premium"
         className={cn(
-          'flex items-center gap-2 h-8 px-2 text-xs rounded-full font-semibold transition-all duration-200 ease-in-out',
+          'flex items-center gap-2 h-8 px-2 text-xs rounded-[var(--radius)] font-semibold transition-all duration-200 ease-in-out',
           isActive && 'ring-2 ring-yellow-400',
           disabled && 'opacity-60 cursor-not-allowed',
           className
@@ -49,7 +49,7 @@ export function FilterButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex items-center gap-2 h-8 px-2 text-xs rounded-full font-semibold transition-all duration-200 ease-in-out shadow-sm',
+        'flex items-center gap-2 h-8 px-2 text-xs rounded-[var(--radius)] font-semibold transition-all duration-200 ease-in-out shadow-sm',
         isActive
           ? 'bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md'
           : 'bg-card text-foreground hover:bg-muted/80 border border-border/60',

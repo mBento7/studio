@@ -21,6 +21,7 @@ interface FeedPostEditorProps {
     tipo: 'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto';
     urgente?: boolean;
     whatsappUrl?: string;
+    tags: string[];
   }) => void;
 }
 
@@ -90,6 +91,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         preco: showPreco ? preco : undefined,
         localizacao: showLocalizacao ? localizacao : undefined,
         tipo: tipoPost,
+        tags,
       });
     }
     
@@ -119,8 +121,21 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   const activeOptions = [
     showPreco && 'preco',
     showLocalizacao && 'localizacao',
-    showTagInput && 'tag',
   ].filter(Boolean);
+
+  // Função para formatar valor como moeda brasileira
+  function formatarMoeda(valor: string) {
+    // Remove tudo que não for número
+    let v = valor.replace(/\D/g, "");
+    if (!v) return "";
+    v = (parseInt(v, 10)).toString();
+    // Adiciona zeros à esquerda se necessário
+    while (v.length < 3) v = "0" + v;
+    // Formata para 0.000,00
+    v = v.replace(/(\d+)(\d{2})$/, "$1,$2");
+    v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return v;
+  }
 
   return (
     <motion.div
@@ -129,7 +144,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
       transition={{ duration: 0.3 }}
       className="w-full max-w-2xl mx-auto"
     >
-      <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-6 space-y-6">
+      <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-6 space-y-6">
         <div className="relative">
           <Textarea
             ref={textRef}
@@ -205,7 +220,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         </AnimatePresence>
 
         <AnimatePresence>
-          {activeOptions.length > 0 && (
+          {activeOptions.length > 0 || showTagInput || tags.length > 0 ? (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -215,11 +230,24 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               {showPreco && (
                 <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
                   <DollarSign className="w-5 h-5 text-green-600" />
-                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Preço (ex: R$ 200,00)" value={preco} onChange={e => setPreco(e.target.value)} />
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">$</span>
+                    <input
+                      type="text"
+                      className="pl-7 pr-2 bg-background border border-border rounded-lg py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 w-full"
+                      placeholder="Preço (ex: $ 200,00)"
+                      value={preco}
+                      onChange={e => {
+                        const raw = e.target.value;
+                        setPreco(formatarMoeda(raw));
+                      }}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                    />
+                  </div>
                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowPreco(false)}><X className="w-4 h-4" /></Button>
                 </motion.div>
               )}
-              
               {showLocalizacao && (
                 <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-blue-600" />
@@ -227,11 +255,49 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowLocalizacao(false)}><X className="w-4 h-4" /></Button>
                 </motion.div>
               )}
+              {(tags.length > 0 || showTagInput) && (
+                <div className="flex flex-col gap-2 w-full">
+                  {tags.length > 0 && (
+                    <div className="flex gap-2 flex-wrap">
+                      {tags.map((tag, idx) => (
+                        <span key={idx} className="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/50 text-xs rounded px-2 py-0.5 flex items-center gap-1">
+                          #{tag}
+                          <button type="button" className="ml-1 text-xs" onClick={() => setTags(tags.filter((_, i) => i !== idx))}>×</button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {showTagInput && (
+                    <input
+                      type="text"
+                      className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      placeholder="Digite uma tag e pressione Enter"
+                      value={tagInput}
+                      onChange={e => {
+                        let value = e.target.value;
+                        if (!value.startsWith('#')) value = '#' + value.replace(/[^0-ÿ0-9 ]/gi, '');
+                        else value = '#' + value.slice(1).replace(/[^0-ÿ0-9 ]/gi, '');
+                        setTagInput(value);
+                      }}
+                      onKeyDown={e => {
+                        if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
+                          e.preventDefault();
+                          const cleanTag = tagInput.replace(/^#+/, '').trim();
+                          if (cleanTag && !tags.includes(cleanTag)) {
+                            setTags([...tags, cleanTag]);
+                          }
+                          setTagInput("");
+                        }
+                      }}
+                    />
+                  )}
+                </div>
+              )}
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
 
-        {/* Botões de opções e input/tag na parte inferior */}
+        {/* Botões de opções na parte inferior */}
         <div className="flex items-center justify-between pt-4 border-t border-border/50">
           <div className="flex items-center gap-0.5">
             <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-muted-foreground hover:text-primary"><Image className="w-5 h-5" /></Button>
@@ -248,7 +314,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
 
             <div className="h-6 w-px bg-border/50 mx-2"></div>
 
-            {[{ key: 'preco', icon: DollarSign, active: showPreco }, { key: 'localizacao', icon: MapPin, active: showLocalizacao }, { key: 'tag', icon: Tag, active: showTagInput }].map(({ key, icon: Icon, active }) => (
+            {[{ key: 'preco', icon: DollarSign, active: showPreco }, { key: 'localizacao', icon: MapPin, active: showLocalizacao }].map(({ key, icon: Icon, active }) => (
               <Button
                 key={key}
                 variant="ghost"
@@ -259,41 +325,19 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                 <Icon className="w-5 h-5" />
               </Button>
             ))}
+            {/* Botão para tag com funcionalidade de inserir '#' */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                toggleOption('tag');
+                setTagInput((prev) => prev.startsWith('#') ? prev : '#' + prev);
+              }}
+              className={cn("transition-colors", showTagInput ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
+            >
+              <Tag className="w-5 h-5" />
+            </Button>
           </div>
-
-          {/* Input de tag e tags visuais */}
-          {(tags.length > 0 || showTagInput) && (
-            <div className="flex flex-col gap-2 mb-2 w-full">
-              {tags.length > 0 && (
-                <div className="flex gap-2 flex-wrap">
-                  {tags.map((tag, idx) => (
-                    <span key={idx} className="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/50 text-xs rounded px-2 py-0.5 flex items-center gap-1">
-                      #{tag}
-                      <button type="button" className="ml-1 text-xs" onClick={() => setTags(tags.filter((_, i) => i !== idx))}>×</button>
-                    </span>
-                  ))}
-                </div>
-              )}
-              {showTagInput && (
-                <input
-                  type="text"
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="Digite uma tag e pressione Enter"
-                  value={tagInput}
-                  onChange={e => setTagInput(e.target.value.replace(/[^\wÀ-ÿ0-9 ]/gi, ''))}
-                  onKeyDown={e => {
-                    if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
-                      e.preventDefault();
-                      if (!tags.includes(tagInput.trim())) {
-                        setTags([...tags, tagInput.trim()]);
-                      }
-                      setTagInput("");
-                    }
-                  }}
-                />
-              )}
-            </div>
-          )}
 
           <Button 
             onClick={handlePost} 

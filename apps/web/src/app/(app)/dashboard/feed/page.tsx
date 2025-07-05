@@ -39,7 +39,6 @@ import { Button as UIButton } from '@/components/ui/button';
 import { FilterButton } from '@/components/ui/filter-button';
 import { useToast } from "@/hooks/use-toast";
 import { createClient } from '@/lib/supabase/client';
-import { feedMocks } from '@/lib/mock-data';
 import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
 import { BannerCard } from '@/components/feed/BannerCard';
 import { CouponCard } from '@/components/feed/CouponCard';
@@ -48,6 +47,9 @@ import { TestimonialCard } from '@/components/feed/TestimonialCard';
 import { InviteCard } from '@/components/feed/InviteCard';
 import { EventCard } from '@/components/feed/EventCard';
 import { LayoutDecider } from '@/components/layout/layout-decider';
+import StoryModal from '@/components/feed/StoryModal';
+import type { FeedCardProps } from '@/components/feed/FeedCard';
+import { getAllUserProfiles } from '@/services/profile.service';
 
 // Mock data
 const stories = [
@@ -183,18 +185,70 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
   );
 }
 
-function StoriesCarousel() {
+function StoriesCarousel({ userStories, userProfile }: { userStories?: any[]; userProfile?: any }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const storiesPerView = 7;
-  const maxIndex = Math.max(0, stories.length - storiesPerView);
+  const storiesData = (userStories && userStories.length > 0)
+    ? userStories.map((s) => ({
+        id: String(s.id),
+        user: {
+          name: userProfile?.name || userProfile?.full_name || 'Você',
+          avatarUrl: userProfile?.profile_picture_url || '',
+          username: userProfile?.username || '',
+        },
+        mediaUrl: s.imageUrl,
+        type: 'image' as 'image',
+        timeLeft: 24,
+        liked: false,
+      }))
+    : stories.map((s, idx) => ({
+        id: s.id.toString(),
+        user: {
+          name: s.user,
+          avatarUrl: s.avatar,
+          username: s.user.toLowerCase(),
+        },
+        mediaUrl: s.avatar,
+        type: 'image' as 'image',
+        timeLeft: 24,
+        liked: false,
+      }));
+  const maxIndex = Math.max(0, storiesData.length - storiesPerView);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedStoryIdx, setSelectedStoryIdx] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  // Auto-scroll
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
     }, 3500);
     return () => clearInterval(interval);
   }, [maxIndex]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (modalOpen && selectedStoryIdx !== null && !isPaused) {
+      setProgress(0);
+      let start = Date.now();
+      interval = setInterval(() => {
+        const elapsed = Date.now() - start;
+        const percent = Math.min(100, (elapsed / 5000) * 100);
+        setProgress(percent);
+        if (percent >= 100) {
+          if (selectedStoryIdx < storiesData.length - 1) {
+            setSelectedStoryIdx(selectedStoryIdx + 1);
+            setProgress(0);
+          } else {
+            closeModal();
+          }
+        }
+      }, 50);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [modalOpen, selectedStoryIdx, isPaused, storiesData.length]);
 
   const scrollLeft = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -204,12 +258,36 @@ function StoriesCarousel() {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
+  const openStory = (idx: number) => {
+    setSelectedStoryIdx(idx);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedStoryIdx(null);
+  };
+
+  const pauseCarousel = () => setIsPaused(true);
+
+  const handlePrev = () => {
+    if (selectedStoryIdx !== null && selectedStoryIdx > 0) {
+      setSelectedStoryIdx(selectedStoryIdx - 1);
+      setIsPaused(false);
+    }
+  };
+  const handleNext = () => {
+    if (selectedStoryIdx !== null && selectedStoryIdx < storiesData.length - 1) {
+      setSelectedStoryIdx(selectedStoryIdx + 1);
+      setIsPaused(false);
+    }
+  };
+
   return (
     <section className="w-full mb-4">
       <h2 className="text-lg font-bold text-foreground mb-3">Destaques 24h</h2>
       <div className="relative z-0">
         <div className="relative w-full">
-          {/* Botões de seta */}
           {currentIndex > 0 && (
             <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 rounded-full p-1 shadow hover:bg-primary/20 transition">
               <ChevronLeft className="w-6 h-6" />
@@ -225,23 +303,34 @@ function StoriesCarousel() {
               className="flex space-x-4 transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 6.5}rem)` }}
             >
-              {stories.map((s) => (
-                <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer w-20 sm:w-24">
+              {storiesData.slice(currentIndex, currentIndex + storiesPerView).map((s, idx) => (
+                <div key={s.id} className="flex-shrink-0 text-center group cursor-pointer w-20 sm:w-24" onClick={() => openStory(currentIndex + idx)}>
                   <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-all duration-300 group-hover:scale-125 group-hover:shadow-2xl group-hover:shadow-primary/50 group-hover:z-30 group-hover:relative">
                     <div className="absolute inset-0 rounded-full overflow-hidden bg-card/90 ring-2 ring-background group-hover:ring-primary/50 transition-all duration-300">
-                      <img src={s.avatar} alt={s.user} className="w-full h-full object-cover" />
+                      <img src={s.user.avatarUrl} alt={s.user.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold group-hover:bg-green-600 transition-colors duration-300">
-                      {Math.floor(s.timeLeft / 100 * 24)}h
+                      {s.timeLeft}h
                     </div>
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user}</p>
+                  <p className="mt-2 text-xs text-muted-foreground group-hover:text-foreground group-hover:font-medium transition-all duration-300">{s.user.name}</p>
                 </div>
-              )).slice(currentIndex, currentIndex + storiesPerView)}
+              ))}
             </div>
           </div>
         </div>
       </div>
+      {selectedStoryIdx !== null && (
+        <StoryModal
+          open={modalOpen}
+          onClose={closeModal}
+          story={storiesData[selectedStoryIdx]}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onUserAction={pauseCarousel}
+          progress={progress}
+        />
+      )}
     </section>
   );
 }
@@ -302,38 +391,13 @@ function SocialCard({ item }: { item: any }) {
   );
 }
 
-function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTab: string, setActiveTab: (tab: string) => void, posts: any[], userProfile: any }) {
+function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }: { activeTab: string, setActiveTab: (tab: string) => void, posts: any[], userProfile: any, hideFilter?: boolean }) {
   const { toast } = useToast();
-  const filters = [
-    { label: 'Todos', icon: Sparkles },
-    { label: 'Servicos', icon: ConciergeBell },
-    { label: 'Produtos', icon: Box },
-    { label: 'Solicitacoes', icon: Siren, premium: true },
-  ];
+  // const filters = [ ... ]; // Mantém apenas se for usado em outro lugar
 
   return (
     <div className="space-y-4">
-      <div className="w-full bg-card rounded shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-2">
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-around sm:flex-wrap">
-          {filters.map(({ label, icon, premium }) => (
-            <FilterButton
-              key={label}
-              icon={icon}
-              label={label}
-              isActive={activeTab === label.toLowerCase()}
-              onClick={() => {
-                if (premium && userProfile?.plan !== 'premium') {
-                  toast({ title: "Exclusivo para Premium", description: "O filtro de solicitações é exclusivo para assinantes Premium.", variant: "destructive" });
-                  return;
-                }
-                setActiveTab(label.toLowerCase());
-              }}
-              premium={premium}
-              disabled={false}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Filtro removido daqui para evitar duplicidade */}
       <div className="space-y-4">
         {posts.map((item, idx) => {
           switch (item.tipo) {
@@ -344,7 +408,15 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTa
               // Remover usuarioId das props
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { usuarioId, ...feedCardProps } = item;
-              return <FeedCard key={idx} {...feedCardProps} />;
+              // Corrigir usuario: garantir sempre objeto { nome, avatar }
+              let usuario = item.usuario;
+              if (typeof usuario === 'string') {
+                usuario = {
+                  nome: usuario,
+                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
+                };
+              }
+              return <FeedCard key={idx} {...feedCardProps} usuario={usuario} />;
             }
             case 'anuncio_patrocinado':
               return <SponsoredAdCard key={idx} {...item} />;
@@ -357,7 +429,15 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile }: { activeTa
             case 'depoimento': {
               // Remover usuarioId das props
               const { usuarioId, ...testimonialProps } = item;
-              return <TestimonialCard key={idx} {...testimonialProps} />;
+              // Corrigir usuario: garantir sempre objeto { nome, avatar }
+              let usuario = item.usuario;
+              if (typeof usuario === 'string') {
+                usuario = {
+                  nome: usuario,
+                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
+                };
+              }
+              return <TestimonialCard key={idx} {...testimonialProps} usuario={usuario} />;
             }
             case 'indicacao':
               return <InviteCard key={idx} {...item} />;
@@ -684,8 +764,9 @@ export default function FeedPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('todos');
   const [isCouponModalOpen, setCouponModalOpen] = useState(false);
-  const [posts, setPosts] = useState(feedMocks);
+  const [posts, setPosts] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
+  const [stories, setStories] = useState<any[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -693,21 +774,110 @@ export default function FeedPage() {
     }
   }, [user, loading, router]);
 
-  // Buscar atividades de atualização de perfil
+  // Gerar stories reais ao carregar
   useEffect(() => {
-    async function fetchActivities() {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from('activities')
-        .select('*, user:profiles!inner(username, full_name, profile_picture_url)')
-        .eq('type', 'profile_update')
-        .order('created_at', { ascending: false })
-        .limit(10);
-      if (!error && data) {
-        setActivities(data);
-      }
+    async function fetchStories() {
+      const users = await getAllUserProfiles(15);
+      const storiesData = users.map((u, idx) => ({
+        id: u.id,
+        user: u.name || u.username,
+        avatar: u.profile_picture_url || '/avatar-default.png',
+        username: u.username,
+        timeLeft: Math.floor(Math.random() * 96) + 1 // tempo fictício
+      }));
+      setStories(storiesData);
     }
-    fetchActivities();
+    fetchStories();
+  }, []);
+
+  // Gerar cards automáticos ao carregar
+  useEffect(() => {
+    async function generateFeedFromUsers() {
+      const users = await getAllUserProfiles(12);
+      if (!users || users.length === 0) return;
+      // Mistura de cards para cada usuário
+      const cards: any[] = users.flatMap((u, idx) => [
+        // FeedCard
+        {
+          tipo: 'oferta_servico',
+          titulo: `Serviço de ${u.category || 'Consultoria'}`,
+          descricao: u.bio || 'Serviço profissional de alta qualidade.',
+          imagem: u.profile_picture_url || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
+          preco: u.services?.[0]?.price || 'R$ 99,90',
+          localizacao: u.location?.city || 'São Paulo, SP',
+          patrocinado: idx % 4 === 0,
+          usuario: { nome: u.name, avatar: u.profile_picture_url },
+          curtidas: Math.floor(Math.random() * 100),
+          comentarios: Math.floor(Math.random() * 20),
+          tags: u.skills?.slice(0, 3) || ['qualidade', 'promoção'],
+          whatsappUrl: u.whatsappNumber ? `https://wa.me/${u.whatsappNumber}` : undefined,
+          urgente: idx % 5 === 0,
+        },
+        // CouponCard
+        {
+          tipo: 'cupom',
+          codigo: `USER${idx + 1}OFF`,
+          desconto: `${10 + idx % 20}%`,
+          validade: '31/12/2024',
+          descricao: `Cupom especial do(a) ${u.name}`,
+        },
+        // BannerCard
+        {
+          tipo: 'banner',
+          imagem: u.cover_photo_url || 'https://picsum.photos/seed/banner/400/200',
+          texto: `Conheça o perfil de ${u.name}`,
+          link: `/profile/${u.username}`,
+        },
+        // EventCard
+        {
+          tipo: 'evento',
+          nome: `Evento com ${u.name}`,
+          data: '15/08/2024',
+          local: u.location?.city || 'Online',
+          imagem: u.profile_picture_url || 'https://picsum.photos/seed/event/400/200',
+          link: `/profile/${u.username}`,
+        },
+        // InviteCard
+        {
+          tipo: 'convite',
+          texto: `Convide amigos para conhecer ${u.name}!`,
+          bonus: `${5 + idx} créditos`,
+          link: `/profile/${u.username}`,
+        },
+        // SponsoredAdCard
+        {
+          tipo: 'patrocinado',
+          titulo: `Destaque: ${u.name}`,
+          descricao: u.bio || 'Profissional em destaque na plataforma.',
+          imagem: u.profile_picture_url || 'https://picsum.photos/seed/ad/400/200',
+          link: `/profile/${u.username}`,
+          usuarioId: u.id,
+        },
+        // TestimonialCard
+        {
+          tipo: 'depoimento',
+          usuario: { nome: u.name, avatar: u.profile_picture_url },
+          nota: Math.floor(Math.random() * 2) + 4,
+          comentario: 'Ótimo profissional, recomendo muito!',
+          servico: u.services?.[0]?.name || 'Serviço',
+          imagem: u.profile_picture_url || 'https://picsum.photos/seed/testimonial/80/80',
+        },
+        // UpdateCard
+        {
+          tipo: 'atualizacao',
+          titulo: `Atualização de ${u.name}`,
+          descricao: 'Perfil atualizado recentemente!',
+          data: 'Hoje',
+        },
+      ]);
+      // Embaralhar cards
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      setPosts(cards);
+    }
+    generateFeedFromUsers();
   }, []);
 
   const handlePost = (newPostData: {
@@ -718,6 +888,7 @@ export default function FeedPage() {
     tipo: 'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto';
     urgente?: boolean;
     whatsappUrl?: string;
+    tags?: string[];
   }) => {
     const newPost = {
       tipo: newPostData.tipo,
@@ -734,7 +905,7 @@ export default function FeedPage() {
       },
       curtidas: 0,
       comentarios: 0,
-      tags: [],
+      tags: newPostData.tags || [],
       whatsappUrl: newPostData.whatsappUrl,
     };
     setPosts((prevPosts: any[]) => [newPost, ...prevPosts]);
@@ -762,9 +933,32 @@ export default function FeedPage() {
 
   return (
     <LayoutDecider>
-      <div className="w-full max-w-2xl mx-auto space-y-6">
-        <StoriesCarousel />
+      <div className="w-full space-y-6">
+        <StoriesCarousel userStories={currentUserProfile?.stories} userProfile={currentUserProfile} />
         <FeedPostEditor onPost={handlePost} />
+        {/* Filtro do Feed */}
+        <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-around sm:flex-wrap">
+            {[{ label: 'Todos', icon: Sparkles }, { label: 'Servicos', icon: ConciergeBell }, { label: 'Produtos', icon: Box }, { label: 'Solicitacoes', icon: Siren, premium: true }].map(({ label, icon, premium }) => (
+              <FilterButton
+                key={label}
+                icon={icon}
+                label={label}
+                isActive={activeTab === label.toLowerCase()}
+                onClick={() => {
+                  if (premium && currentUserProfile?.plan !== 'premium') {
+                    // @ts-ignore
+                    toast({ title: "Exclusivo para Premium", description: "O filtro de solicitações é exclusivo para assinantes Premium.", variant: "destructive" });
+                    return;
+                  }
+                  setActiveTab(label.toLowerCase());
+                }}
+                premium={premium}
+                disabled={false}
+              />
+            ))}
+          </div>
+        </div>
         {/* Atividades de atualização de perfil */}
         {activities.length > 0 && (
           <div className="space-y-4">
@@ -779,7 +973,7 @@ export default function FeedPage() {
             ))}
           </div>
         )}
-        <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={filteredPosts} userProfile={currentUserProfile} />
+        <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={filteredPosts} userProfile={currentUserProfile} hideFilter />
       </div>
       <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />
     </LayoutDecider>

@@ -2,17 +2,10 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { UserProfile } from "@/lib/types";
-import { mockCurrentUser, mockUserProfiles } from "@/lib/mock-data";
 
 // Esta função substitui 'getMockUserByUsername'
 export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
-  // Fallback para mock SEMPRE em dev
-  if (process.env.NODE_ENV !== 'production') {
-    const mockUser = mockUserProfiles.find(u => u.username === username);
-    if (mockUser) return mockUser;
-  }
-
-  // Busca real no Supabase (produção)
+  // Busca real no Supabase
   const supabase = await createClient();
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
@@ -34,8 +27,8 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     phone: profile.phone,
     whatsappNumber: profile.whatsapp_number,
     bio: profile.bio || '',
-    profilePictureUrl: profile.profile_picture_url || '',
-    coverPhotoUrl: profile.cover_photo_url || '',
+    profile_picture_url: profile.profile_picture_url || '',
+    cover_photo_url: profile.cover_photo_url || '',
     category: profile.category || 'Categoria não definida',
     plan: profile.plan as 'free' | 'standard' | 'premium' || 'free',
     layoutTemplateId: profile.layout_template_id,
@@ -47,7 +40,23 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     premiumBanner: profile.premium_banner || undefined,
 
     // Dados que agora vêm do profile_snapshot
-    socialLinks: (profile.profile_snapshot?.social_links || []) as UserProfile['socialLinks'],
+    socialLinks: (() => {
+      if (profile.socialLinks) {
+        if (typeof profile.socialLinks === 'string') {
+          try {
+            const arr = JSON.parse(profile.socialLinks);
+            return Array.isArray(arr) ? arr : [];
+          } catch {
+            return [];
+          }
+        }
+        if (Array.isArray(profile.socialLinks)) {
+          return profile.socialLinks;
+        }
+      }
+      // Fallback para profile_snapshot
+      return (profile.profile_snapshot?.social_links || []);
+    })() as UserProfile['socialLinks'],
     services: (profile.profile_snapshot?.services || []) as UserProfile['services'],
     portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
     experience: (profile.profile_snapshot?.experience || []) as UserProfile['experience'],
@@ -87,8 +96,8 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     ...data,
     name: data.full_name,
     isAvailable: data.is_available,
-    profilePictureUrl: data.profile_picture_url,
-    coverPhotoUrl: data.cover_photo_url,
+    profile_picture_url: data.profile_picture_url,
+    cover_photo_url: data.cover_photo_url,
     whatsappNumber: data.whatsapp_number,
     socialLinks: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
     services: data.services?.map((service: any) => ({ ...service, id: String(service.id) })) || [],
@@ -110,8 +119,8 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
   const {
     name,
     isAvailable,
-    profilePictureUrl,
-    coverPhotoUrl,
+    profile_picture_url,
+    cover_photo_url,
     whatsappNumber,
     socialLinks = [],
     services = [],
@@ -127,8 +136,8 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
     ...rest,
     full_name: name,
     is_available: isAvailable,
-    profile_picture_url: profilePictureUrl,
-    cover_photo_url: coverPhotoUrl,
+    profile_picture_url: profile_picture_url,
+    cover_photo_url: cover_photo_url,
     whatsapp_number: whatsappNumber,
   };
 
@@ -199,3 +208,57 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
 // ATENÇÃO: Não adicione fallback para mocks nesta função.
 // Para um projeto escalável e robusto, todos os perfis públicos devem estar cadastrados no banco de dados real (Supabase).
 // Use mocks apenas em páginas de exemplo, landing page ou testes locais, nunca em rotas públicas ou produção.
+
+// Busca múltiplos perfis reais do Supabase
+export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*, profile_snapshot')
+    .limit(limit);
+
+  if (error || !data) {
+    console.error('Erro ao buscar perfis reais:', error);
+    return [];
+  }
+
+  return data.map((profile: any) => ({
+    id: profile.id,
+    username: profile.username,
+    name: profile.full_name || 'Nome não definido',
+    email: profile.email,
+    phone: profile.phone,
+    whatsappNumber: profile.whatsapp_number,
+    bio: profile.bio || '',
+    profile_picture_url: profile.profile_picture_url || '',
+    cover_photo_url: profile.cover_photo_url || '',
+    category: profile.category || 'Categoria não definida',
+    plan: profile.plan as 'free' | 'standard' | 'premium' || 'free',
+    layoutTemplateId: profile.layout_template_id,
+    isAvailable: profile.is_available,
+    location: profile.location || { city: '', country: '' },
+    skills: profile.skills || [],
+    premiumBanner: profile.premium_banner || undefined,
+    socialLinks: (() => {
+      if (profile.socialLinks) {
+        if (typeof profile.socialLinks === 'string') {
+          try {
+            const arr = JSON.parse(profile.socialLinks);
+            return Array.isArray(arr) ? arr : [];
+          } catch {
+            return [];
+          }
+        }
+        if (Array.isArray(profile.socialLinks)) {
+          return profile.socialLinks;
+        }
+      }
+      return (profile.profile_snapshot?.social_links || []);
+    })() as UserProfile['socialLinks'],
+    services: (profile.profile_snapshot?.services || []) as UserProfile['services'],
+    portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
+    experience: (profile.profile_snapshot?.experience || []) as UserProfile['experience'],
+    education: (profile.profile_snapshot?.education || []) as UserProfile['education'],
+    reviews: (profile.profile_snapshot?.reviews || []) as UserProfile['reviews'],
+  }));
+}

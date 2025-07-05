@@ -1,23 +1,28 @@
 # WhosDo.com
 
-> Plataforma de identidade digital profissional
+> Plataforma de identidade digital profissional para conectar talentos, empresas e oportunidades de forma moderna e segura.
 
 ## 🧱 Stack
-- Next.js 14 (App Router)
-- Supabase
-- Tailwind + Shadcn/UI
-- TypeScript 5
-- pnpm + monorepo
+- [Next.js 14](https://nextjs.org/) (App Router)
+- [Supabase](https://supabase.com/)
+- [Tailwind CSS](https://tailwindcss.com/) + [Shadcn/UI](https://ui.shadcn.com/)
+- [TypeScript 5](https://www.typescriptlang.org/)
+- [pnpm](https://pnpm.io/) + monorepo
+- Husky, ESLint, Prettier, CI/CD (GitHub Actions)
 
 ## 📂 Estrutura
-- apps/web: aplicação principal
-- src/features: funcionalidades modulares
-- supabase/: banco e auth
-- infra/: configurações de deploy
+- `apps/web`: aplicação principal (frontend)
+- `src/features`: módulos e funcionalidades reutilizáveis
+- `supabase/`: banco de dados, autenticação e seed
+- `infra/`: scripts e configurações de deploy
+- `db/`: schemas, policies e migrations
+- `docs/`: documentação do projeto
 
-## 🚀 Scripts
-pnpm dev
-pnpm lint
+## 🚀 Scripts principais
+- `pnpm dev` — inicia o ambiente de desenvolvimento
+- `pnpm build` — build de produção
+- `pnpm lint` — checagem de lint
+- `pnpm format` — formatação automática
 
 ## Primeiros Passos
 
@@ -26,13 +31,16 @@ pnpm lint
    pnpm install
    ```
 2. Configure as variáveis de ambiente conforme instruções em [docs/project-structure-and-recovery-guide.md](./docs/project-structure-and-recovery-guide.md).
+   - Exemplo de `.env.example` disponível na raiz do projeto ou na documentação.
 3. Inicie o projeto:
    ```bash
    pnpm dev
    ```
 
-Para mais detalhes, consulte o [README do app web](./apps/web/README.md) e o [índice de documentação](./docs/README.md).
+> Para mais detalhes, consulte o [README do app web](./apps/web/README.md) e o [índice de documentação](./docs/README.md).
 
-> Este projeto utiliza **monorepo** com pnpm. Os principais apps e pacotes estão em `apps/`, `db/`, `infra/`, `supabase/` e `docs/`. Atualização automática: documentação revisada em  
+---
 
-Atualização rápida: 24/06/2025
+### Histórico de revisões
+
+- Atualização rápida: 24/06/2025

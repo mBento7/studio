@@ -75,7 +75,7 @@ Aqui está uma lista dos principais modelos de anúncios e onde eles são exibid
 ### 5. Perfil Premium como Anúncio
 -   **O que é:** O próprio perfil do usuário, que se torna uma página de vendas completa com recursos avançados.
 -   **Onde aparece:** Na URL pública e exclusiva do perfil do usuário.
--   **Conteúdo:** Layouts exclusivos (`AdvancedProfileLayout`, `PremiumProLayout`), banners internos personalizados, vídeos do YouTube, seção de depoimentos de clientes e mais.
+-   **Conteúdo:** Layouts exclusivos (`StandardProfileLayout`, `PremiumProLayout`), banners internos personalizados, vídeos do YouTube, seção de depoimentos de clientes e mais.
 -   **Como Ativar:** Realizando o upgrade para um plano **Premium**.
 
 ### 2. Tipos de Post no Feed
@@ -98,11 +98,11 @@ O perfil do usuário é a principal forma de anúncio. A sua aparência e os rec
     -   **Premium:** Acesso a todos os recursos, como banners personalizados no perfil, vídeos, depoimentos e layouts avançados.
 
 -   **Layouts de Perfil:** Existem diferentes templates visuais que mudam a forma como as informações do usuário são apresentadas, como:
-    -   `BasicProfileLayout`
+    -   `FreeProfileLayout`
     -   `MinimalistCardLayout`
     -   `ModernProfileLayout`
     -   `PortfolioFocusLayout`
-    -   `AdvancedProfileLayout`
+    -   `StandardProfileLayout`
     -   `PremiumProLayout`
 
 ---

@@ -43,7 +43,7 @@ export default function AppearanceSettingsPage() {
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
     const [selectedAccentColor, setSelectedAccentColor] = useState<AccentColor>(accentColors[0]);
     const [userPlan, setUserPlan] = useState<'free' | 'standard' | 'premium'>('free');
-    const [selectedLayoutTemplate, setSelectedLayoutTemplate] = useState<string>('default');
+    const [selectedLayoutTemplate, setSelectedLayoutTemplate] = useState<string>('free');
 
     useEffect(() => {
         if (!loading && !user) {
@@ -56,7 +56,7 @@ export default function AppearanceSettingsPage() {
         if (profileToLoad) {
             setActiveProfile(profileToLoad);
             setUserPlan(profileToLoad.plan || 'free');
-            setSelectedLayoutTemplate(profileToLoad.layoutTemplateId || 'default');
+            setSelectedLayoutTemplate(profileToLoad.layoutTemplateId || 'free');
             
             const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
             setTheme(storedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'));

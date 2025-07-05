@@ -30,6 +30,7 @@ const VALID_PROFILE_FIELDS = [
   'primaryColor',
   'secondaryColor',
   'font',
+  'socialLinks',
 ];
 
 export function filterValidProfileFields(profile: any) {
@@ -47,6 +48,10 @@ export async function saveUserProfileV2(userId: string, profileData: any) {
   const supabase = createClient();
   // Filtra apenas os campos válidos
   const safeProfileData = filterValidProfileFields(profileData);
+  // Converter socialLinks para string JSON, se existir
+  if (safeProfileData.socialLinks) {
+    safeProfileData.socialLinks = JSON.stringify(safeProfileData.socialLinks);
+  }
   const { error } = await supabase
     .from("profiles")
     .update(safeProfileData)

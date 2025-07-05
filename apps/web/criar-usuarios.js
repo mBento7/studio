@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  'SUA_URL', // Exemplo: https://xxxx.supabase.co
-  'SUA_SERVICE_ROLE_KEY' // Exemplo: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  'https://wkwhvjsnqsognjorjsgf.supabase.co', // Exemplo: https://xxxx.supabase.co
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrd2h2anNucXNvZ25qb3Jqc2dmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDAxOTMxMSwiZXhwIjoyMDY1NTk1MzExfQ.HjnU6EwPy1-KXQ8loIZ0i0ojnL6YeI78D4kVzj2-zEI' // Exemplo: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 )
 
 async function criarUsuarios() {
