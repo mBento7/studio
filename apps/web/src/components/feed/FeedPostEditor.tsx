@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { tipoConfig } from "@/config/feed";
 import { WhosdoIcon } from "@/components/icons/whosdo-icon";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 interface FeedPostEditorProps {
   onPost?: (data: {
@@ -32,10 +33,11 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   const [showLocalizacao, setShowLocalizacao] = useState(false);
   const [preco, setPreco] = useState("");
   const [localizacao, setLocalizacao] = useState("");
-  const [tipoPost, setTipoPost] = useState<'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto'>('oferta_servico');
+  const [tipoPost, setTipoPost] = useState<'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto' | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
+  const [showTipoPost, setShowTipoPost] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -90,19 +92,18 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         imagem: image,
         preco: showPreco ? preco : undefined,
         localizacao: showLocalizacao ? localizacao : undefined,
-        tipo: tipoPost,
+        tipo: tipoPost ?? undefined,
         tags,
       });
     }
-    
     setPostText("");
     setImage(null);
     setPreco("");
     setLocalizacao("");
-    setTipoPost('oferta_servico');
+    setTipoPost(null);
     setTags([]);
     setTagInput("");
-    
+    setShowTipoPost(false);
     toast({
       title: "Post publicado!",
       description: "Sua postagem foi enviada com sucesso.",
@@ -149,8 +150,9 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           <Textarea
             ref={textRef}
             rows={2}
-            className="resize-none overflow-hidden border bg-background/50 focus-visible:ring-1 focus-visible:ring-primary/50 text-base placeholder:text-muted-foreground/60 p-4"
+            className="resize-none overflow-hidden border bg-background/50 focus-visible:ring-1 focus-visible:ring-primary/50 text-base placeholder:text-muted-foreground/60 p-4 mt-2 min-h-[80px] sm:text-lg sm:p-6"
             placeholder="O que você gostaria de compartilhar hoje?"
+            aria-label="Campo de texto para nova postagem"
             value={postText}
             onChange={e => setPostText(e.target.value)}
             maxLength={500}
@@ -165,37 +167,49 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           </div>
         </div>
 
-        {/* Tipo de postagem */}
+        {/* Tipo de postagem (colapsável/opcional) */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+            onClick={() => setShowTipoPost((v) => !v)}
+            aria-expanded={showTipoPost}
+          >
             <Tag className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-foreground">Tipo de postagem</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {postTypes.map(typeKey => {
-              const config = tipoConfig[typeKey];
-              const isActive = tipoPost === typeKey;
-              return (
-                <motion.button
-                  key={typeKey}
-                  onClick={() => setTipoPost(typeKey)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={cn(
-                    "flex items-center gap-2 text-sm px-3 py-2 border rounded-lg transition-all font-medium text-left",
-                    isActive
-                      ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white font-semibold shadow-md border-transparent"
-                      : "bg-transparent border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10"
-                  )}
-                >
-                  {React.cloneElement(config.icon, { 
-                    className: cn("w-4 h-4", isActive ? "text-white" : "text-[#0e9094]") 
-                  })}
-                  <span className="flex-1">{config.badge}</span>
-                </motion.button>
-              );
-            })}
-          </div>
+            {showTipoPost ? "Ocultar tipo de postagem" : tipoPost ? `Tipo: ${tipoConfig[tipoPost]?.badge}` : "Selecionar tipo de postagem (opcional)"}
+          </button>
+          {showTipoPost && (
+            <div className="grid grid-cols-2 gap-2 mt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {postTypes.map(typeKey => {
+                const config = tipoConfig[typeKey];
+                const isActive = tipoPost === typeKey;
+                return (
+                  <Tooltip key={typeKey}>
+                    <TooltipTrigger asChild>
+                      <motion.button
+                        onClick={() => setTipoPost(typeKey)}
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.96 }}
+                        className={cn(
+                          "flex items-center justify-center text-sm px-0 py-2 border rounded-lg transition-all font-medium text-left focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none min-h-[48px] w-full",
+                          isActive
+                            ? "bg-primary text-primary-foreground font-semibold shadow-md border-transparent"
+                            : "bg-transparent border-primary/50 text-primary hover:bg-primary/10"
+                        )}
+                      >
+                        {React.cloneElement(config.icon, { 
+                          className: cn("w-5 h-5", isActive ? "text-primary-foreground" : "text-primary") 
+                        })}
+                      </motion.button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="bg-background text-foreground border border-border">
+                      {config.badge}
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <AnimatePresence>
@@ -260,7 +274,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                   {tags.length > 0 && (
                     <div className="flex gap-2 flex-wrap">
                       {tags.map((tag, idx) => (
-                        <span key={idx} className="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/50 text-xs rounded px-2 py-0.5 flex items-center gap-1">
+                        <span key={idx} className="bg-secondary text-secondary-foreground border border-secondary/50 text-xs rounded px-2 py-0.5 flex items-center gap-1">
                           #{tag}
                           <button type="button" className="ml-1 text-xs" onClick={() => setTags(tags.filter((_, i) => i !== idx))}>×</button>
                         </span>
@@ -342,7 +356,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           <Button 
             onClick={handlePost} 
             disabled={!postText.trim()} 
-            className="px-8 rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md"
+            className="px-8 rounded-full bg-primary text-primary-foreground font-semibold shadow-md hover:brightness-110"
           >
             Publicar
           </Button>

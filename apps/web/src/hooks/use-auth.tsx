@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { UserProfile } from '@/lib/types';
-import { createClient } from '@/lib/supabase/client'; // Nosso novo cliente Supabase!
+import { supabase } from '@/lib/supabase/client';
 import { getUserProfileById } from '@/services/profile.service';
 
 interface AuthContextType {
@@ -23,7 +23,6 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const supabase = createClient();
   const router = useRouter();
   const { toast } = useToast();
   
@@ -35,9 +34,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Função para buscar o perfil do usuário no banco de dados real
     const fetchUserProfile = async (supabaseUser: SupabaseUser) => {
       setLoading(true);
-      const userProfile = await getUserProfileById(supabaseUser.id);
-      setCurrentUserProfile(userProfile);
-      setLoading(false);
+      console.log('[Auth] Buscando perfil do usuário:', supabaseUser.id);
+      try {
+        const userProfile = await getUserProfileById(supabaseUser.id);
+        setCurrentUserProfile(userProfile);
+        setLoading(false);
+        if (!userProfile) {
+          toast({
+            title: 'Perfil não encontrado',
+            description: 'Não foi possível carregar seu perfil. Faça login novamente ou entre em contato com o suporte.',
+            variant: 'destructive',
+            duration: 4000
+          });
+          router.push('/home');
+          await signOutUser();
+          return;
+        }
+        console.log('[Auth] Perfil carregado com sucesso:', userProfile);
+      } catch (err) {
+        setLoading(false);
+        toast({ title: 'Erro ao carregar perfil', description: String(err), variant: 'destructive' });
+        console.error('[Auth] Erro ao carregar perfil:', err);
+      }
     };
 
     // Listener de autenticação do Supabase
@@ -112,8 +130,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithEmail = async (email: string, password: string) => {
     setLoading(true);
+    console.log('[Auth] Iniciando login com email:', email);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) handleAuthError(error, "Login com Email");
+    if (error) {
+      handleAuthError(error, "Login com Email");
+      setLoading(false);
+      throw error;
+    } else {
+      console.log('[Auth] Login com email enviado para Supabase');
+    }
     // O onAuthStateChange cuidará do resto
   };
 
@@ -134,9 +159,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOutUser = async () => {
     setLoading(true);
+    console.log('[Auth] Iniciando logout...');
     const { error } = await supabase.auth.signOut();
     if (error) handleAuthError(error, "Logout");
-    else toast({ title: 'Logout bem-sucedido', variant: 'success', duration: 2000 });
+    else {
+      toast({ title: 'Logout bem-sucedido', variant: 'success', duration: 2000 });
+      console.log('[Auth] Logout bem-sucedido!');
+    }
     setLoading(false);
   };
 

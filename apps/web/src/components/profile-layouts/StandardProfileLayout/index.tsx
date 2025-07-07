@@ -63,7 +63,7 @@ import { StartChatButton } from "@/components/chat/StartChatButton";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { ReviewSummary } from "@/components/reviews/ReviewSummary";
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import { useToast } from "@/hooks/use-toast";
 
 // AVISO: Avaliações (reviews) só devem existir neste layout e no PremiumProfileLayout!
@@ -158,7 +158,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
   const education = user.education || [];
   const portfolio = user.portfolio || [];
   const services = user.services || [];
-  const socialLinks = user.socialLinks || [];
+  const sociallinks = user.socialLinks || [];
   const location = user.location || { city: '', country: '' };
 
   const layoutKey = 'StandardProfileLayout';
@@ -188,7 +188,6 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     setMounted(true);
 
     const fetchCurrentUser = async () => {
-      const supabase = await createClient();
       const { data: { user } } = await supabase.auth.getUser();
       setCurrentUserId(user?.id);
     };
@@ -336,7 +335,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
 
   return (
     <div
-      className="min-h-screen bg-background text-foreground"
+      className="bg-background text-foreground"
       style={{
         background: secondaryColor || undefined,
         color: primaryColor || undefined,
@@ -452,7 +451,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
                 </div>
 
                 <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                  {socialLinks.map((link) => {
+                  {sociallinks.map((link) => {
                     const Icon = platformIcons[link.platform] || Globe;
                     return (
                       <Button

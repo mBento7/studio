@@ -38,7 +38,7 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
   const education = user.education || [];
   const portfolio = user.portfolio || [];
   const services = user.services || [];
-  const socialLinks = user.socialLinks || [];
+  const sociallinks = user.sociallinks || [];
   const location = user.location || { city: "", country: "" };
 
   return (
@@ -58,12 +58,12 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
                 </Avatar>
                 <h1 className="text-3xl font-bold mt-4 text-foreground dark:text-white">{user.name}</h1>
                 <p className="text-primary font-semibold text-lg mt-1">{user.category}</p>
-                {socialLinks.length > 0 && (
+                {sociallinks.length > 0 && (
                   <div className="flex justify-center md:justify-start gap-2 mt-4">
-                    {socialLinks.map((link) => {
+                    {sociallinks.map((link) => {
                       const Icon = platformIcons[link.platform] || Globe;
                       return (
-                        <Button key={link.id} variant="outline" size="icon" className="rounded-full" asChild>
+                        <Button asChild key={link.id} variant="outline" size="icon" className="rounded-full">
                           <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform}>
                             <Icon className="w-4 h-4" />
                           </a>
@@ -87,16 +87,20 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
                     </div>
                   )}
                   {user.email && (
-                    <a href={`mailto:${user.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-                      <Mail className="w-4 h-4" />
-                      <span className="dark:text-slate-300">{user.email}</span>
-                    </a>
+                    <Button asChild>
+                      <a href={`mailto:${user.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                        <Mail className="w-4 h-4" />
+                        <span className="dark:text-slate-300">{user.email}</span>
+                      </a>
+                    </Button>
                   )}
                   {user.phone && (
-                    <a href={`tel:${user.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-                      <Phone className="w-4 h-4" />
-                      <span className="dark:text-slate-300">{user.phone}</span>
-                    </a>
+                    <Button asChild>
+                      <a href={`tel:${user.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                        <Phone className="w-4 h-4" />
+                        <span className="dark:text-slate-300">{user.phone}</span>
+                      </a>
+                    </Button>
                   )}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">

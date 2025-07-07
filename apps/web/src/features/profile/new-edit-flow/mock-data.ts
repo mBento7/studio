@@ -31,7 +31,7 @@ export const superPremiumUser = {
     { id: "s1", name: "Mentoria Executiva", description: "Acompanhamento personalizado para líderes.", price: "R$ 1.500/h" },
     { id: "s2", name: "Palestras", description: "Palestras motivacionais e técnicas.", price: "Sob consulta" }
   ],
-  socialLinks: [
+  sociallinks: [
     { id: "1", platform: "linkedin", url: "https://linkedin.com/in/anapremium" },
     { id: "2", platform: "instagram", url: "https://instagram.com/anapremium" },
     { id: "3", platform: "youtube", url: "https://youtube.com/@anapremium" }
@@ -104,7 +104,7 @@ export const superPremiumShowcaseUser = {
     { id: "srv1", name: "Mentoria Acadêmica", description: "Orientação para carreira acadêmica e pesquisa.", price: "R$ 800/h" },
     { id: "srv2", name: "Palestras Corporativas", description: "Palestras sobre tecnologia e inovação.", price: "Sob consulta" }
   ],
-  socialLinks: [
+  sociallinks: [
     { id: "1", platform: "linkedin", url: "https://linkedin.com/in/lucasshowcase" },
     { id: "2", platform: "instagram", url: "https://instagram.com/lucasshowcase" },
     { id: "3", platform: "youtube", url: "https://youtube.com/@lucasshowcase" }
@@ -155,7 +155,7 @@ export const basicUser = {
   ],
   portfolio: [],
   services: [],
-  socialLinks: [],
+  sociallinks: [],
   location: { city: "Belo Horizonte", country: "Brasil" },
   stories: [],
   coupons: [],
@@ -185,7 +185,7 @@ export const minimalUser = {
   ],
   portfolio: [],
   services: [],
-  socialLinks: [],
+  sociallinks: [],
   location: { city: "Rio de Janeiro", country: "Brasil" },
   stories: [],
   coupons: [],
@@ -215,7 +215,7 @@ export const modernUser = {
   ],
   portfolio: [],
   services: [],
-  socialLinks: [],
+  sociallinks: [],
   location: { city: "Curitiba", country: "Brasil" },
   stories: [],
   coupons: [],

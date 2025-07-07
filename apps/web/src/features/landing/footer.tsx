@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import { Logo } from '@/components/common/logo';
 import { Button } from '@/components/ui/button';
@@ -10,54 +9,50 @@ export function PublicFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-card text-card-foreground py-12 md:py-16 border-t border-border">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          {/* Logo e descrição */}
-          <div className="md:col-span-4">
-            <Logo className="mb-4 text-card-foreground" />
-            <p className="text-sm mb-4 text-muted-foreground">
+    <footer className="bg-card border-t border-border py-10 mt-12">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8">
+          {/* Coluna 1: Logo e descrição */}
+          <div className="flex-1 min-w-[200px]">
+            <Logo className="mb-3" />
+            <p className="text-sm text-muted-foreground max-w-xs">
               {siteConfig.description}
             </p>
           </div>
-
-          {/* Links Rápidos */}
-          <div className="md:col-span-2">
-            <h5 className="font-semibold text-card-foreground mb-4">Plataforma</h5>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/#features" className="text-muted-foreground hover:text-primary">Funcionalidades</Link></li>
-              <li><Link href="/#pricing" className="text-muted-foreground hover:text-primary">Planos</Link></li>
-              <li><Link href="/search" className="text-muted-foreground hover:text-primary">Explorar</Link></li>
-              <li><Link href="/login" className="text-muted-foreground hover:text-primary">Entrar</Link></li>
+          {/* Coluna 2: Links rápidos */}
+          <div>
+            <h5 className="font-semibold mb-2">Plataforma</h5>
+            <ul className="space-y-1 text-sm">
+              <li><Link href="/#features" className="hover:text-primary">Funcionalidades</Link></li>
+              <li><Link href="/#pricing" className="hover:text-primary">Planos</Link></li>
+              <li><Link href="/search" className="hover:text-primary">Explorar</Link></li>
+              <li><Link href="/login" className="hover:text-primary">Entrar</Link></li>
             </ul>
           </div>
-
-          {/* Legal */}
-          <div className="md:col-span-2">
-            <h5 className="font-semibold text-card-foreground mb-4">Legal</h5>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/terms" className="text-muted-foreground hover:text-primary">Termos de Uso</Link></li>
-              <li><Link href="/privacy" className="text-muted-foreground hover:text-primary">Política de Privacidade</Link></li>
+          {/* Coluna 3: Legal */}
+          <div>
+            <h5 className="font-semibold mb-2">Legal</h5>
+            <ul className="space-y-1 text-sm">
+              <li><Link href="/terms" className="hover:text-primary">Termos de Uso</Link></li>
+              <li><Link href="/privacy" className="hover:text-primary">Política de Privacidade</Link></li>
             </ul>
           </div>
-
-          {/* Newsletter */}
-          <div className="md:col-span-4">
-            <h5 className="font-semibold text-card-foreground mb-4">Receba Novidades</h5>
-            <p className="text-sm mb-3 text-muted-foreground">
-              Inscreva-se para receber as últimas notícias, dicas e ofertas especiais do {siteConfig.name}.
-            </p>
-            <form className="flex space-x-2">
-              <Input type="email" placeholder="seu@email.com" className="bg-background border-border focus:ring-primary text-foreground" />
-              <Button type="submit" variant="default" size="icon" aria-label="Inscrever-se na newsletter">
+          {/* Coluna 4: Newsletter */}
+          <div className="flex-1 min-w-[200px]">
+            <h5 className="font-semibold mb-2">Receba Novidades</h5>
+            <form className="flex space-x-2 mb-2">
+              <Input type="email" placeholder="seu@email.com" />
+              <Button type="submit" size="icon" aria-label="Inscrever-se na newsletter">
                 <Send className="h-4 w-4" />
               </Button>
             </form>
+            <p className="text-xs text-muted-foreground max-w-xs">
+              Inscreva-se para receber as últimas notícias, dicas e ofertas especiais do {siteConfig.name}.
+            </p>
           </div>
         </div>
-
-        <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {currentYear} {siteConfig.name}. Todos os direitos reservados.</p>
+        <div className="border-t border-border mt-8 pt-6 text-center text-xs text-muted-foreground">
+          &copy; {currentYear} {siteConfig.name}. Todos os direitos reservados.
         </div>
       </div>
     </footer>

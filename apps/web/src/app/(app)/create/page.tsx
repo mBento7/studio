@@ -71,6 +71,22 @@ const creationOptions = [
     cta: "Gerar Cupom",
     badge: "Business",
   },
+  {
+    title: "Showcase de Anúncios",
+    description: "Veja exemplos de todos os tipos de anúncios disponíveis na plataforma.",
+    icon: <Megaphone className="h-8 w-8 text-primary" />,
+    href: "/showcase-lucas",
+    cta: "Ver Exemplos",
+    badge: "Exemplo",
+  },
+  {
+    title: "Showcase do Feed",
+    description: "Veja exemplos de todos os componentes do feed (cards, eventos, cupons, etc).",
+    icon: <Newspaper className="h-8 w-8 text-primary" />,
+    href: "/showcase-feed",
+    cta: "Ver Feed Demo",
+    badge: "Exemplo",
+  },
 ];
 
 export default function CreatePage() {
@@ -114,23 +130,19 @@ export default function CreatePage() {
                   </div>
                 </CardHeader>
                 <CardFooter className="mt-auto">
-                  <Link href={option.href} passHref className="w-full">
-                    <Button
-                      className={cn(
-                        'flex items-center gap-2 h-10 px-4 text-sm rounded-lg font-semibold transition-all duration-200 ease-in-out shadow w-full',
-                        option.badge === 'Premium'
-                          ? 'bg-white text-yellow-500 ring-2 ring-yellow-400 border border-yellow-300'
-                          : 'bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white hover:from-[#0e9094] hover:to-[#14b8a6]',
-                        'focus-visible:ring-2 focus-visible:ring-primary/40'
-                      )}
-                    >
-                      <PlusCircle className={cn("mr-2 h-4 w-4", option.badge === 'Premium' ? 'text-yellow-500' : 'text-white')} />
+                  <Button
+                    asChild
+                    variant={option.badge === 'Premium' ? 'premium' : 'default'}
+                    className="w-full flex items-center gap-2"
+                  >
+                    <Link href={option.href} passHref className="w-full">
+                      <PlusCircle className={option.badge === 'Premium' ? 'text-white' : 'text-white'} />
                       {option.cta}
                       {option.badge === 'Premium' && (
-                        <span className="ml-2 text-[10px] font-bold uppercase text-yellow-500 bg-yellow-100 px-2 py-0.5 rounded-full">Premium</span>
+                        <span className="ml-2 text-[10px] font-bold uppercase">Premium</span>
                       )}
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </CardFooter>
               </Card>
             </motion.div>

@@ -1,4 +1,4 @@
-import { PublicFooter } from '@/features/landing/footer';
+import PublicHeader from '@/features/landing/header';
 
 export default function PublicLayout({
   children,
@@ -7,8 +7,8 @@ export default function PublicLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <main className="flex-grow bg-background">{children}</main>
-      <PublicFooter />
+      <PublicHeader />
+      <main className="flex-grow bg-background pt-16">{children}</main>
     </div>
   );
 }

@@ -47,6 +47,8 @@ import { motion } from 'framer-motion';
 import { ActionButton } from '@/components/ui/action-button';
 import { ImageUploadField } from '@/components/ui/image-upload-field';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { updateUserProfile } from '@/services/profile.service';
+import { useToast } from '@/hooks/use-toast';
 
 // Simulação de dados do usuário (substituir por dados reais do backend)
 const mockCurrentUser = {
@@ -62,7 +64,7 @@ const mockCurrentUser = {
   profilePictureDataAiHint: "homem sorrindo, camisa azul",
   cover_photo_url: "/images/mock-cover-pic.jpg",
   coverPhotoDataAiHint: "abstrato, tons azuis",
-  socialLinks: [
+  sociallinks: [
     { id: "1", platform: "linkedin", url: "https://www.linkedin.com/in/joaosilva" },
     { id: "2", platform: "github", url: "https://github.com/joaosilva" },
     { id: "3", platform: "youtube", url: "https://www.youtube.com/user/joaosilva" },
@@ -137,7 +139,7 @@ type ProfileFormData = {
   profilePictureDataAiHint: string;
   cover_photo_url: string;
   coverPhotoDataAiHint: string;
-  socialLinks: SocialLink[];
+  sociallinks: SocialLink[];
   locationCity: string;
   locationAddress?: string;
   locationState?: string;
@@ -174,6 +176,8 @@ export function ProfileForm() {
   const [usernameTouched, setUsernameTouched] = useState(false);
   const [activeTab, setActiveTab] = useState('basic-info');
 
+  const { toast } = useToast();
+
   const getInitialFormValues = useCallback((): ProfileFormData => {
     const baseProfile = mockCurrentUser;
     return {
@@ -188,8 +192,8 @@ export function ProfileForm() {
       profilePictureDataAiHint: baseProfile.profilePictureDataAiHint || 'user profile',
       cover_photo_url: baseProfile.cover_photo_url || defaultCoverPicUrl,
       coverPhotoDataAiHint: baseProfile.coverPhotoDataAiHint || 'banner image',
-      socialLinks: Array.isArray(baseProfile.socialLinks) 
-        ? baseProfile.socialLinks.map(link => ({ ...link, id: link.id || Date.now().toString() })) 
+      sociallinks: Array.isArray(baseProfile.sociallinks) 
+        ? baseProfile.sociallinks.map(link => ({ ...link, id: link.id || Date.now().toString() })) 
         : [],
       locationCity: baseProfile.location?.city || '',
       locationAddress: baseProfile.location?.address || undefined,
@@ -238,23 +242,66 @@ export function ProfileForm() {
     }
   }, [getInitialFormValues, reset, checkUsernameAvailability]);
 
-  const { fields: socialLinkFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({ control, name: "socialLinks" });
+  const { fields: socialLinkFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({ control, name: "sociallinks" });
   const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({ control, name: "experience" });
   const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({ control, name: "education" });
 
   const onSubmit = async (data: ProfileFormData) => {
     if (usernameAvailable === false && data.username !== mockCurrentUser.username) {
-      alert("Nome de usuário indisponível");
+      toast({
+        title: "Erro ao salvar",
+        description: "Nome de usuário indisponível.",
+        variant: "destructive",
+      });
       return;
     }
     
-    console.log("Form submitted:", data);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    alert("Perfil atualizado com sucesso!");
-    setUsernameTouched(false);
+    try {
+      // Extrair o ID do usuário para a chamada da API
+      const userId = data.id;
+
+      // Chamar a função de serviço para atualizar o perfil
+      await updateUserProfile(userId, {
+        name: data.name,
+        username: data.username,
+        bio: data.bio,
+        category: data.category,
+        phone: data.phone,
+        whatsappNumber: data.whatsappNumber,
+        profile_picture_url: data.profile_picture_url,
+        cover_photo_url: data.cover_photo_url,
+        sociallinks: data.sociallinks, // Passar o array de sociallinks
+        location: {
+          city: data.locationCity,
+          address: data.locationAddress,
+          state: data.locationState,
+          country: data.locationCountry,
+          googleMapsUrl: data.locationGoogleMapsUrl,
+        },
+        plan: data.plan,
+        isAvailable: data.isAvailable,
+        layoutTemplateId: data.layoutTemplateId,
+        skills: data.skills,
+        experience: data.experience,
+        education: data.education,
+        // Não passe o email aqui, ele é apenas para exibição no formulário.
+        // id também já é passado como primeiro argumento para updateUserProfile.
+      });
+
+      toast({
+        title: "Sucesso!",
+        description: "Perfil atualizado com sucesso.",
+        variant: "default",
+      });
+      setUsernameTouched(false);
+    } catch (error: any) {
+      console.error("Erro ao salvar perfil:", error);
+      toast({
+        title: "Erro ao salvar",
+        description: error.message || "Ocorreu um erro ao atualizar o perfil.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -444,7 +491,7 @@ export function ProfileForm() {
                   {socialLinkFields.map((field, index) => (
                     <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-end">
                       <Controller
-                        name={`socialLinks.${index}.platform`}
+                        name={`sociallinks.${index}.platform`}
                         control={control}
                         render={({ field: controllerField }) => (
                           <div className="space-y-2 flex-grow sm:flex-grow-0 w-full sm:w-auto">
@@ -470,12 +517,12 @@ export function ProfileForm() {
                       <div className="space-y-2 flex-grow w-full">
                         <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">URL</Label>
                         <Input
-                          {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
-                          placeholder={platformOptions.find(opt => opt.value === watch(`socialLinks.${index}.platform`))?.placeholder || "https://"}
+                          {...register(`sociallinks.${index}.url`, { required: "URL é obrigatória" })}
+                          placeholder={platformOptions.find(opt => opt.value === watch(`sociallinks.${index}.platform`))?.placeholder || "https://"}
                           className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                         />
-                        {errors.socialLinks?.[index]?.url && (
-                          <p className="text-sm text-destructive dark:text-red-400">{errors.socialLinks[index]?.url?.message}</p>
+                        {errors.sociallinks?.[index]?.url && (
+                          <p className="text-sm text-destructive dark:text-red-400">{errors.sociallinks[index]?.url?.message}</p>
                         )}
                       </div>
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeSocialLink(index)} className="mt-2 sm:mt-0 dark:bg-slate-700 dark:text-white">
@@ -531,9 +578,11 @@ export function ProfileForm() {
                   {googleMapsLink && (
                     <div className="text-sm text-muted-foreground dark:text-slate-300 flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
-                      <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary dark:text-blue-400">
-                        Ver no Google Maps
-                      </a>
+                      <Button asChild>
+                        <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary dark:text-blue-400">
+                          Ver no mapa
+                        </a>
+                      </Button>
                     </div>
                   )}
                 </div>

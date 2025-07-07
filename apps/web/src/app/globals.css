@@ -6,38 +6,39 @@
 /* ---------- Variáveis de tema (modo claro) ---------- */
 @layer base {
   :root {
-    --background-start-rgb: 248 250 252;   /* slate‑50  */
-    --background-end-rgb:   241 245 249;   /* slate‑100 */
+    --background: 0 0% 100%;           /* #FFFFFF */
+    --foreground: 220 14% 16%;         /* #222831 (texto escuro) */
 
-    --foreground:           220 13% 18%;
-    --card:                 0 0% 100%;
-    --card-foreground:      220 13% 18%;
-    --popover:              0 0% 100%;
-    --popover-foreground:   220 13% 18%;
+    --card: 0 0% 100%;                /* Branco para cards */
+    --card-foreground: 220 14% 16%;   /* #222831 */
 
-    --primary:              174 80% 40%;  /* teal */
-    --primary-foreground:   0 0% 10%;
+    --popover: 0 0% 100%;             /* Branco para fundo do tooltip */
+    --popover-foreground: 220 14% 16%;/* Cor do texto do tooltip */
 
-    --accent:               210 80% 50%;  /* azul vibrante */
-    --accent-foreground:    0 0% 98%;
+    --primary: 214 89% 52%;        /* #1877F2 (azul Facebook) */
+    --primary-foreground: 0 0% 100%;  /* branco */
 
-    --secondary:            210 40% 96.1%;
-    --secondary-foreground: 222 47% 11.2%;
-    --muted:                210 16% 90%;
-    --muted-foreground:     220 13% 40%;
+    --secondary: 211 100% 33%;        /* #0056A6 (azul escuro) */
+    --secondary-foreground: 0 0% 100%;/* branco */
 
-    --destructive:          0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --accent: 24 89% 55%;            /* #F37021 (laranja vibrante) */
+    --accent-foreground: 0 0% 100%;   /* branco */
 
-    --border: 210 20% 88%;
-    --input:  210 20% 94%;
-    --ring:   174 80% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%; 
 
-    --success: 142 72% 29%;
-    --warning: 45  93% 47%;
-    --info:    199 89% 49%;
+    --muted: 0 0% 96%;                /* #F5F5F5 (cinza claro) */
+    --muted-foreground: 220 15% 50%;  
 
-    --radius: 1rem; /* 16 px – bordas padrão de TODOS os cards */
+    --border: 0 0% 74%;               /* #BDBDBD (cinza médio) */
+    --input: 0 0% 96%;                /* igual ao muted */
+    --ring: 24 89% 55%;               /* igual ao primary */
+    --radius: 0.75rem;
+
+    --success: 142 72% 35%;
+    --warning: 45 93% 50%;
+    --info: 199 89% 55%;
+
     --font-geist-sans: 'Geist Sans', 'Inter', system-ui, sans-serif;
     --font-geist-mono: 'Geist Mono', 'Fira Mono', 'Menlo', 'monospace';
   }
@@ -46,33 +47,37 @@
     --background-start-rgb: 17 17 17;
     --background-end-rgb:   24 24 24;
 
-    --foreground:           0 0% 98%;
-    --card:                 0 0% 10%;
-    --card-foreground:      0 0% 98%;
-    --popover:              0 0% 10%;
-    --popover-foreground:   0 0% 98%;
+    --background: 220 14% 10%;           /* #181B20 (cinza bem escuro) */
+    --foreground: 0 0% 100%;             /* #FFFFFF (texto claro) */
 
-    --primary:              174 80% 60%;
-    --primary-foreground:   0 0% 10%;
+    --card: 220 14% 13%;                 /* #22252B (cinza escuro para cards) */
+    --card-foreground: 0 0% 100%;        /* #FFFFFF */
 
-    --secondary:            0 0% 20%;
-    --secondary-foreground: 0 0% 90%;
-    --muted:                0 0% 15%;
-    --muted-foreground:     0 0% 70%;
+    --popover: 220 14% 13%;              /* Cinza escuro para fundo do tooltip */
+    --popover-foreground: 0 0% 100%;     /* Branco para texto do tooltip */
 
-    --accent:               0 0% 25%;
-    --accent-foreground:    0 0% 98%;
+    --primary: 214 89% 52%;           /* #1877F2 (azul Facebook) */
+    --primary-foreground: 0 0% 100%;   /* branco */
 
-    --destructive:          0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --secondary: 211 100% 33%;           /* #0056A6 (azul escuro) */
+    --secondary-foreground: 0 0% 100%;   /* branco */
 
-    --border: 0 0% 25%;
-    --input:  0 0% 20%;
-    --ring:   0 0% 30%;
+    --accent: 24 89% 55%;              /* #F37021 (laranja vibrante) */
+    --accent-foreground: 0 0% 100%;    /* branco */
+
+    --muted: 220 14% 18%;                /* #23262C (cinza escuro para áreas neutras) */
+    --muted-foreground: 0 0% 80%;        /* #CCCCCC */
+
+    --border: 220 14% 22%;               /* #353841 (cinza médio escuro) */
+    --input: 220 14% 18%;                /* igual ao muted */
+    --ring: 24 89% 55%;                  /* igual ao primary */
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%; 
 
     --success: 142 72% 40%;
     --warning: 45 93% 60%;
-    --info:    199 89% 60%;
+    --info: 199 89% 60%;
 
     --font-geist-sans: 'Geist Sans', 'Inter', system-ui, sans-serif;
     --font-geist-mono: 'Geist Mono', 'Fira Mono', 'Menlo', 'monospace';

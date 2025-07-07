@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
 import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 
 const BANNERS = [
     { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
@@ -61,8 +61,12 @@ function BannerCarousel({ banners }: { banners: Banner[] }) {
           <span className="absolute bottom-4 left-4 bg-black/60 text-white text-lg px-4 py-2 rounded shadow-lg">{banner.title}</span>
         </a>
       ))}
-      <button onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-3 z-20"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg></button>
-      <button onClick={next} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-3 z-20"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M9 5l7 7-7 7"/></svg></button>
+      <Button onClick={prev} variant="ghost" className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-3 z-20">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
+      </Button>
+      <Button onClick={next} variant="ghost" className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full p-3 z-20">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+      </Button>
       <div className="absolute bottom-4 right-8 flex gap-2 z-20">
         {banners.map((_: Banner, i: number) => (
           <button key={i} onClick={() => setIndex(i)} className={`w-3 h-3 rounded-full ${i === index ? 'bg-white' : 'bg-white/40'}`}></button>
@@ -96,17 +100,14 @@ function SocialCard({ item }: { item: any }) {
               <span className="px-2 py-1 bg-background/80 rounded-full text-xs font-medium">
                 {item.category}
               </span>
-              <button
-                onClick={handleBookmark}
-                className={cn(
-                  "p-2 rounded-lg transition-all",
-                  isBookmarked 
-                    ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
-                    : "text-muted-foreground hover:bg-background/50"
-                )}
-              >
+              <Button onClick={handleBookmark} variant="ghost" className={cn(
+                "p-2 rounded-lg transition-all",
+                isBookmarked 
+                  ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
+                  : "text-muted-foreground hover:bg-background/50"
+              )}>
                 <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")}/>
-              </button>
+              </Button>
             </div>
             <div>
               <h3 className="font-semibold text-base text-foreground mb-1 truncate">{item.title}</h3>
@@ -124,18 +125,23 @@ function SocialCard({ item }: { item: any }) {
           </div>
         </CardContent>
         <div className="px-3 pb-3 border-t border-border/10 pt-2 flex items-center justify-between text-muted-foreground">
-          <button 
+          <Button 
             onClick={handleLike} 
+            variant="ghost"
             className={cn(
               "flex items-center gap-1.5 text-xs hover:text-red-500 transition-colors",
               isLiked && "text-red-500"
             )}
           >
             <Heart className={cn("w-4 h-4", isLiked && "fill-current")}/> {likes}
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MessageCircle className="w-4 h-4" /> Comentar</button>
-            <button className="flex items-center gap-1.5 text-xs hover:text-primary"><MoreHorizontal className="w-4 h-4" /></button>
+            <Button variant="ghost" className="flex items-center gap-1.5 text-xs hover:text-primary">
+              <MessageCircle className="w-4 h-4" /> Comentar
+            </Button>
+            <Button variant="ghost" className="flex items-center gap-1.5 text-xs hover:text-primary">
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>
@@ -271,7 +277,6 @@ export default function SearchShowcase() {
   useEffect(() => {
     // Busca todos os perfis reais do Supabase ao montar o componente
     const fetchProfiles = async () => {
-      const supabase = createClient();
       const { data, error } = await supabase
         .from('profiles')
         .select('*');
@@ -423,6 +428,16 @@ export default function SearchShowcase() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Mobile: Stories e resultados mobile */}
+      <div className="block md:hidden">
+        {/* <CardFeedMobile ... /> removido */}
+        {/* {filteredProfiles.map(profile => (
+          <CardFeedMobile key={profile.id} post={{
+            ...
+          }} />
+        ))} */}
       </div>
     </div>
   );

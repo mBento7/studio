@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
+import { Card } from "@/components/ui/card";
 
 interface ReviewSummaryProps {
   reviewedUserId: string; // ID do usuário que está sendo avaliado
@@ -45,8 +46,8 @@ export function ReviewSummary({ reviewedUserId }: ReviewSummaryProps) {
   const maxReviewsInDistribution = Math.max(...Object.values(summary.distribution));
 
   return (
-    <div className="p-4 border rounded-xl bg-white shadow-lg mt-4">
-      <h3 className="text-lg font-semibold mb-4">Resumo das Avaliações</h3>
+    <Card className="p-4 md:p-6 shadow-md dark:bg-slate-800/80">
+      <h3 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Resumo das Avaliações</h3>
       <div className="flex items-center mb-4">
         <span className="text-4xl font-bold text-yellow-500">{summary.averageRating}</span>
         <div className="ml-3">
@@ -54,11 +55,11 @@ export function ReviewSummary({ reviewedUserId }: ReviewSummaryProps) {
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
-                className={`w-6 h-6 ${star <= Math.round(summary.averageRating) ? "text-yellow-400" : "text-gray-300"}`}
+                className={`w-5 h-5 ${star <= Math.round(summary.averageRating) ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
               />
             ))}
           </div>
-          <p className="text-gray-600">Baseado em {summary.totalReviews} avaliações</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Baseado em {summary.totalReviews} avaliações</p>
         </div>
       </div>
 
@@ -71,18 +72,18 @@ export function ReviewSummary({ reviewedUserId }: ReviewSummaryProps) {
 
           return (
             <div key={star} className="flex items-center">
-              <span className="text-sm font-medium mr-2 flex-shrink-0">{star} estrelas</span>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <span className="text-sm font-medium mr-2 flex-shrink-0 text-slate-700 dark:text-slate-300">{star} estrelas</span>
+              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5">
                 <div
                   className="bg-yellow-400 h-2.5 rounded-full"
                   style={{ width: `${barWidth}%` }}
                 ></div>
               </div>
-              <span className="text-sm text-gray-600 ml-2 flex-shrink-0">{count}</span>
+              <span className="text-sm text-slate-600 dark:text-slate-400 ml-2 flex-shrink-0">{count}</span>
             </div>
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 } 

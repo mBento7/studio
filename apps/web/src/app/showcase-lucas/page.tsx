@@ -1,5 +1,5 @@
 'use client';
-import ShowcaseLucas from '@/components/anuncios/ShowcaseLucas';
+import ShowcaseAnuncios from '@/components/anuncios/ShowcaseAnuncios';
 import { BannerBuscaTopo } from '@/components/anuncios/BannerBuscaTopo';
 
 export default function ShowcaseLucasPage() {
@@ -15,7 +15,7 @@ export default function ShowcaseLucasPage() {
         />
       </section>
       <section>
-        <ShowcaseLucas />
+        <ShowcaseAnuncios />
       </section>
     </div>
   );

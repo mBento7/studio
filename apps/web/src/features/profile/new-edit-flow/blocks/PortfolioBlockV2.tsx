@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 
 interface PortfolioProject {
   title: string;
@@ -42,7 +42,6 @@ export function PortfolioBlockV2({ portfolio, onChange }: PortfolioBlockV2Props)
   // Função de upload para Supabase Storage
   const handleImageUpload = async (idx: number, file: File) => {
     setUploadingIdx(idx);
-    const supabase = createClient();
     const fileExt = file.name.split('.').pop();
     const filePath = `user-portfolio/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
     const { data, error } = await supabase.storage.from('portfolio').upload(filePath, file);

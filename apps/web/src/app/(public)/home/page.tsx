@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import OnlyClient from '@/components/OnlyClient';
 
 // Utility function for class names
 function cn(...classes: (string | undefined | null | false)[]): string {
@@ -666,384 +667,386 @@ function PremiumPricing() {
   };
 
   return (
-    <section id="pricing" className="relative py-32 bg-gradient-to-br from-black via-indigo-950/20 to-black text-white overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08]"
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-          }}
-          transition={{
-            duration: 40,
-            repeat: Infinity,
-          }}
-          style={{
-            backgroundSize: '400% 400%'
-          }}
-        />
-        
-        <motion.div
-          className="absolute top-1/4 left-1/6 w-80 h-80 bg-indigo-400/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 150, 0],
-            y: [0, 80, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/6 w-64 h-64 bg-rose-400/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -120, 0],
-            y: [0, -60, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-          }}
-        />
-
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
+    <OnlyClient>
+      <section id="pricing" className="relative py-32 bg-gradient-to-br from-black via-indigo-950/20 to-black text-white overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08]"
             animate={{
-              y: [0, -100, 0],
-              opacity: [0.2, 1, 0.2],
-              scale: [1, 2, 1],
+              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
             }}
             transition={{
-              duration: 4 + Math.random() * 4,
+              duration: 40,
               repeat: Infinity,
-              delay: Math.random() * 2,
+            }}
+            style={{
+              backgroundSize: '400% 400%'
             }}
           />
-        ))}
-      </div>
-
-      <motion.div 
-        className="relative z-10 max-w-7xl mx-auto px-6"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-      >
-        {/* Header */}
-        <motion.div 
-          className="text-center mb-20"
-          variants={fadeInUp}
-        >
-          <motion.div
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.15] backdrop-blur-sm mb-6"
-            whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.3)" }}
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <Sparkles className="h-4 w-4 text-indigo-300" />
-            </motion.div>
-            <span className="text-sm font-medium text-white/80">
-              ✨ Planos WhosDo
-            </span>
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-          </motion.div>
-
-          <motion.h2 
-            className="text-4xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tight"
-            variants={fadeInUp}
-          >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
-              Escolha Seu
-            </span>
-            <br />
-            <motion.span 
-              className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-rose-300"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-              }}
-              style={{
-                backgroundSize: '200% 200%'
-              }}
-            >
-              Plano Ideal
-            </motion.span>
-          </motion.h2>
           
-          <motion.p 
-            className="text-xl sm:text-2xl text-white/60 max-w-4xl mx-auto leading-relaxed mb-12"
-            variants={fadeInUp}
-          >
-            Planos flexíveis com sistema de créditos para liberar recursos premium sob demanda.
-          </motion.p>
+          <motion.div
+            className="absolute top-1/4 left-1/6 w-80 h-80 bg-indigo-400/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, 150, 0],
+              y: [0, 80, 0],
+              scale: [1, 1.3, 1],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 right-1/6 w-64 h-64 bg-rose-400/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, -120, 0],
+              y: [0, -60, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+            }}
+          />
 
-          {/* Billing Toggle */}
-          <motion.div 
-            className="flex items-center justify-center gap-4"
-            variants={fadeInUp}
-          >
-            <span className={`text-sm font-medium ${!isYearly ? 'text-white' : 'text-white/60'}`}>
-              Mensal
-            </span>
-            <motion.button
-              onClick={() => setIsYearly(!isYearly)}
-              className={`relative w-16 h-8 rounded-full border-2 transition-all ${
-                isYearly ? 'bg-indigo-500 border-indigo-400' : 'bg-white/[0.08] border-white/[0.15]'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <motion.div
-                className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-lg"
-                animate={{
-                  x: isYearly ? 32 : 2
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30
-                }}
-              />
-            </motion.button>
-            <span className={`text-sm font-medium ${isYearly ? 'text-white' : 'text-white/60'}`}>
-              Anual
-            </span>
-            {isYearly && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="px-2 py-1 bg-green-500/20 border border-green-400/30 rounded-full text-xs text-green-300"
-              >
-                Economize 20%
-              </motion.div>
-            )}
-          </motion.div>
-        </motion.div>
-
-        {/* Pricing Cards */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
-          variants={staggerContainer}
-        >
-          {pricingPlans.map((plan, index) => (
+          {[...Array(20)].map((_, i) => (
             <motion.div
-              key={plan.name}
-              className="relative"
-              variants={fadeInUp}
-              onHoverStart={() => setHoveredPlan(index)}
-              onHoverEnd={() => setHoveredPlan(null)}
-            >
-              <motion.div
-                className={`relative h-full p-8 rounded-3xl border backdrop-blur-xl overflow-hidden ${
-                  plan.highlight
-                    ? 'bg-gradient-to-br from-white/[0.12] to-white/[0.04] border-indigo-400/50'
-                    : 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border-white/[0.15]'
-                }`}
-                variants={cardHover}
-                initial="rest"
-                whileHover="hover"
-                style={{
-                  boxShadow: plan.highlight 
-                    ? "0 25px 50px -12px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2)"
-                    : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-                }}
-              >
-                {/* Badge */}
-                {plan.badge && (
-                  <motion.div
-                    className={`absolute -top-0.1 left-1/2 transform -translate-x-1/2 px-4 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${plan.borderGradient} text-white`}
-                    initial={{ y: -200, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    {plan.badge}
-                  </motion.div>
-                )}
-
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} rounded-3xl opacity-60`}
-                  animate={{
-                    backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-                  }}
-                  transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                  }}
-                  style={{
-                    backgroundSize: '300% 300%'
-                  }}
-                />
-
-                <div className="relative z-10">
-                  <motion.div
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${plan.gradient} border border-white/20 flex items-center justify-center mb-6`}
-                    whileHover={{ scale: 1.1, rotateY: 180 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <plan.icon className="w-8 h-8 text-white" />
-                  </motion.div>
-
-                  <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                  <p className="text-white/60 text-sm mb-4">{plan.subtitle}</p>
-                  <p className="text-white/80 mb-6">{plan.description}</p>
-
-                  <div className="mb-8">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-white">
-                        R${isYearly ? plan.price.yearly : plan.price.monthly}
-                      </span>
-                      <span className="text-white/60">
-                        /{isYearly ? 'ano' : 'mês'}
-                      </span>
-                    </div>
-                    {isYearly && plan.price.monthly > 0 && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-green-400 text-sm mt-1"
-                      >
-                        Economize R${calculateYearlySavings(plan.price.monthly, plan.price.yearly)} por ano
-                      </motion.p>
-                    )}
-                  </div>
-
-                  <div className="mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <motion.div
-                        key={featureIndex}
-                        className="flex items-center gap-3 py-1.5"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: featureIndex * 0.1 }}
-                      >
-                        <div className="w-5 h-5 rounded-full bg-green-500/20 border border-green-400/30 flex items-center justify-center flex-shrink-0">
-                          <Check className="w-3 h-3 text-green-400" />
-                        </div>
-                        <span className="text-white/80 text-sm">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  <motion.button
-                    className={`w-full py-4 px-6 rounded-xl font-medium transition-all ${
-                      plan.highlight
-                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white'
-                        : 'bg-white/[0.08] border border-white/[0.15] text-white hover:bg-white/[0.12] hover:border-white/[0.25]'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      {plan.price.monthly === 0 ? 'Começar Grátis' : 'Escolher Plano'}
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </motion.button>
-                </div>
-
-                <AnimatePresence>
-                  {hoveredPlan === index && (
-                    <motion.div
-                      className="absolute inset-0 rounded-3xl"
-                      style={{
-                        background: `linear-gradient(135deg, ${plan.borderGradient.replace('from-', 'rgba(').replace(' to-', ', 0.2) 0%, rgba(').replace('-', ', ')}, 0.1) 100%)`,
-                        filter: 'blur(20px)',
-                      }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Additional Features */}
-        <motion.div 
-          className="mb-20"
-          variants={fadeInUp}
-        >
-          <h3 className="text-3xl font-bold text-center text-white mb-12">
-            O Que Torna Nossa Plataforma Especial
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {additionalFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="p-6 bg-white/[0.05] backdrop-blur-xl rounded-2xl border border-white/[0.15] text-center group hover:bg-white/[0.08] transition-all"
-                variants={fadeInUp}
-                whileHover={{ scale: 1.05, y: -5 }}
-              >
-                <motion.div
-                  className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/20 flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ rotateY: 180 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <feature.icon className="w-6 h-6 text-indigo-300" />
-                </motion.div>
-                <h4 className="text-lg font-semibold text-white mb-2">{feature.title}</h4>
-                <p className="text-white/60 text-sm">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div 
-          className="text-center"
-          variants={fadeInUp}
-        >
-          <div className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/[0.15] p-8 md:p-12 overflow-hidden group max-w-4xl mx-auto">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08] rounded-3xl"
+              key={i}
+              className="absolute w-1 h-1 bg-white/20 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
               animate={{
-                backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                y: [0, -100, 0],
+                opacity: [0.2, 1, 0.2],
+                scale: [1, 2, 1],
               }}
               transition={{
-                duration: 15,
+                duration: 4 + Math.random() * 4,
                 repeat: Infinity,
-              }}
-              style={{
-                backgroundSize: '300% 300%'
+                delay: Math.random() * 2,
               }}
             />
+          ))}
+        </div>
+
+        <motion.div 
+          className="relative z-10 max-w-7xl mx-auto px-6"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {/* Header */}
+          <motion.div 
+            className="text-center mb-20"
+            variants={fadeInUp}
+          >
+            <motion.div
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.15] backdrop-blur-sm mb-6"
+              whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.3)" }}
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <Sparkles className="h-4 w-4 text-indigo-300" />
+              </motion.div>
+              <span className="text-sm font-medium text-white/80">
+                ✨ Planos WhosDo
+              </span>
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            </motion.div>
+
+            <motion.h2 
+              className="text-4xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tight"
+              variants={fadeInUp}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
+                Escolha Seu
+              </span>
+              <br />
+              <motion.span 
+                className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-rose-300"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                }}
+                style={{
+                  backgroundSize: '200% 200%'
+                }}
+              >
+                Plano Ideal
+              </motion.span>
+            </motion.h2>
             
-            <div className="relative z-10">
-              <h3 className="text-3xl md:text-4xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-white via-indigo-200 to-rose-200 bg-clip-text text-transparent">
-                  Pronto para Transformar Sua Presença Digital?
-                </span>
-              </h3>
-              <p className="text-xl text-white/70 mb-8 leading-relaxed">
-                Junte-se a milhares de profissionais que já usam o WhosDo para destacar seus serviços. 
-                Comece gratuitamente hoje mesmo.
-              </p>
-              
-              <Button size="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <a href="#pricing">
-                  Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
-                </a>
-              </Button>
+            <motion.p 
+              className="text-xl sm:text-2xl text-white/60 max-w-4xl mx-auto leading-relaxed mb-12"
+              variants={fadeInUp}
+            >
+              Planos flexíveis com sistema de créditos para liberar recursos premium sob demanda.
+            </motion.p>
+
+            {/* Billing Toggle */}
+            <motion.div 
+              className="flex items-center justify-center gap-4"
+              variants={fadeInUp}
+            >
+              <span className={`text-sm font-medium ${!isYearly ? 'text-white' : 'text-white/60'}`}>
+                Mensal
+              </span>
+              <motion.button
+                onClick={() => setIsYearly(!isYearly)}
+                className={`relative w-16 h-8 rounded-full border-2 transition-all ${
+                  isYearly ? 'bg-indigo-500 border-indigo-400' : 'bg-white/[0.08] border-white/[0.15]'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-lg"
+                  animate={{
+                    x: isYearly ? 32 : 2
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              </motion.button>
+              <span className={`text-sm font-medium ${isYearly ? 'text-white' : 'text-white/60'}`}>
+                Anual
+              </span>
+              {isYearly && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="px-2 py-1 bg-green-500/20 border border-green-400/30 rounded-full text-xs text-green-300"
+                >
+                  Economize 20%
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
+
+          {/* Pricing Cards */}
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+            variants={staggerContainer}
+          >
+            {pricingPlans.map((plan, index) => (
+              <motion.div
+                key={plan.name}
+                className="relative"
+                variants={fadeInUp}
+                onHoverStart={() => setHoveredPlan(index)}
+                onHoverEnd={() => setHoveredPlan(null)}
+              >
+                <motion.div
+                  className={`relative h-full p-8 rounded-3xl border backdrop-blur-xl overflow-hidden ${
+                    plan.highlight
+                      ? 'bg-gradient-to-br from-white/[0.12] to-white/[0.04] border-indigo-400/50'
+                      : 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border-white/[0.15]'
+                  }`}
+                  variants={cardHover}
+                  initial="rest"
+                  whileHover="hover"
+                  style={{
+                    boxShadow: plan.highlight 
+                      ? "0 25px 50px -12px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2)"
+                      : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  {/* Badge */}
+                  {plan.badge && (
+                    <motion.div
+                      className={`absolute -top-0.1 left-1/2 transform -translate-x-1/2 px-4 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${plan.borderGradient} text-white`}
+                      initial={{ y: -200, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      {plan.badge}
+                    </motion.div>
+                  )}
+
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} rounded-3xl opacity-60`}
+                    animate={{
+                      backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                    }}
+                    transition={{
+                      duration: 15,
+                      repeat: Infinity,
+                    }}
+                    style={{
+                      backgroundSize: '300% 300%'
+                    }}
+                  />
+
+                  <div className="relative z-10">
+                    <motion.div
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${plan.gradient} border border-white/20 flex items-center justify-center mb-6`}
+                      whileHover={{ scale: 1.1, rotateY: 180 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <plan.icon className="w-8 h-8 text-white" />
+                    </motion.div>
+
+                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                    <p className="text-white/60 text-sm mb-4">{plan.subtitle}</p>
+                    <p className="text-white/80 mb-6">{plan.description}</p>
+
+                    <div className="mb-8">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-white">
+                          R${isYearly ? plan.price.yearly : plan.price.monthly}
+                        </span>
+                        <span className="text-white/60">
+                          /{isYearly ? 'ano' : 'mês'}
+                        </span>
+                      </div>
+                      {isYearly && plan.price.monthly > 0 && (
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="text-green-400 text-sm mt-1"
+                        >
+                          Economize R${calculateYearlySavings(plan.price.monthly, plan.price.yearly)} por ano
+                        </motion.p>
+                      )}
+                    </div>
+
+                    <div className="mb-8">
+                      {plan.features.map((feature, featureIndex) => (
+                        <motion.div
+                          key={featureIndex}
+                          className="flex items-center gap-3 py-1.5"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: featureIndex * 0.1 }}
+                        >
+                          <div className="w-5 h-5 rounded-full bg-green-500/20 border border-green-400/30 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-green-400" />
+                          </div>
+                          <span className="text-white/80 text-sm">{feature}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <motion.button
+                      className={`w-full py-4 px-6 rounded-xl font-medium transition-all ${
+                        plan.highlight
+                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white'
+                          : 'bg-white/[0.08] border border-white/[0.15] text-white hover:bg-white/[0.12] hover:border-white/[0.25]'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        {plan.price.monthly === 0 ? 'Começar Grátis' : 'Escolher Plano'}
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </motion.button>
+                  </div>
+
+                  <AnimatePresence>
+                    {hoveredPlan === index && (
+                      <motion.div
+                        className="absolute inset-0 rounded-3xl"
+                        style={{
+                          background: `linear-gradient(135deg, ${plan.borderGradient.replace('from-', 'rgba(').replace(' to-', ', 0.2) 0%, rgba(').replace('-', ', ')}, 0.1) 100%)`,
+                          filter: 'blur(20px)',
+                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Additional Features */}
+          <motion.div 
+            className="mb-20"
+            variants={fadeInUp}
+          >
+            <h3 className="text-3xl font-bold text-center text-white mb-12">
+              O Que Torna Nossa Plataforma Especial
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {additionalFeatures.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className="p-6 bg-white/[0.05] backdrop-blur-xl rounded-2xl border border-white/[0.15] text-center group hover:bg-white/[0.08] transition-all"
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                >
+                  <motion.div
+                    className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/20 flex items-center justify-center mx-auto mb-4"
+                    whileHover={{ rotateY: 180 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <feature.icon className="w-6 h-6 text-indigo-300" />
+                  </motion.div>
+                  <h4 className="text-lg font-semibold text-white mb-2">{feature.title}</h4>
+                  <p className="text-white/60 text-sm">{feature.description}</p>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div 
+            className="text-center"
+            variants={fadeInUp}
+          >
+            <div className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/[0.15] p-8 md:p-12 overflow-hidden group max-w-4xl mx-auto">
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08] rounded-3xl"
+                animate={{
+                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                }}
+                transition={{
+                  duration: 15,
+                  repeat: Infinity,
+                }}
+                style={{
+                  backgroundSize: '300% 300%'
+                }}
+              />
+              
+              <div className="relative z-10">
+                <h3 className="text-3xl md:text-4xl font-bold mb-6">
+                  <span className="bg-gradient-to-r from-white via-indigo-200 to-rose-200 bg-clip-text text-transparent">
+                    Pronto para Transformar Sua Presença Digital?
+                  </span>
+                </h3>
+                <p className="text-xl text-white/70 mb-8 leading-relaxed">
+                  Junte-se a milhares de profissionais que já usam o WhosDo para destacar seus serviços. 
+                  Comece gratuitamente hoje mesmo.
+                </p>
+                
+                <Button size="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <a href="#pricing">
+                    Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
+      </section>
+    </OnlyClient>
   );
 }
 

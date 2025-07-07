@@ -38,11 +38,7 @@ export const PremiumBannerDisplay: React.FC<PremiumBannerDisplayProps> = ({
         <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
         <p className="text-sm md:text-base">{description}</p>
         {ctaText && ctaLink && (
-          <Button
-            size="lg"
-            variant="secondary"
-            className="text-black bg-white hover:bg-gray-100 transition"
-          >
+          <Button asChild>
             <a href={ctaLink} target="_blank" rel="noopener noreferrer">
               {ctaText}
             </a>

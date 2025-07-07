@@ -205,43 +205,50 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
 
   return (
     <>
-      {authUser?.id === userToDisplay.id && (
-        <Link href="/dashboard/profile-edit-v2?step=appearance">
+      {/* Mobile: apenas o layout do perfil */}
+      <div className="block md:hidden">
+        {renderProfileLayout()}
+      </div>
+      {/* Desktop: renderização existente */}
+      <div className="hidden md:block">
+        {authUser?.id === userToDisplay.id && (
+          <Link href="/dashboard/profile-edit-v2?step=appearance">
+            <Button
+              variant="ghost"
+              className="fixed top-6 right-6 z-50 bg-white/80 hover:bg-white shadow-lg rounded-full p-3 border border-primary"
+              title="Personalizar aparência do perfil"
+            >
+              <Edit3 className="w-6 h-6 text-primary" />
+            </Button>
+          </Link>
+        )}
+        {/* Botão de chat para visitantes logados (não o próprio perfil) */}
+        {authUser && authUser.id !== userToDisplay.id && (
           <Button
-            variant="ghost"
-            className="fixed top-6 right-6 z-50 bg-white/80 hover:bg-white shadow-lg rounded-full p-3 border border-primary"
-            title="Personalizar aparência do perfil"
+            variant={isCurrentUserPremium ? "default" : "outline"}
+            className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4 sm:bottom-[88px]"
+            onClick={handleChatButtonClick}
+            title={isCurrentUserPremium ? "Chamar no chat" : "Recurso premium"}
           >
-            <Edit3 className="w-6 h-6 text-primary" />
+            <MessageSquare className="w-5 h-5 mr-2" />
+            {isCurrentUserPremium ? "Chamar no chat" : "Fazer Upgrade"}
           </Button>
-        </Link>
-      )}
-      {/* Botão de chat para visitantes logados (não o próprio perfil) */}
-      {authUser && authUser.id !== userToDisplay.id && (
-        <Button
-          variant={isCurrentUserPremium ? "default" : "outline"}
-          className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4"
-          onClick={handleChatButtonClick}
-          title={isCurrentUserPremium ? "Chamar no chat" : "Recurso premium"}
-        >
-          <MessageSquare className="w-5 h-5 mr-2" />
-          {isCurrentUserPremium ? "Chamar no chat" : "Fazer Upgrade"}
-        </Button>
-      )}
-      {renderProfileLayout()}
-      <PortfolioItemModal 
-        item={selectedPortfolioItem}
-        open={isPortfolioModalOpen}
-        onOpenChange={setIsPortfolioModalOpen}
-      />
-      {/* Caixa de chat flutuante */}
-      {authUser && authUser.id !== userToDisplay.id && (
-        <ChatFloatingBox
-          open={isChatOpen}
-          onOpenChange={setIsChatOpen}
-          otherUser={userToDisplay}
+        )}
+        {renderProfileLayout()}
+        <PortfolioItemModal 
+          item={selectedPortfolioItem}
+          open={isPortfolioModalOpen}
+          onOpenChange={setIsPortfolioModalOpen}
         />
-      )}
+        {/* Caixa de chat flutuante */}
+        {authUser && authUser.id !== userToDisplay.id && (
+          <ChatFloatingBox
+            open={isChatOpen}
+            onOpenChange={setIsChatOpen}
+            otherUser={userToDisplay}
+          />
+        )}
+      </div>
     </>
   );
 }

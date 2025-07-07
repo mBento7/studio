@@ -51,8 +51,8 @@ export function FilterButton({
       className={cn(
         'flex items-center gap-2 h-8 px-2 text-xs rounded-[var(--radius)] font-semibold transition-all duration-200 ease-in-out shadow-sm',
         isActive
-          ? 'bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md'
-          : 'bg-card text-foreground hover:bg-muted/80 border border-border/60',
+          ? 'bg-primary text-primary-foreground shadow-md'
+          : 'bg-card text-foreground border border-border hover:bg-primary/10',
         disabled && 'opacity-60 cursor-not-allowed',
         className
       )}

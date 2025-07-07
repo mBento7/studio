@@ -1,14 +1,13 @@
 "use client";
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const MessageRealtimeToastListener = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const supabase = createClient();
   const pathname = usePathname();
   const router = useRouter();
 

@@ -1,8 +1,7 @@
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 
 // Busca o perfil do usuário logado (V2)
 export async function getUserProfileV2(userId: string) {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -30,7 +29,7 @@ const VALID_PROFILE_FIELDS = [
   'primaryColor',
   'secondaryColor',
   'font',
-  'socialLinks',
+  'social_links',
 ];
 
 export function filterValidProfileFields(profile: any) {
@@ -45,12 +44,11 @@ export function filterValidProfileFields(profile: any) {
 
 // Salva as alterações do perfil do usuário (V2)
 export async function saveUserProfileV2(userId: string, profileData: any) {
-  const supabase = createClient();
   // Filtra apenas os campos válidos
   const safeProfileData = filterValidProfileFields(profileData);
-  // Converter socialLinks para string JSON, se existir
-  if (safeProfileData.socialLinks) {
-    safeProfileData.socialLinks = JSON.stringify(safeProfileData.socialLinks);
+  // Converter social_links para string JSON, se existir
+  if (safeProfileData.social_links) {
+    safeProfileData.social_links = JSON.stringify(safeProfileData.social_links);
   }
   const { error } = await supabase
     .from("profiles")

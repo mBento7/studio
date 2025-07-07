@@ -82,7 +82,7 @@ export interface UserProfile {
   profilePictureDataAiHint?: string;
   cover_photo_url: string;
   coverPhotoDataAiHint?: string;
-  socialLinks: SocialLink[];
+  sociallinks: SocialLink[];
   location?: {
     address?: string;
     city: string;

@@ -1,13 +1,26 @@
-import React from "react";
+import React from 'react';
+import { Card } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Bell } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface NotificacaoPatrocinadaProps {
   mensagem: string;
   link: string;
 }
 
-export const NotificacaoPatrocinada: React.FC<NotificacaoPatrocinadaProps> = ({ mensagem, link }) => (
-  <div className="notificacao-patrocinada flex items-center bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-2 rounded">
-    <span className="font-semibold text-yellow-800 mr-2">Patrocinado:</span>
-    <a href={link} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex-1">{mensagem}</a>
-  </div>
-); 
+const NotificacaoPatrocinada = ({ mensagem, link }: NotificacaoPatrocinadaProps) => {
+  return (
+    <Card className="max-w-lg flex items-center gap-4 p-4">
+      <div className="p-2 rounded-full bg-green-500 text-white">
+        <Bell className="w-5 h-5" />
+      </div>
+      <div className="flex-1">
+        <span className="block text-foreground mb-1">{mensagem}</span>
+        <a href={link} className="text-blue-600 hover:underline text-sm">Ver oferta</a>
+      </div>
+    </Card>
+  );
+};
+
+export default NotificacaoPatrocinada; 

@@ -6,80 +6,10 @@ import { Card } from "@/components/ui/card";
 import { Heart, MessageCircle, Share2, MapPin, User, Tag, Hand, Star } from "lucide-react";
 import { tipoConfig } from "@/config/feed";
 import { useRouter } from "next/navigation";
-
-// Badge component
-const badgeVariants = "inline-flex items-center justify-center border px-1.5 text-xs font-medium leading-normal transition-colors outline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 border-transparent bg-primary text-primary-foreground";
-function Badge({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn(badgeVariants, className)} {...props}>{children}</div>;
-}
-
-// Avatar components
-const Avatar = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("relative flex h-8 w-8 shrink-0 overflow-hidden", className)}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-);
-Avatar.displayName = "Avatar";
-
-const AvatarImage = React.forwardRef<HTMLImageElement, React.ImgHTMLAttributes<HTMLImageElement>>(
-  ({ className, ...props }, ref) => (
-    <img
-      ref={ref}
-      className={cn("aspect-square h-full w-full object-cover", className)}
-      {...props}
-    />
-  )
-);
-AvatarImage.displayName = "AvatarImage";
-
-const AvatarFallback = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "flex h-full w-full items-center justify-center bg-secondary text-xs font-medium text-secondary-foreground",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-);
-AvatarFallback.displayName = "AvatarFallback";
-
-// Button component
-const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "outline" | "ghost";
-  size?: "default" | "sm" | "lg" | "icon";
-}>(({ className, variant = "default", size = "default", ...props }, ref) => {
-  const baseClasses = "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
-  const variants = {
-    default: "bg-primary text-primary-foreground hover:bg-primary/90",
-    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-    ghost: "hover:bg-accent hover:text-accent-foreground"
-  };
-  const sizes = {
-    default: "h-10 px-4 py-2",
-    sm: "h-8 px-3 text-xs",
-    lg: "h-11 px-8",
-    icon: "h-8 w-8"
-  };
-  return (
-    <button
-      className={cn(baseClasses, variants[variant], sizes[size], className)}
-      ref={ref}
-      {...props}
-    />
-  );
-});
-Button.displayName = "Button";
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 // FeedCard interface
 export interface FeedCardProps {
@@ -114,7 +44,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
   tags = ['qualidade', 'promoção'],
   onCurtir,
   onComentar,
-  whatsappUrl = 'https://wa.me/5511999999999',
+  whatsappUrl = 'https://wa.me/5511999999',
   urgente = false,
   ...props
 }, ref) => {
@@ -129,114 +59,117 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
   };
 
   const handleContato = () => {
-    // Gera um slug a partir do nome do usuário
     const username = usuario.nome?.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     router.push(`/profile/${username}`);
-  };
-
-  const handleLocation = () => {
-    // Simular ação de localização
-    console.log('Mostrar localização:', localizacao);
   };
 
   const config = tipoConfig[tipo] || tipoConfig['oferta_produto'];
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-2xl mx-auto mb-4"
       ref={ref}
-      className={cn(
-        "w-full"
-      )}
-      {...props}
     >
-      <div
-        className={cn(
-          "w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-border flex flex-row items-center gap-5 p-6"
-        )}
-      >
-        {/* Imagem lateral centralizada verticalmente */}
-        <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-[var(--radius)] bg-muted flex items-center justify-center">
+      <Card className="overflow-hidden border-0 shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
+        {/* Imagem de capa */}
+        <div className="relative group">
           <img
             src={imagem}
             alt={titulo}
-            className="w-full h-full object-cover"
+            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwTDE3NSAxMjVIMjI1TDIwMCAxNTBaIiBmaWxsPSIjOUNBM0FGIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOUNBM0FGIiBmb250LXNpemU9IjE0Ij5JbWFnZW0gbsOjbyBlbmNvbnRyYWRhPC90ZXh0Pgo8L3N2Zz4K';
             }}
           />
+          {/* Overlay para efeito visual */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Avatar sobreposto */}
+          <div className="absolute -bottom-6 left-6 z-10">
+            <Avatar className="w-14 h-14 border-4 border-white shadow-lg">
+              <AvatarImage src={usuario.avatar} alt={usuario.nome} />
+              <AvatarFallback>{usuario.nome[0]}</AvatarFallback>
+            </Avatar>
+          </div>
         </div>
-        {/* Conteúdo à direita */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between h-full">
-          <div className="flex flex-col">
-            <div className="flex items-start justify-between">
-               <span className={cn(
-                "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full",
-                config.bg,
-                config.text,
-                config.border,
-              )}>
-                {React.cloneElement(config.icon, { className: "w-4 h-4" })}
-                {config.badge}
-              </span>
-            </div>
-
-            <div className="mt-2 mb-3 flex items-center gap-2">
-              <img src={usuario.avatar} alt={usuario.nome} className="w-8 h-8 object-cover rounded border border-border" />
-              <span className="text-sm font-medium text-muted-foreground">{usuario.nome}</span>
-            </div>
-
-            {/* Preço e descrição */}
-            <div className="mb-3">
-              {preco && (
-                <span className="font-semibold text-emerald-700 mr-2">{preco}</span>
-              )}
-              <span className="text-sm text-muted-foreground">{descricao}</span>
-            </div>
-          
-            {tags && tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {tags.map((tag, i) => (
-                  <Badge key={i} className="bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300 border-teal-200/50 dark:border-teal-800/50 text-xs">#{tag}</Badge>
-                ))}
-              </div>
+        <div className="px-6 pt-8 pb-4">
+          {/* Título e badge */}
+          <div className="flex items-center gap-2 mb-2">
+            <h2 className="text-lg font-bold text-foreground leading-tight flex-1">{titulo}</h2>
+            {patrocinado && (
+              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white flex items-center gap-1">
+                <Star className="w-3 h-3 mr-1" /> Destaque
+              </Badge>
             )}
           </div>
-
-          {/* Ações */}
-          <div className="flex items-center justify-between mt-auto">
+          {/* Nome e localização */}
+          <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+            <span className="font-medium">{usuario.nome}</span>
+            <span>·</span>
+            <MapPin className="w-4 h-4" />
+            <span>{localizacao}</span>
+          </div>
+          {/* Preço */}
+          <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">
+            {preco}
+          </div>
+          {/* Descrição */}
+          <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{descricao}</p>
+          {/* Tags */}
+          {tags && tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {tags.map((tag, i) => (
+                <Badge key={i} variant="secondary" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">#{tag}</Badge>
+              ))}
+            </div>
+          )}
+          {/* Barra de engajamento */}
+          <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-4">
-              <button
+              <Button
                 onClick={handleLike}
-                className={cn(
-                  "flex items-center gap-1.5 text-sm transition-colors",
-                  isLiked
-                    ? "text-red-500"
-                    : "text-muted-foreground hover:text-red-500"
-                )}
+                variant={isLiked ? "default" : "ghost"}
+                size="sm"
+                aria-label={isLiked ? "Descurtir" : "Curtir"}
+                className={cn(isLiked ? "text-red-500" : "text-muted-foreground hover:text-red-500")}
               >
-                <Heart className={cn("w-4 h-4", isLiked && "fill-current")} />
+                <Heart className={cn("w-4 h-4", isLiked && "fill-current animate-pulse")}/>
                 <span>{likeCount}</span>
-              </button>
-              <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-sky-500 transition-colors">
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label="Comentar"
+                className="text-muted-foreground hover:text-sky-500"
+                onClick={onComentar}
+              >
                 <MessageCircle className="w-4 h-4" />
                 <span>{comentarios}</span>
-              </button>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label="Compartilhar"
+                className="text-muted-foreground hover:text-emerald-500"
+                onClick={() => {}}
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
             </div>
-            {/* Botão de contato agora aparece para todos os tipos de card */}
-            <button 
+            {/* Botão de contato em destaque */}
+            <Button 
               onClick={handleContato}
-              className={cn(
-                "flex items-center gap-2 py-2 px-4 bg-gradient-to-r text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all",
-                config.gradient || 'from-[#14b8a6] to-[#0e9094]'
-              )}
+              className="flex items-center gap-2 py-2 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all"
             >
               Contato
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </Card>
+    </motion.div>
   );
 });
 

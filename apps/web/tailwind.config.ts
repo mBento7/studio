@@ -49,6 +49,47 @@ export default {
         info: "hsl(var(--info))",
       },
 
+      /* ---------- Breakpoints personalizados ---------- */
+      screens: {
+        xs: '400px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+        '2xl': '1536px',
+      },
+
+      /* ---------- Espaçamentos extras ---------- */
+      spacing: {
+        18: '4.5rem',
+        22: '5.5rem',
+        30: '7.5rem',
+        72: '18rem',
+      },
+
+      /* ---------- Gradientes pré-definidos ---------- */
+      backgroundImage: {
+        'hero-gradient': 'linear-gradient(90deg, #7f5af0 0%, #5eead4 100%)',
+        'glass-dark': 'linear-gradient(120deg, rgba(32,32,32,0.6), rgba(48,48,48,0.6))',
+      },
+
+      /* ---------- Z-index customizado ---------- */
+      zIndex: {
+        1: '1',
+        5: '5',
+        60: '60',
+        99: '99',
+        999: '999',
+      },
+
+      /* ---------- Utilitários para blur/glass ---------- */
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        md: '8px',
+        lg: '16px',
+      },
+
       /* ---------- Raio de borda global ---------- */
       borderRadius: {
         lg: "var(--radius)",            // 1 rem

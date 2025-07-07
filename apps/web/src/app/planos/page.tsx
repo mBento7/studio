@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { motion } from 'framer-motion';
-import { PublicHeader } from '@/features/landing/header';
+import PublicHeader from '@/features/landing/header';
 import { useAuth } from '@/hooks/use-auth';
 
 const plans = [

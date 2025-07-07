@@ -11,7 +11,7 @@ interface UserProfile {
   category?: string;
   profilePictureUrl: string;
   profilePictureDataAiHint?: string;
-  socialLinks: Array<{
+  sociallinks: Array<{
     platform: string;
     url: string;
   }>;
@@ -37,8 +37,8 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
     const contactItems = [
       ...(user.phone ? [{ icon: Phone, text: user.phone, href: `tel:${user.phone}` }] : []),
       ...(user.email ? [{ icon: Mail, text: user.email, href: `mailto:${user.email}` }] : []),
-      ...(user.socialLinks.find(link => link.platform === 'website')?.url 
-        ? [{ icon: Globe, text: user.socialLinks.find(link => link.platform === 'website')?.url.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0], href: user.socialLinks.find(link => link.platform === 'website')?.url }]
+      ...(user.sociallinks.find(link => link.platform === 'website')?.url 
+        ? [{ icon: Globe, text: user.sociallinks.find(link => link.platform === 'website')?.url.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0], href: user.sociallinks.find(link => link.platform === 'website')?.url }]
         : []),
     ];
 
@@ -158,7 +158,7 @@ const BusinessCardExample = () => {
     category: "Desenvolvedor Full Stack",
     profilePictureUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
     profilePictureDataAiHint: "professional headshot",
-    socialLinks: [
+    sociallinks: [
       {
         platform: "website",
         url: "https://joaosilva.dev"

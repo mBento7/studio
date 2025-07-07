@@ -11,7 +11,6 @@ import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Palette, LayoutGrid, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockCurrentUser, updateMockCurrentUser } from "@/lib/mock-data";
 import type { UserProfile, AccentColor, LayoutTemplate } from "@/lib/types";
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';

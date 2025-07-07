@@ -38,18 +38,18 @@ import { useRouter } from 'next/navigation';
 import { Button as UIButton } from '@/components/ui/button';
 import { FilterButton } from '@/components/ui/filter-button';
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
-import { BannerCard } from '@/components/feed/BannerCard';
-import { CouponCard } from '@/components/feed/CouponCard';
-import { UpdateCard } from '@/components/feed/UpdateCard';
-import { TestimonialCard } from '@/components/feed/TestimonialCard';
-import { InviteCard } from '@/components/feed/InviteCard';
-import { EventCard } from '@/components/feed/EventCard';
+import BannerCard from '@/components/feed/BannerCard';
+import CouponCard from '@/components/feed/CouponCard';
+import TestimonialCard from '@/components/feed/TestimonialCard';
+import InviteCard from '@/components/feed/InviteCard';
+import EventCard from '@/components/feed/EventCard';
 import { LayoutDecider } from '@/components/layout/layout-decider';
 import StoryModal from '@/components/feed/StoryModal';
 import type { FeedCardProps } from '@/components/feed/FeedCard';
 import { getAllUserProfiles } from '@/services/profile.service';
+import UpdateCard from '@/components/feed/UpdateCard';
 
 // Mock data
 const stories = [
@@ -393,13 +393,59 @@ function SocialCard({ item }: { item: any }) {
 
 function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }: { activeTab: string, setActiveTab: (tab: string) => void, posts: any[], userProfile: any, hideFilter?: boolean }) {
   const { toast } = useToast();
-  // const filters = [ ... ]; // Mantém apenas se for usado em outro lugar
+  const { user } = useAuth();
+
+  // Exemplo de CouponCard usando usuário do supabase
+  const couponUser = user && user.user_metadata ? {
+    name: user.user_metadata.full_name || user.user_metadata.name || 'Usuário',
+    username: user.user_metadata.username || user.email?.split('@')[0] || 'usuario',
+    avatarUrl: user.user_metadata.avatar_url || '/avatar-default.png',
+  } : undefined;
+
+  const filteredPosts = posts.filter(post => {
+    if (activeTab === 'todos') return true;
+    if (activeTab === 'servicos') return post.tipo.endsWith('_servico');
+    if (activeTab === 'produtos') return post.tipo.endsWith('_produto');
+    if (activeTab === 'solicitacoes') return post.tipo.includes('solicitacao');
+    return false;
+  });
+
+  // Filtro para remover cards duplicados (mesmo conteúdo)
+  const uniquePosts = [] as any[];
+  const seen = new Set<string>();
+  for (const post of filteredPosts) {
+    const key = JSON.stringify(post);
+    if (!seen.has(key)) {
+      uniquePosts.push(post);
+      seen.add(key);
+    }
+  }
 
   return (
     <div className="space-y-4">
-      {/* Filtro removido daqui para evitar duplicidade */}
+      {/* Exemplo de CouponCard do usuário autenticado */}
+      {couponUser && (
+        <CouponCard
+          user={couponUser}
+          publishedAt={new Date().toISOString()}
+          discount="10% OFF"
+          code="PROMO10"
+          description="Desconto especial para novos usuários em todos os serviços de design."
+          validUntil="2025-08-05"
+          brand={couponUser.name}
+        />
+      )}
       <div className="space-y-4">
-        {posts.map((item, idx) => {
+        {/* Exemplo fixo de EventCard */}
+        <EventCard
+          name="Design Conference 2024"
+          date={new Date().toISOString()}
+          location="São Paulo, SP"
+          image="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop"
+          attendees={120}
+          price="R$ 150,00"
+        />
+        {uniquePosts.map((item, idx) => {
           switch (item.tipo) {
             case 'oferta_servico':
             case 'oferta_produto':
@@ -427,9 +473,7 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
             case 'atualizacao':
               return <UpdateCard key={idx} {...item} />;
             case 'depoimento': {
-              // Remover usuarioId das props
               const { usuarioId, ...testimonialProps } = item;
-              // Corrigir usuario: garantir sempre objeto { nome, avatar }
               let usuario = item.usuario;
               if (typeof usuario === 'string') {
                 usuario = {
@@ -437,7 +481,32 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
                   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
                 };
               }
-              return <TestimonialCard key={idx} {...testimonialProps} usuario={usuario} />;
+              // Adaptar para o formato esperado pelo TestimonialCard moderno
+              const user = {
+                name: usuario.nome,
+                avatar: usuario.avatar,
+              };
+              const rating = item.nota || item.rating || 5;
+              const comment = item.comentario || item.comment || '';
+              const service = item.servico || item.service || '';
+              const date = item.data || item.date || '';
+              // Ajuste: garantir que todos os campos obrigatórios estejam presentes
+              return (
+                <TestimonialCard
+                  key={idx}
+                  post={{
+                    id: item.id || String(idx),
+                    type: 'testimonial',
+                    user,
+                    rating,
+                    comment,
+                    service,
+                    serviceProvider: user, // ajuste conforme necessário
+                    engagement: { likes: 0, comments: 0, shares: 0 }, // ajuste conforme necessário
+                    timeAgo: date,
+                  }}
+                />
+              );
             }
             case 'indicacao':
               return <InviteCard key={idx} {...item} />;
@@ -919,6 +988,17 @@ export default function FeedPage() {
     return false;
   });
 
+  // Filtro para remover cards duplicados (mesmo conteúdo)
+  const uniquePosts = [] as any[];
+  const seen = new Set<string>();
+  for (const post of filteredPosts) {
+    const key = JSON.stringify(post);
+    if (!seen.has(key)) {
+      uniquePosts.push(post);
+      seen.add(key);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -932,13 +1012,27 @@ export default function FeedPage() {
   }
 
   return (
-    <LayoutDecider>
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6">
       <div className="w-full space-y-6">
+        {/* Mobile: Stories e Feed de cards mobile */}
+        <div className="block md:hidden">
+          {/* <StoriesMobile stories={stories.map(s => ({ avatar: s.avatar, name: s.user }))} /> */}
+          {/* CardFeedMobile removido */}
+          {/* {feedItems.trending.map((item, idx) => (
+            <CardFeedMobile key={item.id} post={{
+              image: `https://picsum.photos/seed/feed${item.id}/400/300`,
+              title: item.title,
+              user: item.user,
+              time: 'há 2h',
+              description: item.title + ' - ' + item.category
+            }} />
+          ))} */}
+        </div>
         <StoriesCarousel userStories={currentUserProfile?.stories} userProfile={currentUserProfile} />
         <FeedPostEditor onPost={handlePost} />
         {/* Filtro do Feed */}
         <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-2">
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-around sm:flex-wrap">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
             {[{ label: 'Todos', icon: Sparkles }, { label: 'Servicos', icon: ConciergeBell }, { label: 'Produtos', icon: Box }, { label: 'Solicitacoes', icon: Siren, premium: true }].map(({ label, icon, premium }) => (
               <FilterButton
                 key={label}
@@ -973,9 +1067,9 @@ export default function FeedPage() {
             ))}
           </div>
         )}
-        <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={filteredPosts} userProfile={currentUserProfile} hideFilter />
+        <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={uniquePosts} userProfile={currentUserProfile} hideFilter />
       </div>
       <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />
-    </LayoutDecider>
+    </div>
   );
 }

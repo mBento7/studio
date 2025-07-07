@@ -11,32 +11,53 @@ interface LayoutDeciderProps {
   hideRightSidebar?: boolean;
 }
 
-export function LayoutDecider({ children, hideSidebar, hideRightSidebar }: LayoutDeciderProps) {
+export function LayoutDecider({
+  children,
+  hideSidebar,
+  hideRightSidebar,
+}: LayoutDeciderProps) {
   const pathname = usePathname();
-  const { hideRightSidebar: contextHideRightSidebar, layoutTier } = useProfileLayout();
+  const { hideRightSidebar: contextHideRightSidebar } = useProfileLayout();
 
-  const publicPages = ['/home', '/login', '/'];
+  if (!pathname) return null;
 
-  if (publicPages.includes(pathname || '')) {
+  // 🟢 Páginas públicas que não usam AppContainer
+  const isPublic = ["/", "/home", "/login"].includes(pathname);
+  if (isPublic) {
+    return <div className="flex flex-col min-h-screen">{children}</div>;
+  }
+
+  // 🟡 Página de perfil público → sem sidebar esquerda
+  if (pathname.startsWith("/profile/")) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <AppContainer
+        hideSidebar
+        hideRightSidebar={contextHideRightSidebar}
+      >
         {children}
-      </div>
+      </AppContainer>
     );
   }
 
-  // Se for página de perfil público, oculta a sidebar
-  if ((pathname || '').startsWith('/profile/')) {
-    // Usa AppContainer para garantir que o header/nav principal sempre apareça
-    // Exemplo: pode usar layoutTier === 'premium' para outras regras
-    return <AppContainer hideSidebar={true} hideRightSidebar={contextHideRightSidebar}>{children}</AppContainer>;
+  // 🔵 Página de busca → sem sidebar esquerda
+  if (pathname.startsWith("/search")) {
+    return (
+      <AppContainer
+        hideSidebar
+        hideRightSidebar={contextHideRightSidebar}
+      >
+        {children}
+      </AppContainer>
+    );
   }
 
-  // Oculta a coluna esquerda na página de busca
-  if ((pathname || '').startsWith('/search')) {
-    return <AppContainer hideSidebar={true} hideRightSidebar={contextHideRightSidebar}>{children}</AppContainer>;
-  }
-
-  // Se não for uma página pública, usa o layout do aplicativo com sidebar
-  return <AppContainer hideSidebar={hideSidebar} hideRightSidebar={hideRightSidebar}>{children}</AppContainer>;
+  // 🟣 Demais páginas protegidas (ex: feed, dashboard, planos, etc)
+  return (
+    <AppContainer
+      hideSidebar={hideSidebar}
+      hideRightSidebar={hideRightSidebar}
+    >
+      {children}
+    </AppContainer>
+  );
 }

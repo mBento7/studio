@@ -56,7 +56,7 @@ const users = [
     username: "mariasilva",
     name: "Maria Silva",
     profilePictureUrl: "/avatar-default.png",
-    coverPhotoUrl: "/capa-exemplo.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Designer Gráfico",
     location: { city: "São Paulo", state: "SP", country: "Brasil" },
     services: [
@@ -67,7 +67,7 @@ const users = [
     username: "joaosouza",
     name: "João Souza",
     profilePictureUrl: "/avatar-joao.png",
-    coverPhotoUrl: "/capa-joao.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Desenvolvedor Full Stack",
     location: { city: "Rio de Janeiro", state: "RJ", country: "Brasil" },
     services: [
@@ -78,7 +78,7 @@ const users = [
     username: "moco",
     name: "Moco Silva",
     profilePictureUrl: "/avatar-moco.png",
-    coverPhotoUrl: "/capa-moco.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Fotógrafo Profissional",
     location: { city: "Belo Horizonte", state: "MG", country: "Brasil" },
     services: [
@@ -89,7 +89,7 @@ const users = [
     username: "felipealves",
     name: "Felipe Alves",
     profilePictureUrl: "/avatar-felipe.png",
-    coverPhotoUrl: "/capa-felipe.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Consultor de Marketing",
     location: { city: "Curitiba", state: "PR", country: "Brasil" },
     services: [
@@ -100,7 +100,7 @@ const users = [
     username: "anapereira",
     name: "Ana Pereira",
     profilePictureUrl: "/avatar-ana.png",
-    coverPhotoUrl: "/capa-ana.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Arquiteta",
     location: { city: "Porto Alegre", state: "RS", country: "Brasil" },
     services: [
@@ -111,7 +111,7 @@ const users = [
     username: "brunoribeiro",
     name: "Bruno Ribeiro",
     profilePictureUrl: "/avatar-bruno.png",
-    coverPhotoUrl: "/capa-bruno.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Personal Trainer",
     location: { city: "Salvador", state: "BA", country: "Brasil" },
     services: [
@@ -122,7 +122,7 @@ const users = [
     username: "carlamartins",
     name: "Carla Martins",
     profilePictureUrl: "/avatar-carla.png",
-    coverPhotoUrl: "/capa-carla.png",
+    coverPhotoUrl: "/avatar-default.png",
     category: "Advogada Trabalhista",
     location: { city: "Recife", state: "PE", country: "Brasil" },
     services: [

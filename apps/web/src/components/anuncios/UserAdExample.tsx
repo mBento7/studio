@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 
 export function UserAdExample() {
   return (
-    <Card className="w-full shadow-lg shadow-black/5 dark:shadow-black/30 rounded-2xl bg-card/95 border border-white/10 overflow-hidden transition-all hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/40">
+    <Card className="w-full shadow-xl shadow-black/20 dark:shadow-black/50 rounded-2xl bg-card/95 border border-white/10 overflow-hidden transition-all hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40">
       <div className="relative h-32 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-600 overflow-hidden">
         <img 
           src="https://picsum.photos/seed/useradexample/400/150" 

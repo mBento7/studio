@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Camera, Image as ImageIcon } from "lucide-react";
 import { Instagram, Linkedin, Facebook, Globe, Github, MessageCircle, Trash2, Plus } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface ProfileBasicTabV2Props {
   data: any;
@@ -80,43 +81,43 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
   const handleAddSocial = () => {
     if (!socialUrl) return;
     let newLinks = [];
-    if (Array.isArray(data.socialLinks)) {
-      newLinks = [...data.socialLinks];
-    } else if (typeof data.socialLinks === 'string') {
-      try { newLinks = JSON.parse(data.socialLinks); } catch { newLinks = []; }
+    if (Array.isArray(data.sociallinks)) {
+      newLinks = [...data.sociallinks];
+    } else if (typeof data.sociallinks === 'string') {
+      try { newLinks = JSON.parse(data.sociallinks); } catch { newLinks = []; }
     }
     if (!Array.isArray(newLinks)) newLinks = [];
     const url = getFullSocialUrl(selectedSocial.type, socialUrl);
     if (selectedSocial.type && url) {
       newLinks.push({ type: selectedSocial.type, url });
-      onChange({ ...data, socialLinks: newLinks });
+      onChange({ ...data, sociallinks: newLinks });
       setSocialUrl("");
     }
   };
   const handleRemoveSocial = (idx: number) => {
     let arr = [];
-    if (Array.isArray(data.socialLinks)) {
-      arr = [...data.socialLinks];
-    } else if (typeof data.socialLinks === 'string') {
-      try { arr = JSON.parse(data.socialLinks); } catch { arr = []; }
+    if (Array.isArray(data.sociallinks)) {
+      arr = [...data.sociallinks];
+    } else if (typeof data.sociallinks === 'string') {
+      try { arr = JSON.parse(data.sociallinks); } catch { arr = []; }
     }
     if (!Array.isArray(arr)) arr = [];
     arr.splice(idx, 1);
-    onChange({ ...data, socialLinks: arr });
+    onChange({ ...data, sociallinks: arr });
   };
 
-  // Normalização robusta do campo socialLinks
+  // Normalização robusta do campo sociallinks
   let socialLinksArr: any[] = [];
-  if (typeof data.socialLinks === 'string') {
+  if (typeof data.sociallinks === 'string') {
     try {
-      socialLinksArr = JSON.parse(data.socialLinks);
+      socialLinksArr = JSON.parse(data.sociallinks);
       if (!Array.isArray(socialLinksArr)) socialLinksArr = [];
     } catch {
       socialLinksArr = [];
     }
-  } else if (Array.isArray(data.socialLinks)) {
-    socialLinksArr = data.socialLinks;
-  } else if (data.socialLinks == null) {
+  } else if (Array.isArray(data.sociallinks)) {
+    socialLinksArr = data.sociallinks;
+  } else if (data.sociallinks == null) {
     socialLinksArr = [];
   }
 
@@ -203,9 +204,9 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <div className="flex flex-col md:flex-row gap-2 items-end">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button type="button" className="flex items-center gap-2 border rounded px-3 py-2 bg-muted hover:bg-accent">
+                  <Button type="button" variant="outline" className="flex items-center gap-2 border rounded px-3 py-2 bg-muted hover:bg-accent">
                     {selectedSocial.icon && <selectedSocial.icon className="w-5 h-5" />} {selectedSocial.label}
-                  </button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   {socialOptions.map(opt => (
@@ -222,9 +223,9 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
                 value={socialUrl}
                 onChange={e => setSocialUrl(e.target.value)}
               />
-              <button type="button" className="ml-2 px-3 py-2 bg-primary text-white rounded flex items-center gap-1 hover:bg-primary/90" onClick={handleAddSocial}>
+              <Button type="button" variant="default" className="ml-2 px-3 py-2 flex items-center gap-1" onClick={handleAddSocial}>
                 <Plus className="w-4 h-4" /> Adicionar
-              </button>
+              </Button>
             </div>
             <span className="text-xs text-muted-foreground">Selecione a rede, cole o link e clique em adicionar. Para WhatsApp, informe o número com DDD e país. Exemplo: 5511999999999.</span>
             <div className="mt-2 space-y-1">
@@ -234,7 +235,9 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
                   <div key={idx} className="flex items-center gap-2 border rounded px-3 py-1 bg-muted">
                     {opt?.icon && <opt.icon className="w-4 h-4" />} <span className="font-medium">{opt?.label || item.type}</span>
                     <a href={item.type === 'whatsapp' ? `https://wa.me/${item.url}` : item.url} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all ml-2 flex-1">{item.type === 'whatsapp' ? `https://wa.me/${item.url}` : item.url}</a>
-                    <button type="button" className="ml-2 text-destructive hover:text-red-700" onClick={() => handleRemoveSocial(idx)}><Trash2 className="w-4 h-4" /></button>
+                    <Button type="button" variant="ghost" className="ml-2 text-destructive hover:text-red-700 p-1" onClick={() => handleRemoveSocial(idx)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 );
               })}

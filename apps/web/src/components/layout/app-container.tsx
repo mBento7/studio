@@ -2,12 +2,14 @@
 
 import React from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { PublicHeader } from '@/features/landing/header';
+import PublicHeader from '@/features/landing/header';
 import { Loader2 } from 'lucide-react';
 import { LeftProfileSidebar } from './left-profile-sidebar';
 import { RightWidgetsColumn } from './right-widgets-column';
 
-// Novo componente reutilizável de grid
+/**
+ * Componente de grid responsivo principal.
+ */
 export function MainGridLayout({
   children,
   leftSidebar,
@@ -20,53 +22,64 @@ export function MainGridLayout({
   const hasLeft = !!leftSidebar;
   const hasRight = !!rightSidebar;
 
+  // Grid responsivo com 1 a 3 colunas (em telas grandes)
   let gridCols = 'grid-cols-1';
   if (hasLeft && hasRight) gridCols = 'lg:grid-cols-[280px_1fr_320px]';
   else if (hasLeft) gridCols = 'lg:grid-cols-[280px_1fr]';
   else if (hasRight) gridCols = 'lg:grid-cols-[1fr_320px]';
-  else gridCols = 'grid-cols-1';
-
-  console.log('MainGridLayout', { hasLeft, hasRight, gridCols, rightSidebar });
 
   return (
-    <div className={`max-w-screen-xl mx-auto grid ${gridCols} gap-6 px-4 py-4 items-stretch`}>
-      {hasLeft && <div className="order-2 lg:order-1 h-full lg:sticky lg:top-20">{leftSidebar}</div>}
-      <div className="min-w-0 h-full flex flex-col order-1 lg:order-2">{children}</div>
-      {hasRight && <div className="order-3 lg:order-3 h-full lg:sticky lg:top-20">{rightSidebar}</div>}
+    <div className={`grid ${gridCols} gap-6 px-4 lg:px-8 py-6 max-w-screen-xl mx-auto min-h-0 scrollbar-hide`}>
+      {hasLeft && (
+        <aside className="order-2 lg:order-1 hidden lg:flex flex-col h-full scrollbar-hide sticky top-0">
+          {leftSidebar}
+        </aside>
+      )}
+
+      <section className="order-1 lg:order-2 min-w-0 w-full h-full overflow-y-auto scrollbar-hide">{children}</section>
+
+      {hasRight && (
+        <aside className="order-3 sticky top-0 self-start hidden lg:flex flex-col h-full scrollbar-hide">
+          {rightSidebar}
+        </aside>
+      )}
     </div>
   );
 }
 
-export function AppContainer({ children, hideSidebar = false, hideRightSidebar = false }: { children: React.ReactNode, hideSidebar?: boolean, hideRightSidebar?: boolean }) {
+/**
+ * Componente que envolve toda a estrutura da página protegida/pública.
+ */
+export function AppContainer({
+  children,
+  hideSidebar = false,
+  hideRightSidebar = false,
+}: {
+  children: React.ReactNode;
+  hideSidebar?: boolean;
+  hideRightSidebar?: boolean;
+}) {
   const { loading, user, currentUserProfile } = useAuth();
-
-  console.log('AppContainer hideRightSidebar:', hideRightSidebar);
-
-  // Mock de dados do usuário (substitua por dados reais do contexto/auth futuramente)
-  const mockProfile = {
-    name: 'João Silva',
-    email: 'joao@exemplo.com',
-    profilePictureUrl: '',
-    username: 'joaosilva',
-    progress: 85,
-    stats: { views: 1234, connections: 89, projects: 12 },
-  };
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
+      <div className="flex h-screen w-full items-center justify-center bg-background text-foreground">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <PublicHeader />
-      <main className="flex-1 bg-transparent pt-16">
+      <main className="flex-1 pt-16">
         <MainGridLayout
-          leftSidebar={!hideSidebar && user ? <LeftProfileSidebar profile={currentUserProfile || mockProfile} /> : null}
-          rightSidebar={!hideRightSidebar && user ? <RightWidgetsColumn /> : null}
+          leftSidebar={
+            !hideSidebar && user && currentUserProfile ? (
+              <LeftProfileSidebar profile={currentUserProfile} />
+            ) : undefined
+          }
+          rightSidebar={!hideRightSidebar && user ? <RightWidgetsColumn /> : undefined}
         >
           {children}
         </MainGridLayout>

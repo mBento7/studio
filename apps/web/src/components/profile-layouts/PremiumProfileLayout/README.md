@@ -11,6 +11,17 @@
 - Banner personalizado
 - Recursos de cupons avançados
 - Funcionalidade de Stories
+- **Avaliações (reviews) de clientes**
+- **Cupons exclusivos e promoções**
+- **Personalização de cores primária/secundária e fonte**
+- **Contato facilitado via QR Code**
+- **Prova social (social proof) com avatares e estrelas**
+- **Navegação por abas entre seções (Home, Portfólio, Serviços, Contato)**
+- **Animações visuais e partículas de fundo**
+- **Skills em destaque com chips**
+- **Seção de experiência e educação detalhadas**
+- **Botões de ação aprimorados (chat, compartilhar, etc.)**
+- **Stories visuais e banner premium**
 
 Layout avançado para perfis públicos, com foco em exibir múltiplas seções detalhadas (serviços, portfólio, skills, experiência, etc).
 

@@ -54,7 +54,7 @@ const profileFormSchema = z.object({
     name: z.string().min(1, "Nome do serviço é obrigatório"),
     description: z.string().optional(),
   })).optional(),
-  socialLinks: z.array(z.object({
+  sociallinks: z.array(z.object({
     id: z.string().optional(),
     platform: z.string().min(1, "Plataforma é obrigatória"),
     url: z.string().url("URL inválida").min(1, "URL é obrigatória"),
@@ -119,9 +119,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
     name: "portfolio",
   });
 
-  const { fields: socialLinksFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({
+  const { fields: sociallinksFields, append: appendSociallink, remove: removeSociallink } = useFieldArray({
     control,
-    name: "socialLinks",
+    name: "sociallinks",
   });
 
   const { fields: servicesFields, append: appendService, remove: removeService } = useFieldArray({
@@ -303,11 +303,11 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
               <CardTitle>Links Sociais</CardTitle>
             </CardHeader>
             <CardContent>
-              {socialLinksFields.length === 0 && (
+              {sociallinksFields.length === 0 && (
                 <p className="text-muted-foreground text-sm mb-4">Adicione links para suas redes sociais.</p>
               )}
               <div className="space-y-4">
-                {socialLinksFields.map((link, index) => (
+                {sociallinksFields.map((link, index) => (
                   <motion.div
                     key={link.id}
                     initial={{ opacity: 0, y: -20 }}
@@ -317,10 +317,10 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end border p-4 rounded-lg">
                       <div>
-                        <Label htmlFor={`socialLinks.${index}.platform`}>Plataforma</Label>
+                        <Label htmlFor={`sociallinks.${index}.platform`}>Plataforma</Label>
                         <Controller
                           control={control}
-                          name={`socialLinks.${index}.platform`}
+                          name={`sociallinks.${index}.platform`}
                           render={({ field }) => (
                             <Select value={field.value} onValueChange={field.onChange}>
                               <SelectTrigger className="w-full">
@@ -339,30 +339,30 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
                             </Select>
                           )}
                         />
-                        {errors.socialLinks?.[index]?.platform && (
-                          <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.platform?.message}</p>
+                        {errors.sociallinks?.[index]?.platform && (
+                          <p className="text-destructive text-sm mt-1">{errors.sociallinks[index]?.platform?.message}</p>
                         )}
                       </div>
                       <div>
-                        <Label htmlFor={`socialLinks.${index}.url`}>URL</Label>
+                        <Label htmlFor={`sociallinks.${index}.url`}>URL</Label>
                         <Input
-                          id={`socialLinks.${index}.url`}
-                          {...register(`socialLinks.${index}.url`, { required: "URL é obrigatória" })}
+                          id={`sociallinks.${index}.url`}
+                          {...register(`sociallinks.${index}.url`, { required: "URL é obrigatória" })}
                           placeholder={
-                            socialPlatforms.find(opt => opt.value === watch(`socialLinks.${index}.platform`))?.label === "Website"
+                            socialPlatforms.find(opt => opt.value === watch(`sociallinks.${index}.platform`))?.label === "Website"
                               ? "https://seusite.com"
                               : "https://exemplo.com/seu-perfil"
                           }
                         />
-                        {errors.socialLinks?.[index]?.url && (
-                          <p className="text-destructive text-sm mt-1">{errors.socialLinks[index]?.url?.message}</p>
+                        {errors.sociallinks?.[index]?.url && (
+                          <p className="text-destructive text-sm mt-1">{errors.sociallinks[index]?.url?.message}</p>
                         )}
                       </div>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => removeSocialLink(index)}
+                        onClick={() => removeSociallink(index)}
                         className="md:col-span-2 mt-2 md:mt-0"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
@@ -374,7 +374,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => appendSocialLink({ id: Date.now().toString(), platform: '', url: '' })}
+                onClick={() => appendSociallink({ id: Date.now().toString(), platform: '', url: '' })}
                 className="w-full mt-4"
               >
                 <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Link Social

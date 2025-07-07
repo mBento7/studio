@@ -40,23 +40,23 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     premiumBanner: profile.premium_banner || undefined,
 
     // Dados que agora vêm do profile_snapshot
-    socialLinks: (() => {
-      if (profile.socialLinks) {
-        if (typeof profile.socialLinks === 'string') {
+    sociallinks: (() => {
+      if (profile.sociallinks) {
+        if (typeof profile.sociallinks === 'string') {
           try {
-            const arr = JSON.parse(profile.socialLinks);
+            const arr = JSON.parse(profile.sociallinks);
             return Array.isArray(arr) ? arr : [];
           } catch {
             return [];
           }
         }
-        if (Array.isArray(profile.socialLinks)) {
-          return profile.socialLinks;
+        if (Array.isArray(profile.sociallinks)) {
+          return profile.sociallinks;
         }
       }
       // Fallback para profile_snapshot
-      return (profile.profile_snapshot?.social_links || []);
-    })() as UserProfile['socialLinks'],
+      return (profile.profile_snapshot?.sociallinks || []);
+    })() as UserProfile['sociallinks'],
     services: (profile.profile_snapshot?.services || []) as UserProfile['services'],
     portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
     experience: (profile.profile_snapshot?.experience || []) as UserProfile['experience'],
@@ -99,7 +99,7 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     profile_picture_url: data.profile_picture_url,
     cover_photo_url: data.cover_photo_url,
     whatsappNumber: data.whatsapp_number,
-    socialLinks: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
+    social_links: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
     services: data.services?.map((service: any) => ({ ...service, id: String(service.id) })) || [],
     portfolio: data.portfolio_items?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
     experience: data.experience?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
@@ -122,7 +122,7 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
     profile_picture_url,
     cover_photo_url,
     whatsappNumber,
-    socialLinks = [],
+    social_links = [],
     services = [],
     portfolio = [],
     experience = [],
@@ -141,6 +141,8 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
     whatsapp_number: whatsappNumber,
   };
 
+  console.log('Dados enviados para profiles:', updateData);
+
   const { error: profileError } = await supabase
     .from('profiles')
     .update(updateData)
@@ -151,7 +153,7 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
   }
 
   // Atualiza social_links
-  for (const link of socialLinks) {
+  for (const link of social_links) {
     if (link.id) {
       await supabase.from('social_links').update(link).eq('id', link.id);
     } else {
@@ -239,22 +241,22 @@ export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
     location: profile.location || { city: '', country: '' },
     skills: profile.skills || [],
     premiumBanner: profile.premium_banner || undefined,
-    socialLinks: (() => {
-      if (profile.socialLinks) {
-        if (typeof profile.socialLinks === 'string') {
+    social_links: (() => {
+      if (profile.sociallinks) {
+        if (typeof profile.sociallinks === 'string') {
           try {
-            const arr = JSON.parse(profile.socialLinks);
+            const arr = JSON.parse(profile.sociallinks);
             return Array.isArray(arr) ? arr : [];
           } catch {
             return [];
           }
         }
-        if (Array.isArray(profile.socialLinks)) {
-          return profile.socialLinks;
+        if (Array.isArray(profile.sociallinks)) {
+          return profile.sociallinks;
         }
       }
-      return (profile.profile_snapshot?.social_links || []);
-    })() as UserProfile['socialLinks'],
+      return (profile.profile_snapshot?.sociallinks || []);
+    })() as UserProfile['social_links'],
     services: (profile.profile_snapshot?.services || []) as UserProfile['services'],
     portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
     experience: (profile.profile_snapshot?.experience || []) as UserProfile['experience'],

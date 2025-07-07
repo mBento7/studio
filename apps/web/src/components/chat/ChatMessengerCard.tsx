@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { IoChatbubbleEllipsesOutline, IoChevronDown, IoOpenOutline, IoChevronUp, IoSearch, IoList, IoMailOutline } from 'react-icons/io5';
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 interface ChatMessengerCardProps {
@@ -32,7 +32,6 @@ export const ChatMessengerCard: React.FC<ChatMessengerCardProps> = ({ onOpenMess
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState<'prioritarias' | 'outras'>('prioritarias');
-  const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {

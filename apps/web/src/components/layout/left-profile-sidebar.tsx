@@ -1,72 +1,91 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import Link from 'next/link';
-import { Eye, Clock, Percent, Megaphone, Pencil, Award, Activity, Trophy, Plus, User } from 'lucide-react';
+import { Eye, Clock, Percent, Megaphone, Pencil, Award, Activity, Trophy, Plus, User, ChevronDown, Newspaper, Briefcase, Ticket, ImageIcon } from 'lucide-react';
 import { ProfileBg } from '@/components/ui/profile-bg';
 import { useAuth } from '@/hooks/use-auth';
 import type { UserProfile } from '@/lib/types';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { useRouter } from 'next/navigation';
 
-// QuickActions
-function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
+const quickActions = [
+  { label: 'Storie 24h', icon: <Clock className="w-4 h-4 mr-2" />, href: '/create?type=status' },
+  { label: 'Cupom de Desconto', icon: <Ticket className="w-4 h-4 mr-2" />, href: '/create?type=coupon' },
+  { label: 'Anúncio Patrocinado', icon: <Megaphone className="w-4 h-4 mr-2" />, href: '/create?type=ad' },
+];
+
+const extraActions = [
+  { label: 'Postagem no Feed', icon: <Newspaper className="w-4 h-4 mr-2" />, href: '/create?type=feed' },
+  { label: 'Item de Portfólio', icon: <Briefcase className="w-4 h-4 mr-2" />, href: '/create?type=portfolio' },
+  { label: 'Banner de Perfil', icon: <ImageIcon className="w-4 h-4 mr-2" />, href: '/create?type=banner' },
+  { label: 'Showcase de Anúncios', icon: <Megaphone className="w-4 h-4 mr-2" />, href: '/showcase-lucas' },
+  { label: 'Showcase do Feed', icon: <Newspaper className="w-4 h-4 mr-2" />, href: '/showcase-feed' },
+];
+
+function QuickActions() {
+  const router = useRouter();
+  const [showMore, setShowMore] = useState(false);
+
   return (
-    <div className="space-y-4 p-5 bg-card/95 backdrop-blur-lg rounded-2xl shadow-xl border border-border transition-all hover:shadow-lg">
+    <div className="w-full bg-card rounded-2xl shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-5 space-y-4 transition-all hover:shadow-lg">
       <h3 className="text-lg font-semibold text-center flex items-center gap-2 justify-center">
-        <Plus className="w-5 h-5 text-[#0e9094]" />
+        <Plus className="w-5 h-5 text-primary" />
         Criar Novo
       </h3>
       <TooltipProvider>
         <div className="space-y-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-all hover:scale-[1.02] hover:shadow-sm"
-              >
-                <Clock className="w-4 h-4 mr-2" />
-                Status (24h)
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Publique um conteúdo que dura 24 horas.</p>
-            </TooltipContent>
-          </Tooltip>
-          
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-all hover:scale-[1.02] hover:shadow-sm"
-                onClick={onCouponClick}
-              >
-                <Percent className="w-4 h-4 mr-2" />
-                Cupom / Oferta
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ofereça um desconto ou promoção especial.</p>
-            </TooltipContent>
-          </Tooltip>
-          
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="w-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full transition-all hover:scale-[1.02] hover:shadow-sm"
-              >
-                <Megaphone className="w-4 h-4 mr-2" />
-                Anúncio Patrocinado
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Impulsione seu conteúdo com mais visibilidade.</p>
-            </TooltipContent>
-          </Tooltip>
+          {quickActions.map((action) => (
+            <Tooltip key={action.label}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full border-primary/50 text-primary hover:bg-primary/10 hover:text-primary rounded-full transition-all hover:scale-[1.02] hover:shadow-sm flex items-center"
+                  onClick={() => router.push(action.href)}
+                >
+                  {action.icon}
+                  {action.label}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{action.label}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
         </div>
       </TooltipProvider>
+      <Button
+        variant="ghost"
+        onClick={() => setShowMore((v) => !v)}
+        className="w-full flex items-center justify-center mt-2"
+      >
+        <ChevronDown className="mr-2 w-4 h-4" />
+        Mais opções de criação
+      </Button>
+      {showMore && (
+        <div className="mt-2 space-y-2">
+          {extraActions.map((action) => (
+            <Button
+              key={action.label}
+              onClick={() => router.push(action.href)}
+              variant="outline"
+              className="w-full flex items-center justify-start"
+            >
+              {action.icon}
+              {action.label}
+            </Button>
+          ))}
+          <Button
+            variant="link"
+            onClick={() => router.push('/create')}
+            className="w-full justify-center"
+          >
+            Ver todas as opções
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
@@ -107,11 +126,14 @@ function ActivityStats() {
         <Progress value={65} className="h-2 bg-muted/30" />
         
         <Button 
+          asChild
           variant="outline" 
           size="sm" 
-          className="w-full mt-2 rounded-full border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] transition-all hover:scale-[1.02] hover:shadow-sm"
+          className="w-full mt-2 rounded-full border-primary/50 text-primary hover:bg-primary/10 hover:text-primary transition-all hover:scale-[1.02] hover:shadow-sm"
         >
-          Ver Relatório Completo
+          <Link href="/dashboard/activity">
+            Ver Relatório Completo
+          </Link>
         </Button>
       </div>
     </div>
@@ -183,7 +205,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-24 bg-gradient-to-r from-[#14b8a6] to-[#0e9094]" />
+              <div className="w-full h-24 bg-gradient-to-r from-primary to-secondary" />
             )}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
           </div>
@@ -201,7 +223,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
                       className="object-cover w-full h-full"
                     />
                   ) : (
-                    <AvatarFallback className="text-4xl font-bold rounded-full bg-[#0e9094]/10 text-[#0e9094]">
+                    <AvatarFallback className="text-4xl font-bold rounded-full bg-primary/10 text-primary">
                       {userProfile.name?.substring(0, 2) || 'U'}
                     </AvatarFallback>
                   )}
@@ -222,7 +244,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
               <div className="w-full flex flex-col gap-3">
                 <Button 
                   asChild 
-                  className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:from-[#0e9094] hover:to-[#14b8a6] text-white font-semibold shadow-md rounded-full transition-all hover:scale-[1.02] hover:shadow-lg"
+                  className="bg-primary text-primary-foreground font-semibold shadow-md rounded-full transition-all hover:scale-[1.02] hover:shadow-lg"
                 >
                   <Link href={publicProfileLink} className="flex items-center justify-center">
                     <Eye className="w-4 h-4 mr-2" />
@@ -233,7 +255,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
                 <Button 
                   asChild 
                   variant="outline" 
-                  className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] hover:border-[#0e9094] rounded-full transition-all hover:scale-[1.02]"
+                  className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary rounded-full transition-all hover:scale-[1.02]"
                 >
                   <Link href="/dashboard" className="flex items-center justify-center">
                     <Pencil className="w-4 h-4 mr-2" />
@@ -245,10 +267,9 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
           </div>
         </div>
       </div>
-      
+      <QuickActions />
       <AchievementsCard />
       <ActivityStats />
-      <QuickActions onCouponClick={() => {}} />
     </aside>
   );
 } 

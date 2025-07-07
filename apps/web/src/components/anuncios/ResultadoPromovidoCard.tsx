@@ -1,4 +1,8 @@
-import React from "react";
+import React from 'react';
+import { Card } from '../ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { cn } from '@/lib/utils';
 
 interface ResultadoPromovidoCardProps {
   avatar: string;
@@ -7,12 +11,20 @@ interface ResultadoPromovidoCardProps {
   destaque?: boolean;
 }
 
-export const ResultadoPromovidoCard: React.FC<ResultadoPromovidoCardProps> = ({ avatar, nome, linkPerfil, destaque }) => (
-  <div className={`resultado-promovido-card advertisement-shadow border rounded p-4 flex items-center bg-white shadow ${destaque ? 'border-yellow-400' : ''}`}>
-    <img src={avatar} alt={nome} className="w-12 h-12 rounded-full mr-4" />
-    <div className="flex-1">
-      <a href={linkPerfil} target="_blank" rel="noopener noreferrer" className="font-bold text-blue-600">{nome}</a>
-      {destaque && <span className="ml-2 px-2 py-1 bg-yellow-200 text-yellow-800 text-xs rounded">Promovido</span>}
-    </div>
-  </div>
-); 
+const ResultadoPromovidoCard = ({ avatar, nome, linkPerfil, destaque }: ResultadoPromovidoCardProps) => {
+  return (
+    <Card className={cn("max-w-lg flex items-center gap-4 p-4", destaque && "border-2 border-yellow-400")}> 
+      <Avatar>
+        <AvatarImage src={avatar} alt={nome} />
+        <AvatarFallback>{nome[0]}</AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <h3 className="font-bold text-foreground">{nome}</h3>
+        {destaque && <Badge variant="secondary">Destaque</Badge>}
+        <a href={linkPerfil} className="block text-blue-600 hover:underline text-sm mt-1">Ver perfil</a>
+      </div>
+    </Card>
+  );
+};
+
+export default ResultadoPromovidoCard; 

@@ -4,6 +4,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/hooks/use-auth';
 import { MessageRealtimeToastListener } from '@/components/chat/MessageRealtimeToastListener';
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { PublicFooter } from '@/features/landing/footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,11 +32,16 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-        <AuthProvider>
-          {children}
-          <MessageRealtimeToastListener />
-        </AuthProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased min-h-screen flex flex-col`}>
+        <div className="flex-1 flex flex-col">
+          <TooltipProvider>
+            <AuthProvider>
+              {children}
+              <MessageRealtimeToastListener />
+            </AuthProvider>
+          </TooltipProvider>
+        </div>
+        <PublicFooter />
         <Toaster />
       </body>
     </html>

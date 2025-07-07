@@ -50,7 +50,7 @@ import { UserAdExample } from '@/components/anuncios/UserAdExample';
 //               <span className="text-sm text-muted-foreground font-medium">até 31/12</span>
 //             </div>
 //             <Button 
-//               className="w-full rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:from-[#0e9094] hover:to-[#14b8a6] text-white font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
+//               className="w-full rounded-full bg-primary text-primary-foreground font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
 //             >
 //               Ver Oferta Completa
 //             </Button>
@@ -83,7 +83,7 @@ export function PremiumAdCard() {
             <span className="text-muted-foreground">mais visualizações</span>
           </div>
           <Button 
-            className="w-full rounded-full bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:from-[#0e9094] hover:to-[#14b8a6] text-white font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
+            className="w-full rounded-full bg-primary text-primary-foreground font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
           >
             Começar Agora
           </Button>
@@ -123,7 +123,7 @@ export function TrendingHashtags() {
             className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-xl cursor-pointer transition-all hover:scale-[1.02] hover:shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-[#0e9094] dark:text-teal-400">#{item.tag}</span>
+              <span className="text-sm font-medium text-primary">#{item.tag}</span>
               <span className="text-xs text-muted-foreground">{item.posts} posts</span>
             </div>
             <span className="text-xs font-medium text-muted-foreground bg-muted/30 px-2 py-0.5 rounded-full">
@@ -151,7 +151,7 @@ export function UserSuggestions() {
             <img 
               src={user.avatar} 
               alt={user.name} 
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-transparent hover:ring-[#0e9094]/30 transition-all" 
+              className="w-12 h-12 rounded-xl object-cover ring-2 ring-transparent hover:ring-primary/30 transition-all" 
             />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate text-foreground">{user.name}</p>
@@ -160,7 +160,7 @@ export function UserSuggestions() {
             <Button 
               size="sm" 
               variant="outline" 
-              className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full flex items-center gap-1 transition-all hover:scale-105"
+              className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary rounded-full flex items-center gap-1 transition-all hover:scale-105"
             >
               <Plus className="w-3 h-3" />
               Seguir
@@ -215,13 +215,13 @@ export function CouponsWidget() {
       {coupons.map((c) => (
         <div key={c.id} className="flex justify-between items-center p-4 bg-muted/80 dark:bg-muted/30 rounded-xl hover:bg-muted/90 transition-all">
           <div className="space-y-1">
-            <p className="font-semibold text-[#0e9094] dark:text-teal-400 text-lg">{c.code}</p>
+            <p className="font-semibold text-primary text-lg">{c.code}</p>
             <p className="text-xs text-muted-foreground">{c.desc}</p>
           </div>
           <Button 
             size="sm" 
             variant="outline" 
-            className="border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] rounded-full flex items-center gap-1 transition-all hover:scale-105"
+            className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary rounded-full flex items-center gap-1 transition-all hover:scale-105"
           >
             Copiar
           </Button>

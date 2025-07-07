@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 interface ProfileAppearanceTabV2Props {
   data: any;
@@ -77,9 +78,9 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
               <option value="roboto" style={{ fontFamily: "Roboto, sans-serif" }}>Roboto – Exemplo</option>
             </select>
           </div>
-          <button type="button" className="mt-2 text-xs underline" onClick={resetAppearance}>
+          <Button type="button" variant="link" className="mt-2 text-xs underline" onClick={resetAppearance}>
             Restaurar padrões do layout
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="text-muted-foreground text-center p-8">

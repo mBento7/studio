@@ -77,19 +77,17 @@ export async function GET(req: NextRequest) {
         reviewed_user_id,
         reply,
         verified,
-        profiles(full_name, username, avatar_url) -- buscando dados do reviewer
+        profiles(full_name, username, avatar_url)
       `)
       .eq('reviewed_user_id', userId)
-      .eq('is_public', true) // Apenas avaliações públicas
-      .order('created_at', { ascending: false });
+      .eq('is_public', true);
 
     if (error) {
-      console.error('Erro ao buscar avaliações:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Erro ao buscar avaliações do Supabase:', error);
+      return NextResponse.json({ error: 'Erro ao buscar avaliações.' }, { status: 500 });
     }
 
-    return NextResponse.json({ reviews }, { status: 200 });
-
+    return NextResponse.json({ reviews });
   } catch (error: any) {
     console.error('Erro inesperado na API de reviews (GET):', error);
     return NextResponse.json({ error: error.message || 'Erro interno do servidor.' }, { status: 500 });

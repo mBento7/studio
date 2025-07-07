@@ -1,18 +1,28 @@
-import React from "react";
+import React from 'react';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 interface AnuncioLateralCardProps {
   imagem: string;
   titulo: string;
+  descricao: string;
   link: string;
-  descricao?: string;
 }
 
-export const AnuncioLateralCard: React.FC<AnuncioLateralCardProps> = ({ imagem, titulo, link, descricao }) => (
-  <div className="anuncio-lateral-card advertisement-shadow border rounded p-4 flex flex-col items-center bg-white shadow">
-    <a href={link} target="_blank" rel="noopener noreferrer">
-      <img src={imagem} alt={titulo} className="w-32 h-32 object-cover mb-2 rounded" />
-      <h3 className="font-bold text-lg text-center mb-1">{titulo}</h3>
-      {descricao && <p className="text-sm text-gray-600 text-center">{descricao}</p>}
-    </a>
-  </div>
-); 
+const AnuncioLateralCard = ({ imagem, titulo, descricao, link }: AnuncioLateralCardProps) => {
+  return (
+    <Card className="max-w-lg">
+      <img src={imagem} alt={titulo} className="w-full h-40 object-cover rounded-t-2xl" />
+      <div className="p-4">
+        <h3 className="font-bold text-lg mb-2">{titulo}</h3>
+        <p className="text-muted-foreground mb-2">{descricao}</p>
+        <Button asChild className="w-full mt-2">
+          <a href={link}>Ver perfil</a>
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
+export default AnuncioLateralCard; 

@@ -27,14 +27,18 @@ export const PortfolioItemModal: React.FC<PortfolioItemModalProps> = ({ item, op
         </DialogHeader>
         <div className="p-6 w-full flex flex-col items-center justify-center">
           <div className="relative aspect-video w-full bg-muted rounded-md overflow-hidden border flex items-center justify-center">
-            <Image
-              src={item.imageUrl}
-              alt={item.caption || 'Imagem do Portfólio'}
-              fill
-              style={{ objectFit: 'contain' }}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-              data-ai-hint={item.dataAiHint || "portfolio detail"}
-            />
+            {item.imageUrl ? (
+              <Image
+                src={item.imageUrl}
+                alt={item.caption || 'Imagem do Portfólio'}
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                data-ai-hint={item.dataAiHint || "portfolio detail"}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-slate-400">Sem imagem</div>
+            )}
           </div>
         </div>
         <DialogFooter className="p-6 pt-0 w-full flex items-center justify-center">

@@ -3,6 +3,7 @@ import { Star, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Card } from "@/components/ui/card";
 
 interface Review {
   id: string;
@@ -82,60 +83,59 @@ export function ReviewList({ reviewedUserId, currentUserId }: ReviewListProps) {
   if (reviews.length === 0) return <div className="p-4 text-center text-gray-500">Nenhuma avaliação ainda.</div>;
 
   return (
-    <div className="p-4 border rounded-xl bg-white shadow-lg mt-4">
-      <h3 className="text-lg font-semibold mb-4">Avaliações ({reviews.length})</h3>
-      <div className="space-y-4">
+    <Card className="p-4 md:p-6 shadow-md dark:bg-slate-800/80 mt-4">
+      <h3 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Avaliações ({reviews.length})</h3>
+      <div className="space-y-6">
         {reviews.map((review) => (
-          <div key={review.id} className="border-b pb-4 last:border-b-0 last:pb-0">
-            <div className="flex items-center mb-2">
+          <div key={review.id} className="border-b pb-4 last:border-b-0 last:pb-0 border-slate-200 dark:border-slate-700">
+            <div className="flex items-start mb-2">
               <Image
                 src={review.profiles.avatar_url || '/avatar-default.png'}
                 alt={review.profiles.full_name || review.profiles.username}
                 width={40}
                 height={40}
-                className="rounded-full mr-3"
+                className="rounded-full mr-3 flex-shrink-0"
               />
-              <div>
-                <p className="font-semibold">{review.profiles.full_name || review.profiles.username}</p>
-                <div className="flex items-center">
+              <div className="flex-1">
+                <p className="font-semibold text-slate-800 dark:text-slate-200">{review.profiles.full_name || review.profiles.username}</p>
+                <div className="flex items-center text-sm mb-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
-                      className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400" : "text-gray-300"}`}
+                      className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
                     />
                   ))}
-                  <span className="ml-2 text-sm text-gray-500">
+                  <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">
                     {formatDistanceToNow(new Date(review.created_at), { addSuffix: true, locale: ptBR })}
                   </span>
                 </div>
+                <p className="text-slate-700 dark:text-slate-300">{review.comment}</p>
               </div>
+              {currentUserId === review.reviewer_id && (
+                <button
+                  onClick={() => handleDeleteReview(review.id)}
+                  className="ml-4 text-red-500 hover:text-red-700 text-xs flex items-center"
+                >
+                  <Trash2 className="w-3 h-3 mr-1" /> Excluir
+                </button>
+              )}
             </div>
-            <p className="text-gray-700 mb-2">{review.comment}</p>
 
             {review.reply && (
-              <div className="bg-gray-100 p-2 rounded-md mt-2 ml-10 border-l-2 border-blue-500">
-                <p className="font-semibold text-blue-700">Resposta do Avaliado:</p>
-                <p className="text-gray-800">{review.reply}</p>
+              <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded-md mt-2 ml-13 border-l-2 border-blue-500 dark:border-blue-400">
+                <p className="font-semibold text-blue-700 dark:text-blue-300">Resposta do Avaliado:</p>
+                <p className="text-slate-800 dark:text-slate-200 text-sm">{review.reply}</p>
               </div>
             )}
 
             {review.verified && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 mt-2 ml-13">
                 Avaliação Verificada
               </span>
-            )}
-
-            {currentUserId === review.reviewer_id && (
-              <button
-                onClick={() => handleDeleteReview(review.id)}
-                className="ml-auto text-red-500 hover:text-red-700 text-sm mt-2 flex items-center"
-              >
-                <Trash2 className="w-4 h-4 mr-1" /> Excluir
-              </button>
             )}
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   );
 } 
