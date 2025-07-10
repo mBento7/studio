@@ -5,6 +5,7 @@ import { LAYOUTS, PlanType } from "./layoutFeatures";
 import { Star as StarIcon, CheckCircle2, Info, Star, User, Briefcase, Award, Layers, Crown, Gem } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
 
 const PLAN_COLORS: Record<PlanType, string> = {
   default: "bg-gray-200 text-gray-700",
@@ -36,6 +37,50 @@ function isAllowed(plan: PlanType, layoutPlan: PlanType) {
   return layoutPlan === "default";
 }
 
+// Atualize a lista de features exclusivas do plano Standard para incluir todos os benefícios em relação ao Free
+const STANDARD_EXCLUSIVE = [
+  "Abas e navegação rápida",
+  "Seções detalhadas",
+  "Vídeo do YouTube integrado",
+  "Chat integrado",
+  "Portfólio visual avançado (até 8 itens)",
+  "Serviços (até 5)",
+  "Tags em destaque (até 6)",
+  "FAQ (até 5 perguntas)",
+  "Links para redes sociais (até 6)",
+  "Experiência profissional (até 8)"
+];
+
+// Lista de features do Premium que têm limite maior que o Standard
+const PREMIUM_LIMITS_EXCLUSIVE = [
+  "Portfólio visual avançado (até 12 itens)",
+  "Serviços (até 12)",
+  "FAQ (até 10 perguntas)",
+  "Experiência profissional (até 12)",
+  "Tags em destaque (até 12)",
+  "Links para redes sociais (até 12)",
+  "Destaque para conquistas",
+  "Visual sofisticado",
+  "Destaque de depoimentos",
+  "Destaque de depoimentos em carrossel",
+  "Animações exclusivas",
+  "Reviews e avaliações integradas",
+  "Banner personalizável",
+  "Stories (destaques rápidos)"
+];
+
+const STANDARD_LIMITS_EXCLUSIVE = [
+  "Abas e navegação rápida",
+  "Portfólio visual avançado (até 8 itens)",
+  "Serviços (até 5)",
+  "Tags em destaque (até 6)",
+  "Links para redes sociais (até 6)",
+  "Vídeo do YouTube integrado",
+  "Chat integrado",
+  "FAQ (até 5 perguntas)",
+  "Experiência profissional (até 8)"
+];
+
 export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onUpgrade }: {
   currentPlan: PlanType;
   selectedLayout: string;
@@ -43,6 +88,7 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
   onUpgrade?: () => void;
 }) {
   const [selectedTab, setSelectedTab] = useState(0);
+  const router = useRouter();
 
   return (
     <TooltipProvider>
@@ -79,7 +125,12 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
                     <img src={layout.previewImage} alt={layout.name + ' preview'} className="w-full h-32 object-cover rounded mb-2 border" />
                   )}
                   <div className="flex items-center gap-3 mb-2">
-                    {ICONS[layout.key] || <Info className="w-7 h-7 text-gray-300" />}
+                    {layout.plan === 'premium'
+                      ? <Crown className="w-7 h-7 text-yellow-500" />
+                      : layout.plan === 'standard'
+                        ? <Award className="w-7 h-7 text-blue-500" />
+                        : (ICONS[layout.key] || <Info className="w-7 h-7 text-gray-300" />)
+                    }
                     <span className="font-bold text-lg flex-1">{layout.name}</span>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -108,50 +159,36 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
                         f.includes('Reviews e avaliações integradas') ||
                         f.includes('Animações exclusivas')
                       );
-                      const isStandardExclusive = layout.plan === 'standard' && (
-                        f.includes('Abas e navegação rápida') ||
-                        f.includes('Seções detalhadas') ||
-                        f.includes('Portfólio visual avançado (até 8 itens)') ||
-                        f.includes('Serviços (até 5)') ||
-                        f.includes('Integração com agenda')
-                      );
+                      // Destaque todos os limites maiores que o Standard
+                      const isPremiumLimit = layout.plan === 'premium' && PREMIUM_LIMITS_EXCLUSIVE.some(e => f.includes(e));
+                      // Destaque Standard para os dois itens
+                      const isStandardExclusive = ((layout.plan === 'standard' || layout.plan === 'free') && STANDARD_LIMITS_EXCLUSIVE.includes(f)) ||
+                        (layout.plan === 'premium' && (f === 'Vídeo do YouTube integrado' || f === 'Chat integrado'));
                       return (
-                        <li key={f} className="flex items-center gap-2">
-                          {isPremiumExclusive
+                        <li key={f} className={`flex items-center gap-2 ${isPremiumLimit ? 'font-semibold text-yellow-700' : ''} ${isStandardExclusive ? 'font-semibold text-blue-700' : ''}`}>
+                          {isPremiumLimit
                             ? <Crown className="w-4 h-4 text-yellow-500" />
-                            : isStandardExclusive
-                              ? <Award className="w-4 h-4 text-blue-500" />
-                              : <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            : isPremiumExclusive
+                              ? <Crown className="w-4 h-4 text-yellow-400" />
+                              : isStandardExclusive
+                                ? <Award className="w-4 h-4 text-blue-500" />
+                                : <CheckCircle2 className="w-4 h-4 text-green-500" />
                           }
                           {f}
                         </li>
                       );
                     })}
                   </ul>
-                  <ul className="list-disc ml-6 text-xs text-muted-foreground mb-2">
-                    {layout.benefits.map(b => <li key={b}>{b}</li>)}
-                  </ul>
-                  <div className="mt-auto flex gap-2">
-                    {isAllowed(currentPlan, layout.plan) ? (
-                      <Button
-                        variant={selectedLayout === layout.key ? "default" : "outline"}
-                        onClick={() => onSelect(layout.key)}
-                        disabled={selectedLayout === layout.key}
-                        className="w-full"
-                      >
-                        {selectedLayout === layout.key ? "Selecionado" : "Selecionar"}
-                      </Button>
-                    ) : (
-                      <Button variant="secondary" onClick={onUpgrade} className="w-full">
-                        Fazer upgrade para acessar
+                  <div className="flex justify-end mt-4">
+                    {!isAllowed(currentPlan, layout.plan) && (
+                      <Button variant="outline" onClick={onUpgrade} className="text-muted-foreground hover:text-primary">
+                        Upgrade para {PLAN_LABELS[layout.plan]}
                       </Button>
                     )}
+                    <Button onClick={() => onSelect(layout.key)} className="ml-2">
+                      Selecionar
+                    </Button>
                   </div>
-                  {!isAllowed(currentPlan, layout.plan) && (
-                    <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10 rounded-lg">
-                      <span className="text-sm font-medium text-gray-600 mb-2">Requer upgrade</span>
-                    </div>
-                  )}
                 </Card>
               </div>
             </motion.div>
@@ -160,4 +197,4 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
       </div>
     </TooltipProvider>
   );
-} 
+}

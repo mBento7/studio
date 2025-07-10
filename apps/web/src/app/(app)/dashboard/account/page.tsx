@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileInMockData } from '@/lib/mock-data';
+import { supabase } from '@/lib/supabase/client';
 
 export default function AccountPage() {
   const { signOutUser, currentUserProfile, updateUserProfile } = useAuth();
@@ -44,19 +45,20 @@ export default function AccountPage() {
     setSelectedPlan(newPlan);
   };
 
+  const updateUserPlan = async (userId: string, newPlan: string) => {
+    const { error } = await supabase.rpc('update_user_plan', {
+      user_id: userId,
+      new_plan: newPlan
+    });
+    return error;
+  };
+
   const handleSavePlan = async () => {
     if (!currentUserProfile) return;
     setSaving(true);
     try {
-      const response = await fetch('/api/update-user-plan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: currentUserProfile.id,
-          plan: selectedPlan,
-        }),
-      });
-      if (!response.ok) throw new Error('Erro ao salvar plano');
+      const error = await updateUserPlan(currentUserProfile.id, selectedPlan);
+      if (error) throw new Error('Erro ao salvar plano');
       updateUserProfile({ ...currentUserProfile, plan: selectedPlan });
       toast({
         title: 'Plano Atualizado',

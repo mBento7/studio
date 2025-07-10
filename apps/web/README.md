@@ -200,3 +200,10 @@ Este projeto é guiado por uma documentação estratégica detalhada para garant
 - Para sugerir melhorias, abra uma issue ou pull request no repositório.
 - Sempre que alterar algo fundamental (rotas, estrutura, regras de negócio), atualize este README e a documentação relacionada.
 - Em caso de dúvida, consulte a documentação central em `/docs` ou pergunte ao time responsável.
+
+## 🔌 Integração com Edge Functions
+- O frontend consome Edge Functions do Supabase para lógica sensível e escalável. Veja exemplos em `../../supabase/functions/`.
+
+## 🔒 Segurança e Automação
+- Todas as rotas privadas são protegidas por autenticação e RLS no banco. Veja templates em `../../db/policies/`.
+- Scripts para automação de deploy, migrations e abertura de painéis estão em `../../scripts/`.

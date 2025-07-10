@@ -114,7 +114,7 @@ export function AppearanceSettings({
                   <div className="flex items-center justify-between w-full mb-3">
                     <div className="flex items-center gap-3"><RadioGroupItem value={template.id} id={`layout-${template.id}`} disabled={!isSelectable} /><span className="font-semibold">{template.name}</span></div>
                   </div>
-                  <div className="w-full h-32 relative bg-muted rounded-md border"><Image src={template.imageUrl} alt={template.name} fill style={{objectFit: "cover"}} className="rounded-md"/></div>
+                  <div className="w-full h-32 relative bg-muted rounded-md border"><Image src={template.imageUrl} alt={template.name} fill sizes="(max-width: 768px) 100vw, 400px" style={{objectFit: "cover"}} className="rounded-md"/></div>
                   <p className="text-xs mt-2 text-muted-foreground">{template.description}</p>
                   {!isSelectable && <p className="text-xs mt-1 font-semibold text-amber-600">Requer plano {template.availableFor[0] || 'superior'}</p>}
                 </Label>

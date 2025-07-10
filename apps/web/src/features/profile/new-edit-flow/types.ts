@@ -1,4 +1,5 @@
 export interface UserProfileV2 {
+  id?: string;
   full_name: string;
   username: string;
   bio: string;
@@ -18,8 +19,10 @@ export interface UserProfileV2 {
   tiktok?: string;
   github?: string;
   whatsapp?: string;
-  social_links?: Array<{
-    type: string; // ex: 'instagram', 'linkedin', 'whatsapp', etc
+  maps_link?: string;
+  sociallinks?: Array<{
+    platform?: string;
+    type?: string;
     url: string;
     label?: string;
   }>;

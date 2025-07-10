@@ -45,6 +45,12 @@ export default function ProfileEditV2ContentPage() {
     }
   };
 
+  // Novo onChange que já salva no Supabase
+  const handleChangeAndSave = async (newProfile: any) => {
+    setProfile(newProfile);
+    await handleSave(newProfile);
+  };
+
   if (loading) return <div>Carregando perfil...</div>;
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
   if (!profile) return <div>Nenhum dado de perfil encontrado.</div>;
@@ -55,8 +61,8 @@ export default function ProfileEditV2ContentPage() {
   return (
     <div>
       {success && <div style={{ color: 'green' }}>{success}</div>}
-      <ProfileContentTabV2 data={profile} plan={plan} layout={layout} onChange={setProfile} />
-      <button onClick={() => handleSave(profile)} style={{ marginTop: 16 }}>Salvar</button>
+      <ProfileContentTabV2 data={profile} plan={plan} layout={layout} onChange={handleChangeAndSave} />
+      {/* Botão extra de salvar manual removido, pois agora salva automaticamente */}
     </div>
   );
 } 

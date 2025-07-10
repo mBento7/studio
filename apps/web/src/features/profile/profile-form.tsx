@@ -26,7 +26,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 const portfolioItemSchema = z.object({
   id: z.string().optional(),
   imageUrl: z.string().url("URL da imagem inválida").min(1, "URL da imagem é obrigatória"),
-  caption: z.string().optional(),
+  caption: z.string().min(1, "Legenda é obrigatória"),
   description: z.string().optional(),
   dataAiHint: z.string().optional(),
 });

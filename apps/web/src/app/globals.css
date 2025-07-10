@@ -133,7 +133,11 @@
 }
 
 /* ---------- Utilitário para ocultar scrollbar ---------- */
+/* Use a classe .scrollbar-hide junto com overflow-x-auto para esconder a barra de rolagem, mas manter a rolagem funcional */
 .scrollbar-hide {
   -ms-overflow-style: none; scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

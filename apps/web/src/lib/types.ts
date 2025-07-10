@@ -1,4 +1,6 @@
 import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MessageSquare, Briefcase, Facebook, Twitch } from "lucide-react";
+import { SocialIcon } from 'react-social-icons'; // Importe SocialIcon
+import type { User } from '@supabase/supabase-js';
 
 export interface SocialLink {
   id: string;
@@ -11,21 +13,24 @@ export interface Service {
   name: string;
   description: string;
   price?: string;
+  icon?: string;
 }
 
 export interface PortfolioItem {
-  id?: string | number;
+  id: string;
   imageUrl: string;
-  caption?: string;
+  caption: string; // Agora obrigatório
   description?: string;
   dataAiHint?: string;
+  externalLink?: string;
 }
 
 export interface ExperienceItem {
   id: string;
   title: string;
   company: string;
-  years: string;
+  startDate: string;
+  endDate: string | null;
   description?: string;
 }
 
@@ -33,7 +38,9 @@ export interface EducationItem {
   id: string;
   degree: string;
   institution: string;
-  years: string;
+  startDate: string;
+  endDate: string | null;
+  description?: string;
 }
 
 export interface Review {
@@ -69,6 +76,11 @@ export interface Story {
   link?: string;
 }
 
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 export interface UserProfile {
   id: string;
   username: string;
@@ -83,6 +95,15 @@ export interface UserProfile {
   cover_photo_url: string;
   coverPhotoDataAiHint?: string;
   sociallinks: SocialLink[];
+  // Endereço detalhado
+  endereco_rua?: string;
+  endereco_numero?: string;
+  endereco_complemento?: string;
+  endereco_bairro?: string;
+  endereco_cidade?: string;
+  endereco_estado?: string;
+  endereco_cep?: string;
+  maps_link?: string;
   location?: {
     address?: string;
     city: string;
@@ -109,6 +130,10 @@ export interface UserProfile {
   coupons?: Coupon[];
   stories?: Story[];
   calendlyUrl?: string;
+  isOnlineService?: boolean; // Novo campo para indicar se o serviço é online
+  faqs?: FAQItem[];
+  public_sections?: { [key: string]: boolean };
+  public_visibility?: boolean;
 }
 
 export interface ProfileLayoutProps {
@@ -133,6 +158,7 @@ export const platformIcons: { [key: string]: React.ElementType } = {
   tiktok: MessageSquare, 
   facebook: Facebook,
   twitch: Twitch,
+  whatsapp: SocialIcon, // Adicione o SocialIcon para o WhatsApp
 };
 
 export interface LayoutTemplate {

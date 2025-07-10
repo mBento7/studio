@@ -18,9 +18,10 @@ import { Tag, Ticket, Coins } from 'lucide-react';
 interface CreateCouponModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  onSave?: (newCoupon: { code: string; description: string; discount?: string; validUntil?: string; }) => void;
 }
 
-export function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
+export function CreateCouponModal({ isOpen, onOpenChange, onSave }: CreateCouponModalProps) {
   const [couponCode, setCouponCode] = useState("");
   const [couponDesc, setCouponDesc] = useState("");
   const { toast } = useToast();
@@ -28,6 +29,13 @@ export function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalPro
   const handlePublish = () => {
     // Lógica de publicação (simulada)
     console.log("Publishing coupon:", { code: couponCode, desc: couponDesc });
+    if (onSave) {
+      onSave({
+        code: couponCode,
+        description: couponDesc,
+        // Pode adicionar mais campos aqui se necessário, como discount, validUntil, etc.
+      });
+    }
     toast({
       title: "Cupom Publicado!",
       description: `O cupom "${couponCode}" foi publicado com sucesso.`,

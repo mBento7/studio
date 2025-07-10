@@ -24,3 +24,17 @@ Esta pasta armazena as migrations versionadas do banco de dados do projeto.
 Coloque aqui os arquivos de migration versionados do banco de dados (ex: 001_create_profiles.sql, 002_add_services.sql, etc).
 
 Use ferramentas como Supabase CLI, dbmate ou sqitch para versionar e aplicar as migrations. 
+
+## Edge Functions
+- Funções serverless para lógica customizada estão em `../../supabase/functions/`. Veja o README da pasta para detalhes.
+
+## Políticas de Segurança (RLS)
+- Versionamento e templates em `../policies/`. Consulte o README para exemplos práticos.
+
+## Scripts de Automação
+- Scripts para deploy, migrations e abertura de painéis estão em `../../scripts/`. Veja o README correspondente para instruções. 
+
+# Funções do Banco
+
+- **delete_expired_conversations**: Função responsável por remover conversas e mensagens expiradas do banco. Agora implementada com `search_path` explícito para maior segurança, evitando ambiguidades de schema.
+- Recomenda-se sempre definir `search_path` explicitamente em funções PL/pgSQL para evitar riscos de segurança em ambientes multi-schema. 

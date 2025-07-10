@@ -22,7 +22,6 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
 
   return (
     <Card className="p-4 md:p-6 shadow-md dark:bg-slate-800/80 mt-4">
-      <h3 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Deixe sua avaliação</h3>
       <div className="flex items-center mb-3">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star

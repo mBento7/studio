@@ -1,76 +1,127 @@
 import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
+import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-interface ExperienceBlockV2Props {
-  experience: any[];
-  onChange: (experience: any[]) => void;
+interface ExperienceItem {
+  title: string;
+  company: string;
+  years: string;
+  description?: string; // Added description field
 }
 
-export function ExperienceBlockV2({ experience, onChange }: ExperienceBlockV2Props) {
+interface ExperienceBlockV2Props {
+  experience: ExperienceItem[];
+  onChange: (experience: ExperienceItem[]) => void;
+  plan?: PlanType;
+}
+
+export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }: ExperienceBlockV2Props) {
   const safeExperience = experience ?? [];
+  const limit = PLAN_LIMITS[plan as PlanType].experiences;
   const [touched, setTouched] = useState(false);
-  const addExperience = () => {
-    onChange([...safeExperience, { title: "", company: "", years: "" }]);
-    setTouched(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState<ExperienceItem | null>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const handleOpenModalForAdd = () => {
+    setCurrentItem({ title: '', company: '', years: '', description: '' });
+    setEditingIndex(null);
+    setIsModalOpen(true);
   };
+  const handleOpenModalForEdit = (idx: number) => {
+    setCurrentItem(safeExperience[idx]);
+    setEditingIndex(idx);
+    setIsModalOpen(true);
+  };
+  const handleSave = () => {
+    let newExperience = [...safeExperience];
+    if (editingIndex !== null) {
+      newExperience[editingIndex] = currentItem;
+    } else {
+      newExperience.push(currentItem);
+    }
+    onChange(newExperience);
+    setIsModalOpen(false);
+  };
+
   const removeExperience = (idx: number) => {
     onChange(safeExperience.filter((_, i) => i !== idx));
     setTouched(true);
   };
-  const updateExperience = (idx: number, field: string, value: string) => {
-    const newExp = [...safeExperience];
-    newExp[idx] = { ...newExp[idx], [field]: value };
-    onChange(newExp);
-  };
+
   const hasError = touched && safeExperience.length === 0;
+
   return (
     <div className="space-y-6">
-      {safeExperience.map((exp, idx) => (
-        <div key={idx} className="flex flex-col md:flex-row gap-4 items-end border-b pb-4 mb-4">
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
-            <div>
-              <Label htmlFor={`exp-title-${idx}`}>Título</Label>
-              <Input
-                id={`exp-title-${idx}`}
-                value={exp.title ?? ""}
-                onChange={e => updateExperience(idx, "title", e.target.value)}
-                placeholder="Cargo ou função"
-                autoComplete="off"
-              />
+      <Button onClick={handleOpenModalForAdd}>Adicionar Experiência</Button>
+      {safeExperience.map((item, idx) => (
+        <div key={idx}>
+          <div className="flex flex-col md:flex-row gap-4 items-end border-b pb-4 mb-4 cursor-pointer" onClick={() => handleOpenModalForEdit(idx)}>
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
+              <div>
+                <Label htmlFor={`exp-title-${idx}`}>Título</Label>
+                <Input
+                  id={`exp-title-${idx}`}
+                  value={item.title ?? ""}
+                  placeholder="Cargo ou função"
+                  autoComplete="off"
+                  readOnly
+                  className="pointer-events-none"
+                />
+              </div>
+              <div>
+                <Label htmlFor={`exp-company-${idx}`}>Empresa</Label>
+                <Input
+                  id={`exp-company-${idx}`}
+                  value={item.company ?? ""}
+                  placeholder="Nome da empresa"
+                  autoComplete="off"
+                  readOnly
+                  className="pointer-events-none"
+                />
+              </div>
+              <div>
+                <Label htmlFor={`exp-years-${idx}`}>Período</Label>
+                <Input
+                  id={`exp-years-${idx}`}
+                  value={item.years ?? ""}
+                  placeholder="Ex: 2020-2023"
+                  autoComplete="off"
+                  readOnly
+                  className="pointer-events-none"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor={`exp-company-${idx}`}>Empresa</Label>
-              <Input
-                id={`exp-company-${idx}`}
-                value={exp.company ?? ""}
-                onChange={e => updateExperience(idx, "company", e.target.value)}
-                placeholder="Nome da empresa"
-                autoComplete="off"
-              />
-            </div>
-            <div>
-              <Label htmlFor={`exp-years-${idx}`}>Período</Label>
-              <Input
-                id={`exp-years-${idx}`}
-                value={exp.years ?? ""}
-                onChange={e => updateExperience(idx, "years", e.target.value)}
-                placeholder="Ex: 2020-2023"
-                autoComplete="off"
-              />
-            </div>
+            <Button onClick={(e) => { e.stopPropagation(); removeExperience(idx); }} variant="ghost" size="icon" aria-label="Remover experiência">
+              <Trash2 className="w-4 h-4 text-destructive" />
+            </Button>
           </div>
-          <Button onClick={() => removeExperience(idx)} variant="ghost" size="icon" aria-label="Remover experiência">
-            <Trash2 className="w-4 h-4 text-destructive" />
-          </Button>
+          <Button onClick={() => handleOpenModalForEdit(idx)}>Editar</Button>
         </div>
       ))}
-      <Button onClick={addExperience} variant="outline" type="button" className="w-full flex items-center gap-2 justify-center">
-        <Plus className="w-4 h-4" /> Adicionar Experiência
-      </Button>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editingIndex !== null ? 'Editar Experiência' : 'Adicionar Experiência'}</DialogTitle>
+          </DialogHeader>
+          {/* Campos do formulário: title, company, years, description */}
+          <Input value={currentItem?.title || ''} onChange={e => setCurrentItem({ ...currentItem, title: e.target.value })} placeholder="Cargo" />
+          <Input value={currentItem?.company || ''} onChange={e => setCurrentItem({ ...currentItem, company: e.target.value })} placeholder="Empresa" />
+          <Input value={currentItem?.years || ''} onChange={e => setCurrentItem({ ...currentItem, years: e.target.value })} placeholder="Período" />
+          <Input value={currentItem?.description || ''} onChange={e => setCurrentItem({ ...currentItem, description: e.target.value })} placeholder="Descrição" />
+          <DialogFooter>
+            <Button onClick={() => setIsModalOpen(false)} variant="outline">Cancelar</Button>
+            <Button onClick={handleSave}>Salvar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {safeExperience.length >= limit && <div className="text-warning text-xs mt-1">Limite de {limit} experiências atingido para seu plano.</div>}
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos uma experiência.</div>}
     </div>
   );

@@ -1,10 +1,8 @@
-import { User, Briefcase, Award, Camera, Layout, FolderOpen, Sparkles } from "lucide-react";
+import { User, Award, Camera, Layout, FolderOpen, Sparkles } from "lucide-react";
 import { ProfileBasicTabV2 } from "./ProfileBasicTabV2";
 import { MinimalistBlockV2 } from "./blocks/MinimalistBlockV2";
 import { LayoutSelectBlockV2 } from "./LayoutSelectBlockV2";
-import { ServicesBlockV2 } from "./blocks/ServicesBlockV2";
 import { PortfolioBlockV2 } from "./blocks/PortfolioBlockV2";
-import { SkillsBlockV2 } from "./blocks/SkillsBlockV2";
 import * as React from "react";
 import type { UserProfileV2 } from "./types";
 import type { Dispatch } from "react";
@@ -12,6 +10,7 @@ import { ProfileContentTabV2 } from "./ProfileContentTabV2";
 import { ContentBlock } from "./components/ContentBlock";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import StoryModal from "@/components/feed/StoryModal";
+import CouponCard from '@/components/feed/CouponCard';
 
 interface PremiumTabV2Props {
   data: any;
@@ -25,6 +24,26 @@ function PremiumTabV2({ data, plan, layout, onChange }: PremiumTabV2Props): JSX.
   const [modalOpen, setModalOpen] = React.useState(false);
   const [selectedStoryIdx, setSelectedStoryIdx] = React.useState<number | null>(null);
   const stories = data.stories || [];
+
+  // Editor de cupons de desconto
+  const [couponDraft, setCouponDraft] = React.useState({
+    code: '',
+    discount: '',
+    description: '',
+    validUntil: '',
+    brand: '',
+  });
+  const coupons = data.coupons || [];
+  const handleAddCoupon = () => {
+    if (!couponDraft.code || !couponDraft.discount) return;
+    onChange({ ...data, coupons: [...coupons, { ...couponDraft }] });
+    setCouponDraft({ code: '', discount: '', description: '', validUntil: '', brand: '' });
+  };
+  const handleRemoveCoupon = (idx: number) => {
+    const newCoupons = [...coupons];
+    newCoupons.splice(idx, 1);
+    onChange({ ...data, coupons: newCoupons });
+  };
 
   function handleAddStory() {
     if (!storyDraft.image || !storyDraft.title) return;
@@ -110,53 +129,6 @@ function PremiumTabV2({ data, plan, layout, onChange }: PremiumTabV2Props): JSX.
           )}
         </div>
       </ContentBlock>
-      {/* Vídeo do YouTube */}
-      <ContentBlock
-        title="Vídeo do YouTube"
-        description="Incorpore um vídeo do YouTube em seu perfil. Cole a URL do vídeo abaixo."
-        isLocked={plan !== "premium"}
-        badgeText={plan !== "premium" ? "Premium" : undefined}
-      >
-        <div className="flex flex-col gap-2">
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="Título do vídeo"
-            value={data.youtubeTitle || ""}
-            onChange={e => onChange({ ...data, youtubeTitle: e.target.value })}
-            disabled={plan !== "premium"}
-          />
-          <textarea
-            className="input input-bordered"
-            placeholder="Descrição do vídeo"
-            value={data.youtubeDescription || ""}
-            onChange={e => onChange({ ...data, youtubeDescription: e.target.value })}
-            disabled={plan !== "premium"}
-            rows={2}
-          />
-          <input
-            type="url"
-            className="input input-bordered"
-            placeholder="Cole a URL do vídeo do YouTube"
-            value={data.youtubeUrl || ""}
-            onChange={e => onChange({ ...data, youtubeUrl: e.target.value })}
-            disabled={plan !== "premium"}
-          />
-          {data.youtubeUrl && (
-            <div className="aspect-video w-full mt-2 rounded overflow-hidden border">
-              <iframe
-                width="100%"
-                height="315"
-                src={`https://www.youtube.com/embed/${getYouTubeId(data.youtubeUrl)}`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-            </div>
-          )}
-        </div>
-      </ContentBlock>
       {/* Stories 24h */}
       <ContentBlock
         title="Stories 24h"
@@ -226,6 +198,40 @@ function PremiumTabV2({ data, plan, layout, onChange }: PremiumTabV2Props): JSX.
           />
         )}
       </ContentBlock>
+      {/* Cupons de Desconto */}
+      <ContentBlock
+        title="Cupons de Desconto"
+        description="Adicione cupons de desconto para seus seguidores."
+        isLocked={plan !== "premium"}
+        badgeText={plan !== "premium" ? "Premium" : undefined}
+      >
+        <div className="flex flex-col gap-2 mb-4">
+          <input type="text" className="input input-bordered" placeholder="Código do cupom" value={couponDraft.code} onChange={e => setCouponDraft(d => ({ ...d, code: e.target.value }))} disabled={plan !== "premium"} />
+          <input type="text" className="input input-bordered" placeholder="Desconto (ex: 10% OFF)" value={couponDraft.discount} onChange={e => setCouponDraft(d => ({ ...d, discount: e.target.value }))} disabled={plan !== "premium"} />
+          <input type="text" className="input input-bordered" placeholder="Descrição" value={couponDraft.description} onChange={e => setCouponDraft(d => ({ ...d, description: e.target.value }))} disabled={plan !== "premium"} />
+          <input type="text" className="input input-bordered" placeholder="Marca" value={couponDraft.brand} onChange={e => setCouponDraft(d => ({ ...d, brand: e.target.value }))} disabled={plan !== "premium"} />
+          <input type="date" className="input input-bordered" placeholder="Validade" value={couponDraft.validUntil} onChange={e => setCouponDraft(d => ({ ...d, validUntil: e.target.value }))} disabled={plan !== "premium"} />
+          <button className="btn btn-primary mt-2" type="button" onClick={handleAddCoupon} disabled={plan !== "premium"}>Adicionar Cupom</button>
+        </div>
+        <div className="grid gap-4">
+          {coupons.map((coupon, idx) => (
+            <div key={idx} className="relative">
+              <CouponCard
+                user={{ name: data.full_name, username: data.username, avatarUrl: data.profile_picture_url }}
+                publishedAt={new Date().toISOString()}
+                discount={coupon.discount}
+                code={coupon.code}
+                description={coupon.description}
+                validUntil={coupon.validUntil}
+                brand={coupon.brand}
+                onCopy={() => {}}
+                isExpired={coupon.validUntil && new Date(coupon.validUntil) < new Date()}
+              />
+              <button className="absolute top-2 right-2 text-xs text-red-600" onClick={() => handleRemoveCoupon(idx)} disabled={plan !== "premium"}>Remover</button>
+            </div>
+          ))}
+        </div>
+      </ContentBlock>
     </div>
   );
 }
@@ -240,7 +246,6 @@ function getYouTubeId(url: string): string | undefined {
 export const RAW_STEPS = [
   { key: 'basic', label: 'Básico', icon: User, component: ProfileBasicTabV2, requiredPlan: 'free' },
   { key: 'layout', label: 'Layout', icon: Layout, component: LayoutSelectBlockV2, requiredPlan: 'free' },
-  { key: 'services', label: 'Serviços', icon: Briefcase, component: ServicesBlockV2, requiredPlan: 'standard' },
   { key: 'conteudo', label: 'Conteúdo', icon: FolderOpen, component: ProfileContentTabV2, requiredPlan: 'standard' },
   { key: 'portfolio', label: 'Portfólio', icon: Camera, component: PortfolioBlockV2, requiredPlan: 'standard' },
   { key: 'premium', label: 'Premium', icon: Sparkles, component: PremiumTabV2, requiredPlan: 'premium' },
@@ -278,24 +283,10 @@ export function buildSteps(
         };
         component = React.createElement(s.component, componentProps);
         break;
-      case 'services':
-        componentProps = {
-          services: profile.services || [],
-          onChange: (services: any[]) => dispatch({ type: 'update', payload: { services } })
-        };
-        component = React.createElement(s.component, componentProps);
-        break;
       case 'portfolio':
         componentProps = {
           portfolio: profile.portfolio || [],
           onChange: (portfolio: any[]) => dispatch({ type: 'update', payload: { portfolio } })
-        };
-        component = React.createElement(s.component, componentProps);
-        break;
-      case 'skills':
-        componentProps = {
-          skills: profile.skills || [],
-          onChange: (skills: string[]) => dispatch({ type: 'update', payload: { skills } })
         };
         component = React.createElement(s.component, componentProps);
         break;
@@ -329,5 +320,17 @@ export function buildSteps(
   });
 }
 
-export const stepIcons = RAW_STEPS.reduce((acc, s) => ({ ...acc, [s.key]: s.icon }), {});
-export const stepLabels = RAW_STEPS.reduce((acc, s) => ({ ...acc, [s.key]: s.label }), {}); 
+export const stepIcons = {
+  basic: User,
+  layout: Layout,
+  conteudo: FolderOpen,
+  portfolio: Camera,
+  premium: Sparkles,
+};
+export const stepLabels = {
+  basic: 'Básico',
+  layout: 'Layout',
+  conteudo: 'Conteúdo',
+  portfolio: 'Portfólio',
+  premium: 'Premium',
+}; 

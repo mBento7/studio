@@ -63,6 +63,17 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'wkwhvjsnqsognjorjsgf.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
+    domains: [
+      'wkwhvjsnqsognjorjsgf.supabase.co',
+      'images.unsplash.com',
+      'images.pexels.com',
     ],
   },
   // Adiciona pacotes a serem transpilados para o funcionamento correto do monorepo.

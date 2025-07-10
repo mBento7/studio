@@ -42,6 +42,7 @@ import { SponsoredAdCard } from './SponsoredAdCard';
 import StoryHeader from './StoryHeader';
 import StoryActions from './StoryActions';
 import StoryOptionsMenu from './StoryOptionsMenu';
+import CuponFeedCard from './CuponFeedCard';
 
 // Exemplo de dados do feed
 const feedData = [
@@ -190,11 +191,31 @@ const ShowcaseFeed = () => {
           <section>
             <h2 className="font-bold text-lg mb-2">CouponCard</h2>
             <CouponCard
+              user={{
+                name: 'Maria Souza',
+                username: 'maria.souza',
+                avatarUrl: 'https://i.pravatar.cc/100?img=8',
+              }}
+              publishedAt={new Date().toISOString()}
               code="PROMO10"
               discount="10% OFF"
               description="Desconto especial para novos usuários."
               validUntil={new Date(Date.now() + 86400000).toISOString()}
               brand="Whosdo"
+            />
+          </section>
+          {/* CuponFeedCard */}
+          <section>
+            <h2 className="font-bold text-lg mb-2">CuponFeedCard (Atualização no Feed)</h2>
+            <CuponFeedCard
+              user={{
+                name: 'Maria Souza',
+                username: 'maria.souza',
+                avatarUrl: 'https://i.pravatar.cc/100?img=8',
+              }}
+              benefit="10% OFF em qualquer serviço!"
+              description="Aproveite 10% de desconto em todos os serviços do perfil da Maria. Visite o perfil e copie o código do cupom!"
+              publishedAt={new Date().toISOString()}
             />
           </section>
           {/* BannerCard */}
@@ -231,11 +252,17 @@ const ShowcaseFeed = () => {
           <section>
             <h2 className="font-bold text-lg mb-2">TestimonialCard</h2>
             <TestimonialCard
-              user={{ name: 'Carlos Souza', avatar: 'https://i.pravatar.cc/100?img=7' }}
-              rating={5}
-              comment="Excelente serviço, recomendo muito!"
-              service="Design Gráfico"
-              date={new Date().toISOString()}
+              post={{
+                id: '1',
+                type: 'testimonial',
+                user: { name: 'Carlos Souza', avatar: 'https://i.pravatar.cc/100?img=7' },
+                rating: 5,
+                comment: 'Excelente serviço, recomendo muito!',
+                service: 'Design Gráfico',
+                serviceProvider: { name: 'Ana Paula', avatar: 'https://i.pravatar.cc/100?img=5' },
+                engagement: { likes: 10, comments: 2, shares: 1 },
+                timeAgo: '2h',
+              }}
             />
           </section>
           {/* SponsoredAdCard */}

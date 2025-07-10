@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from "framer-motion";
 import {
   Star,
@@ -30,6 +30,14 @@ import {
   Calendar,
   Clock,
   Globe,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Pencil,
+  Github,
+  Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
@@ -40,8 +48,24 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
 import { SocialIcon } from 'react-social-icons';
+import CouponCard from '@/components/feed/CouponCard';
+import ProfileHeader from '@/components/layout/ProfileHeader'; // Novo import
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
+import { CreateCouponModal } from '@/features/dashboard/create-coupon-modal';
+import { PLAN_LIMITS } from '@/features/profile/new-edit-flow/layoutFeatures';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import type { PlanType } from '@/features/profile/new-edit-flow/layoutFeatures';
 
-interface UserProfile {
+export interface UserProfile {
   id: string;
   name: string;
   username: string;
@@ -102,7 +126,26 @@ interface UserProfile {
   coupons?: Array<{
     code: string;
     description: string;
+    discount?: string;
+    validUntil?: string;
+    discount_value?: string; // Adicionado para compatibilidade
+    expires_at?: string; // Adicionado para compatibilidade
   }>;
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
+  plan?: 'free' | 'standard' | 'premium';
+  public_visibility?: boolean;
+  public_sections?: Record<string, boolean>;
+  endereco_rua?: string;
+  endereco_numero?: string;
+  endereco_complemento?: string;
+  endereco_bairro?: string;
+  endereco_cidade?: string;
+  endereco_estado?: string;
+  endereco_cep?: string;
+  maps_link?: string;
 }
 
 interface PortfolioItem {
@@ -671,6 +714,8 @@ const Particles = ({
   );
 };
 
+const PortfolioItemModal = lazy(() => import('@/features/profile/portfolio-item-modal').then(mod => ({ default: mod.PortfolioItemModal })));
+
 const PremiumProfileLayout: React.FC<{
   user?: UserProfile;
   primaryColorHex?: string;
@@ -681,6 +726,11 @@ const PremiumProfileLayout: React.FC<{
   primaryColor?: string;
   secondaryColor?: string;
   font?: string;
+  onAddService?: () => void;
+  onEditService?: (index: number) => void;
+  isServiceModalOpen?: boolean;
+  onCloseServiceModal?: () => void;
+  editingServiceIndex?: number | null;
 }> = ({
   user = {
     id: "1",
@@ -752,7 +802,30 @@ const PremiumProfileLayout: React.FC<{
     coupons: [
       { code: "FIRST20", description: "20% off your first project with us" },
       { code: "BUNDLE50", description: "50% off when you book 3 or more services" }
-    ]
+    ],
+    faqs: [
+      { question: 'Como contratar?', answer: 'Clique no botão "Get Quote" em um dos serviços e envie sua solicitação.' },
+      { question: 'Quais formas de pagamento?', answer: 'Aceito Pix, boleto e cartão de crédito.' },
+      { question: 'Prazo de entrega?', answer: 'O prazo depende do serviço, mas geralmente entre 7 e 30 dias.' },
+    ],
+    public_visibility: true,
+    public_sections: {
+      about: true,
+      experience: true,
+      education: true,
+      skills: true,
+      portfolio: true,
+      services: true,
+      youtube: true,
+    },
+    endereco_rua: "Rua Exemplo",
+    endereco_numero: "123",
+    endereco_complemento: "Apto 404",
+    endereco_bairro: "Bairro Exemplo",
+    endereco_cidade: "São Paulo",
+    endereco_estado: "SP",
+    endereco_cep: "01310-100",
+    maps_link: "https://maps.google.com/?q=Rua+Exemplo+123+Apto+404+Bairro+Exemplo+São+Paulo+SP+01310-100"
   },
   primaryColorHex = "#6366f1",
   isCurrentUserProfile = false,
@@ -762,12 +835,33 @@ const PremiumProfileLayout: React.FC<{
   primaryColor,
   secondaryColor,
   font,
+  onAddService = () => {},
+  onEditService = () => {},
+  isServiceModalOpen = false,
+  onCloseServiceModal = () => {},
+  editingServiceIndex = null,
 }) => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [activeStory, setActiveStory] = useState<number | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | undefined>(undefined);
+  const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
+  const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
+  const [showCouponModal, setShowCouponModal] = React.useState(false);
+  const [coupons, setCoupons] = React.useState(user.coupons || []);
+  const [services, setServices] = useState(user.services || []);
+  const [experience, setExperience] = useState(user.experience || []);
+  const [portfolio, setPortfolio] = useState(user.portfolio || []);
+  const [faqs, setFaqs] = useState(user.faqs || []);
+  const [skills, setSkills] = useState(user.skills || []);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [editServiceIdx, setEditServiceIdx] = useState<number|null>(null);
+  const [isThemeOpen, setIsThemeOpen] = useState(false);
+  const [themeCustomizer, setThemeCustomizer] = useState({
+    primary: '#3B82F6',
+    mode: 'light',
+  });
 
   const { toast } = useToast();
 
@@ -906,594 +1000,1011 @@ const PremiumProfileLayout: React.FC<{
   };
   console.log('safeUser.sociallinks', safeUser.sociallinks);
 
+  const handlePortfolioItemClick = (item: PortfolioItem) => {
+    setSelectedPortfolioItem(item);
+    setIsPortfolioModalOpen(true);
+  };
+
+  // Adicione antes do return do componente PremiumProfileLayout:
+  const portfolioItems = user.portfolio || [];
+  let gridCols = "grid-cols-1";
+  if (portfolioItems.length === 2) gridCols = "grid-cols-2";
+  else if (portfolioItems.length === 3) gridCols = "grid-cols-3";
+  else if (portfolioItems.length === 4) gridCols = "grid-cols-2 md:grid-cols-4";
+  else if (portfolioItems.length >= 5) gridCols = "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+
+  // Dentro do componente PremiumProfileLayout, logo após a definição de user (antes de const [expandedFaq, ...]):
+  // Adiciona 2 cupons de exemplo automaticamente para o usuário "joaosilva"
+  if (user?.username === "joaosilva") {
+    user.coupons = [
+      {
+        code: "JOAO10",
+        description: "10% de desconto na primeira compra",
+        discount: "10%",
+        validUntil: "2099-12-31T23:59:59.000Z", // Data futura para manter o cupom ativo
+        discount_value: "10%", // Adicionado para compatibilidade
+        expires_at: "2099-11-30T23:59:59.000Z" // Adicionado para compatibilidade
+      },
+      {
+        code: "FRETEGRATIS",
+        description: "Frete grátis para todo o Brasil",
+        discount: "Frete Grátis",
+        validUntil: "2099-11-30T23:59:59.000Z", // Data futura para manter o cupom ativo
+        discount_value: "Frete Grátis", // Adicionado para compatibilidade
+        expires_at: "2099-11-30T23:59:59.000Z" // Adicionado para compatibilidade
+      }
+    ];
+  }
+
+  const sectionRefs = {
+    hero: useRef<HTMLDivElement>(null), // Adicionado para a seção Home
+    portfolio: useRef<HTMLDivElement>(null),
+    services: useRef<HTMLDivElement>(null),
+    contact: useRef<HTMLDivElement>(null), // Adicionado para a seção Contact
+    reviews: useRef<HTMLDivElement>(null),
+    skills: useRef<HTMLDivElement>(null),
+    experience: useRef<HTMLDivElement>(null),
+    education: useRef<HTMLDivElement>(null),
+    about: useRef<HTMLDivElement>(null), // Manter se for usado em outro lugar
+  };
+
+  const handleSectionClick = useCallback((section: keyof typeof sectionRefs) => {
+    sectionRefs[section]?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [sectionRefs]);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Fechar modais se existirem
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
+  const handleAddCoupon = (newCoupon: any) => {
+    setCoupons([...coupons, newCoupon]);
+  };
+  const handleRemoveCoupon = (idx: number) => {
+    setCoupons(coupons.filter((_, i) => i !== idx));
+  };
+
+  const handleAddService = () => { setEditServiceIdx(null); setShowServiceModal(true); };
+  const handleEditService = (idx: number) => { setEditServiceIdx(idx); setShowServiceModal(true); };
+
+  const handleAddExperience = () => {
+    setExperience(prev => [...prev, { title: '', company: '', years: '' }]);
+  };
+  const handleAddPortfolio = () => {
+    setPortfolio(prev => [...prev, { id: Date.now().toString(), caption: '', imageUrl: '' }]);
+  };
+  const handleAddFaq = () => {
+    setFaqs(prev => [...prev, { question: '', answer: '' }]);
+  };
+  const handleAddSkill = () => {
+    setSkills(prev => [...prev, '']);
+  };
+
+  const plano = (user.plan === 'free' || user.plan === 'standard' || user.plan === 'premium') ? user.plan : 'free';
+
+  // Adicione no início do componente PremiumProfileLayout, após as declarações de variáveis:
+  function isSectionVisible(section: string) {
+    if (!user?.public_sections) return true;
+    return user.public_sections[section] !== false;
+  }
+
+  if (user?.public_visibility === false && !isCurrentUserProfile) {
+    return <div className="text-center p-8">Este perfil é privado.</div>;
+  }
+
+  // Ordenar para WhatsApp primeiro
+  const sortedSocialLinks = [
+    ...safeUser.sociallinks.filter(link => link.platform === 'whatsapp'),
+    ...safeUser.sociallinks.filter(link => link.platform !== 'whatsapp'),
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      {/* Banner de capa com gradiente melhorado */}
-      <div className="w-full h-64 md:h-80 lg:h-96 overflow-hidden relative">
-        <Image
-          src={user.cover_photo_url}
-          alt="Capa do perfil"
-          fill
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-          quality={90}
-          priority
+    <>
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        {/* Banner de capa com gradiente melhorado */}
+        <div className="w-full h-64 md:h-80 lg:h-96 overflow-hidden relative">
+          <Image
+            src={user.cover_photo_url || '/banners/institucional1.png'} // Fallback para imagem de capa
+            alt="Capa do perfil"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            quality={90}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+          />
+        </div>
+
+        {/* Partículas e gradiente de fundo agora só aparecem após o banner de capa */}
+        <BackgroundGradientAnimation
+          gradientBackgroundStart="rgb(15, 23, 42)"
+          gradientBackgroundEnd="rgb(30, 41, 59)"
+          firstColor="99, 102, 241"
+          secondColor="139, 92, 246"
+          thirdColor="236, 72, 153"
+          fourthColor="245, 158, 11"
+          fifthColor="34, 197, 94"
+          containerClassName="fixed inset-0 opacity-20 dark:opacity-30"
+          interactive={false}
         />
-      </div>
+        <Particles
+          className="fixed inset-0 opacity-20 dark:opacity-30"
+          quantity={70}
+          ease={60}
+          color={primaryColorHex}
+          refresh={false}
+        />
 
-      {/* Partículas e gradiente de fundo agora só aparecem após o banner de capa */}
-      <BackgroundGradientAnimation
-        gradientBackgroundStart="rgb(15, 23, 42)"
-        gradientBackgroundEnd="rgb(30, 41, 59)"
-        firstColor="99, 102, 241"
-        secondColor="139, 92, 246"
-        thirdColor="236, 72, 153"
-        fourthColor="245, 158, 11"
-        fifthColor="34, 197, 94"
-        containerClassName="fixed inset-0 opacity-20 dark:opacity-30"
-        interactive={false}
-      />
-      <Particles
-        className="fixed inset-0 opacity-20 dark:opacity-30"
-        quantity={70}
-        ease={60}
-        color={primaryColorHex}
-        refresh={false}
-      />
-
-      <div className="relative z-10">
-        {/* Hero Section com espaçamento melhorado */}
-        <section id="hero" className="relative flex items-center justify-center overflow-hidden pb-16 pt-8">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Card de perfil */}
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="flex justify-center lg:justify-start order-1 lg:order-1"
-              >
-                <Card className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-xl border border-white/20 dark:border-slate-700/30 p-4 sm:p-6 rounded-2xl shadow-xl max-w-md w-full">
-                  <div className="text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      className="relative mb-6 inline-block"
-                    >
-                      <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-white/20 shadow-xl mx-auto">
-                        <img src={user.profile_picture_url} alt={user.name} className="w-full h-full object-cover" />
-                      </Avatar>
-                      <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      </div>
-                    </motion.div>
-
-                    {/* Nome do usuário dentro do card de perfil */}
-                    <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-slate-900 dark:text-white leading-tight">{user.name}</h3>
-                    <p className="text-blue-700 dark:text-blue-400 font-medium mb-4">{user.category}</p>
-                    
-                    {/* Quick Info com espaçamento melhorado */}
-                    <div className="space-y-3 mb-6">
-                      {user.location && (
-                        <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
-                          <MapPin className="w-4 h-4" />
-                          <span className="text-sm">{user.location.city}, {user.location.country}</span>
+        <div className="relative z-10">
+          {/* Hero Section com espaçamento melhorado */}
+          <section id="hero" className="relative flex items-center justify-center overflow-hidden pb-16 pt-8" ref={sectionRefs.hero}>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                {/* Card de perfil */}
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="flex justify-center lg:justify-start order-1 lg:order-1"
+                >
+                  <Card className="relative bg-white/10 dark:bg-slate-800/50 backdrop-blur-xl border border-white/20 dark:border-slate-700/30 p-4 sm:p-6 rounded-2xl shadow-xl max-w-md w-full">
+                    {isCurrentUserProfile && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="absolute top-3 right-3 z-20"
+                        onClick={() => window.location.href = '/dashboard/profile-edit-v2'}
+                        title="Editar Perfil"
+                      >
+                        <Pencil className="w-5 h-5" />
+                      </Button>
+                    )}
+                    <div className="text-center">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="relative mb-6 inline-block"
+                      >
+                        <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-white/20 shadow-xl mx-auto">
+                          <img src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} className="w-full h-full object-cover" />
+                        </Avatar>
+                        <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                         </div>
-                      )}
-                      <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">Available for projects</span>
-                      </div>
-                    </div>
+                      </motion.div>
 
-                    {/* Social Links com layout responsivo */}
-                    {Array.isArray(safeUser.sociallinks) && safeUser.sociallinks.length > 0 ? (
-                      <div className="flex flex-wrap justify-center gap-2 mb-6">
-                        {safeUser.sociallinks.map((link, idx) => {
-                          const platform = link.platform || link.type;
-                          if (typeof platform !== 'string' || !platform.trim() || typeof link.url !== 'string' || !link.url.trim()) return null;
-                          return (
-                            <motion.div
-                              key={link.id || idx}
-                              whileHover={{ scale: 1.15, y: -2 }}
-                              className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-100 dark:bg-slate-700/30 backdrop-blur-sm rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-500 hover:text-white transition-colors border border-slate-200 dark:border-slate-600"
-                            >
-                              <SocialIcon
-                                url={link.url}
-                                style={{ width: '36px', height: '36px' }}
+                      {/* Nome do usuário dentro do card de perfil */}
+                      <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-slate-900 dark:text-white leading-tight">{user.name}</h3>
+                      <p className="text-blue-700 dark:text-blue-400 font-medium mb-4">{user.category}</p>
+                      
+                      {/* Quick Info com espaçamento melhorado */}
+                      <div className="space-y-3 mb-6">
+                        {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
+                        {(
+                          user.endereco_rua || user.endereco_numero || user.endereco_complemento || user.endereco_bairro || user.endereco_cidade || user.endereco_estado || user.endereco_cep
+                        ) ? (
+                          <div className="flex items-center gap-2">
+                            {user.maps_link ? (
+                              <a
+                                href={user.maps_link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                              />
-                            </motion.div>
-                          );
-                        })}
+                                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
+                                title="Abrir no Google Maps"
+                                style={{ marginRight: 0 }}
+                              >
+                                <MapPin className="w-5 h-5" />
+                              </a>
+                            ) : (
+                              <MapPin className="w-5 h-5 text-muted-foreground" />
+                            )}
+                            <span>
+                              {user.endereco_rua ? user.endereco_rua : ''}
+                              {user.endereco_numero ? `, ${user.endereco_numero}` : ''}
+                              {user.endereco_complemento ? `, ${user.endereco_complemento}` : ''}
+                              {user.endereco_bairro ? `, ${user.endereco_bairro}` : ''}
+                              {user.endereco_cidade ? `, ${user.endereco_cidade}` : ''}
+                              {user.endereco_estado ? ` - ${user.endereco_estado}` : ''}
+                              {user.endereco_cep ? `, CEP: ${user.endereco_cep}` : ''}
+                            </span>
+                          </div>
+                        ) : (
+                          (user.maps_link || (user.location && user.location.city)) && (
+                            <div className="flex items-center gap-2">
+                              {user.maps_link ? (
+                                <a
+                                  href={user.maps_link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
+                                  title="Abrir no Google Maps"
+                                  style={{ marginRight: 0 }}
+                                >
+                                  <MapPin className="w-5 h-5" />
+                                </a>
+                              ) : (
+                                <MapPin className="w-5 h-5 text-muted-foreground" />
+                              )}
+                              <span>
+                                {user.location?.city}
+                                {user.location?.country ? `, ${user.location.country}` : ''}
+                              </span>
+                            </div>
+                          )
+                        )}
+                        <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
+                          <Clock className="w-4 h-4" />
+                          <span className="text-sm">Available for projects</span>
+                        </div>
                       </div>
-                    ) : (
-                      <div className="text-xs text-slate-500 dark:text-slate-500 mb-6 text-center">Nenhum link social cadastrado</div>
-                    )}
 
-                    {/* Skills Preview com chips melhorados */}
-                    <div className="mb-6">
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {user.skills?.slice(0, 4).map((skill, index) => (
-                          <Badge key={skill + '-' + index} className="bg-blue-100 dark:bg-blue-800/70 text-blue-800 dark:text-blue-100 border-blue-200 dark:border-blue-600/30 text-xs">
-                            {skill}
+                      {/* Social Links com layout responsivo */}
+                      {Array.isArray(sortedSocialLinks) && sortedSocialLinks.length > 0 ? (
+                        <div className="flex flex-wrap justify-center gap-2 mb-6">
+                          {sortedSocialLinks.map((link, idx) => {
+                            const platform = link.platform || link.type;
+                            if (typeof platform !== 'string' || !platform.trim() || typeof link.url !== 'string' || !link.url.trim()) return null;
+                            return (
+                              <motion.div
+                                key={link.id || idx}
+                                whileHover={{ scale: 1.15, y: -2 }}
+                                className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-100 dark:bg-slate-700/30 backdrop-blur-sm rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-500 hover:text-white transition-colors border border-slate-200 dark:border-slate-600"
+                              >
+                                <SocialIcon
+                                  url={link.url}
+                                  style={{ width: '36px', height: '36px' }}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                />
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="text-xs text-slate-500 dark:text-slate-500 mb-6 text-center">Nenhum link social cadastrado</div>
+                      )}
+
+                      {/* Skills Preview com chips melhorados */}
+                      <div className="mb-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-semibold text-base text-blue-900 dark:text-blue-100">Tags</span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="ml-1 cursor-pointer">
+                                  <InformationCircleIcon className="w-4 h-4 text-muted-foreground" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent side="top">
+                                Adicione tags com suas habilidades, ferramentas e áreas de atuação. Assim, mais pessoas encontrarão você!
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-2">
+                          {user.skills?.slice(0, 4).map((skill, index) => (
+                            <Badge key={skill + '-' + index} className="bg-blue-100 dark:bg-blue-800/70 text-blue-800 dark:text-blue-100 border-blue-200 dark:border-blue-600/30 text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                          {user.skills && user.skills.length > 4 && (
+                            <Badge className="bg-slate-100 dark:bg-slate-700/50 text-slate-700 border-slate-200 dark:border-slate-600 text-xs">
+                              +{user.skills.length - 4} mais
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Botões de contato com hover effects */}
+                      <Button 
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 text-white hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-800 dark:hover:to-blue-600 font-semibold rounded-full text-base sm:text-lg py-2.5 sm:py-3 flex items-center justify-center mb-2 shadow-lg transition-all duration-300 hover:shadow-xl"
+                        onClick={() => {/* lógica para abrir chat */}}
+                      >
+                        <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                        Chamar no Chat
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center"
+                        onClick={handleShare}
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartilhar Perfil
+                      </Button>
+                    </div>
+                  </Card>
+                </motion.div>
+
+                {/* Conteúdo principal */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-white order-2 lg:order-2"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="inline-flex items-center bg-blue-100 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-200 dark:border-blue-600/30 rounded-full px-4 py-2 mb-6"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-300" />
+                    <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Professional {user.category}</span>
+                  </motion.div>
+
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 mt-2 leading-tight text-slate-900 dark:text-white overflow-visible"
+                    style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}
+                  >
+                    <TextShimmer duration={3} spread={1}>
+                      {user.name}
+                    </TextShimmer>
+                  </motion.h1>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl"
+                  >
+                    {user.bio || "Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados."}
+                  </motion.p>
+
+                  {/* Disponível para projetos e tags */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.55 }}
+                    className="mb-6 flex flex-col items-start gap-2"
+                  >
+                    <span className="flex items-center gap-2 text-base text-green-700 dark:text-green-400 font-medium">
+                      <span className="w-2 h-2 rounded-full bg-green-500 inline-block animate-pulse" />
+                      Disponível para projetos
+                    </span>
+                    {user.skills && user.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {user.skills.map((tag, idx) => (
+                          <Badge key={idx} variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 border-none">
+                            {tag}
                           </Badge>
                         ))}
-                        {user.skills && user.skills.length > 4 && (
-                          <Badge className="bg-slate-100 dark:bg-slate-700/50 text-slate-700 border-slate-200 dark:border-slate-600 text-xs">
-                            +{user.skills.length - 4} mais
-                          </Badge>
-                        )}
                       </div>
-                    </div>
+                    )}
+                  </motion.div>
 
-                    {/* Botões de contato com hover effects */}
+                 
+
+                  {/* CTA Buttons com espaçamento melhorado */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.7 }}
+                    className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+                  >
                     <Button 
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 text-white hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-800 dark:hover:to-blue-600 font-semibold rounded-full text-base sm:text-lg py-2.5 sm:py-3 flex items-center justify-center mb-2 shadow-lg transition-all duration-300 hover:shadow-xl"
-                      onClick={() => {/* lógica para abrir chat */}}
+                      size="lg" 
+                      className="bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                     >
                       <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                      Chamar no Chat
+                      Start Project
                     </Button>
                     <Button 
-                      variant="outline"
-                      className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center"
-                      onClick={handleShare}
+                      variant="outline" 
+                      size="lg" 
+                      className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 hover:scale-105"
+                      onClick={() => handleSectionClick('portfolio')}
                     >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Compartilhar Perfil
+                      <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                      View Work
                     </Button>
-                  </div>
-                </Card>
-              </motion.div>
+                  </motion.div>
 
-              {/* Conteúdo principal */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-white order-2 lg:order-2"
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="inline-flex items-center bg-blue-100 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-200 dark:border-blue-600/30 rounded-full px-4 py-2 mb-6"
-                >
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-300" />
-                  <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Professional {user.category}</span>
-                </motion.div>
-
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 mt-2 leading-tight text-slate-900 dark:text-white overflow-visible"
-                  style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}
-                >
-                  <TextShimmer duration={3} spread={1}>
-                    {user.name}
-                  </TextShimmer>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl"
-                >
-                  {user.bio || "Transform your vision into reality with professional expertise and creative solutions that drive results."}
-                </motion.p>
-
-                {/* Stats com layout responsivo */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-8"
-                >
-                  <div className="text-center">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-700 dark:text-blue-300">50+</div>
-                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-500">Projects</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-700 dark:text-blue-300">5.0</div>
-                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-500">Rating</div>
-                  </div>
-                  <div className="text-center sm:col-span-1 col-span-2">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-700 dark:text-blue-300">24h</div>
-                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-500">Response</div>
-                  </div>
-                </motion.div>
-
-                {/* CTA Buttons com espaçamento melhorado */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                  className="flex flex-col sm:flex-row gap-3 sm:gap-4"
-                >
-                  <Button 
-                    size="lg" 
-                    className="bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                  {/* Social Proof com layout responsivo */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.8 }}
+                    className="flex flex-col sm:flex-row items-center gap-4 mt-8"
                   >
-                    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    Start Project
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 hover:scale-105"
-                    onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
-                  >
-                    <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    View Work
-                  </Button>
-                </motion.div>
-
-                {/* Social Proof com layout responsivo */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                  className="flex flex-col sm:flex-row items-center gap-4 mt-8"
-                >
-                  <div className="flex -space-x-2">
-                    {user.reviews?.slice(0, 3).map((review, index) => (
-                      <Avatar key={review.id || index} className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white">
-                        <img src={review.authorAvatarUrl} alt={review.authorName} />
-                      </Avatar>
-                    ))}
-                  </div>
-                  <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center sm:text-left">
-                    <div className="flex items-center gap-1 mb-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                    <div className="flex -space-x-2">
+                      {user.reviews?.slice(0, 3).map((review, index) => (
+                        <Avatar key={review.id || index} className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white">
+                          <img src={review.authorAvatarUrl || '/avatar-default.png'} alt={review.authorName || 'Usuário Anônimo'} />
+                        </Avatar>
                       ))}
                     </div>
-                    <span>Trusted by 100+ clients</span>
-                  </div>
+                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center sm:text-left">
+                      <div className="flex items-center gap-1 mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <span>Trusted by 100+ clients</span>
+                    </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Scroll Indicator melhorado */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-2"
-            >
-              <span className="text-xs sm:text-sm text-slate-300">Scroll to explore</span>
-              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.div>
-          </motion.div>
-        </section>
-
-        {/* Stories reposicionados e centralizados */}
-        {user.stories && user.stories.length > 0 && (
-          <section className="w-full flex flex-col items-center justify-center py-8">
-            <div className="flex gap-4 overflow-x-auto max-w-5xl w-full px-4 justify-center items-center">
-              {user.stories.map((story, idx) => (
-                <Card key={story.title + idx} className="min-w-[120px] max-w-[120px] flex flex-col items-center p-2 rounded-lg bg-white/80 dark:bg-slate-800/80">
-                  <img src={story.imageUrl} alt={story.title} className="w-20 h-20 rounded-full object-cover mb-2 border-4 border-blue-400" />
-                  <span className="text-xs text-center font-semibold text-blue-700 dark:text-blue-300">{story.title}</span>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Header Tabs Navigation entre as seções */}
-        <Tabs defaultValue="portfolio" className="w-full mt-4">
-          <TabsList className="flex justify-center gap-2 py-2 rounded-full">
-            {[ 
-              { id: 'hero', label: 'Home' },
-              { id: 'portfolio', label: 'Portfolio' },
-              { id: 'services', label: 'Services' },
-              { id: 'contact', label: 'Contact' }
-            ].map((tab) => (
-              <TabsTrigger
-                key={tab.id}
-                value={tab.id}
-                onClick={() => {
-                  if (tab.id === 'hero') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    const el = document.getElementById(tab.id);
-                    if (el) {
-                      const y = el.getBoundingClientRect().top + window.scrollY - 88;
-                      window.scrollTo({ top: y, behavior: 'smooth' });
-                    }
-                  }
-                }}
-                className={cn(
-                  "px-6 py-2 flex items-center justify-center rounded-full font-semibold bg-white text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-100",
-                  "data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-lg"
-                )}
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-
-        {/* Banner Premium reposicionado */}
-        {user.premiumBanner && (
-          <section className="w-full py-0">
-            <Card className="flex flex-col md:flex-row items-center gap-6 md:gap-8 w-full bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white shadow-xl p-6 md:p-8 rounded-none">
-              <img src={user.premiumBanner.imageUrl} alt="Banner Premium" className="w-full md:w-1/2 object-cover max-h-60 rounded-none" />
-              <div className="flex-1 flex flex-col items-start gap-4">
-                <h2 className="text-3xl font-bold">{user.premiumBanner.title}</h2>
-                <p className="text-lg opacity-90">{user.premiumBanner.description}</p>
-                {user.premiumBanner.ctaText && (
-                  <Button size="lg" className="bg-white text-blue-700 font-bold hover:bg-blue-100 mt-2">
-                    {user.premiumBanner.ctaText}
-                  </Button>
-                )}
               </div>
-            </Card>
-          </section>
-        )}
+            </div>
 
-        <section id="portfolio" className="py-20 px-4 scroll-mt-24">
-          <div className="w-full flex flex-col items-center justify-center">
+            {/* Scroll Indicator melhorado */}
             <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5 }}
+              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white"
             >
-              <h2 className="text-4xl font-bold mb-4">Portfolio Showcase</h2>
-              <p className="text-xl text-slate-800 dark:text-slate-400">Recent projects and creative work</p>
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="flex flex-col items-center gap-2"
+              >
+                <span className="text-xs sm:text-sm text-slate-300">Scroll to explore</span>
+                <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
+              </motion.div>
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl items-center justify-center">
-              {(user.portfolio || []).map((item, index) => {
-                const imgSrc = item.imageUrl || '';
-                return (
+          </section>
+
+          {/* Stories reposicionados e centralizados */}
+          {user.stories && user.stories.length > 0 && (
+            <section className="w-full flex flex-col items-center justify-center py-8">
+              <div className="flex gap-4 overflow-x-auto max-w-5xl w-full px-4 justify-center items-center">
+                {user.stories.map((story, idx) => (
+                  <Card key={story.title + idx} className="min-w-[120px] max-w-[120px] flex flex-col items-center p-2 rounded-lg bg-white/80 dark:bg-slate-800/80">
+                    <img src={story.imageUrl || '/banners/institucional1.png'} alt={story.title} className="w-20 h-20 rounded-full object-cover mb-2 border-4 border-blue-400" />
+                    <span className="text-xs text-center font-semibold text-blue-700 dark:text-blue-300">{story.title}</span>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Novo Header de Navegação */}
+          <ProfileHeader handleSectionClick={handleSectionClick} primaryColorHex={primaryColorHex} />
+
+          {/* Espaço entre Tabs e Banner Premium */}
+          <div className="mt-8" />
+
+          {/* Banner Premium destacado após o hero */}
+          {user.premiumBanner && (
+            <section
+              className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-0 px-0"
+              style={{
+                backgroundImage: `url('${user.premiumBanner.imageUrl}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                minHeight: '220px',
+              }}
+            >
+              {/* Overlay para legibilidade do texto */}
+              <div className="w-full h-full absolute inset-0 bg-gradient-to-r from-blue-900/60 to-orange-900/40 pointer-events-none" />
+              <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-center gap-3 md:gap-8 w-full max-w-5xl mx-auto py-10 px-4">
+                {/* Espaço vazio para alinhar à direita em telas grandes */}
+                <div className="hidden md:block md:flex-1" />
+                <div className="flex flex-col items-center md:items-start justify-center gap-3 md:gap-4 text-center md:text-left md:flex-1">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{user.premiumBanner.title}</h2>
+                  <p className="text-base sm:text-lg text-white/90 drop-shadow">{user.premiumBanner.description}</p>
+                  {user.premiumBanner.ctaText && (
+                    <Button className="bg-white text-blue-700 font-bold hover:bg-blue-100 mt-2 px-6 py-2 text-base rounded-full shadow">
+                      {user.premiumBanner.ctaText}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Seção de Serviços acima do Portfólio */}
+          <section id="services" className="py-20 px-4 bg-slate-100 dark:bg-slate-800 scroll-mt-24" ref={sectionRefs.services}>
+            <div className="w-full flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold mb-4 text-slate-900">Services</h2>
+                <p className="text-xl text-slate-800 dark:text-slate-400">What I can do for you</p>
+              </motion.div>
+              <div className="grid gap-4">
+                {services.map((service, idx) => (
+                  <div key={idx} className="relative">
+                    {/* Card visual original do serviço */}
+                    <Card className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
+                      <div className="font-semibold text-blue-800 dark:text-blue-300">{service.name}</div>
+                      <div className="text-sm text-slate-700 dark:text-slate-300">{service.description}</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-500">{service.price}</div>
+                    </Card>
+                    {isCurrentUserProfile && (
+                      <Button size="icon" variant="ghost" className="absolute top-2 right-2" onClick={() => handleEditService(idx)}>
+                        <Pencil />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {isCurrentUserProfile && (
+                <Button
+                  onClick={handleAddService}
+                  disabled={services.length >= PLAN_LIMITS[plano].services}
+                  className="mb-4"
+                >
+                  Adicionar Serviço
+                </Button>
+              )}
+            </div>
+            {/* Modal de adição/edição de serviço */}
+            <Dialog open={showServiceModal} onOpenChange={setShowServiceModal}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{editServiceIdx === null ? 'Adicionar Serviço' : 'Editar Serviço'}</DialogTitle>
+                  <DialogDescription>Preencha os dados do serviço.</DialogDescription>
+                </DialogHeader>
+                {/* Formulário de serviço aqui */}
+                <DialogFooter>
+                  {/* Botões de ação */}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </section>
+
+          {/* Seção de Portfólio */}
+          <section id="portfolio" className="py-20 px-4 scroll-mt-24" ref={sectionRefs.portfolio}>
+            <div className="w-full flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold mb-4">Portfolio Showcase</h2>
+                <p className="text-xl text-slate-800 dark:text-slate-400">Recent projects and creative work</p>
+              </motion.div>
+              <div
+                className={`grid gap-8 w-full max-w-5xl mx-auto ${gridCols}`}
+              >
+                {portfolioItems.map((item, index) => (
                   <motion.div
                     key={item.id || index}
                     initial={{ y: 50, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     whileHover={{ y: -10, scale: 1.02 }}
-                    className="group cursor-pointer flex flex-col items-center justify-center"
-                    onClick={() => onPortfolioItemClick(item)}
+                    className="group cursor-pointer flex flex-col items-center"
+                    onClick={() => handlePortfolioItemClick(item)}
                   >
-                    <Card className="overflow-hidden bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-lg">
-                      <div className="aspect-video overflow-hidden">
-                        {imgSrc ? (
+                    <Card className="overflow-hidden bg-white/90 dark:bg-slate-800/80 shadow-md hover:shadow-2xl transition-all duration-300 rounded-2xl group-hover:ring-2 group-hover:ring-blue-400 max-w-xs w-full mx-auto">
+                      <div className="aspect-video overflow-hidden rounded-t-2xl">
+                        {item.imageUrl ? (
                           <Image
-                            src={imgSrc}
+                            src={item.imageUrl || '/banners/institucional1.png'} // Fallback para imagem do portfólio
                             alt={item.caption}
                             width={600}
                             height={400}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-t-2xl shadow"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-700">Sem imagem</div>
+                          <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-700 rounded-t-2xl">Sem imagem</div>
                         )}
                       </div>
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold text-slate-800">{item.caption}</h3>
+                      <div className="p-4 flex flex-col items-center justify-center">
+                        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 text-center truncate w-full">{item.caption}</h3>
                       </div>
                     </Card>
                   </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section id="services" className="py-20 px-4 bg-slate-100 dark:bg-slate-800 scroll-mt-24">
-          <div className="w-full flex flex-col items-center justify-center">
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl font-bold mb-4 text-slate-900">Services</h2>
-              <p className="text-xl text-slate-800 dark:text-slate-400">What I can do for you</p>
-            </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl items-center justify-center">
-              {user.services?.map((service) => (
-                <motion.div
-                  key={service.name || service.name}
-                  initial={{ y: 50, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="flex flex-col items-center justify-center"
+                ))}
+              </div>
+              {isCurrentUserProfile && (
+                <Button
+                  onClick={handleAddPortfolio}
+                  disabled={portfolioItems.length >= PLAN_LIMITS[plano].portfolio}
+                  className="mb-4"
                 >
-                  <Card className="p-6 h-full bg-white dark:bg-slate-900 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg">
-                    <div className="flex justify-between items-start mb-6">
-                      <h3 className="text-xl font-semibold text-slate-900">{service.name}</h3>
-                      {service.price && (
-                        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                          {service.price}
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-slate-700 dark:text-slate-400 mb-6">{service.description}</p>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                      Get Quote
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Experiência e Educação */}
-        {(user.experience?.length ?? 0) > 0 || (user.education?.length ?? 0) > 0 ? (
-          <section className="py-16 px-4 max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
-              {(user.experience?.length ?? 0) > 0 && (
-                <div>
-                  <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><Briefcase className="w-5 h-5" /> Experiência</h3>
-                  <div className="space-y-4">
-                    {user.experience?.map((exp, idx) => (
-                      <Card key={exp.title + exp.company + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
-                        <div className="font-semibold text-blue-800 dark:text-blue-300">{exp.title}</div>
-                        <div className="text-sm text-slate-700 dark:text-slate-300">{exp.company}</div>
-                        <div className="text-xs text-slate-600 dark:text-slate-500">{exp.years}</div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {(user.education?.length ?? 0) > 0 && (
-                <div>
-                  <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><GraduationCap className="w-5 h-5" /> Educação</h3>
-                  <div className="space-y-4">
-                    {user.education?.map((edu, idx) => (
-                      <Card key={edu.degree + edu.institution + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
-                        <div className="font-semibold text-blue-800 dark:text-blue-300">{edu.degree}</div>
-                        <div className="text-sm text-slate-700 dark:text-slate-300">{edu.institution}</div>
-                        <div className="text-xs text-slate-600 dark:text-slate-500">{edu.years}</div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
+                  Adicionar Item ao Portfólio
+                </Button>
               )}
             </div>
+            <Suspense fallback={null}>
+              <PortfolioItemModal
+                item={selectedPortfolioItem}
+                open={isPortfolioModalOpen}
+                onOpenChange={setIsPortfolioModalOpen}
+              />
+            </Suspense>
           </section>
-        ) : null}
 
-        {/* Seção de Avaliações (Reviews) */}
-        <section ref={reviewsRef} className="py-16 px-4 max-w-5xl mx-auto">
-          <h3 className="text-2xl font-bold mb-8 flex items-center gap-2">
-            <Star className="w-5 h-5 text-yellow-400" /> Avaliações
-          </h3>
-          <ReviewSummary reviewedUserId={user.id} />
-          <ReviewList reviewedUserId={user.id} currentUserId={currentUserId} />
-          {!isCurrentUserProfile && currentUserId && (
-            <ReviewForm onSubmit={handleReviewSubmit} />
+          {/* Seção de vídeo do YouTube após o portfólio */}
+          {user.youtubeVideoUrl && (
+            <section className="w-full flex flex-col items-center justify-center py-12">
+              <div className="w-full max-w-4xl min-h-[220px] md:min-h-[280px] bg-white/90 dark:bg-slate-800/80 rounded-2xl shadow-xl p-6 flex flex-col md:flex-row items-center md:items-stretch gap-8">
+                {/* Texto à esquerda */}
+                <div className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+                  {user.youtubeVideoTitle && (
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">{user.youtubeVideoTitle}</h3>
+                  )}
+                  {user.youtubeVideoDescription && (
+                    <p className="text-base md:text-lg text-slate-700 dark:text-slate-300">{user.youtubeVideoDescription}</p>
+                  )}
+                </div>
+                {/* Vídeo à direita */}
+                <div className="flex-1 w-full max-w-md aspect-video rounded-xl overflow-hidden bg-black self-center min-h-[180px] md:min-h-[220px]">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${user.youtubeVideoUrl.split('v=')[1]}`}
+                    title={user.youtubeVideoTitle || 'Vídeo do YouTube'}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </section>
           )}
-        </section>
 
-        {/* Cupons */}
-        {user.coupons && user.coupons.length > 0 && (
-          <section className="py-16 px-4 w-full flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-900"><Award className="w-5 h-5 text-green-500" /> Cupons Exclusivos</h3>
-            <div className="flex flex-wrap gap-4 w-full max-w-5xl items-center justify-center">
-              {user.coupons.map((coupon, idx) => (
-                <Card key={coupon.code + idx} className="py-2 px-4 sm:py-3 sm:px-5 rounded-lg shadow-md bg-white dark:bg-slate-800 flex flex-col items-center gap-1 text-center">
-                  <span className="font-bold text-green-700 dark:text-green-300 text-lg sm:text-xl">{coupon.code}</span>
-                  <span className="text-sm sm:text-base text-green-800 dark:text-green-200">{coupon.description}</span>
+          {/* Experiência e Educação */}
+          {isSectionVisible('experience') && (user.experience && user.experience.length > 0) && (
+            <section className="py-16 px-4 max-w-5xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-8">
+                {(user.experience && user.experience.length > 0) && (
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><Briefcase className="w-5 h-5" /> Experiência</h3>
+                    <div className="space-y-4">
+                      {experience?.map((exp, idx) => (
+                        <Card key={exp.title + exp.company + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
+                          <div className="font-semibold text-blue-800 dark:text-blue-300">{exp.title}</div>
+                          <div className="text-sm text-slate-700 dark:text-slate-300">{exp.company}</div>
+                          <div className="text-xs text-slate-600 dark:text-slate-500">{exp.years}</div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {(user.education && user.education.length > 0) && (
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><GraduationCap className="w-5 h-5" /> Educação</h3>
+                    <div className="space-y-4">
+                      {user.education?.map((edu, idx) => (
+                        <Card key={edu.degree + edu.institution + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
+                          <div className="font-semibold text-blue-800 dark:text-blue-300">{edu.degree}</div>
+                          <div className="text-sm text-slate-700 dark:text-slate-300">{edu.institution}</div>
+                          <div className="text-xs text-slate-600 dark:text-slate-500">{edu.years}</div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {isCurrentUserProfile && (
+                <Button
+                  onClick={handleAddExperience}
+                  disabled={(user.experience?.length ?? 0) >= PLAN_LIMITS[plano].experiences}
+                  className="mb-4"
+                >
+                  Adicionar Experiência
+                </Button>
+              )}
+            </section>
+          )}
+
+          {/* Seção de FAQ acima das avaliações */}
+          <section className="py-16 px-4 max-w-5xl mx-auto">
+            <h3 className="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-900"><Sparkles className="w-5 h-5 text-blue-500" /> Perguntas Frequentes</h3>
+            <div className="space-y-4">
+              {faqs.map((faq, idx) => (
+                <Card key={faq.question + idx} className="p-0 bg-white/80 dark:bg-slate-800/80 rounded-lg overflow-hidden">
+                  <button
+                    className="w-full flex justify-between items-center px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400 text-left"
+                    onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                    aria-expanded={expandedFaq === idx}
+                  >
+                    <span className="font-semibold text-blue-800 dark:text-blue-300">{faq.question}</span>
+                    <ChevronDown className={`w-5 h-5 ml-2 transition-transform ${expandedFaq === idx ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {expandedFaq === idx && (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="px-4 pb-4 text-slate-700 dark:text-slate-300"
+                      >
+                        {faq.answer}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </Card>
               ))}
             </div>
+            {isCurrentUserProfile && (
+              <Button
+                onClick={handleAddFaq}
+                disabled={faqs.length >= PLAN_LIMITS[plano].faq}
+                className="mb-4"
+              >
+                Adicionar Pergunta
+              </Button>
+            )}
           </section>
-        )}
 
-        <section id="contact" className="py-20 px-4 scroll-mt-24">
-          <div className="container mx-auto">
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
-              <p className="text-xl text-slate-600 dark:text-slate-400">Let's work together</p>
-            </motion.div>
-            
-            <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-6">
-                {user.email && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Email</h3>
-                      <p className="text-slate-600 dark:text-slate-400">{user.email}</p>
-                    </div>
-                  </motion.div>
-                )}
-                
-                {user.phone && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Phone</h3>
-                      <p className="text-slate-600 dark:text-slate-400">{user.phone}</p>
-                    </div>
-                  </motion.div>
-                )}
-                
-                {user.location && (
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Location</h3>
-                      <p className="text-slate-600 dark:text-slate-400">{user.location.city}, {user.location.country}</p>
-                    </div>
-                  </motion.div>
-                )}
+          {/* Seção de Avaliações (Reviews) */}
+          <section ref={reviewsRef} className="py-16 px-4 max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-4">Avaliações</h2>
+              <p className="text-xl text-slate-600 dark:text-slate-400">
+                O que nossos clientes dizem
+              </p>
+            </div>
+            {/* Bloco de Resumo e Formulário em duas colunas */}
+            <div className="flex flex-col md:flex-row gap-8 mb-8 md:items-start md:justify-center"> {/* Ajustado mb e items para alinhar ao topo */}
+              <div className="flex-1 min-w-[320px]">
+                <ReviewSummary reviewedUserId={user.id} />
               </div>
+              {isCurrentUserProfile && (
+                <div className="flex-1 min-w-[320px]">
+                  <ReviewForm onSubmit={handleReviewSubmit} />
+                </div>
+              )}
+            </div>
+            {/* Carrossel de Comentários */}
+            {user.reviews && user.reviews.length > 0 ? (
+              <div className="mt-8 w-full flex justify-center">
+                <ReviewList 
+                  reviewedUserId={user.id} 
+                  currentUserId={currentUserId} 
+                  renderAsCarousel 
+                  reviews={user.reviews}
+                />
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-gray-500 dark:text-gray-400 mb-4">
+                  <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Nenhuma avaliação ainda
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400">
+                  Seja o primeiro a deixar uma avaliação!
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* Seção de Cupons Exclusivos */}
+          {coupons && coupons.length > 0 && (
+            <section className="py-16 px-4 w-full flex flex-col items-center justify-center">
+              <h3 className="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-900 dark:text-white">
+                <Award className="w-5 h-5 text-green-500" /> Cupons Exclusivos
+              </h3>
+              {isCurrentUserProfile && (
+                <Button onClick={() => setShowCouponModal(true)} className="mb-6">Adicionar Cupom</Button>
+              )}
+              <CreateCouponModal
+                isOpen={showCouponModal}
+                onOpenChange={setShowCouponModal}
+                onSave={handleAddCoupon}
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl">
+                {coupons.map((coupon, idx) => (
+                  <div key={coupon.code + idx} className="w-full relative">
+                    <CouponCard
+                      user={{
+                        name: user.name,
+                        username: user.username,
+                        avatarUrl: user.profile_picture_url,
+                      }}
+                      publishedAt={new Date().toISOString()}
+                      discount={coupon.discount || coupon.discount_value || '10%'}
+                      code={coupon.code}
+                      description={coupon.description}
+                      validUntil={coupon.validUntil || coupon.expires_at || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()}
+                      brand={user.name}
+                    />
+                    {isCurrentUserProfile && (
+                      <button onClick={() => handleRemoveCoupon(idx)} className="absolute top-2 right-2 text-xs text-red-600">Remover</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Seção de Contato */}
+          <section id="contact" className="py-20 px-4 bg-slate-100 dark:bg-slate-800 scroll-mt-24" ref={sectionRefs.contact}>
+            <div className="container mx-auto">
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
+                <p className="text-xl text-slate-600 dark:text-slate-400">Let's work together</p>
+              </motion.div>
               
-              <div className="flex flex-col items-center justify-center">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center"
+              <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-6">
+                  {user.email && (
+                    <motion.div
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
+                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">Email</h3>
+                        <p className="text-slate-600 dark:text-slate-400">{user.email}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                  
+                  {user.phone && (
+                    <motion.div
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
+                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <Phone className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">Phone</h3>
+                        <p className="text-slate-600 dark:text-slate-400">{user.phone}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                  
+                  {user.location && (
+                    <motion.div
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
+                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">Location</h3>
+                        <p className="text-slate-600 dark:text-slate-400">{user.location.city}, {user.location.country}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+                
+                <div className="flex flex-col items-center justify-center">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center"
+                  >
+                    <h3 className="text-xl font-semibold mb-4">Scan to Connect</h3>
+                    <img src={qrCodeUrl} alt="QR Code" className="w-40 h-40 mx-auto mb-4" />
+                    <Button onClick={handleShare} variant="outline" className="w-full">
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share Profile
+                    </Button>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <footer className="py-12 bg-slate-900 text-white">
+            <div className="container mx-auto px-4 text-center">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col items-center gap-2"
+              >
+                <span>© 2024 {user.name}. All rights reserved.</span>
+                <span className="flex items-center gap-1">
+                  Made with <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> and creativity
+                </span>
+              </motion.div>
+            </div>
+          </footer>
+          <motion.button
+            onClick={scrollToTop}
+            className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 hover:bg-blue-700 ${showScrollTop ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ChevronUp className="w-6 h-6" />
+          </motion.button>
+        </div>
+      </div>
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        onClick={() => setIsThemeOpen(!isThemeOpen)}
+        className="absolute top-3 left-3 z-20 p-2 bg-white/80 backdrop-blur-md border border-white/20 rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+        aria-label="Abrir customizador de tema"
+      >
+        <Settings className="w-5 h-5 text-gray-700" />
+      </motion.button>
+      {isThemeOpen && (
+        <div className="flex justify-end mb-8">
+          <ThemeCustomizer
+            isOpen={isThemeOpen}
+            onClose={() => setIsThemeOpen(false)}
+            theme={themeCustomizer}
+            onThemeChange={setThemeCustomizer}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+const ThemeCustomizer: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  theme: Theme;
+  onThemeChange: (theme: Theme) => void;
+}> = ({ isOpen, onClose, theme, onThemeChange }) => {
+  const handleColorChange = (key: keyof Theme, color: string) => {
+    const newTheme = { ...theme, [key]: color };
+    onThemeChange(newTheme);
+  };
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 300 }}
+          className="bg-white rounded-xl shadow-xl p-6 z-30 w-80 border"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Personalizar Tema</h3>
+            <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded" aria-label="Fechar customizador de tema">
+              <ChevronUp className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Cor Primária</label>
+              <div className="flex gap-2">
+                {["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"].map(color => (
+                  <button
+                    key={color}
+                    onClick={() => handleColorChange('primary', color)}
+                    className={`w-8 h-8 rounded-full border-2 ${theme.primary === color ? 'border-blue-500' : 'border-gray-300'}`}
+                    style={{ backgroundColor: color }}
+                    aria-label={`Selecionar cor primária ${color}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Modo</label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleColorChange('mode', 'light')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg ${theme.mode === 'light' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`}
+                  aria-label="Modo claro"
                 >
-                  <h3 className="text-xl font-semibold mb-4">Scan to Connect</h3>
-                  <img src={qrCodeUrl} alt="QR Code" className="w-40 h-40 mx-auto mb-4" />
-                  <Button onClick={handleShare} variant="outline" className="w-full">
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Share Profile
-                  </Button>
-                </motion.div>
+                  <Sun className="w-4 h-4" />
+                  Claro
+                </button>
+                <button
+                  onClick={() => handleColorChange('mode', 'dark')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg ${theme.mode === 'dark' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`}
+                  aria-label="Modo escuro"
+                >
+                  <Moon className="w-4 h-4" />
+                  Escuro
+                </button>
               </div>
             </div>
           </div>
-        </section>
-
-        <footer className="py-12 bg-slate-900 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center gap-2"
-            >
-              <span>© 2024 {user.name}. All rights reserved.</span>
-              <span className="flex items-center gap-1">
-                Made with <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> and creativity
-              </span>
-            </motion.div>
-          </div>
-        </footer>
-        <motion.button
-          onClick={scrollToTop}
-          className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 hover:bg-blue-700 ${showScrollTop ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <ChevronUp className="w-6 h-6" />
-        </motion.button>
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

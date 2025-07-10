@@ -1,26 +1,24 @@
-# README - db/policies
+# Políticas de Segurança (RLS) - WhosDo
 
-Esta pasta armazena as políticas de segurança (RLS) versionadas do banco de dados do projeto.
+## Padrão Atual
 
-## Como usar
-- Sempre que criar ou alterar políticas, crie um novo arquivo numerado e datado, seguindo o padrão: `YYYYMMDD_descricao.sql`.
-- Aplique as políticas na ordem correta após as migrations de schema.
-- Utilize ferramentas como Supabase CLI para facilitar o versionamento e aplicação.
-- Não edite políticas já aplicadas em produção; crie uma nova versão para cada alteração.
+- Cada tabela possui apenas **uma política permissiva** por ação/role, consolidando regras públicas e de acesso do próprio usuário.
+- O acesso do usuário autenticado é feito usando `(select auth.uid())` para melhor performance, conforme recomendação do Supabase.
+- Políticas públicas (ex: SELECT para todos) e de "próprio usuário" (ex: ALL para quem é dono do registro) foram unificadas quando possível.
 
-## Fluxo recomendado
-1. Crie uma nova migration para cada alteração de política.
-2. Documente a alteração no início do arquivo e neste README.
-3. Aplique as migrations em ambiente de teste antes de produção.
-4. Marque no README quando uma migration for aplicada em produção.
+## Exemplo de política consolidada
 
-## Boas práticas
-- Documente cada política com um comentário no início do arquivo.
-- Mantenha o histórico completo para facilitar rollback e auditoria.
-- Remova gradualmente dependências do seed.sql, usando apenas migrations para evoluir as políticas.
+```sql
+-- Exemplo para tabela education
+CREATE POLICY "Education: public or own" ON public.education FOR SELECT USING (true OR (select auth.uid()) = profile_id);
+CREATE POLICY "Users can manage their own education" ON public.education FOR ALL USING ((select auth.uid()) = profile_id);
+```
 
-# Policies (RLS)
+## Benefícios
+- Menos avaliações por query, melhorando a performance.
+- Menos duplicidade e mais clareza nas regras de acesso.
+- Alinhamento com as melhores práticas do Supabase.
 
-Coloque aqui os arquivos de políticas de Row Level Security (RLS) do banco de dados, um por tabela/domínio.
-
-Exemplo: profiles_rls.sql, services_rls.sql, etc. 
+## Observações
+- Sempre que criar novas políticas, siga o padrão de consolidar permissivas e usar `(select auth.uid())`.
+- Em caso de dúvidas, consulte a [documentação oficial do Supabase sobre RLS](https://supabase.com/docs/guides/auth/row-level-security). 

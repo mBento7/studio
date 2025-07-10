@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase/client";
+import { refreshProfileSnapshot } from '@/services/profile.service';
 
 // Busca o perfil do usuário logado (V2)
 export async function getUserProfileV2(userId: string) {
@@ -29,7 +30,8 @@ const VALID_PROFILE_FIELDS = [
   'primaryColor',
   'secondaryColor',
   'font',
-  'social_links',
+  'maps_link',
+  // 'social_links', // Removido: social_links é uma tabela relacional separada
 ];
 
 export function filterValidProfileFields(profile: any) {
@@ -39,6 +41,13 @@ export function filterValidProfileFields(profile: any) {
       filtered[key] = profile[key];
     }
   }
+  // Remover a padronização de social_links aqui, pois é tratado pela saveSocialLinksV2
+  // if (filtered.social_links && Array.isArray(filtered.social_links)) {
+  //   filtered.social_links = filtered.social_links.map((link: any) => ({
+  //     platform: link.platform || link.type,
+  //     url: link.url
+  //   }));
+  // }
   return filtered;
 }
 
@@ -46,10 +55,10 @@ export function filterValidProfileFields(profile: any) {
 export async function saveUserProfileV2(userId: string, profileData: any) {
   // Filtra apenas os campos válidos
   const safeProfileData = filterValidProfileFields(profileData);
-  // Converter social_links para string JSON, se existir
-  if (safeProfileData.social_links) {
-    safeProfileData.social_links = JSON.stringify(safeProfileData.social_links);
-  }
+  // Remover a conversão de social_links para string JSON aqui
+  // if (safeProfileData.social_links) {
+  //   safeProfileData.social_links = JSON.stringify(safeProfileData.social_links);
+  // }
   const { error } = await supabase
     .from("profiles")
     .update(safeProfileData)
@@ -64,7 +73,39 @@ export async function saveUserProfileV2(userId: string, profileData: any) {
   };
   await supabase.from('activities').insert([activity]);
 
+  // Atualiza o snapshot do perfil para refletir imediatamente as alterações
+  await refreshProfileSnapshot(userId);
+
   return true;
+}
+
+// Salva, atualiza e remove links sociais na tabela relacional social_links
+export async function saveSocialLinksV2(userId: string, socialLinks: Array<{ platform: string, url: string, id?: string }>) {
+  // Buscar links atuais do banco
+  const { data: currentLinks, error: fetchError } = await supabase
+    .from('social_links')
+    .select('*')
+    .eq('profile_id', userId);
+  if (fetchError) throw fetchError;
+
+  // Mapear por plataforma+url para facilitar comparação
+  const currentMap = new Map((currentLinks || []).map((l: any) => [l.platform + l.url, l]));
+  const newMap = new Map(socialLinks.map(l => [l.platform + l.url, l]));
+
+  // Remover links que não existem mais
+  for (const l of currentLinks || []) {
+    if (!newMap.has(l.platform + l.url)) {
+      await supabase.from('social_links').delete().eq('id', l.id);
+    }
+  }
+  // Adicionar ou atualizar links
+  for (const l of socialLinks) {
+    const found = (currentLinks || []).find((c: any) => c.platform === l.platform && c.url === l.url);
+    if (!found) {
+      await supabase.from('social_links').insert({ profile_id: userId, platform: l.platform, url: l.url });
+    }
+    // Se quiser atualizar campos extras, adicione aqui
+  }
 }
 
 // Exemplo de uso:

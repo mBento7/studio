@@ -16,6 +16,7 @@ import { DigitalBusinessCard } from '@/features/profile/digital-business-card';
 import { PortfolioItemModal } from '@/features/profile/portfolio-item-modal';
 import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 import { platformIcons } from "@/lib/types";
+import { getUserProfileV2 } from '@/features/profile/new-edit-flow/profile.service';
 // Removidos notFound e getMockUserByUsername, pois são responsabilidades do Server Component
 // import { notFound } from "next/navigation";
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
@@ -24,6 +25,7 @@ import { platformIcons } from "@/lib/types";
 import FreeProfileLayout from "@/components/profile-layouts/FreeProfileLayout";
 import StandardProfileLayout from "@/components/profile-layouts/StandardProfileLayout";
 import PremiumProfileLayout from "@/components/profile-layouts/PremiumProfileLayout";
+// Removido: import EnhancedProfileLayout from "@/components/profile-layouts/EnhancedProfileLayout";
 import { LeftProfileSidebar } from "@/components/layout/left-profile-sidebar";
 import { isPremiumLayout } from "@/lib/isPremiumLayout";
 import { ChatFloatingBox } from '@/components/chat/ChatFloatingBox';
@@ -54,6 +56,18 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [editingServiceIndex, setEditingServiceIndex] = useState<number | null>(null);
+
+  const handleAddService = () => {
+    setEditingServiceIndex(null);
+    setIsServiceModalOpen(true);
+  };
+
+  const handleEditService = (index: number) => {
+    setEditingServiceIndex(index);
+    setIsServiceModalOpen(true);
+  };
 
   const isCurrentUserPremium = currentUserProfile?.plan === 'standard' || currentUserProfile?.plan === 'premium';
 
@@ -84,6 +98,14 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
       setUserToDisplay(initialUserProfile);
     }
   }, [initialUserProfile, userToDisplay]);
+
+  // Adicionar log para debug das reviews
+  useEffect(() => {
+    if (initialUserProfile) {
+      console.log('🔍 DEBUG - userProfile.reviews:', initialUserProfile.reviews);
+      console.log('🔍 DEBUG - userProfile.reviews.length:', initialUserProfile.reviews?.length);
+    }
+  }, [initialUserProfile]);
 
   // Gerar QR Code
   useEffect(() => {
@@ -155,6 +177,18 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
     router.push('/planos');
   };
 
+  // Função para buscar perfil atualizado do Supabase
+  const fetchAndUpdateProfile = async () => {
+    if (!userToDisplay?.id) return;
+    try {
+      const updated = await getUserProfileV2(userToDisplay.id);
+      setUserToDisplay(updated);
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      toast({ title: 'Erro ao atualizar perfil', description: errorMessage, variant: 'destructive' });
+    }
+  };
+
   if (authLoading || !userToDisplay || !mounted) {
     return (
       <div className="flex justify-center items-center min-h-screen text-muted-foreground">
@@ -182,17 +216,59 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   };
 
   const renderProfileLayout = () => {
+    // Forçar micaelsbento a usar o EnhancedProfileLayout, mas com props do FreeProfileLayout
+    // Substituir por FreeProfileLayout
+    if (userToDisplay.username === "micaelsbento") {
+      return <FreeProfileLayout user={userToDisplay} />;
+    }
     // Lógica para determinar o layout baseado no plano e imagens
     if (userToDisplay.plan === 'free') {
       return <FreeProfileLayout {...commonLayoutProps} />;
     } else if (userToDisplay.plan === 'standard') {
-      if (userToDisplay.layoutTemplateId === 'standard') {
+      if (userToDisplay.layoutTemplateId === 'enhanced') {
+        return <FreeProfileLayout {...commonLayoutProps} />;
+      } else if (userToDisplay.layoutTemplateId === 'standard') {
+        return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      } else {
+        // fallback padrão para StandardProfileLayout
         return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
       }
-      return <FreeProfileLayout {...commonLayoutProps} />;
     } else if (userToDisplay.plan === 'premium') {
-      if (userToDisplay.layoutTemplateId === 'premiumprofile') {
-        return <PremiumProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
+      if (userToDisplay.layoutTemplateId === 'premium') {
+        // Garantir que cada item de experience tenha apenas as propriedades necessárias
+        const userWithYears = {
+          ...userToDisplay,
+          experience: userToDisplay.experience?.map(exp => ({
+            title: exp.title,
+            company: exp.company,
+            years: (exp as any).years ?? '',
+          })),
+          education: userToDisplay.education?.map(edu => ({
+            degree: edu.degree,
+            institution: edu.institution,
+            years: (edu as any).years ?? '',
+          })),
+          reviews: userToDisplay.reviews?.map(rev => ({
+            id: rev.id,
+            authorName: rev.authorName,
+            authorAvatarUrl: rev.authorAvatarUrl ?? '',
+            rating: rev.rating,
+            comment: rev.comment,
+            createdAt: rev.createdAt,
+          })),
+        };
+        return (
+          <PremiumProfileLayout
+            {...commonLayoutProps}
+            {...premiumAppearanceProps}
+            user={userWithYears}
+            onAddService={handleAddService}
+            onEditService={handleEditService}
+            isServiceModalOpen={isServiceModalOpen}
+            onCloseServiceModal={() => setIsServiceModalOpen(false)}
+            editingServiceIndex={editingServiceIndex}
+          />
+        );
       } else if (userToDisplay.layoutTemplateId === 'standard') {
         return <StandardProfileLayout {...commonLayoutProps} {...premiumAppearanceProps} />;
       } else {
@@ -211,19 +287,9 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
       </div>
       {/* Desktop: renderização existente */}
       <div className="hidden md:block">
-        {authUser?.id === userToDisplay.id && (
-          <Link href="/dashboard/profile-edit-v2?step=appearance">
-            <Button
-              variant="ghost"
-              className="fixed top-6 right-6 z-50 bg-white/80 hover:bg-white shadow-lg rounded-full p-3 border border-primary"
-              title="Personalizar aparência do perfil"
-            >
-              <Edit3 className="w-6 h-6 text-primary" />
-            </Button>
-          </Link>
-        )}
+        {/* Removido botão de personalizar aparência do perfil */}
         {/* Botão de chat para visitantes logados (não o próprio perfil) */}
-        {authUser && authUser.id !== userToDisplay.id && (
+        {authUser && authUser.id !== userToDisplay.id && (userToDisplay.plan === 'standard' || userToDisplay.plan === 'premium') && (
           <Button
             variant={isCurrentUserPremium ? "default" : "outline"}
             className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4 sm:bottom-[88px]"
@@ -241,7 +307,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
           onOpenChange={setIsPortfolioModalOpen}
         />
         {/* Caixa de chat flutuante */}
-        {authUser && authUser.id !== userToDisplay.id && (
+        {authUser && authUser.id !== userToDisplay.id && (userToDisplay.plan === 'standard' || userToDisplay.plan === 'premium') && (
           <ChatFloatingBox
             open={isChatOpen}
             onOpenChange={setIsChatOpen}

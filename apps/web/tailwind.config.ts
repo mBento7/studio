@@ -51,6 +51,7 @@ export default {
 
       /* ---------- Breakpoints personalizados ---------- */
       screens: {
+        xxs: '320px',
         xs: '400px',
         sm: '640px',
         md: '768px',

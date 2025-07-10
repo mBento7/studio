@@ -11,6 +11,11 @@ import {
   IoSunnyOutline,
   IoMoonOutline,
   IoLogInOutline,
+  IoLogOutOutline,
+  IoMailOutline,
+  IoSettingsOutline,
+  IoPencilOutline,
+  IoNewspaperOutline,
 } from 'react-icons/io5';
 import {
   DropdownMenu,
@@ -54,6 +59,7 @@ export default function PublicHeader() {
   /** links de navegação ------------------------------------------------------ */
   const nav = [
     { href: '/dashboard/feed', label: 'Home', icon: IoHomeOutline },
+    { href: '/portal',         label: 'Portal', icon: IoNewspaperOutline },
     { href: '/search',         label: 'Buscar', icon: IoSearchOutline },
     { href: '/create',         label: 'Criar',  icon: IoAddCircleOutline },
   ];
@@ -146,13 +152,32 @@ export default function PublicHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={`/profile/${currentUserProfile.username}`}>Ver perfil</Link>
+                  <Link href={`/profile/${currentUserProfile.username}`} className="flex items-center gap-2">
+                    <IoHomeOutline className="h-4 w-4 mr-2" />
+                    Ver perfil
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard">Editar perfil</Link>
+                  <Link href="/dashboard" className="flex items-center gap-2">
+                    <IoPencilOutline className="h-4 w-4 mr-2" />
+                    Editar perfil
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/messages" className="flex items-center gap-2">
+                    <IoMailOutline className="h-4 w-4 mr-2" />
+                    Mensagens
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/account" className="flex items-center gap-2">
+                    <IoSettingsOutline className="h-4 w-4 mr-2" />
+                    Conta
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOutUser} className="text-destructive">
+                <DropdownMenuItem onClick={signOutUser} className="text-destructive bg-red-50 hover:bg-red-100 flex items-center gap-2">
+                  <IoLogOutOutline className="h-4 w-4 mr-2 text-destructive" />
                   Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>

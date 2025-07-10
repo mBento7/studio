@@ -143,14 +143,14 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-2xl mx-auto"
+      className="w-full max-w-2xl mx-auto px-1 sm:px-0"
     >
-      <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-6 space-y-6">
+      <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-3 sm:p-6 space-y-6">
         <div className="relative">
           <Textarea
             ref={textRef}
             rows={2}
-            className="resize-none overflow-hidden border bg-background/50 focus-visible:ring-1 focus-visible:ring-primary/50 text-base placeholder:text-muted-foreground/60 p-4 mt-2 min-h-[80px] sm:text-lg sm:p-6"
+            className="resize-none overflow-hidden border bg-background/50 focus-visible:ring-1 focus-visible:ring-primary/50 text-base placeholder:text-muted-foreground/60 p-3 mt-2 min-h-[80px] sm:text-lg sm:p-6 w-full"
             placeholder="O que você gostaria de compartilhar hoje?"
             aria-label="Campo de texto para nova postagem"
             value={postText}
@@ -179,7 +179,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
             {showTipoPost ? "Ocultar tipo de postagem" : tipoPost ? `Tipo: ${tipoConfig[tipoPost]?.badge}` : "Selecionar tipo de postagem (opcional)"}
           </button>
           {showTipoPost && (
-            <div className="grid grid-cols-2 gap-2 mt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-2 mt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {postTypes.map(typeKey => {
                 const config = tipoConfig[typeKey];
                 const isActive = tipoPost === typeKey;
@@ -220,7 +220,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               exit={{ opacity: 0, height: 0 }}
               className="relative rounded-xl overflow-hidden border bg-muted/20"
             >
-              <img src={image} alt="Preview" className="w-full h-auto max-h-72 object-cover" />
+              <img src={image} alt="Preview" className="w-full h-auto max-h-56 sm:max-h-72 object-cover" />
               <Button
                 variant="destructive"
                 size="icon"
@@ -239,10 +239,10 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="space-y-4 p-4 bg-muted/20 rounded-xl border"
+              className="space-y-4 p-3 sm:p-4 bg-muted/20 rounded-xl border"
             >
               {showPreco && (
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                   <DollarSign className="w-5 h-5 text-green-600" />
                   <div className="relative flex-1">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">$</span>
@@ -259,14 +259,14 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                       pattern="[0-9]*"
                     />
                   </div>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowPreco(false)}><X className="w-4 h-4" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground self-end sm:self-auto" onClick={() => setShowPreco(false)}><X className="w-4 h-4" /></Button>
                 </motion.div>
               )}
               {showLocalizacao && (
-                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                   <MapPin className="w-5 h-5 text-blue-600" />
-                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Localização" value={localizacao} onChange={e => setLocalizacao(e.target.value)} />
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => setShowLocalizacao(false)}><X className="w-4 h-4" /></Button>
+                  <input type="text" className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 w-full" placeholder="Localização" value={localizacao} onChange={e => setLocalizacao(e.target.value)} />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground self-end sm:self-auto" onClick={() => setShowLocalizacao(false)}><X className="w-4 h-4" /></Button>
                 </motion.div>
               )}
               {(tags.length > 0 || showTagInput) && (
@@ -312,8 +312,8 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         </AnimatePresence>
 
         {/* Botões de opções na parte inferior */}
-        <div className="flex items-center justify-between pt-4 border-t border-border/50">
-          <div className="flex items-center gap-0.5">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-4 border-t border-border/50 gap-2 sm:gap-0">
+          <div className="flex flex-wrap items-center gap-0.5">
             <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-muted-foreground hover:text-primary"><Image className="w-5 h-5" /></Button>
             <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageChange} />
 
@@ -321,12 +321,12 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary"><Smile className="w-5 h-5" /></Button>
               </PopoverTrigger>
-              <PopoverContent className="p-0 border-none w-auto">
-                <EmojiPicker onEmojiClick={onEmojiClick} />
+              <PopoverContent className="p-0 border-none w-[90vw] max-w-xs sm:w-auto sm:max-w-none">
+                <EmojiPicker onEmojiClick={onEmojiClick} width="100%" style={{ width: '100%' }} />
               </PopoverContent>
             </Popover>
 
-            <div className="h-6 w-px bg-border/50 mx-2"></div>
+            <div className="h-6 w-px bg-border/50 mx-2 hidden sm:block"></div>
 
             {[{ key: 'preco', icon: DollarSign, active: showPreco }, { key: 'localizacao', icon: MapPin, active: showLocalizacao }].map(({ key, icon: Icon, active }) => (
               <Button
@@ -356,7 +356,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           <Button 
             onClick={handlePost} 
             disabled={!postText.trim()} 
-            className="px-8 rounded-full bg-primary text-primary-foreground font-semibold shadow-md hover:brightness-110"
+            className="px-8 rounded-full bg-primary text-primary-foreground font-semibold shadow-md hover:brightness-110 w-full sm:w-auto"
           >
             Publicar
           </Button>

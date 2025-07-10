@@ -4,16 +4,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
+import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
 
 interface SkillsBlockV2Props {
   skills: string[];
   onChange: (skills: string[]) => void;
 }
 
-export function SkillsBlockV2({ skills, onChange }: SkillsBlockV2Props) {
+export function SkillsBlockV2({ skills, onChange, plan = 'free' }: SkillsBlockV2Props & { plan?: PlanType }) {
   const safeSkills = skills ?? [];
   const [touched, setTouched] = useState(false);
+  const limit = PLAN_LIMITS[plan].tags;
   const addSkill = () => {
+    if (safeSkills.length >= limit) return;
     onChange([...safeSkills, ""]);
     setTouched(true);
   };
@@ -45,10 +48,11 @@ export function SkillsBlockV2({ skills, onChange }: SkillsBlockV2Props) {
           </Button>
         </div>
       ))}
-      <Button onClick={addSkill} variant="outline" type="button" className="w-full flex items-center gap-2 justify-center">
+      <Button onClick={addSkill} variant="outline" type="button" className="w-full flex items-center gap-2 justify-center" disabled={safeSkills.length >= limit}>
         <Plus className="w-4 h-4" /> Adicionar Habilidade
       </Button>
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos uma habilidade.</div>}
+      {safeSkills.length >= limit && <div className="text-warning text-xs mt-1">Limite de {limit} tags atingido para seu plano.</div>}
     </div>
   );
 } 

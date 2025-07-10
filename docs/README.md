@@ -82,6 +82,9 @@ Bem-vindo à documentação do projeto WhosDo! Aqui você encontra guias, padrõ
 - [Estratégia de Hospedagem e Deploy](./infraestrutura/hosting-and-deployment-strategy.md): Estratégias de hospedagem e publicação.
 - [Documentação de Pagamentos e Créditos](./pagamentos-e-creditos/README.md): Planejamento, regras e integrações do sistema de créditos e monetização.
 - [Messenger: Planejamento, Arquitetura e Roteiro](./messenger.md): Detalhamento técnico e de negócio do sistema de chat/mensageria.
+- [Edge Functions e automação](../supabase/functions/README.md): Estrutura, exemplos e integração com o backend.
+- [Scripts de automação de painéis](../scripts/README.md): Como abrir Coolify, Supabase e outros painéis rapidamente.
+- [Políticas de segurança (RLS)](../db/policies/README.md): Templates, exemplos e versionamento.
 
 ## Como contribuir
 - Sempre que alterar algo fundamental (visual, regras de negócio, infraestrutura), atualize a documentação correspondente.

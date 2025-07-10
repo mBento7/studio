@@ -6,12 +6,18 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ChevronLeft, ChevronRight, Save, Loader2 } from "lucide-react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 import { useAuth } from "@/hooks/use-auth";
 import { useSaveProfile } from "./useSaveProfile";
 import { useProfileWizard } from "./useProfileWizard";
 import { PlanGate } from "./components/PlanGate";
 import { RAW_STEPS, buildSteps, stepIcons, stepLabels } from "./stepsConfig";
+import { useToast } from '@/hooks/use-toast';
 
 import type { ProfileEditPageV2Props, UserProfileV2 } from "./types";
 
@@ -24,8 +30,9 @@ function profileReducer(state: UserProfileV2, action: { type: "update"; payload:
   }
 }
 
-export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: ProfileEditPageV2Props) {
+export default function ProfileEditPageV2({ profile, onProfileChange, onSave, onClose, onAfterSave }: ProfileEditPageV2Props & { onClose?: () => void, onAfterSave?: () => void }) {
   const { user } = useAuth();
+  const { toast } = useToast();
   const initialProfile: UserProfileV2 = {
     full_name: "",
     username: "",
@@ -37,6 +44,10 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: 
     services: [],
     portfolio: [],
     skills: [],
+    // Padronizar: garantir que sociallinks sempre exista e venha do campo correto
+    sociallinks: (profile?.sociallinks || profile?.social_links || []),
+    // Garantir que o id esteja presente
+    id: profile?.id || user?.id,
     ...(profile || {})
   };
 
@@ -50,6 +61,14 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: 
 
   const handleSave = async () => {
     await save();
+    if (successMsg) {
+      toast({ title: 'Perfil salvo com sucesso!' });
+      if (onClose) onClose();
+      if (onAfterSave) onAfterSave();
+    }
+    if (errorMsg) {
+      toast({ title: 'Erro ao salvar perfil', description: errorMsg, variant: 'destructive' });
+    }
     setFinished(true);
   };
 
@@ -71,7 +90,7 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: 
             Editar novamente
           </Button>
         </div>
-        <div className="flex items-center justify-center gap-2 mt-8 overflow-x-auto scrollbar-thin scrollbar-thumb-muted/30 scrollbar-track-transparent">
+        <div className="flex items-center justify-center gap-2 mt-8 overflow-x-auto scrollbar-hide">
           {steps.map((s, idx) => {
             const isActive = idx === step;
             const Icon = stepIcons[s.key as keyof typeof stepIcons] as React.ElementType;
@@ -111,30 +130,39 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: 
         <p className="text-muted-foreground">Personalize seu perfil profissional e destaque suas habilidades</p>
       </div>
 
-      <div className="flex items-center justify-center gap-2 mb-8 overflow-x-auto scrollbar-thin scrollbar-thumb-muted/30 scrollbar-track-transparent">
+      {/* Carrossel de abas com SwiperJS */}
+      <Swiper
+        modules={[Navigation, Pagination]}
+        slidesPerView="auto"
+        spaceBetween={8}
+        navigation
+        pagination={{ clickable: true }}
+        style={{ padding: '8px 0' }}
+      >
         {steps.map((s, idx) => {
           const isActive = idx === step;
           const Icon = stepIcons[s.key as keyof typeof stepIcons] as React.ElementType;
           const badge = typeof s.badge === 'function' ? s.badge(internalProfile.plan || '') : s.badge;
           const label = typeof s.label === 'function' ? s.label(internalProfile.plan || '') : s.label;
           return (
-            <button
-              key={s.key}
-              className={`flex flex-col items-center mx-1 min-w-[72px] focus:outline-none transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-70 hover:opacity-100'} ${isActive ? 'cursor-default' : 'cursor-pointer'}`}
-              onClick={() => setStep(idx)}
-              disabled={isActive}
-              style={{ background: 'none', border: 'none', padding: 0 }}
-              aria-current={isActive ? 'step' : undefined}
-              tabIndex={0}
-            >
-              <div className={`rounded-full border-2 flex items-center justify-center w-11 h-11 mb-1 shadow-md transition-all duration-300 ${isActive ? "border-primary bg-primary/10" : "border-muted bg-muted"}`}>
-                <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
-              </div>
-              <span className={`text-xs flex items-center gap-1 text-center ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
-            </button>
+            <SwiperSlide key={s.key} style={{ width: 90, minWidth: 72 }}>
+              <button
+                className={`flex flex-col items-center mx-1 min-w-[72px] focus:outline-none transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-70 hover:opacity-100'} ${isActive ? 'cursor-default' : 'cursor-pointer'}`}
+                onClick={() => setStep(idx)}
+                disabled={isActive}
+                style={{ background: 'none', border: 'none', padding: 0 }}
+                aria-current={isActive ? 'step' : undefined}
+                tabIndex={0}
+              >
+                <div className={`rounded-full border-2 flex items-center justify-center w-11 h-11 mb-1 shadow-md transition-all duration-300 ${isActive ? "border-primary bg-primary/10" : "border-muted bg-muted"}`}>
+                  <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+                </div>
+                <span className={`text-xs flex items-center gap-1 text-center ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
+              </button>
+            </SwiperSlide>
           );
         })}
-      </div>
+      </Swiper>
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -156,7 +184,7 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave }: 
             <PlanGate required={steps[step].requiredPlan} plan={plan}>
               {steps[step].component}
             </PlanGate>
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+            <div className="flex flex-col xxs:gap-2 sm:flex-row justify-between gap-4 mt-8">
               <Button variant="outline" onClick={goPrev} disabled={isFirst || saving} className="flex items-center gap-2">
                 <ChevronLeft className="w-4 h-4" /> Voltar
               </Button>

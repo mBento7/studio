@@ -33,7 +33,6 @@ const featureDescriptions: Record<FeatureKey, string> = {
   portfolio: 'Mostre seus melhores trabalhos.',
   experiencia: 'Compartilhe sua experiência profissional.',
   habilidades: 'Liste suas principais habilidades.',
-  depoimentos: 'Exiba depoimentos de clientes.',
   bannerPromocional: 'Destaque promoções especiais.',
   videoYoutube: 'Incorpore vídeos do YouTube.',
 };
@@ -119,6 +118,12 @@ export const profileLayouts = [
     Component: PremiumProfileLayout,
     SearchResultComponent: PremiumProfileSearchResultCard,
   },
+  // Novo layout aprimorado
+  // {
+  //   ...enhancedConfig,
+  //   Component: EnhancedProfileLayout,
+  //   SearchResultComponent: FreeSearchResultCard, // Pode ser customizado depois
+  // },
 ];
 
 export type ProfileLayout = typeof profileLayouts[number]; 

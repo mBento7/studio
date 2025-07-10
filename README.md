@@ -24,6 +24,12 @@
 - `pnpm lint` — checagem de lint
 - `pnpm format` — formatação automática
 
+## 🔒 Segurança e Boas Práticas
+- Todas as tabelas sensíveis usam Row Level Security (RLS). Veja exemplos e templates em `db/policies/`.
+- Edge Functions são usadas para lógica sensível e escalável. Estrutura e exemplos em `supabase/functions/`.
+- Scripts de automação para deploy, migrations e abertura de painéis (Coolify, Supabase) estão em `scripts/`.
+- Consulte o [Guia de Infraestrutura](./docs/infraestrutura/infrastructure-and-operations-guide.md) para detalhes de deploy e práticas recomendadas.
+
 ## Primeiros Passos
 
 1. Instale as dependências:

@@ -344,7 +344,7 @@ export function ProfileForm() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-12 px-2 sm:px-4">
+    <div className="min-h-screen bg-white py-12 px-2 xxs:px-1 sm:px-4">
       <div className="container mx-auto px-0 py-0 max-w-2xl">
         {/* Header */}
         <motion.div 
@@ -474,6 +474,7 @@ export function ProfileForm() {
                     currentImageUrl={watchedProfile_picture_url}
                     uploading={profileUploading}
                     setUploading={setProfileUploading}
+                    userId={watch("id")}
                   />
                   <ImageUploadField
                     label="Foto de Capa"
@@ -483,6 +484,7 @@ export function ProfileForm() {
                     currentImageUrl={watchedCover_photo_url}
                     uploading={coverUploading}
                     setUploading={setCoverUploading}
+                    userId={watch("id")}
                   />
                 </div>
               </TabsContent>

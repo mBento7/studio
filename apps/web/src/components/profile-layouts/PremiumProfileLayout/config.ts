@@ -15,10 +15,10 @@ export const defaultAdvancedProfileLayoutConfig: AdvancedProfileLayoutConfig = {
 };
 
 export const premiumProfileLayoutConfig = {
-  id: 'premiumprofile',
+  id: 'premium',
   name: 'Premium Profile',
-  description: 'Layout exclusivo para o plano Premium Plus',
-  imageUrl: 'https://picsum.photos/seed/layout-premiumplus/300/200',
+  description: 'Layout exclusivo para o plano Premium',
+  imageUrl: 'https://picsum.photos/seed/layout-premium/300/200',
   plan: 'premium',
   ...defaultAdvancedProfileLayoutConfig,
 }; 

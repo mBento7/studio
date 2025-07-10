@@ -36,7 +36,6 @@ import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { Button as UIButton } from '@/components/ui/button';
-import { FilterButton } from '@/components/ui/filter-button';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/lib/supabase/client';
 import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
@@ -50,6 +49,7 @@ import StoryModal from '@/components/feed/StoryModal';
 import type { FeedCardProps } from '@/components/feed/FeedCard';
 import { getAllUserProfiles } from '@/services/profile.service';
 import UpdateCard from '@/components/feed/UpdateCard';
+import CuponFeedCard from '@/components/feed/CuponFeedCard';
 
 // Mock data
 const stories = [
@@ -1030,29 +1030,6 @@ export default function FeedPage() {
         </div>
         <StoriesCarousel userStories={currentUserProfile?.stories} userProfile={currentUserProfile} />
         <FeedPostEditor onPost={handlePost} />
-        {/* Filtro do Feed */}
-        <div className="w-full bg-card rounded-[var(--radius)] shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-2">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
-            {[{ label: 'Todos', icon: Sparkles }, { label: 'Servicos', icon: ConciergeBell }, { label: 'Produtos', icon: Box }, { label: 'Solicitacoes', icon: Siren, premium: true }].map(({ label, icon, premium }) => (
-              <FilterButton
-                key={label}
-                icon={icon}
-                label={label}
-                isActive={activeTab === label.toLowerCase()}
-                onClick={() => {
-                  if (premium && currentUserProfile?.plan !== 'premium') {
-                    // @ts-ignore
-                    toast({ title: "Exclusivo para Premium", description: "O filtro de solicitações é exclusivo para assinantes Premium.", variant: "destructive" });
-                    return;
-                  }
-                  setActiveTab(label.toLowerCase());
-                }}
-                premium={premium}
-                disabled={false}
-              />
-            ))}
-          </div>
-        </div>
         {/* Atividades de atualização de perfil */}
         {activities.length > 0 && (
           <div className="space-y-4">
@@ -1067,6 +1044,13 @@ export default function FeedPage() {
             ))}
           </div>
         )}
+        {/* Exemplo de CuponFeedCard */}
+        <CuponFeedCard
+          user={{ name: 'Maria Souza', username: 'mariasouza', avatarUrl: undefined }}
+          benefit="20% OFF"
+          description="Ganhe 20% de desconto em qualquer serviço de consultoria até o final do mês! Aproveite já."
+          publishedAt={new Date().toISOString()}
+        />
         <FeedContent activeTab={activeTab} setActiveTab={setActiveTab} posts={uniquePosts} userProfile={currentUserProfile} hideFilter />
       </div>
       <CreateCouponModal isOpen={isCouponModalOpen} onOpenChange={setCouponModalOpen} />

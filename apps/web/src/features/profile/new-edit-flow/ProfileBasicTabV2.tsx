@@ -3,15 +3,20 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Image as ImageIcon } from "lucide-react";
+import { Camera, Image as ImageIcon, MapPin } from "lucide-react";
 import { Instagram, Linkedin, Facebook, Globe, Github, MessageCircle, Trash2, Plus } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ProfileBasicTabV2Props {
   data: any;
   onChange: (data: any) => void;
 }
+
+// Definir as categorias disponíveis, similar à página de busca
+const categories = ["Serviços", "Produtos", "Lojas e Estabelecimentos"];
+const ALL_VALUE = "all"; // Usado para valor padrão, se necessário
 
 // Função utilitária para montar a URL completa do perfil social
 function getFullSocialUrl(type: string, value: string) {
@@ -89,7 +94,8 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
     if (!Array.isArray(newLinks)) newLinks = [];
     const url = getFullSocialUrl(selectedSocial.type, socialUrl);
     if (selectedSocial.type && url) {
-      newLinks.push({ type: selectedSocial.type, url });
+      // Corrigir aqui: salvar como 'platform' e não 'type'
+      newLinks.push({ platform: selectedSocial.type, url });
       onChange({ ...data, sociallinks: newLinks });
       setSocialUrl("");
     }
@@ -157,6 +163,24 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               rows={4}
             />
           </div>
+
+          {/* Nova Seção para Categoria */}
+          <div>
+            <Label htmlFor="category">Categoria Principal do Perfil</Label>
+            <Select
+              value={categories.includes(data.category) ? data.category : undefined}
+              onValueChange={value => onChange({ ...data, category: value })}>
+              <SelectTrigger className="mt-1 w-full">
+                <SelectValue placeholder="Não especificado" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Avatar */}
           <div className="flex flex-col items-center gap-2 mt-4">
             <Label className="font-semibold flex items-center gap-1"><ImageIcon className="w-5 h-5 text-primary" /> Foto de Perfil (Avatar)</Label>
@@ -198,6 +222,110 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Input type="tel" placeholder="Seu telefone" value={data.phone ?? ""} onChange={e => onChange({ ...data, phone: e.target.value })} />
             </div>
           </div>
+          {/* Endereço por extenso */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <Label htmlFor="endereco_rua">Rua</Label>
+              <Input
+                id="endereco_rua"
+                value={data.endereco_rua ?? ""}
+                onChange={e => onChange({ ...data, endereco_rua: e.target.value })}
+                placeholder="Ex: Av. Paulista"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="endereco_numero">Número</Label>
+              <Input
+                id="endereco_numero"
+                value={data.endereco_numero ?? ""}
+                onChange={e => onChange({ ...data, endereco_numero: e.target.value })}
+                placeholder="Ex: 1000"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="endereco_complemento">Complemento</Label>
+              <Input
+                id="endereco_complemento"
+                value={data.endereco_complemento ?? ""}
+                onChange={e => onChange({ ...data, endereco_complemento: e.target.value })}
+                placeholder="Ex: Sala 101"
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <Label htmlFor="endereco_bairro">Bairro</Label>
+              <Input
+                id="endereco_bairro"
+                value={data.endereco_bairro ?? ""}
+                onChange={e => onChange({ ...data, endereco_bairro: e.target.value })}
+                placeholder="Ex: Bela Vista"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="endereco_cidade">Cidade</Label>
+              <Input
+                id="endereco_cidade"
+                value={data.endereco_cidade ?? ""}
+                onChange={e => onChange({ ...data, endereco_cidade: e.target.value })}
+                placeholder="Ex: São Paulo"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="endereco_estado">Estado</Label>
+              <Input
+                id="endereco_estado"
+                value={data.endereco_estado ?? ""}
+                onChange={e => onChange({ ...data, endereco_estado: e.target.value })}
+                placeholder="Ex: SP"
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <Label htmlFor="endereco_cep">CEP</Label>
+              <Input
+                id="endereco_cep"
+                value={data.endereco_cep ?? ""}
+                onChange={e => onChange({ ...data, endereco_cep: e.target.value })}
+                placeholder="Ex: 01310-100"
+                className="mt-1"
+              />
+            </div>
+          </div>
+          {/* Link do Google Maps com ícone de pino */}
+          <div className="flex items-center gap-2 mt-4">
+            <Label htmlFor="maps_link" className="flex items-center gap-1">
+              Link do Google Maps
+              {/* Ícone de pino clicável */}
+              {data.maps_link && (
+                <a
+                  href={data.maps_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-1 text-primary hover:text-blue-700"
+                  title="Abrir no Google Maps"
+                >
+                  {/* Importar MapPin do lucide-react no topo do arquivo */}
+                  <MapPin className="w-5 h-5 inline" />
+                </a>
+              )}
+            </Label>
+            <Input
+              id="maps_link"
+              type="url"
+              placeholder="Cole aqui o link do Google Maps"
+              value={data.maps_link ?? ""}
+              onChange={e => onChange({ ...data, maps_link: e.target.value })}
+              className="mt-1 flex-1"
+            />
+          </div>
           {/* Links e Redes Sociais */}
           <div className="space-y-2 mt-6">
             <h3 className="text-lg font-semibold mb-2">Links e Redes Sociais</h3>
@@ -230,11 +358,12 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <span className="text-xs text-muted-foreground">Selecione a rede, cole o link e clique em adicionar. Para WhatsApp, informe o número com DDD e país. Exemplo: 5511999999999.</span>
             <div className="mt-2 space-y-1">
               {socialLinksArr.map((item: any, idx: number) => {
-                const opt = socialOptions.find(o => o.type === item.type);
+                const platform = item.platform || item.type; // fallback para compatibilidade
+                const opt = socialOptions.find(o => o.type === platform);
                 return (
                   <div key={idx} className="flex items-center gap-2 border rounded px-3 py-1 bg-muted">
-                    {opt?.icon && <opt.icon className="w-4 h-4" />} <span className="font-medium">{opt?.label || item.type}</span>
-                    <a href={item.type === 'whatsapp' ? `https://wa.me/${item.url}` : item.url} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all ml-2 flex-1">{item.type === 'whatsapp' ? `https://wa.me/${item.url}` : item.url}</a>
+                    {opt?.icon && <opt.icon className="w-4 h-4" />} <span className="font-medium">{opt?.label || platform}</span>
+                    <a href={platform === 'whatsapp' ? `https://wa.me/${item.url}` : item.url} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all ml-2 flex-1">{platform === 'whatsapp' ? `https://wa.me/${item.url}` : item.url}</a>
                     <Button type="button" variant="ghost" className="ml-2 text-destructive hover:text-red-700 p-1" onClick={() => handleRemoveSocial(idx)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>

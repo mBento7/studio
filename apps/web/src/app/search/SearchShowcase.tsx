@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox"; // Importe o componente Checkbox
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SearchIcon, X, Star, ExternalLink, Share2, Bookmark, Flame, Heart, MessageCircle, MoreHorizontal, SlidersHorizontal, LayoutGrid, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,9 +19,8 @@ const BANNERS = [
     { id: 3, image: 'https://picsum.photos/seed/banner-patrocinado/1200/400', link: '/dashboard/credits/promover', type: 'Patrocinado', title: 'Promova seu Perfil e Ganhe Destaque' },
 ];
 
-const categories: string[] = [];
-const cities: string[] = [];
-const states: string[] = [];
+const categories: string[] = ["Serviços", "Produtos", "Lojas e Estabelecimentos"];
+// Removidas as constantes globais cities e states, pois serão gerenciadas por estado local.
 const ALL_VALUE = "all";
 
 // A função getLayoutComponent agora pode ser mais genérica
@@ -159,7 +159,11 @@ function SearchHeader({
   selectedState,
   setSelectedState,
   hasActiveFilters, 
-  clearFilters 
+  clearFilters,
+  isOnlineService, // Novo prop
+  setIsOnlineService, // Novo prop
+  availableCities, // Novo prop
+  availableStates // Novo prop
 }: { 
   searchTerm: string, 
   setSearchTerm: (v: string) => void, 
@@ -170,7 +174,11 @@ function SearchHeader({
   selectedState: string,
   setSelectedState: (v: string) => void,
   hasActiveFilters: boolean, 
-  clearFilters: () => void 
+  clearFilters: () => void,
+  isOnlineService: boolean; // Novo tipo
+  setIsOnlineService: (v: boolean) => void; // Novo tipo
+  availableCities: string[]; // Novo prop
+  availableStates: string[]; // Novo prop
 }) {
   return (
     <motion.div
@@ -193,7 +201,7 @@ function SearchHeader({
           />
           <Button
             type="submit"
-            className="h-10 px-6 rounded-lg bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md flex-shrink-0"
+            className="h-10 px-6 rounded-lg bg-[#14b8a6] hover:bg-[#0e9094] text-white font-bold shadow-lg transition-all duration-200 flex-shrink-0 border-2 border-transparent focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]"
             style={{ minWidth: 110 }}
           >
             Buscar
@@ -204,10 +212,10 @@ function SearchHeader({
         <div className="flex items-center justify-center gap-2">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className={cn(
-              "rounded-lg px-2 h-8 text-xs transition-colors border",
-              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-              selectedCategory !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
-            )}>
+  "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
+  "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
+  selectedCategory !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
+)}>
               <SelectValue placeholder="Categoria" />
             </SelectTrigger>
             <SelectContent>
@@ -219,34 +227,50 @@ function SearchHeader({
           </Select>
           <Select value={selectedState} onValueChange={setSelectedState}>
             <SelectTrigger className={cn(
-              "rounded-lg px-2 h-8 text-xs transition-colors border",
+              "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
               "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-              selectedState !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
+              selectedState !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
             )}>
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL_VALUE}>Todos estados</SelectItem>
-              {states.map((state) => (
+              {availableStates.map((state) => (
                 <SelectItem key={state} value={state}>{state}</SelectItem>
               ))}
             </SelectContent>
           </Select>
           <Select value={selectedCity} onValueChange={setSelectedCity}>
             <SelectTrigger className={cn(
-              "rounded-lg px-2 h-8 text-xs transition-colors border",
+              "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
               "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-              selectedCity !== ALL_VALUE ? "border-slate-400 dark:border-slate-500" : "border-transparent"
+              selectedCity !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
             )}>
               <SelectValue placeholder="Cidade" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL_VALUE}>Todas cidades</SelectItem>
-              {cities.map((city) => (
+              {availableCities.map((city) => (
                 <SelectItem key={city} value={city}>{city}</SelectItem>
               ))}
             </SelectContent>
           </Select>
+
+          {/* Novo filtro para serviços online */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="online-service"
+              checked={isOnlineService}
+              onCheckedChange={(checked) => setIsOnlineService(!!checked)}
+            />
+            <label
+              htmlFor="online-service"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Atendimento Online
+            </label>
+          </div>
+
           {hasActiveFilters && (
             <Button
               variant="ghost"
@@ -273,15 +297,35 @@ export default function SearchShowcase() {
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'social'>('grid');
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
+  const [isOnlineService, setIsOnlineService] = useState(false); // Estado para o filtro de serviço online
+  const [availableCities, setAvailableCities] = useState<string[]>([]); // Novo estado para cidades
+  const [availableStates, setAvailableStates] = useState<string[]>([]); // Novo estado para estados
 
   useEffect(() => {
-    // Busca todos os perfis reais do Supabase ao montar o componente
     const fetchProfiles = async () => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*');
+      let query = supabase.from('profiles').select('*, location'); // Seleciona também a coluna location
+
+      if (searchTerm) {
+        query = query.or(
+          `full_name.ilike.%${searchTerm}%,skills.cs.{${searchTerm}},category.ilike.%${searchTerm}%`
+        );
+      }
+      if (selectedCategory !== ALL_VALUE) {
+        query = query.eq('category', selectedCategory);
+      }
+      if (selectedState !== ALL_VALUE) {
+        query = query.eq('location->>state', selectedState);
+      }
+      if (selectedCity !== ALL_VALUE) {
+        query = query.eq('location->>city', selectedCity);
+      }
+      if (isOnlineService) {
+        query = query.eq('is_online_service', true); // Assumindo uma coluna 'is_online_service' booleana
+      }
+
+      const { data, error } = await query;
+
       if (!error && data) {
-        // Mapeamento dos campos para garantir compatibilidade com os componentes
         const mapped = data.map((user: any) => ({
           ...user,
           name: user.full_name || user.name || "Usuário",
@@ -289,47 +333,59 @@ export default function SearchShowcase() {
           category: user.category || "Categoria Exemplo",
           bio: user.bio || "",
           cover_photo_url: user.cover_photo_url || "",
-          // Adicione outros campos se necessário
+          isOnlineService: user.is_online_service || false, // Mapeia o campo online
+          location: user.location || { city: '', state: '' }, // Mapeia a localização
         }));
         setAllProfiles(mapped as UserProfile[]);
+
+        // Popular cidades e estados únicos e atualizar os estados locais
+        const uniqueCities = Array.from(new Set(data.map((p: any) => p.location?.city).filter(Boolean)));
+        const uniqueStates = Array.from(new Set(data.map((p: any) => p.location?.state).filter(Boolean)));
+        setAvailableCities(uniqueCities.sort()); // Opcional: ordenar alfabeticamente
+        setAvailableStates(uniqueStates.sort()); // Opcional: ordenar alfabeticamente
+
+        console.log("Unique Cities:", uniqueCities);
+        console.log("Unique States:", uniqueStates);
       }
     };
     fetchProfiles();
-  }, []);
+  }, [searchTerm, selectedCategory, selectedCity, selectedState, isOnlineService]); // Adiciona dependências dos filtros
 
+  // Remove o useEffect anterior que aplicava os filtros no cliente, pois agora a filtragem é feita no servidor.
+  // O useEffect abaixo será removido ou modificado para não duplicar a lógica de filtragem.
+  /*
   useEffect(() => {
-    // Aplica os filtros no array de perfis reais
     let results = allProfiles;
-    if (searchTerm) {
-      results = results.filter(p =>
-        (p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category?.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    }
-    if (selectedCategory !== ALL_VALUE) {
-      results = results.filter(p => p.category === selectedCategory);
-    }
-    if (selectedState !== ALL_VALUE) {
-      results = results.filter(p => p.location?.state === selectedState);
-    }
-    if (selectedCity !== ALL_VALUE) {
-      results = results.filter(p => p.location?.city === selectedCity);
-    }
+    // ... lógica de filtragem anterior ...
     setFilteredProfiles(results);
     setHasActiveFilters(
       searchTerm !== '' ||
       selectedCategory !== ALL_VALUE ||
       selectedCity !== ALL_VALUE ||
-      selectedState !== ALL_VALUE
+      selectedState !== ALL_VALUE ||
+      isOnlineService
     );
-  }, [searchTerm, selectedCategory, selectedCity, selectedState, allProfiles]);
+  }, [searchTerm, selectedCategory, selectedCity, selectedState, allProfiles, isOnlineService]);
+  */
+
+  useEffect(() => {
+    // Atualiza filteredProfiles quando allProfiles muda (já filtrado pelo fetchProfiles)
+    setFilteredProfiles(allProfiles);
+    setHasActiveFilters(
+      searchTerm !== '' ||
+      selectedCategory !== ALL_VALUE ||
+      selectedCity !== ALL_VALUE ||
+      selectedState !== ALL_VALUE ||
+      isOnlineService
+    );
+  }, [allProfiles, searchTerm, selectedCategory, selectedCity, selectedState, isOnlineService]);
 
   const clearFilters = () => {
     setSelectedCategory(ALL_VALUE);
     setSelectedCity(ALL_VALUE);
     setSelectedState(ALL_VALUE);
     setSearchTerm("");
+    setIsOnlineService(false); // Limpar o filtro de serviço online
   };
 
   return (
@@ -348,6 +404,10 @@ export default function SearchShowcase() {
           setSelectedState={setSelectedState}
           hasActiveFilters={hasActiveFilters}
           clearFilters={clearFilters}
+          isOnlineService={isOnlineService}
+          setIsOnlineService={setIsOnlineService}
+          availableCities={availableCities} // Passa as cidades disponíveis como prop
+          availableStates={availableStates} // Passa os estados disponíveis como prop
         />
         <div className="my-8">
           <div className="flex justify-between items-center mb-6">

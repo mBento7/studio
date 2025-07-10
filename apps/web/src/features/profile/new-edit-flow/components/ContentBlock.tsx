@@ -2,7 +2,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 
 interface ContentBlockProps {
-  title: string;
+  title: React.ReactNode; // Alterado de string para React.ReactNode
   description: string;
   isLocked?: boolean;
   badgeText?: string;

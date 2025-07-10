@@ -42,3 +42,12 @@ Script para aplicar todas as migrations de `db/schemas/` e `db/policies/` em ord
 ---
 
 > Em caso de dúvidas, consulte o README de `db/schemas/` e `db/policies/` para mais detalhes sobre versionamento e boas práticas. 
+
+## Scripts de Automação de Painéis
+- Scripts para abrir painéis de controle (Coolify, Supabase, etc.) estão disponíveis nesta pasta. Veja exemplos: `abrir-coolify.sh`, `abrir-supabase.sh`, etc.
+
+## Edge Functions
+- Para lógica customizada, consulte as Edge Functions em `../supabase/functions/`.
+
+## Versionamento
+- Siga as práticas de versionamento descritas em `../db/schemas/README.md` e `../db/policies/README.md`. 

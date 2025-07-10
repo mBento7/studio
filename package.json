@@ -22,11 +22,14 @@
     "pnpm": "^9.0.0"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "emoji-picker-react": "^4.12.2",
     "framer-motion": "^12.18.1",
     "genkitx-anthropic": "^0.23.0",
     "lucide-react": "^0.522.0",
     "react-icons": "^5.5.0",
-    "react-social-icons": "^6.24.0"
+    "react-qr-code": "^2.0.18",
+    "react-social-icons": "^6.24.0",
+    "swiper": "^11.2.10"
   }
 }

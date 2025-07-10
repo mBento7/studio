@@ -304,7 +304,7 @@ export default function ContentSettingsPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-1 space-y-2">
-                  <div className="aspect-video relative bg-background rounded-md border"><Image src={item.imageUrl} alt={item.caption||'Item do portfolio'} fill style={{objectFit:'cover'}} className="rounded-md"/></div>
+                  <div className="aspect-video relative bg-background rounded-md border"><Image src={item.imageUrl} alt={item.caption||'Item do portfolio'} fill sizes="(max-width: 768px) 100vw, 400px" style={{objectFit:'cover'}} className="rounded-md"/></div>
                   <Button type="button" variant="outline" size="sm" className="w-full" onClick={()=>document.getElementById(`portfolio-upload-${item.id}`)?.click()}><Upload className="mr-2 h-3 w-3"/>Mudar Imagem</Button>
                   <input type="file" id={`portfolio-upload-${item.id}`} className="hidden" accept="image/*" onChange={(e)=>handlePortfolioImageUpload(e,item.id)}/>
                 </div>
@@ -330,7 +330,7 @@ export default function ContentSettingsPage() {
               <>
                 <Label>Pré-visualização do Banner</Label>
                 <Card className="flex overflow-hidden bg-muted/40 rounded-lg border shadow-md">
-                  <div className="relative w-1/3 h-auto min-h-[150px]"><Image src={premiumBanner.imageUrl} alt="Banner" fill className="object-cover" /></div>
+                  <div className="relative w-1/3 h-auto min-h-[150px]"><Image src={premiumBanner.imageUrl} alt="Banner" fill sizes="(max-width: 768px) 100vw, 400px" className="object-cover" /></div>
                   <CardContent className="p-4 flex flex-col justify-center gap-2 w-2/3">
                     <h3 className="text-lg font-semibold">{premiumBanner.title}</h3>
                     <p className="text-sm text-muted-foreground">{premiumBanner.description}</p>

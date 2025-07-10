@@ -5,6 +5,7 @@ import { Label } from './label';
 import { Skeleton } from './skeleton';
 import Image from 'next/image';
 import { Upload, Trash2, Loader2, Image as ImageIcon } from 'lucide-react';
+import { supabase } from '@/lib/supabase/client';
 
 interface ImageUploadFieldProps {
   label: string;
@@ -53,12 +54,21 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
     }
     if (!file) return;
     if (setUploading) setUploading(true);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      onChange(reader.result as string);
+    try {
+      // Gera um nome único para o arquivo (ex: profile/{userId}.png)
+      // Aqui, para exemplo, usa Date.now, mas ideal é passar o userId como prop
+      const filePath = `profile/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      if (!data?.publicUrl) throw new Error('Erro ao obter URL pública da imagem');
+      onChange(data.publicUrl);
+    } catch (err) {
+      console.error('Erro ao fazer upload da imagem:', err);
+      onChange('');
+    } finally {
       if (setUploading) setUploading(false);
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleRemove = (onChange: (v: string) => void) => {
@@ -88,7 +98,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
               </div>
             )}
             {currentImageUrl ? (
-              <Image src={currentImageUrl} alt={label} fill style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
+              <Image src={currentImageUrl} alt={label} fill sizes="(max-width: 768px) 100vw, 400px" style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
             ) : (
               <div className="flex flex-col items-center justify-center w-full h-full text-muted-foreground">
                 <ImageIcon className="w-10 h-10 mb-1 opacity-40" />
@@ -163,9 +173,9 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
                 </div>
               )}
               {value ? (
-                <Image src={value} alt={label} fill style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
+                <Image src={value} alt={label} fill sizes="(max-width: 768px) 100vw, 400px" style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
               ) : currentImageUrl ? (
-                <Image src={currentImageUrl} alt={label} fill style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
+                <Image src={currentImageUrl} alt={label} fill sizes="(max-width: 768px) 100vw, 400px" style={{ objectFit: 'cover' }} className="transition-transform duration-200 group-hover:scale-110" />
               ) : (
                 <div className="flex flex-col items-center justify-center w-full h-full text-muted-foreground">
                   <ImageIcon className="w-10 h-10 mb-1 opacity-40" />
