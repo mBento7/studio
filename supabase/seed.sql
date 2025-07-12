@@ -1,7 +1,97 @@
--- NÃO USE ESTE ARQUIVO EM PRODUÇÃO!
--- Use apenas para popular dados de exemplo em ambientes de desenvolvimento.
--- Toda alteração estrutural deve ser feita via migrations versionadas em db/schemas/ e db/policies/.
+-- Dados reais exportados do Supabase Cloud
+-- (Revisar antes de rodar em produção!)
 
--- Exemplo de dados de desenvolvimento:
--- INSERT INTO public.profiles (id, username, full_name, email) VALUES ('00000000-0000-0000-0000-000000000001', 'devuser', 'Usuário Dev', 'dev@exemplo.com');
--- INSERT INTO public.services (profile_id, name, description) VALUES ('00000000-0000-0000-0000-000000000001', 'Design', 'Serviço de design gráfico');
+-- Tabela: profiles
+INSERT INTO public.profiles (id, username, full_name, email, phone, whatsapp_number, bio, profile_picture_url, cover_photo_url, category, plan, layout_template_id, is_available, location, skills, premium_banner, created_at, updated_at, profile_snapshot, layout, primarycolor, secondarycolor, font, layouttemplateid, avatar_url, sociallinks, public_visibility, public_sections, banner_title, banner_description, banner_image_url, youtube_video_url, youtube_video_title, youtube_video_description, maps_link) VALUES
+('8e31e86f-1c90-4065-a95c-f666c420a3dc','pedrosantos','pedrosantos','pedrosantos@exemplo.com',NULL,NULL,'Designer iniciante, apaixonado por criatividade e tecnologia.','/avatar-default.png','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Designer Gráfico','free','free',true,'{"city":"São Paulo","state":"SP","country":"Brasil"}','["Photoshop","Illustrator","Figma"]',NULL,'2025-07-03 15:02:36.552875+00','2025-07-09 18:39:56.341112+00',NULL,'minimalist',NULL,NULL,NULL,'modern','https://api.dicebear.com/9.x/thumbs/svg?seed=pedrosantos',NULL,true,'{}',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('d3191553-06db-4cc0-9ea8-28472722c15a','mariasouza','mariasouza','mariasouza@exemplo.com',NULL,NULL,'Profissional criativa com experiência em design e desenvolvimento. Apaixonada por criar soluções inovadoras e experiências únicas.','https://randomuser.me/api/portraits/women/32.jpg','https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop','Designer & Desenvolvedora','standard','standard',true,'{"city":"São Paulo","country":"Brasil"}','["Design","UI/UX","React","TypeScript","Figma","Photoshop"]','{"title":"Consultoria Premium","ctaLink":"/contato","ctaText":"Agendar agora","imageUrl":"https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600","description":"Transforme sua marca com uma consultoria personalizada! Agende uma sessão."}','2025-07-03 15:02:36.417793+00','2025-07-11 14:20:10.923328+00',NULL,'minimalist',NULL,NULL,NULL,NULL,NULL,NULL,true,'{}',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','micaelsbento','micaelsbento','micaelsbento@gmail.com',NULL,NULL,'Curioso por natureza, criador por vocação. Atualmente explorando...','https://api.dicebear.com/7.x/thumbs/svg?seed=User','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Gerente','free','free',true,NULL,'["React","Node.js","UX"]',NULL,'2025-06-24 04:40:42.771397+00','2025-07-09 18:39:56.341112+00',NULL,'minimalist',NULL,NULL,NULL,NULL,NULL,NULL,true,'{}',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('e8b144fa-776e-4028-ad11-424fd4a42f29','joaosilva','joaosilva','joaosilva@exemplo.com',NULL,NULL,'Perfil atualizado automaticamente.','https://api.dicebear.com/7.x/thumbs/svg?seed=User','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Categoria Exemplo','premium','premium',true,NULL,'["Campanhas","SEO","Copywriting"]',NULL,'2025-07-03 15:02:36.226471+00','2025-07-11 13:19:02.558205+00',NULL,'minimalist',NULL,NULL,NULL,NULL,NULL,'[{"id":"1","url":"https://instagram.com/joaosilva","platform":"instagram"},{"id":"2","url":"https://linkedin.com/in/joaosilva","platform":"linkedin"},{"id":"3","url":"https://twitter.com/joaosilva","platform":"twitter"},{"id":"4","url":"https://joaosilva.com","platform":"site"}]',true,'{}',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','micaelsants','Micael Bento','micael.sants@gmail.com','48998599989','+5548998599989','Curioso por natureza, criador por vocação. Atualmente explorando ideias, projetos e possibilidades que unem criatividade e estratégia. Apaixonado por aprender, testar limites e encontrar soluções fora da caixa. Sempre em busca de novos desafios e conexões que façam a diferença.','blob:http://localhost:9002/ffe3d03a-ae95-40ad-ae43-caaa976dcef6','blob:http://10.1.1.105:9002/ec480f7c-7262-438f-bf34-0eeb81dbe793','Gerente','premium','premium',true,'{"city":"Sombrio","country":"Brasil"}','["Mentoria","Gestão","Liderança","universal"]',NULL,'2025-06-15 22:00:23.286163+00','2025-07-11 23:19:39.392182+00',NULL,'advanced',NULL,NULL,NULL,NULL,'https://api.dicebear.com/7.x/avataaars/svg?seed=micaelsants','[{\"type\":\"instagram\",\"url\":\"https://instagram.com/micaelsbento\"}]',true,'{}','Mentoria e Tecnologia','Mentoria, gestão e soluções digitais para negócios.','https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop','https://www.youtube.com/watch?v=3tmd-ClpJxA','Como aprender programação do zero','Dicas práticas para quem quer começar na área de tecnologia.','https://g.co/kgs/qBMohpc');
+
+-- Tabela: services
+INSERT INTO public.services (id, profile_id, name, description, created_at) VALUES
+(5,'8e31e86f-1c90-4065-a95c-f666c420a3dc','Design de Logotipo','Criação de identidade visual para marcas','2025-07-03 19:46:00.914751+00'),
+(6,'cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Desenvolvimento Web','Sites institucionais e landing pages','2025-07-03 19:46:00.914751+00'),
+(16,'e8b144fa-776e-4028-ad11-424fd4a42f29','UI/UX Design','Soluções completas de design, do wireframe ao protótipo.','2025-07-07 11:46:40.893935+00'),
+(17,'e8b144fa-776e-4028-ad11-424fd4a42f29','Desenvolvimento Web','Sites modernos e responsivos com as melhores tecnologias.','2025-07-07 11:46:40.893935+00'),
+(18,'e8b144fa-776e-4028-ad11-424fd4a42f29','Identidade Visual','Pacotes de branding, logo e manual de marca.','2025-07-07 11:46:40.893935+00'),
+(21,'e8b144fa-776e-4028-ad11-424fd4a42f29','Campanhas Digitais','Gestão de campanhas online.','2025-07-09 15:10:48.368636+00'),
+(22,'8e31e86f-1c90-4065-a95c-f666c420a3dc','Photoshop','Edição e manipulação de imagens.','2025-07-09 15:10:48.368636+00'),
+(23,'8e31e86f-1c90-4065-a95c-f666c420a3dc','Illustrator','Criação de vetores e ilustrações.','2025-07-09 15:10:48.368636+00'),
+(24,'cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Mentoria','Apoio e orientação para desenvolvimento profissional.','2025-07-09 15:10:48.368636+00'),
+(25,'cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Gestão','Gestão de equipes e projetos.','2025-07-09 15:10:48.368636+00'),
+(28,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','UI/UX Design','Soluções completas de design, do wireframe ao protótipo.','2025-07-09 18:52:31.196194+00'),
+(29,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Desenvolvimento Web','Sites modernos e responsivos com as melhores tecnologias.','2025-07-09 18:52:31.196194+00'),
+(30,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Identidade Visual','Pacotes de branding, logo e manual de marca.','2025-07-09 18:52:31.196194+00'),
+(31,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Campanhas Digitais','Gestão de campanhas online.','2025-07-09 18:52:31.196194+00'),
+(35,'d3191553-06db-4cc0-9ea8-28472722c15a','Criação de Logotipo','Desenvolvimento de identidade visual profissional.','2025-07-11 14:20:10.32328+00'),
+(36,'d3191553-06db-4cc0-9ea8-28472722c15a','Design de Posts','Artes para redes sociais.','2025-07-11 14:20:10.32328+00'),
+(37,'d3191553-06db-4cc0-9ea8-28472722c15a','Consultoria de Branding','Orientação estratégica para marcas.','2025-07-11 14:20:10.32328+00');
+
+-- Tabela: portfolio_items
+INSERT INTO public.portfolio_items (id, profile_id, image_url, caption, description, created_at) VALUES
+(5,'8e31e86f-1c90-4065-a95c-f666c420a3dc','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Logo para Startup','Projeto de branding completo','2025-07-03 19:46:03.202192+00'),
+(6,'cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Site para ONG','Desenvolvimento web responsivo','2025-07-03 19:46:03.202192+00'),
+(16,'e8b144fa-776e-4028-ad11-424fd4a42f29','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','E-commerce Moderno','Plataforma de vendas online com checkout otimizado.','2025-07-07 11:46:39.435884+00'),
+(17,'e8b144fa-776e-4028-ad11-424fd4a42f29','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','App Mobile Delivery','Aplicativo de entregas com UX premiada.','2025-07-07 11:46:39.435884+00'),
+(18,'e8b144fa-776e-4028-ad11-424fd4a42f29','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png','Identidade Visual','Branding completo para startup de tecnologia.','2025-07-07 11:46:39.435884+00'),
+(25,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80','E-commerce Moderno','Plataforma de vendas online com checkout otimizado.','2025-07-09 18:52:29.748182+00'),
+(26,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80','App Mobile Delivery','Aplicativo de entregas com UX premiada.','2025-07-09 18:52:29.748182+00'),
+(27,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80','Identidade Visual','Branding completo para startup de tecnologia.','2025-07-09 18:52:29.748182+00'),
+(28,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80','Website Institucional','Site institucional moderno, responsivo e otimizado para SEO.','2025-07-11 04:06:06.13815+00'),
+(29,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80','Campanha de Oferta','Landing page de alta conversão para campanha promocional.','2025-07-11 04:06:06.13815+00'),
+(30,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80','Anúncio Patrocinado','Criativo para mídia paga com foco em engajamento.','2025-07-11 04:06:06.13815+00'),
+(31,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80','Landing Page Responsiva','Página responsiva para captação de leads.','2025-07-11 04:06:06.13815+00'),
+(35,'d3191553-06db-4cc0-9ea8-28472722c15a','https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400','Identidade Visual para Startup','Projeto de branding e identidade visual para startup de tecnologia.','2025-07-11 14:20:10.192427+00'),
+(36,'d3191553-06db-4cc0-9ea8-28472722c15a','https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=400','Website Institucional','Desenvolvimento de site institucional para ONG.','2025-07-11 14:20:10.192427+00'),
+(37,'d3191553-06db-4cc0-9ea8-28472722c15a','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400','Campanha Digital','Criação de peças para campanha digital de grande alcance.','2025-07-11 14:20:10.192427+00');
+
+-- Tabela: social_links
+INSERT INTO public.social_links (id, profile_id, platform, url, created_at) VALUES
+(5,'8e31e86f-1c90-4065-a95c-f666c420a3dc','instagram','https://instagram.com/pedrosantos','2025-07-03 19:46:30.082929+00'),
+(6,'cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','linkedin','https://linkedin.com/in/micaelsbento','2025-07-03 19:46:30.082929+00'),
+(7,'e8b144fa-776e-4028-ad11-424fd4a42f29','twitter','https://twitter.com/joaosilva','2025-07-03 19:46:30.082929+00'),
+(31,'d3191553-06db-4cc0-9ea8-28472722c15a','linkedin','https://linkedin.com/in/mariasouza','2025-07-11 14:20:10.642896+00'),
+(32,'d3191553-06db-4cc0-9ea8-28472722c15a','instagram','https://instagram.com/mariasouza','2025-07-11 14:20:10.642896+00'),
+(33,'d3191553-06db-4cc0-9ea8-28472722c15a','github','https://github.com/mariasouza','2025-07-11 14:20:10.642896+00'),
+(34,'abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','tiktok','tiktok.com/@micaelsbento','2025-07-11 21:51:15.328158+00');
+
+-- Tabela: experience
+INSERT INTO public.experience (id, profile_id, title, company, years, created_at) VALUES
+('94568934-19e5-419d-967a-b025260d6d3b','8e31e86f-1c90-4065-a95c-f666c420a3dc','Designer Sênior','Agência Criativa','2020-2023','2025-07-03 19:46:06.489343+00'),
+('31dda908-6ce8-41cc-bf36-4413f6b1f637','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Desenvolvedor Frontend','Tech Solutions','2019-2022','2025-07-03 19:46:06.489343+00'),
+('f5e689f8-de60-4622-a5a0-545860133c26','e8b144fa-776e-4028-ad11-424fd4a42f29','Senior Designer','Tech Corp','2022 - Presente','2025-07-07 11:46:43.056867+00'),
+('1248c357-434e-4f5f-9b3f-81913bcff29b','e8b144fa-776e-4028-ad11-424fd4a42f29','UI Designer','Startup Inc','2020 - 2022','2025-07-07 11:46:43.056867+00'),
+('537436e6-dfd4-47dd-8c9e-8a385724a7af','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Senior Designer','Tech Corp','2022 - Presente','2025-07-09 18:52:32.68601+00'),
+('d403fcf5-8cd5-4c59-8ce1-8063173a8c52','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','UI Designer','Startup Inc','2020 - 2022','2025-07-09 18:52:32.68601+00'),
+('706c2be6-d9e3-4c29-b63d-68db3023f8df','d3191553-06db-4cc0-9ea8-28472722c15a','Designer Sênior','Tech Solutions','2022-Atual','2025-07-11 14:20:10.443813+00'),
+('11f2f799-4655-4a7a-93ca-b8889e498a69','d3191553-06db-4cc0-9ea8-28472722c15a','UI/UX Designer','Startup Inovação','2020-2022','2025-07-11 14:20:10.443813+00');
+
+-- Tabela: education
+INSERT INTO public.education (id, profile_id, degree, institution, years, created_at) VALUES
+('33b3810a-59ba-46d8-b002-962e3b781be0','8e31e86f-1c90-4065-a95c-f666c420a3dc','Bacharel em Design','Universidade Federal','2015-2019','2025-07-03 19:46:08.933254+00'),
+('1af62377-78a7-4209-97f2-afc5963cda6e','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Bacharel em Sistemas','Instituto de Tecnologia','2014-2018','2025-07-03 19:46:08.933254+00'),
+('11577972-b65c-45c6-b8ec-610f99295632','e8b144fa-776e-4028-ad11-424fd4a42f29','Mestrado em Design','Universidade de Design','2018 - 2020','2025-07-07 11:46:44.503078+00'),
+('79c44e79-4833-49d2-92b7-2cec527db1d4','e8b144fa-776e-4028-ad11-424fd4a42f29','Bacharel em Ciência da Computação','Instituto Tech','2014 - 2018','2025-07-07 11:46:44.503078+00'),
+('0bb28d20-ad28-497c-8163-2849186d954b','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Mestrado em Design','Universidade de Design','2018 - 2020','2025-07-09 18:52:34.020302+00'),
+('29d6bfa8-695e-47f8-a280-82303b17f826','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Bacharel em Ciência da Computação','Instituto Tech','2014 - 2018','2025-07-09 18:52:34.020302+00'),
+('105c8614-99be-4c44-a934-6ae5b10b0e9c','d3191553-06db-4cc0-9ea8-28472722c15a','Bacharel em Design','Universidade de São Paulo','2016-2020','2025-07-11 14:20:10.542587+00');
+
+-- Tabela: reviews
+INSERT INTO public.reviews (id, profile_id, author_name, author_avatar_url, rating, comment, created_at, reviewed_user_id, reviewer_id, is_public, reply, verified) VALUES
+('39ac61f9-558b-4d20-916b-90ff14894cdc','8e31e86f-1c90-4065-a95c-f666c420a3dc','Cliente Satisfeito','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',5,'Ótimo trabalho, recomendo!','2025-07-03 19:46:33.385592+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0',NULL,true,NULL,true),
+('c77210c1-34e0-4254-b0b6-235609de45e9','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473','Empresa Parceira','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',4,'Profissional dedicado e competente.','2025-07-03 19:46:33.385592+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0',NULL,true,NULL,true),
+('0578b575-ffb0-47b7-8a05-325f20dd8c88','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Micael Santos','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',5,'João é um profissional excelente, superou todas as expectativas!','2025-07-09 18:52:36.761932+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','8e31e86f-1c90-4065-a95c-f666c420a3dc',true,NULL,true),
+('6b4ed0f2-2b00-477a-9136-4b3e0f46cccd','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Pedro Santos','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',4,'Ótima experiência, recomendo para projetos de design.','2025-07-09 18:52:36.761932+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473',true,NULL,true),
+('a58d07d2-bdeb-469c-b743-68a27b4012f8','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Micael Bento','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',5,'Atendimento rápido e resultado impecável!','2025-07-09 18:52:36.761932+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','e8b144fa-776e-4028-ad11-424fd4a42f29',true,NULL,true),
+('e639e677-0517-4c6e-b616-0ba3c4bc493f','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','João Testador','https://randomuser.me/api/portraits/men/1.jpg',5,'Excelente profissional! Atendimento rápido e de qualidade.','2025-07-09 21:17:49.536241+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','8e31e86f-1c90-4065-a95c-f666c420a3dc',true,NULL,true),
+('e9d2ace3-2771-451e-8509-0b5f73609f02','e8b144fa-776e-4028-ad11-424fd4a42f29','Micael Santos','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',5,'João é um profissional excelente, superou todas as expectativas!','2024-06-01 00:00:00+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0',true,NULL,true),
+('090ec173-0e5c-4036-bdd8-b0d9be2bd3a6','e8b144fa-776e-4028-ad11-424fd4a42f29','Pedro Santos','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',4,'Ótima experiência, recomendo para projetos de design.','2024-06-05 00:00:00+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0',true,NULL,true),
+('e742f7ea-dda1-4ec7-a8cc-7ea0cec5d644','e8b144fa-776e-4028-ad11-424fd4a42f29','Micael Bento','https://wkwhvjsnqsognjorjsgf.supabase.co/storage/v1/object/public/portfolio/default.png',5,'Atendimento rápido e resultado impecável!','2024-06-10 00:00:00+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0',true,NULL,true),
+('837098ec-417d-4881-b9c5-dfa56252a599','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Ana Paula',NULL,5,'Excelente profissional! Entregou tudo antes do prazo e com muita qualidade.','2025-07-09 22:01:08.82623+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473',true,NULL,false),
+('9c9b2d39-e2fa-4ff4-acfa-2f9fed16257d','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Carlos Eduardo',NULL,4,'Gostei muito do atendimento e do resultado final. Recomendo!','2025-07-09 22:01:08.82623+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','e8b144fa-776e-4028-ad11-424fd4a42f29',true,NULL,false),
+('b6d9eab8-c68f-4edc-b038-3f5c494ae772','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Juliana Martins',NULL,5,'Super atencioso e dedicado. Voltarei a contratar com certeza.','2025-07-09 22:01:08.82623+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','8e31e86f-1c90-4065-a95c-f666c420a3dc',true,NULL,false),
+('6ff3ce16-7346-4d8e-9b26-fa0935820299','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','Rafael Souza',NULL,4,'Serviço de qualidade, só atrasou um pouco na entrega, mas valeu a pena.','2025-07-09 22:01:08.82623+00','abf4a1f7-03c1-4d6b-8f70-d505fd827cc0','cce1a2b4-cf2b-43b0-a60b-4c38ebef0473',true,NULL,false),
+('084a7b20-3ce2-466c-b7cc-ccdd962d67f5','d3191553-06db-4cc0-9ea8-28472722c15a','João Pedro','https://randomuser.me/api/portraits/men/45.jpg',5,'Maria é uma profissional incrível! Recomendo muito.','2025-07-11 14:20:10.328+00',NULL,NULL,false,NULL,false),
+('d8a559e6-2bea-4db6-aa92-bf9afbcbc649','d3191553-06db-4cc0-9ea8-28472722c15a','Marina Souza','https://randomuser.me/api/portraits/women/44.jpg',5,'Trabalho impecável e entrega rápida.','2025-07-11 14:20:10.334+00',NULL,NULL,false,NULL,false);
