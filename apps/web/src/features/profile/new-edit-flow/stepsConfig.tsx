@@ -1,4 +1,4 @@
-import { User, Award, Camera, Layout, FolderOpen, Sparkles } from "lucide-react";
+import { User, Award, Camera, Layout, FolderOpen, Sparkles, Eye, Megaphone, TicketPercent } from "lucide-react";
 import { ProfileBasicTabV2 } from "./ProfileBasicTabV2";
 import { MinimalistBlockV2 } from "./blocks/MinimalistBlockV2";
 import { LayoutSelectBlockV2 } from "./LayoutSelectBlockV2";
@@ -11,6 +11,10 @@ import { ContentBlock } from "./components/ContentBlock";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import StoryModal from "@/components/feed/StoryModal";
 import CouponCard from '@/components/feed/CouponCard';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { motion } from "framer-motion";
 
 interface PremiumTabV2Props {
   data: any;
@@ -19,31 +23,28 @@ interface PremiumTabV2Props {
   onChange: (data: any) => void;
 }
 
-function PremiumTabV2({ data, plan, layout, onChange }: PremiumTabV2Props): JSX.Element {
-  const [storyDraft, setStoryDraft] = React.useState({ title: '', image: '', text: '' });
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [selectedStoryIdx, setSelectedStoryIdx] = React.useState<number | null>(null);
+// NOVA VERSÃO MODERNIZADA DO PremiumTabV2
+export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan: string, layout: string, onChange: (data: any) => void }) {
+  const [storyDraft, setStoryDraft] = useState({ title: '', image: '', text: '' });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedStoryIdx, setSelectedStoryIdx] = useState<number | null>(null);
   const stories = data.stories || [];
 
-  // Editor de cupons de desconto
-  const [couponDraft, setCouponDraft] = React.useState({
-    code: '',
-    discount: '',
-    description: '',
-    validUntil: '',
-    brand: '',
-  });
+  const [couponDraft, setCouponDraft] = useState({ code: '', discount: '', description: '', validUntil: '', brand: '' });
   const coupons = data.coupons || [];
-  const handleAddCoupon = () => {
-    if (!couponDraft.code || !couponDraft.discount) return;
-    onChange({ ...data, coupons: [...coupons, { ...couponDraft }] });
-    setCouponDraft({ code: '', discount: '', description: '', validUntil: '', brand: '' });
-  };
-  const handleRemoveCoupon = (idx: number) => {
-    const newCoupons = [...coupons];
-    newCoupons.splice(idx, 1);
-    onChange({ ...data, coupons: newCoupons });
-  };
+
+  const premiumBenefits = [
+    'Stories 24h para engajar seu público',
+    'Banner promocional para destacar ofertas',
+    'Cupons de desconto exclusivos',
+    'Suporte prioritário',
+    'Mais visibilidade no sistema',
+    'E muito mais!'
+  ];
+
+  const [showExampleBanner, setShowExampleBanner] = useState(false);
+  const [showExampleStories, setShowExampleStories] = useState(false);
+  const [showExampleCupons, setShowExampleCupons] = useState(false);
 
   function handleAddStory() {
     if (!storyDraft.image || !storyDraft.title) return;
@@ -59,179 +60,115 @@ function PremiumTabV2({ data, plan, layout, onChange }: PremiumTabV2Props): JSX.
     setStoryDraft({ title: '', image: '', text: '' });
   }
 
-  function handleOpenModal(idx: number) {
-    setSelectedStoryIdx(idx);
-    setModalOpen(true);
-  }
-  function handleCloseModal() {
-    setModalOpen(false);
-    setSelectedStoryIdx(null);
-  }
-  function handlePrev() {
-    if (selectedStoryIdx !== null && selectedStoryIdx > 0) setSelectedStoryIdx(selectedStoryIdx - 1);
-  }
-  function handleNext() {
-    if (selectedStoryIdx !== null && selectedStoryIdx < stories.length - 1) setSelectedStoryIdx(selectedStoryIdx + 1);
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Banner Promocional */}
-      <ContentBlock
-        title="Banner Promocional"
-        description="Destaque uma mensagem ou promoção especial. Preencha os campos abaixo."
-        isLocked={plan !== "premium"}
-        badgeText={plan !== "premium" ? "Premium" : undefined}
+    <div className="w-full px-4 md:px-8 py-8 bg-muted/50">
+      <motion.div
+        className="bg-gradient-to-br from-yellow-300 to-orange-500 rounded-2xl shadow-lg px-6 py-8 text-center text-white mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        <div className="flex flex-col gap-2">
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="Título do banner"
-            value={data.banner?.title || ""}
-            onChange={e => onChange({ ...data, banner: { ...data.banner, title: e.target.value } })}
-            disabled={plan !== "premium"}
-          />
-          <textarea
-            className="input input-bordered"
-            placeholder="Descrição do banner"
-            value={data.banner?.description || ""}
-            onChange={e => onChange({ ...data, banner: { ...data.banner, description: e.target.value } })}
-            disabled={plan !== "premium"}
-            rows={2}
-          />
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="Texto do botão (CTA)"
-            value={data.banner?.ctaText || ""}
-            onChange={e => onChange({ ...data, banner: { ...data.banner, ctaText: e.target.value } })}
-            disabled={plan !== "premium"}
-          />
-          <input
-            type="url"
-            className="input input-bordered"
-            placeholder="Link do botão (URL)"
-            value={data.banner?.ctaLink || ""}
-            onChange={e => onChange({ ...data, banner: { ...data.banner, ctaLink: e.target.value } })}
-            disabled={plan !== "premium"}
-          />
-          <input
-            type="url"
-            className="input input-bordered"
-            placeholder="URL da imagem do banner"
-            value={data.banner?.image || ""}
-            onChange={e => onChange({ ...data, banner: { ...data.banner, image: e.target.value } })}
-            disabled={plan !== "premium"}
-          />
-          {data.banner?.image && (
-            <img src={data.banner.image} alt="Banner" className="mt-2 rounded max-h-32 border" />
-          )}
-        </div>
-      </ContentBlock>
-      {/* Stories 24h */}
-      <ContentBlock
-        title="Stories 24h"
-        description="Crie stories que ficarão disponíveis por 24 horas no seu perfil."
-        isLocked={plan !== "premium"}
-        badgeText={plan !== "premium" ? "Premium" : undefined}
-      >
-        <div className="flex flex-col gap-2 mb-4">
-          <ImageUploadField
-            label="Imagem do Story"
-            name="storyImage"
-            setValue={(_name, value) => setStoryDraft(d => ({ ...d, image: value }))}
-            currentImageUrl={storyDraft.image}
-            aspectRatio="16/9"
-            buttonText="Enviar Story"
-          />
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="Título do story"
-            value={storyDraft.title}
-            onChange={e => setStoryDraft(d => ({ ...d, title: e.target.value }))}
-            disabled={plan !== "premium"}
-          />
-          <textarea
-            className="input input-bordered"
-            placeholder="Descrição do story (opcional)"
-            value={storyDraft.text}
-            onChange={e => setStoryDraft(d => ({ ...d, text: e.target.value }))}
-            disabled={plan !== "premium"}
-            rows={2}
-          />
-          <button
-            className="btn btn-primary mt-2"
-            type="button"
-            disabled={plan !== "premium" || !storyDraft.image || !storyDraft.title}
-            onClick={handleAddStory}
-          >
-            Adicionar Story
+        <h2 className="text-3xl font-bold mb-2">Desbloqueie o Premium!</h2>
+        <p className="max-w-md mx-auto mb-4">Tenha acesso a stories, cupons, banner promocional, suporte prioritário e muito mais.</p>
+        <a href="/planos">
+          <button className="bg-white text-yellow-700 font-bold px-6 py-2 rounded-full shadow hover:scale-105 transition">
+            Quero ser Premium ⭐
           </button>
-        </div>
-        {/* Lista de stories criados */}
-        <div className="flex flex-wrap gap-4">
-          {stories.length === 0 && <span className="text-muted-foreground">Nenhum story criado ainda.</span>}
+        </a>
+      </motion.div>
+
+      <div className="mb-8 text-center">
+        <h3 className="text-lg font-semibold mb-2 text-yellow-700">Benefícios do Premium:</h3>
+        <ul className="list-disc text-yellow-900 pl-6 space-y-1 text-base inline-block text-left">
+          {premiumBenefits.map((b, i) => <li key={i}>{b}</li>)}
+        </ul>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        {/* Banner */}
+        <motion.div className="relative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+          <ContentBlock
+            title={<span className="flex items-center gap-2 text-xl font-semibold text-yellow-800"><Megaphone className="w-5 h-5 text-yellow-500" />Banner Promocional</span>}
+            description="Destaque uma mensagem ou promoção especial."
+            isLocked={plan !== "premium"}
+            badgeText="Premium"
+          >
+            <input type="text" placeholder="Título" className="input input-bordered" disabled />
+          </ContentBlock>
+        </motion.div>
+
+        {/* Stories */}
+        <motion.div className="relative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+          <ContentBlock
+            title={<span className="flex items-center gap-2 text-xl font-semibold text-purple-800"><Camera className="w-5 h-5 text-purple-500" />Stories 24h</span>}
+            description="Crie stories que ficarão disponíveis por 24 horas."
+            isLocked={plan !== "premium"}
+            badgeText="Premium"
+          >
+            <ImageUploadField
+              label="Imagem do Story"
+              name="storyImage"
+              setValue={(_name, value) => setStoryDraft(d => ({ ...d, image: value }))}
+              currentImageUrl={storyDraft.image}
+              aspectRatio="16/9"
+              buttonText="Enviar Story"
+            />
+            <input
+              type="text"
+              placeholder="Título"
+              className="input input-bordered"
+              value={storyDraft.title}
+              onChange={e => setStoryDraft(d => ({ ...d, title: e.target.value }))}
+              disabled={plan !== "premium"}
+            />
+            <button className="btn btn-primary mt-2" type="button" onClick={handleAddStory}>Adicionar Story</button>
+          </ContentBlock>
+        </motion.div>
+
+        {/* Cupons */}
+        <motion.div className="relative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+          <ContentBlock
+            title={<span className="flex items-center gap-2 text-xl font-semibold text-green-800"><TicketPercent className="w-5 h-5 text-green-500" />Cupons de Desconto</span>}
+            description="Adicione cupons de desconto para seus seguidores."
+            isLocked={plan !== "premium"}
+            badgeText="Premium"
+          >
+            <input type="text" placeholder="Código do cupom" className="input input-bordered" disabled />
+          </ContentBlock>
+        </motion.div>
+      </div>
+
+      {/* Stories visualização */}
+      {stories.length > 0 && (
+        <div className="flex gap-4 overflow-x-auto py-4 scrollbar-hide">
           {stories.map((story: any, idx: number) => (
-            <div key={story.id} className="flex flex-col items-center cursor-pointer" onClick={() => handleOpenModal(idx)}>
+            <div key={story.id} className="flex flex-col items-center cursor-pointer" onClick={() => { setSelectedStoryIdx(idx); setModalOpen(true); }}>
               <img src={story.imageUrl} alt={story.title} className="w-24 h-24 object-cover rounded-lg border mb-1" />
               <span className="text-xs text-center max-w-[96px] truncate">{story.title}</span>
             </div>
           ))}
         </div>
-        {/* Modal de visualização de story */}
-        {modalOpen && selectedStoryIdx !== null && (
-          <StoryModal
-            open={modalOpen}
-            onClose={handleCloseModal}
-            story={{
-              id: stories[selectedStoryIdx].id,
-              user: { name: data.full_name, avatarUrl: data.profile_picture_url || '', username: data.username },
-              mediaUrl: stories[selectedStoryIdx].imageUrl,
-              type: 'image',
-              timeLeft: 24 * 60 * 60, // placeholder
-              liked: false,
-            }}
-            onPrev={handlePrev}
-            onNext={handleNext}
-          />
-        )}
-      </ContentBlock>
-      {/* Cupons de Desconto */}
-      <ContentBlock
-        title="Cupons de Desconto"
-        description="Adicione cupons de desconto para seus seguidores."
-        isLocked={plan !== "premium"}
-        badgeText={plan !== "premium" ? "Premium" : undefined}
-      >
-        <div className="flex flex-col gap-2 mb-4">
-          <input type="text" className="input input-bordered" placeholder="Código do cupom" value={couponDraft.code} onChange={e => setCouponDraft(d => ({ ...d, code: e.target.value }))} disabled={plan !== "premium"} />
-          <input type="text" className="input input-bordered" placeholder="Desconto (ex: 10% OFF)" value={couponDraft.discount} onChange={e => setCouponDraft(d => ({ ...d, discount: e.target.value }))} disabled={plan !== "premium"} />
-          <input type="text" className="input input-bordered" placeholder="Descrição" value={couponDraft.description} onChange={e => setCouponDraft(d => ({ ...d, description: e.target.value }))} disabled={plan !== "premium"} />
-          <input type="text" className="input input-bordered" placeholder="Marca" value={couponDraft.brand} onChange={e => setCouponDraft(d => ({ ...d, brand: e.target.value }))} disabled={plan !== "premium"} />
-          <input type="date" className="input input-bordered" placeholder="Validade" value={couponDraft.validUntil} onChange={e => setCouponDraft(d => ({ ...d, validUntil: e.target.value }))} disabled={plan !== "premium"} />
-          <button className="btn btn-primary mt-2" type="button" onClick={handleAddCoupon} disabled={plan !== "premium"}>Adicionar Cupom</button>
-        </div>
-        <div className="grid gap-4">
-          {coupons.map((coupon, idx) => (
-            <div key={idx} className="relative">
-              <CouponCard
-                user={{ name: data.full_name, username: data.username, avatarUrl: data.profile_picture_url }}
-                publishedAt={new Date().toISOString()}
-                discount={coupon.discount}
-                code={coupon.code}
-                description={coupon.description}
-                validUntil={coupon.validUntil}
-                brand={coupon.brand}
-                onCopy={() => {}}
-                isExpired={coupon.validUntil && new Date(coupon.validUntil) < new Date()}
-              />
-              <button className="absolute top-2 right-2 text-xs text-red-600" onClick={() => handleRemoveCoupon(idx)} disabled={plan !== "premium"}>Remover</button>
-            </div>
-          ))}
-        </div>
-      </ContentBlock>
+      )}
+
+      {modalOpen && selectedStoryIdx !== null && (
+        <StoryModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          story={{
+            user: { name: data.full_name, avatarUrl: data.profile_picture_url || '', username: data.username },
+            mediaUrl: stories[selectedStoryIdx].imageUrl,
+            type: 'image',
+            time: stories[selectedStoryIdx].createdAt || '',
+            liked: false,
+          }}
+          onPrev={() => {
+            if (selectedStoryIdx !== null && selectedStoryIdx > 0) setSelectedStoryIdx(selectedStoryIdx - 1);
+          }}
+          onNext={() => {
+            if (selectedStoryIdx !== null && selectedStoryIdx < stories.length - 1) setSelectedStoryIdx(selectedStoryIdx + 1);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -246,9 +183,9 @@ function getYouTubeId(url: string): string | undefined {
 export const RAW_STEPS = [
   { key: 'basic', label: 'Básico', icon: User, component: ProfileBasicTabV2, requiredPlan: 'free' },
   { key: 'layout', label: 'Layout', icon: Layout, component: LayoutSelectBlockV2, requiredPlan: 'free' },
-  { key: 'conteudo', label: 'Conteúdo', icon: FolderOpen, component: ProfileContentTabV2, requiredPlan: 'standard' },
-  { key: 'portfolio', label: 'Portfólio', icon: Camera, component: PortfolioBlockV2, requiredPlan: 'standard' },
-  { key: 'premium', label: 'Premium', icon: Sparkles, component: PremiumTabV2, requiredPlan: 'premium' },
+  { key: 'conteudo', label: 'Conteúdo', icon: FolderOpen, component: ProfileContentTabV2, requiredPlan: 'free' },
+  { key: 'portfolio', label: 'Portfólio', icon: Camera, component: PortfolioBlockV2, requiredPlan: 'free' },
+  { key: 'premium', label: 'Premium', icon: Sparkles, component: PremiumTabV2, requiredPlan: 'free' },
 ];
 
 export function buildSteps(
@@ -286,7 +223,8 @@ export function buildSteps(
       case 'portfolio':
         componentProps = {
           portfolio: profile.portfolio || [],
-          onChange: (portfolio: any[]) => dispatch({ type: 'update', payload: { portfolio } })
+          onChange: (portfolio: any[]) => dispatch({ type: 'update', payload: { portfolio } }),
+          plan,
         };
         component = React.createElement(s.component, componentProps);
         break;

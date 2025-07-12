@@ -25,7 +25,7 @@ interface ProfileContentTabV2Props {
 
 export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileContentTabV2Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6">
       {/* Tags */}
       <ContentBlock
         title={<div className="flex items-center gap-2">Tags
@@ -41,7 +41,7 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
           </TooltipProvider>
         </div>}
         description="Adicione palavras-chave (tags) que descrevem suas habilidades, serviços ou produtos."
-        isLocked={plan !== PlanType.PREMIUM && plan !== PlanType.STANDARD}
+        isLocked={false}
         badgeText={plan === PlanType.FREE ? "Standard/Premium" : undefined}
       >
         <SkillsBlockV2 skills={data.skills || []} onChange={skills => onChange({ ...data, skills })} plan={plan} />
@@ -56,7 +56,7 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
       <ContentBlock
         title="Serviços"
         description="Adicione os serviços que você oferece."
-        isLocked={plan !== PlanType.PREMIUM && plan !== PlanType.STANDARD}
+        isLocked={false}
         badgeText={plan === PlanType.FREE ? "Standard/Premium" : undefined}
       >
         <ServicesBlockV2 services={data.services || []} onChange={services => onChange({ ...data, services })} plan={plan} />
@@ -71,7 +71,7 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
       <ContentBlock
         title="Vídeo do YouTube"
         description="Incorpore um vídeo do YouTube em seu perfil. Cole a URL do vídeo abaixo."
-        isLocked={plan !== PlanType.PREMIUM && plan !== PlanType.STANDARD}
+        isLocked={plan === PlanType.FREE}
         badgeText={plan === PlanType.FREE ? "Standard/Premium" : undefined}
       >
         <div className="flex flex-col gap-2">
@@ -124,7 +124,7 @@ export function ProfileContentTabV2({ data, plan, layout, onChange }: ProfileCon
       <ContentBlock
         title="Experiência"
         description="Adicione sua experiência profissional."
-        isLocked={plan === PlanType.FREE}
+        isLocked={false}
         badgeText={plan === PlanType.FREE ? "Standard/Premium" : undefined}
       >
         <ExperienceBlockV2 experience={data.experience || []} onChange={experience => onChange({ ...data, experience })} plan={plan} />

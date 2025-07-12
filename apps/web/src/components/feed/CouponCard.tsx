@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Clock, Check, Copy, Tag, Heart, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/common/logo';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { supabase } from '@/lib/supabase/client';
+import { useAuth } from '@/hooks/use-auth';
 
 interface CouponCardProps {
   user?: {
@@ -16,8 +19,11 @@ interface CouponCardProps {
   description: string;
   validUntil: string; // ISO string
   brand: string;
+  regulation?: string; // Novo campo opcional
   onCopy?: () => void;
   isExpired?: boolean;
+  likesCount?: number; // Novo campo opcional
+  onLike?: (liked: boolean) => void; // Callback opcional para integração backend
 }
 
 function timeAgo(dateString: string) {
@@ -38,12 +44,20 @@ const CouponCard: React.FC<CouponCardProps> = ({
   description,
   validUntil,
   brand,
+  regulation, // Novo campo
   onCopy,
   isExpired = false,
+  likesCount = 0,
+  onLike,
 }) => {
   const [copied, setCopied] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const expired = isExpired || new Date(validUntil) < new Date();
+  const { user: currentUser } = useAuth();
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const [likeAnimation, setLikeAnimation] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(false);
 
   // Fallbacks para user
   const avatarUrl = user?.avatarUrl || '/avatar-default.png';
@@ -53,6 +67,31 @@ const CouponCard: React.FC<CouponCardProps> = ({
   // Se user não existir, renderiza null
   if (!user) return null;
 
+  // Buscar likes e status do usuário ao montar
+  useEffect(() => {
+    async function fetchLikeData() {
+      // Total de likes
+      const { count } = await supabase
+        .from('coupon_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('coupon_code', code);
+      setLikes(count || 0);
+      // Se usuário logado, buscar se já curtiu
+      if (currentUser?.id) {
+        const { data } = await supabase
+          .from('coupon_likes')
+          .select('id')
+          .eq('coupon_code', code)
+          .eq('user_id', currentUser.id)
+          .single();
+        setLiked(!!data);
+      } else {
+        setLiked(false);
+      }
+    }
+    fetchLikeData();
+  }, [code, currentUser?.id]);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
@@ -60,8 +99,38 @@ const CouponCard: React.FC<CouponCardProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleLike = async () => {
+    if (!currentUser?.id || loadingLike) return;
+    setLoadingLike(true);
+    setLikeAnimation(true);
+    if (!liked) {
+      // Adiciona like
+      const { error } = await supabase
+        .from('coupon_likes')
+        .insert({ coupon_code: code, user_id: currentUser.id });
+      if (!error) {
+        setLikes(likes + 1);
+        setLiked(true);
+      }
+    } else {
+      // Remove like
+      const { error } = await supabase
+        .from('coupon_likes')
+        .delete()
+        .eq('coupon_code', code)
+        .eq('user_id', currentUser.id);
+      if (!error) {
+        setLikes(likes - 1);
+        setLiked(false);
+      }
+    }
+    setTimeout(() => setLikeAnimation(false), 400);
+    setLoadingLike(false);
+  };
+
   const formattedDate = new Date(validUntil).toLocaleDateString('pt-BR');
-  const profileUrl = `https://seusite.com/profile/${username}`;
+  const profileUrl = `/profile/${username}`;
+  const validadeFormatada = validUntil ? new Date(validUntil).toLocaleDateString('pt-BR') : '';
 
   return (
     <motion.div
@@ -72,6 +141,8 @@ const CouponCard: React.FC<CouponCardProps> = ({
       className={`relative w-full overflow-hidden rounded-2xl shadow-xl border border-black/5 dark:border-white/10 bg-card
         ${expired ? 'opacity-60 grayscale pointer-events-none' : ''}`}
     >
+      {/* Efeito visual de destaque animado no fundo */}
+      <div className="absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat] [mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)] animate-pulse opacity-100"></div>
       {/* Recortes laterais (ticket) - círculos realmente vazados usando SVG */}
       <svg
         className="pointer-events-none absolute inset-0 w-full h-full z-40 text-card"
@@ -100,21 +171,28 @@ const CouponCard: React.FC<CouponCardProps> = ({
         {/* QR code no topo da fatia */}
         <div className="mb-4">
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(profileUrl)}`}
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=${encodeURIComponent(profileUrl)}`}
             alt="QR Code do perfil do usuário"
-            className="w-20 h-20 md:w-32 md:h-32 bg-white rounded-md p-1 shadow"
+            className="w-16 h-16 bg-white rounded-md p-1 shadow"
           />
         </div>
         {/* Botão Copiar alinhado à altura do input de código */}
-        <Button
-          onClick={handleCopy}
-          variant="secondary"
-          size="sm"
-          className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm rounded-lg flex items-center justify-center w-10 h-10 p-0 font-semibold"
-          aria-label="Copiar código do cupom"
-        >
-          {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={handleCopy}
+              variant="secondary"
+              size="sm"
+              className="bg-accent text-blue-600 hover:text-blue-700 hover:bg-accent/90 shadow-sm rounded-lg flex items-center justify-center w-10 h-10 p-0 font-semibold"
+              aria-label="Copiar código do cupom"
+            >
+              {copied ? <Check className="w-5 h-5 text-blue-600" /> : <Copy className="w-5 h-5 text-blue-600" />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left" align="center">
+            Copiar código
+          </TooltipContent>
+        </Tooltip>
         {copied && (
           <span className="mt-1 text-xs text-accent-foreground font-semibold animate-fade-in">Copiado!</span>
         )}
@@ -148,7 +226,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
         <div className="flex items-center gap-2 mt-1">
           <Tag className="w-4 h-4 text-gray-700" />
           <span className="text-xs font-medium text-gray-700 uppercase">
-            Cupom de Desconto
+            Cupom Whosfy{validadeFormatada ? ` - Válido até ${validadeFormatada}` : ''}
           </span>
         </div>
       </div>
@@ -156,7 +234,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
       {/* Layout da coluna esquerda (conteúdo principal) */}
       <div className="relative w-full px-6 pb-4">
         {/* Conteúdo da coluna esquerda */}
-        <div className="flex flex-col justify-center pr-[120px] gap-3">
+        <div className="flex flex-col justify-center pr-[120px] pl-8 gap-3">
           <div className="text-2xl font-bold text-black tracking-tight leading-none">
             {discount}
           </div>
@@ -175,12 +253,35 @@ const CouponCard: React.FC<CouponCardProps> = ({
       {/* Rodapé */}
       <div className="relative bg-white/90 px-6 py-3 flex items-center justify-between gap-2">
         <button
-          className="flex items-center gap-1 text-pink-600 hover:text-pink-700 font-semibold text-base focus:outline-none"
-          aria-label="Gostei"
+          className={
+            'flex items-center gap-1 font-semibold text-base focus:outline-none select-none text-red-600 hover:text-red-700'
+          }
+          aria-label={liked ? 'Descurtir' : 'Gostei'}
           type="button"
+          onClick={handleLike}
+          disabled={loadingLike || !currentUser?.id}
         >
-          <Heart className="w-5 h-5 fill-pink-600" />
-          <span>12</span>
+          <motion.span
+            animate={likeAnimation ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex"
+          >
+            {liked ? (
+              <Heart className="w-5 h-5 fill-red-600 text-red-600" />
+            ) : (
+              <Heart className="w-5 h-5 text-red-600" />
+            )}
+          </motion.span>
+          <motion.span
+            key={likes}
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -10, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="ml-1 text-red-600"
+          >
+            {likes}
+          </motion.span>
         </button>
         <button
           className="text-sm text-gray-700 hover:underline"
@@ -190,6 +291,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
         >
           Ver detalhes
         </button>
+        {/* Removido aviso legal do rodapé do card */}
       </div>
 
       {/* Modal de detalhes */}
@@ -210,10 +312,26 @@ const CouponCard: React.FC<CouponCardProps> = ({
               <li><b>Descrição:</b> {description}</li>
               <li><b>Marca:</b> {brand}</li>
               <li><b>Validade:</b> {formattedDate}</li>
-              {/* Adicione mais regras ou restrições aqui */}
+              {regulation && (
+                <li>
+                  <b>Regulamento:</b>{' '}
+                  {regulation.startsWith('http') ? (
+                    <a
+                      href={regulation}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline font-medium"
+                    >
+                      Consulte o regulamento
+                    </a>
+                  ) : (
+                    regulation
+                  )}
+                </li>
+              )}
             </ul>
-            <div className="text-xs text-gray-500">
-              * Sujeito a regras e condições. Consulte o regulamento da promoção.
+            <div className="text-xs text-gray-500 mt-2">
+              * Sujeito a regras e condições. Consulte o regulamento.
             </div>
           </div>
         </div>

@@ -29,13 +29,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
+import { SocialLinks } from "@/components/social/SocialLinks";
+import { SkillsList } from "@/components/skills/SkillsList";
+import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
+import { ServicesList } from "@/components/services/ServicesList";
+import { ExperienceList } from "@/components/experience/ExperienceList";
+import { ReviewList } from "@/components/reviews/ReviewList";
+import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
+import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
+import FreeProfileCardHeader from "@/components/profile-layouts/ProfileCardHeader";
+import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
+import { ProfileCardContainer } from "@/components/profile-layouts/ProfileCardContainer";
+import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
 
 const PortfolioItemModal = lazy(() => import('@/features/profile/portfolio-item-modal').then(mod => ({ default: mod.PortfolioItemModal })));
 
 const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
   user,
   isCurrentUserProfile,
-  qrCodeUrl,
   onPortfolioItemClick,
 }) => {
   const skills = user.skills || [];
@@ -60,7 +71,8 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
     education: useRef<HTMLDivElement>(null),
   };
 
-  const handleSectionClick = useCallback((section: keyof typeof sectionRefs) => {
+  type SectionKey = 'skills' | 'portfolio' | 'services' | 'experience' | 'education';
+  const handleSectionClick = useCallback((section: SectionKey) => {
     sectionRefs[section]?.current?.scrollIntoView({ behavior: 'smooth' });
   }, [sectionRefs]);
 
@@ -74,7 +86,7 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  function isSectionVisible(section: string) {
+  function isSectionVisible(section: SectionKey) {
     if (!user.public_sections) return true;
     return user.public_sections[section] !== false;
   }
@@ -83,291 +95,87 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
     return <div className="text-center p-8">Este perfil é privado.</div>;
   }
 
+  const profileUrl = user.username ? `${window?.location?.origin || ''}/profile/${user.username}` : '';
+  const { qrCodeUrl, isLoading: isQrLoading } = useProfileQrCode(profileUrl);
+
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-100 dark:bg-gradient-to-b dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 md:p-8">
+      <div className="relative max-w-6xl mx-auto space-y-10">
+        {/* Gradiente no topo, só no light */}
+        <div className="absolute inset-x-0 top-0 h-[340px] bg-gradient-to-b from-blue-200 via-slate-100 to-transparent dark:hidden pointer-events-none -z-10" />
         {/* Header Section */}
-        <Card className="shadow-xl rounded-2xl overflow-hidden border-0 bg-white dark:bg-slate-900 dark:border-slate-700">
-          <CardContent className="p-6 md:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-              {/* Left Column: Avatar & Basic Info */}
-              <div className="md:col-span-1 flex flex-col items-center text-center">
-                <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-white dark:border-slate-800 shadow-lg ring-2 ring-primary/40">
-                  <AvatarImage src={user.profile_picture_url} alt={user.name} />
-                  <AvatarFallback className="text-4xl font-bold">
-                    {user.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: user.name,
-                        text: user.bio,
-                        url: typeof window !== 'undefined' ? window.location.href : ''
-                      });
-                    } else {
-                      navigator.clipboard.writeText(typeof window !== 'undefined' ? window.location.href : '');
-                      alert('Link do perfil copiado!');
-                    }
-                  }}
-                  className="rounded-full flex items-center gap-1 mt-4 w-fit"
-                  aria-label="Compartilhar perfil"
-                >
-                  <Share2 className="w-4 h-4" /> Compartilhar perfil
-                </Button>
+        <FreeProfileCardHeader user={user} isCurrentUserProfile={isCurrentUserProfile} variant="free" />
 
-                {/* Social links com tooltip e aria-label */}
-                {displayedLinks.length > 0 && (
-                  <div className="flex justify-center gap-3 mt-6">
-                    {displayedLinks.map((link) => {
-                      const Icon = platformIcons[link.platform] || Globe;
-                      return (
-                        <Button asChild key={link.id} variant="outline" size="icon" className="rounded-full transition-all duration-200 hover:bg-primary/10 focus:ring-2 focus:ring-primary" aria-label={link.platform} title={link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}>
-                          <a href={link.url} target="_blank" rel="noopener noreferrer">
-                            <Icon className="w-4 h-4" />
-                          </a>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-              
-              {/* Right Column: Bio & Actions */}
-              <div className="md:col-span-2 space-y-5">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <h1 className="text-3xl font-bold text-foreground dark:text-white">{user.name}</h1>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: user.name,
-                        text: user.bio,
-                        url: typeof window !== 'undefined' ? window.location.href : ''
-                      });
-                    } else {
-                      navigator.clipboard.writeText(typeof window !== 'undefined' ? window.location.href : '');
-                      alert('Link do perfil copiado!');
-                    }
-                  }}
-                  className="rounded-full flex items-center gap-1 mt-2 w-fit"
-                  aria-label="Compartilhar perfil"
-                >
-                  <Star className="w-4 h-4" /> Compartilhar perfil
-                </Button>
-                <p className="text-primary font-light text-lg">{user.category}</p>
-                <p className="text-base leading-relaxed text-foreground">
-                  <span>{user.bio}</span>
-                </p>
-                <div className="flex flex-col gap-3 text-sm text-muted-foreground mt-4">
-                  {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
-                  {(
-                    user.endereco_rua || user.endereco_numero || user.endereco_complemento || user.endereco_bairro || user.endereco_cidade || user.endereco_estado || user.endereco_cep
-                  ) ? (
-                    <div className="flex items-center gap-2">
-                      {user.maps_link ? (
-                        <a
-                          href={user.maps_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                          title="Abrir no Google Maps"
-                          style={{ marginRight: 0 }}
-                        >
-                          <MapPin className="w-5 h-5" />
-                        </a>
-                      ) : (
-                        <MapPin className="w-5 h-5 text-muted-foreground" />
-                      )}
-                      <span>
-                        {user.endereco_rua ? user.endereco_rua : ''}
-                        {user.endereco_numero ? `, ${user.endereco_numero}` : ''}
-                        {user.endereco_complemento ? `, ${user.endereco_complemento}` : ''}
-                        {user.endereco_bairro ? `, ${user.endereco_bairro}` : ''}
-                        {user.endereco_cidade ? `, ${user.endereco_cidade}` : ''}
-                        {user.endereco_estado ? ` - ${user.endereco_estado}` : ''}
-                        {user.endereco_cep ? `, CEP: ${user.endereco_cep}` : ''}
-                      </span>
-                    </div>
-                  ) : (
-                    (user.maps_link || (user.location && user.location.city)) && (
-                      <div className="flex items-center gap-2">
-                        {user.maps_link ? (
-                          <a
-                            href={user.maps_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                            title="Abrir no Google Maps"
-                            style={{ marginRight: 0 }}
-                          >
-                            <MapPin className="w-5 h-5" />
-                          </a>
-                        ) : (
-                          <MapPin className="w-5 h-5 text-muted-foreground" />
-                        )}
-                        <span>
-                          {user.location?.city}
-                          {user.location?.country ? `, ${user.location.country}` : ''}
-                        </span>
-                      </div>
-                    )
-                  )}
-                  {user.email && (
-                    <Button asChild className="w-fit transition-all duration-200 hover:bg-primary/20 focus:ring-2 focus:ring-primary">
-                      <a href={`mailto:${user.email}`} className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        <span className="dark:text-slate-300">{user.email}</span>
-                      </a>
-                    </Button>
-                  )}
-                  {user.phone && (
-                    <Button asChild className="w-fit bg-primary text-white shadow-lg hover:bg-primary/90 focus:ring-2 focus:ring-primary transition-all duration-200">
-                      <a href={`tel:${user.phone}`} className="flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
-                        <span>{user.phone}</span>
-                      </a>
-                    </Button>
-                  )}
-                </div>
-                {isCurrentUserProfile && (
-                  <Button size="lg" variant="outline" asChild className="mt-4">
-                    <Link href="/dashboard/my-profile">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Editar Perfil
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Removido: <ProfileHeader ... /> */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Main Content Column */}
-          <div className="lg:col-span-2 space-y-8">
-            {isSectionVisible('about') && (
-              <Card className="shadow-lg rounded-xl border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Star className="w-5 h-5 text-primary" /> Tags
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="ml-1 cursor-pointer">
-                            <InformationCircleIcon className="w-4 h-4 text-muted-foreground" />
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                          Adicione tags com suas habilidades, ferramentas e áreas de atuação. Assim, mais pessoas encontrarão você!
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+          <div className="lg:col-span-2 space-y-10">
+            {isSectionVisible('portfolio') && portfolio.length > 0 && (
+              <ProfileCardContainer className="p-6 shadow-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-bold text-blue-700 dark:text-blue-300">
+                    <Globe className="w-5 h-5 text-primary" /> Portfólio
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill: string, idx: number) => (
-                      <Badge key={idx} variant="default" className="text-sm px-3 py-1">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
+                <CardContent className="pt-2">
+                  <PortfolioGrid
+                    items={portfolio}
+                    maxToShow={6}
+                    variant="free"
+                    onItemClick={onPortfolioItemClick}
+                  />
                 </CardContent>
-              </Card>
-            )}
-
-            {isSectionVisible('portfolio') && portfolio.length > 0 && (
-              <Card className="shadow-lg rounded-xl border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg"><Globe className="w-5 h-5 text-primary" /> Portfólio</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    {portfolio.slice(0, 6).map((item: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="relative group rounded-lg overflow-hidden shadow-sm cursor-pointer w-full h-40"
-                        onClick={() => onPortfolioItemClick?.(item)}
-                      >
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.caption || "Portfólio"}
-                          fill
-                          style={{ objectFit: "cover" }}
-                          sizes="(max-width: 768px) 100vw, 400px"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Maximize className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Exibir avaliações reais e comentários */}
-            {user.reviews && user.reviews.length > 0 && (
-              <div className="mt-8">
-                {/* Importação dinâmica para evitar SSR issues */}
-                {(() => {
-                  const ReviewList = require("@/components/reviews/ReviewList").ReviewList;
-                  return <ReviewList reviewedUserId={user.id} reviews={user.reviews} />;
-                })()}
-              </div>
+              </ProfileCardContainer>
             )}
 
             {isSectionVisible('services') && services.length > 0 && (
-              <Card className="shadow-lg rounded-xl border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg"><Briefcase className="w-5 h-5 text-primary" /> Serviços</CardTitle>
+              <ProfileCardContainer className="p-6 shadow-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-bold text-blue-700 dark:text-blue-300">
+                    <Briefcase className="w-5 h-5 text-primary" /> Serviços
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {services.map((service: any, idx: number) => (
-                    <div key={idx} className="p-4 rounded-lg border bg-slate-50 dark:bg-slate-800/50">
-                      <h3 className="font-semibold text-foreground">{service.name}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
-                    </div>
-                  ))}
+                <CardContent className="pt-2">
+                  <ServicesList
+                    services={services}
+                    maxToShow={6}
+                    variant="free"
+                    isCurrentUserProfile={isCurrentUserProfile}
+                  />
                 </CardContent>
-              </Card>
+              </ProfileCardContainer>
             )}
           </div>
 
           {/* Sidebar Column */}
-          <div className="lg:col-span-1 space-y-8">
+          <div className="lg:col-span-1 space-y-10">
             {isSectionVisible('experience') && experience.length > 0 && (
-              <Card className="shadow-lg rounded-xl border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg"><Briefcase className="w-5 h-5 text-primary" /> Experiência</CardTitle>
+              <ProfileCardContainer className="p-6 shadow-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-bold text-blue-700 dark:text-blue-300">
+                    <Briefcase className="w-5 h-5 text-primary" /> Experiência
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {experience.map((exp: any, idx: number) => (
-                    <div key={idx} className="relative pl-6">
-                      <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-primary" />
-                      <div className="absolute left-[3px] top-2 h-full w-px bg-primary/20" />
-                      <p className="font-semibold">{exp.title}</p>
-                      <p className="text-sm text-muted-foreground">{exp.company}</p>
-                      <p className="text-xs text-muted-foreground">{exp.years}</p>
-                    </div>
-                  ))}
+                <CardContent className="pt-2">
+                  <ExperienceList
+                    experience={experience}
+                    maxToShow={6}
+                    variant="free"
+                    isCurrentUserProfile={isCurrentUserProfile}
+                  />
                 </CardContent>
-              </Card>
+              </ProfileCardContainer>
             )}
 
             {isSectionVisible('education') && education.length > 0 && (
-              <Card className="shadow-lg rounded-xl border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg"><GraduationCap className="w-5 h-5 text-primary" /> Educação</CardTitle>
+              <ProfileCardContainer className="p-6 shadow-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-bold text-blue-700 dark:text-blue-300">
+                    <GraduationCap className="w-5 h-5 text-primary" /> Educação
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="pt-2 space-y-4">
                   {education.map((edu: any, idx: number) => (
                     <div key={idx} className="relative pl-6">
                       <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-primary" />
@@ -378,11 +186,11 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
                     </div>
                   ))}
                 </CardContent>
-              </Card>
+              </ProfileCardContainer>
             )}
             
             {qrCodeUrl && (
-              <Card className="shadow-lg rounded-xl border-0 flex flex-col items-center p-6">
+              <ProfileCardContainer className="p-6 shadow-xl flex flex-col items-center">
                  <Image
                     src={qrCodeUrl}
                     alt={`QR Code de ${user.name}`}
@@ -391,7 +199,37 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
                     className="rounded-lg border p-1 bg-white shadow-md"
                   />
                   <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
-              </Card>
+              </ProfileCardContainer>
+            )}
+            {isSectionVisible('skills') && (
+              <ProfileCardContainer className="p-6 shadow-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-xl font-bold text-blue-700 dark:text-blue-300">
+                    <Star className="w-5 h-5 text-primary" /> Tags
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="ml-1 cursor-pointer">
+                            <InformationCircleIcon className="w-4 h-4 text-blue-400 dark:text-blue-400" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          Adicione tags com suas habilidades, ferramentas e áreas de atuação. Assim, mais pessoas encontrarão você!
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-2">
+                  {skills.length > 0 && (
+                    <SkillsList
+                      skills={skills}
+                      maxToShow={8}
+                      variant="free"
+                    />
+                  )}
+                </CardContent>
+              </ProfileCardContainer>
             )}
           </div>
         </div>

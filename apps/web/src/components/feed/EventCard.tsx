@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -5,8 +6,10 @@ import { Calendar, MapPin, Users, Heart, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
+import Link from 'next/link';
 
 interface EventCardProps {
+  id: string;
   name: string;
   date: string;
   location: string;
@@ -17,6 +20,7 @@ interface EventCardProps {
 }
 
 const EventCard = ({
+  id,
   name,
   date,
   location,
@@ -104,10 +108,12 @@ const EventCard = ({
           </div>
           {/* Botões de ação */}
           <div className="flex gap-2 mt-auto">
-            <Button className="flex-1" variant="default">
-              <Calendar className="w-4 h-4 mr-2" />
-              Participar
-            </Button>
+            <Link href={`/events/${id}`} className="flex-1">
+              <Button className="w-full" variant="default">
+                <Calendar className="w-4 h-4 mr-2" />
+                Participar
+              </Button>
+            </Link>
             <Button variant="outline" size="icon" aria-label="Compartilhar evento">
               <Share2 className="w-4 h-4" />
             </Button>

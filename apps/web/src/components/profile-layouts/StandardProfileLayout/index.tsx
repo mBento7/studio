@@ -77,6 +77,18 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../
 import Image from 'next/image';
 import { platformIcons } from "@/lib/types";
 import QRCode from 'react-qr-code';
+import { SocialLinks } from "@/components/social/SocialLinks";
+import { SkillsList } from "@/components/skills/SkillsList";
+import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
+import { ServicesList } from "@/components/services/ServicesList";
+import { ExperienceList } from "@/components/experience/ExperienceList";
+import { EducationList } from "@/components/education/EducationList";
+import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
+import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
+import StandardProfileCardHeader from "../StandardProfileCardHeader";
+import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
+import { ProfileCardContainer } from "@/components/profile-layouts/ProfileCardContainer";
+import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
 
 const BGPattern = ({ variant = 'grid', mask = 'fade-edges', className }: { 
   variant?: 'dots' | 'grid' | 'diagonal-stripes'; 
@@ -211,7 +223,6 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
 }> = ({ 
   user, 
   isCurrentUserProfile, 
-  qrCodeUrl, 
   onPortfolioItemClick, 
   primaryColor, 
   secondaryColor, 
@@ -259,8 +270,8 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     education: educationRef,
   };
 
-  const handleSectionClick = useCallback((section: keyof typeof sectionRefs) => {
-    sectionRefs[section]?.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleSectionClick = useCallback((section: string) => {
+    sectionRefs[section as keyof typeof sectionRefs]?.current?.scrollIntoView({ behavior: 'smooth' });
   }, [sectionRefs]);
 
   const skills = user.skills || [];
@@ -345,6 +356,10 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
   };
 
   const youtubeEmbedUrl = user.youtubeVideoUrl ? getYoutubeEmbedUrl(user.youtubeVideoUrl) : null;
+
+  // Gerar profileUrl a partir do username
+  const profileUrl = user.username ? `https://seusite.com/profile/${user.username}` : "";
+  const { qrCodeUrl, isLoading: isQrLoading } = useProfileQrCode(profileUrl);
 
   const handleDownloadQrCode = async () => {
     if (!user) return;
@@ -473,522 +488,136 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     return <div className="text-center p-8">Este perfil é privado.</div>;
   }
 
+  // Função utilitária para salvar as cores no localStorage
+  function saveThemeColors(primary: string, secondary: string) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('standardProfileThemeColors', JSON.stringify({ primary, secondary }));
+    }
+  }
+
   return (
     <div className={`bg-background text-foreground ${primaryColorState ? `${primaryColorState}-theme` : ''}`}>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-b from-primary/10 to-background pb-16">
-        {user.cover_photo_url && (
-          <div className="relative w-full h-64 sm:h-80 bg-muted/50">
-            <img
-              src={coverImage}
-              alt="Capa"
-              className="w-full h-full object-cover"
-            />
-            {isCurrentUserProfile && (
-              <button
-                type="button"
-                className="absolute top-2 right-2 p-2 bg-white/80 rounded-full shadow hover:bg-white"
-                title="Editar capa"
-                onClick={() => setIsCoverImageModalOpen(true)}
-              >
-                <Edit3 className="w-5 h-5 text-primary" />
-              </button>
-            )}
-          </div>
-        )}
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-6 relative z-10">
-          <div
-            className="flex flex-col lg:flex-row gap-8 p-8 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg items-center lg:items-start relative"
-            style={{ borderColor: primaryColorState, borderWidth: 2, background: `${secondaryColorState}15` }}
-          >
-            {isCurrentUserProfile && (
-              <>
-                <motion.button
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  onClick={() => setIsThemeOpen(!isThemeOpen)}
-                  className="absolute top-3 left-3 z-20 p-2 bg-white/80 backdrop-blur-md border border-white/20 rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
-                  aria-label="Abrir customizador de cor"
-                >
-                  <Settings className="w-5 h-5 text-gray-700" />
-                </motion.button>
-                {isThemeOpen && (
-                  <div className="absolute top-16 left-3 z-[9999]">
-                    <StandardThemeCustomizer
-                      isOpen={isThemeOpen}
-                      onClose={() => setIsThemeOpen(false)}
-                      primaryColor={primaryColorState}
-                      secondaryColor={secondaryColorState}
-                      onPrimaryColorChange={color => { setPrimaryColor(color); setIsThemeOpen(false); }}
-                      onSecondaryColorChange={color => { setSecondaryColor(color); setIsThemeOpen(false); }}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-            {/* Coluna da esquerda: Avatar + botões de Ação */}
-            <div className="flex flex-col items-center w-full lg:w-1/3 gap-4">
-              {/* Avatar Section */}
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 shadow-lg ring-2 overflow-hidden bg-background flex-shrink-0"
-                style={{ borderColor: primaryColorState, boxShadow: `0 0 0 4px ${primaryColorState}40` }}
-              >
-                <img
-                  src={user.profile_picture_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'} // Usar user.profile_picture_url diretamente
-                  alt={user.name}
-                  className="w-full h-full object-cover"
-                />
-                {isCurrentUserProfile && (
-                  <button
-                    type="button"
-                    className="absolute left-1/2 -translate-x-1/2 -bottom-6 z-50 p-2 bg-primary text-white rounded-full shadow-lg border-2 border-white hover:bg-primary/90 transition"
-                    title="Editar foto de perfil"
-                    onClick={() => setIsProfileImageModalOpen(true)}
-                  >
-                    <Edit3 className="w-6 h-6 text-white" />
-                  </button>
-                )}
-              </div>
-
-              {/* Botão Chamar no Chat (Condicional) */}
-              {(plan === 'standard' || plan === 'premium') && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full px-3 py-1 text-sm flex items-center gap-1 w-fit justify-center hover:bg-accent focus:ring-2 focus:ring-primary transition-all duration-200 mt-6 shadow-md shadow-black/10 dark:shadow-none"
-                  onClick={() => {/* lógica de abrir chat */}}
-                >
-                  <MessageSquare className="w-4 h-4" /> Chamar no Chat
-                </Button>
-              )}
-
-              {/* Botão Compartilhar Perfil */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                className="rounded-full flex items-center gap-1 w-fit justify-center hover:bg-primary focus:ring-2 focus:ring-primary transition-all duration-200 mt-2 shadow-md shadow-black/10 dark:shadow-none"
-                aria-label="Compartilhar perfil"
-              >
-                <Share2 className="w-4 h-4 mr-2" /> Compartilhar perfil
-              </Button>
-            </div>
-            {/* Coluna da direita: informações do perfil */}
-            <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left gap-2">
-              <div className="flex items-center gap-2 justify-center lg:justify-start">
-                <h1
-                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-0"
-                  style={{
-                    fontFamily: font && font !== 'default' ? font : undefined,
-                    color: primaryColorState === DEFAULT_PRIMARY ? '#111827' : primaryColorState
-                  }}
-                >
-                  {user.name}
-                </h1>
-                {isCurrentUserProfile && (
-                  <button type="button" onClick={() => setIsEditing((prev) => !prev)} className="ml-2 p-1 rounded-full hover:bg-muted transition" title={isEditing ? 'Visualizar perfil' : 'Editar perfil'} aria-label={isEditing ? 'Visualizar perfil' : 'Editar perfil'}>
-                    {isEditing ? <Eye className="w-5 h-5 text-primary" /> : <Edit3 className="w-5 h-5 text-primary" />}
-                  </button>
-                )}
-              </div>
-              <div className="text-lg sm:text-xl text-muted-foreground mb-1">{user.category}</div>
-              <div className="mt-2 mb-4 max-w-2xl">{/* Bio */}
-                <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-base">{user.bio}</p>
-              </div>
-              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-x-4 gap-y-2 text-sm sm:text-base text-muted-foreground mb-2">
-                {user.email && (
-                  <div className="flex items-center gap-1"><Mail className="w-4 h-4" /><span>{user.email}</span></div>
-                )}
-                {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
-                {(
-                  user.endereco_rua || user.endereco_numero || user.endereco_complemento || user.endereco_bairro || user.endereco_cidade || user.endereco_estado || user.endereco_cep
-                ) ? (
-                  <div className="flex items-center gap-2">
-                    {user.maps_link ? (
-                      <a
-                        href={user.maps_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                        title="Abrir no Google Maps"
-                        style={{ marginRight: 0 }}
-                      >
-                        <MapPin className="w-5 h-5" />
-                      </a>
-                    ) : (
-                      <MapPin className="w-5 h-5 text-muted-foreground" />
-                    )}
-                    <span>
-                      {user.endereco_rua ? user.endereco_rua : ''}
-                      {user.endereco_numero ? `, ${user.endereco_numero}` : ''}
-                      {user.endereco_complemento ? `, ${user.endereco_complemento}` : ''}
-                      {user.endereco_bairro ? `, ${user.endereco_bairro}` : ''}
-                      {user.endereco_cidade ? `, ${user.endereco_cidade}` : ''}
-                      {user.endereco_estado ? ` - ${user.endereco_estado}` : ''}
-                      {user.endereco_cep ? `, CEP: ${user.endereco_cep}` : ''}
-                    </span>
-                  </div>
-                ) : (
-                  (user.maps_link || (user.location && user.location.city)) && (
-                    <div className="flex items-center gap-2">
-                      {user.maps_link ? (
-                        <a
-                          href={user.maps_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                          title="Abrir no Google Maps"
-                          style={{ marginRight: 0 }}
-                        >
-                          <MapPin className="w-5 h-5" />
-                        </a>
-                      ) : (
-                        <MapPin className="w-5 h-5 text-muted-foreground" />
-                      )}
-                      <span>
-                        {user.location?.city}
-                        {user.location?.country ? `, ${user.location.country}` : ''}
-                      </span>
-                    </div>
-                  )
-                )}
-                {user.phone && (
-                  <div className="flex items-center gap-1"><Phone className="w-4 h-4" /><span>{user.phone}</span></div>
-                )}
-              </div>
-              {/* Social links */}
-              {sortedSocialLinks.length > 0 && (
-                <div className="flex flex-wrap justify-center lg:justify-start gap-2 mt-2">
-                  <TooltipProvider>
-                    {sortedSocialLinks.map((link) => {
-                      const Icon = platformIcons[link.platform] || Globe;
-
-                      if (link.platform === 'whatsapp') {
-                        return (
-                          <Tooltip key={link.id}>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="rounded-full transition-all duration-200 hover:bg-primary focus:ring-2 focus:ring-primary shadow-md shadow-black/10 dark:shadow-none"
-                                aria-label={link.platform}
-                                asChild
-                              >
-                                {/* O SocialIcon renderiza seu próprio <a>, que será estilizado pelo Button asChild */}
-                                <Icon
-                                  url={link.url}
-                                  network="whatsapp"
-                                  fgColor="currentColor"
-                                  bgColor="transparent"
-                                  size={20} // Definindo o tamanho usando a prop 'size' para 20px
-                                />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                              {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
-                            </TooltipContent>
-                          </Tooltip>
-                        );
-                      } else {
-                        return (
-                          <Tooltip key={link.id}>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="rounded-full transition-all duration-200 hover:bg-primary focus:ring-2 focus:ring-primary shadow-md shadow-black/10 dark:shadow-none"
-                                asChild
-                              >
-                                <a href={link.url} target="_blank" rel="noopener noreferrer">
-                                  <Icon className="w-5 h-5" /> {/* Aumentado para 20x20px */}
-                                </a>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                              {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
-                            </TooltipContent>
-                          </Tooltip>
-                        );
-                      }
-                    })}
-                  </TooltipProvider>
-                </div>
-              )}
-              {/* Botão Baixar QR Code */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownloadQrCode}
-                className="rounded-full w-fit hover:bg-accent focus:ring-2 focus:ring-primary transition-all duration-200 mt-2 shadow-md shadow-black/10 dark:shadow-none"
-                aria-label="Baixar QR Code"
-              >
-                <QrCode className="w-4 h-4 mr-2" /> QR Code
-              </Button>
-            </div>
-          </div>
-        </div>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-6 relative z-10">
+        <StandardProfileCardHeader user={user} isCurrentUserProfile={isCurrentUserProfile} />
       </div>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="w-full mt-12">
-          <div className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg flex w-full mb-12 h-auto p-2 justify-center items-center">
-            <Button
-              variant={activeTab === 'overview' ? 'default' : 'ghost'}
-              onClick={() => setActiveTab('overview')}
-              className={activeTab === 'overview' ? 'bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-foreground hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-gray-700'}
-            >
-              Visão Geral
-            </Button>
-            <Button
-              variant={activeTab === 'portfolio' ? 'default' : 'ghost'}
-              onClick={() => setActiveTab('portfolio')}
-              className={activeTab === 'portfolio' ? 'bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-foreground hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-gray-700'}
-            >
-              Portfólio
-            </Button>
-            <Button
-              variant={activeTab === 'services' ? 'default' : 'ghost'}
-              onClick={() => setActiveTab('services')}
-              className={activeTab === 'services' ? 'bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-foreground hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-gray-700'}
-            >
-              Serviços
-            </Button>
-            <Button
-              variant={activeTab === 'youtube' ? 'default' : 'ghost'}
-              onClick={() => setActiveTab('youtube')}
-              className={activeTab === 'youtube' ? 'bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-foreground hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-gray-700'}
-            >
-              Mídia
-            </Button>
-          </div>
+        <div className="w-full mt-8">
+          <ProfileHeader
+            sections={[
+              { key: 'about', label: 'Sobre' },
+              { key: 'portfolio', label: 'Portfólio' },
+              { key: 'services', label: 'Serviços' },
+              { key: 'experience', label: 'Experiência' },
+              { key: 'education', label: 'Educação' },
+            ]}
+            sectionRefs={sectionRefs}
+            onSectionClick={handleSectionClick}
+            variant="standard"
+          />
 
-          <div className="space-y-12">
+          <div className="space-y-12 mt-4">
+            {/* Sobre */}
+            <div ref={aboutRef} />
             {/* Habilidades */}
             {isSectionVisible('skills') && skills.length > 0 && (
-              <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={skillsRef}>
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                    Tags
-                    <span className="relative group">
-                      <span className="ml-1 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 cursor-pointer text-base font-bold border border-blue-200">i</span>
-                      <span className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 bg-white text-gray-700 text-sm rounded-lg shadow-lg px-4 py-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-20">
-                        Tags são palavras-chave que ajudam as pessoas a encontrar seu perfil. Exemplo: design, consultoria, mentorias, aulas online.
-                      </span>
-                    </span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {skills.map((skill, idx) => (
-                      <span
-                        key={skill + idx}
-                        className="bg-blue-700 text-white px-3 py-1 rounded-full shadow-sm text-xs font-medium capitalize transition hover:bg-blue-800 hover:shadow-md cursor-pointer"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <SkillsList
+                skills={skills}
+                maxToShow={12}
+                variant="standard"
+              />
             )}
 
             {/* Serviços */}
+            <div ref={servicesRef}>
             {isSectionVisible('services') && services.length > 0 && (
-              <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={servicesRef}>
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                    {/* <Briefcase className="w-6 h-6 text-primary" /> */} Serviços
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {services.slice(0, 6).map((item, idx) => (
-                      <div key={item.id || idx} className="rounded-xl overflow-hidden shadow bg-background p-4 transition-all duration-200 hover:shadow-2xl hover:border-[#5A6B8A] hover:-translate-y-1">
-                        <h3 className="font-semibold text-lg mb-1">{item.name}</h3>
-                        <p className="text-muted-foreground text-base mb-2">{item.description}</p>
-                        {item.price && <span className="text-primary font-bold">{item.price}</span>}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <ServicesList
+                services={services}
+                maxToShow={8}
+                variant="standard"
+                isCurrentUserProfile={isCurrentUserProfile}
+              />
             )}
+            </div>
 
             {/* Meu Portfólio */}
-            {normalizedPortfolioItems.length > 0 && (
-              <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={portfolioRef}>
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                    {/* <Palette className="w-6 h-6 text-primary" /> */} Meu Portfólio
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {normalizedPortfolioItems.slice(0, 6).map((item, idx) => {
-                      const isDefaultSupabase = item.imageUrl?.includes('/portfolio/default.png');
-                      return (
-                        <motion.div
-                          key={item.id || idx}
-                          whileHover={{ scale: 1.05 }}
-                          className="aspect-square w-full min-h-[200px] rounded-lg overflow-hidden border shadow-sm cursor-pointer group relative transition-all duration-200 hover:shadow-xl hover:border-[#5A6B8A] hover:-translate-y-1"
-                          onClick={() => onPortfolioItemClick(item)}
-                        >
-                          <Image
-                            src={isDefaultSupabase ? '/avatar-default.png' : item.imageUrl}
-                            alt={item.caption || 'Portfólio'}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            sizes="(max-width: 768px) 100vw, 400px"
-                            className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              if (target.src !== '/avatar-default.png') {
-                                target.src = '/avatar-default.png';
-                              }
-                            }}
-                          />
-                          {/* Título sobreposto */}
-                          {item.caption && (
-                            <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white text-sm font-semibold px-2 py-1 truncate z-10">
-                              {item.caption}
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <Maximize className="w-8 h-8 text-white" />
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
+            <div ref={portfolioRef}>
+            {isSectionVisible('portfolio') && portfolio.length > 0 && (
+              <PortfolioGrid
+                items={portfolio}
+                maxToShow={9}
+                variant="standard"
+                onItemClick={onPortfolioItemClick}
+              />
             )}
+            </div>
 
             {/* Mídia (YouTube) */}
             {isSectionVisible('youtube') && user.youtubeVideoUrl && (
-              <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={youtubeRef}>
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                    {/* <Youtube className="w-6 h-6 text-primary" /> */} Mídia
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col md:flex-row md:gap-6">
-                    <div className="aspect-video rounded-lg overflow-hidden border shadow-sm w-full md:w-1/2">
-                      <iframe
-                        width="100%"
-                        src={getYoutubeEmbedUrl(user.youtubeVideoUrl) || ''}
-                        title={user.youtubeVideoTitle || 'YouTube video'}
-                        frameBorder="0"
-                        allowFullScreen
-                      ></iframe>
+              <div ref={youtubeRef}>
+                <ProfileCardContainer className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
+                      {/* <Youtube className="w-6 h-6 text-primary" /> */} Mídia
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col md:flex-row md:gap-6">
+                      <div className="aspect-video rounded-lg overflow-hidden border shadow-sm w-full md:w-1/2">
+                        <iframe
+                          width="100%"
+                          src={getYoutubeEmbedUrl(user.youtubeVideoUrl) || ''}
+                          title={user.youtubeVideoTitle || 'YouTube video'}
+                          frameBorder="0"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                      <div className="mt-4 md:mt-0 w-full md:w-1/2 flex flex-col items-start">
+                        {user.youtubeVideoTitle && (
+                          <div className="font-semibold text-lg mb-1">{user.youtubeVideoTitle}</div>
+                        )}
+                        {user.youtubeVideoDescription && (
+                          <div className="text-muted-foreground text-base">{user.youtubeVideoDescription}</div>
+                        )}
+                      </div>
                     </div>
-                    <div className="mt-4 md:mt-0 w-full md:w-1/2 flex flex-col items-start">
-                      {user.youtubeVideoTitle && (
-                        <div className="font-semibold text-lg mb-1">{user.youtubeVideoTitle}</div>
-                      )}
-                      {user.youtubeVideoDescription && (
-                        <div className="text-muted-foreground text-base">{user.youtubeVideoDescription}</div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </ProfileCardContainer>
+              </div>
             )}
 
             {/* Experiência Profissional + Formação Acadêmica em duas colunas */}
-            {(isSectionVisible('experience') && experience.length > 0) || (isSectionVisible('education') && education.length > 0) ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Experiência Profissional */}
-                {isSectionVisible('experience') && experience.length > 0 && (
-                  <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={experienceRef}>
-                    <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                        {/* <Building className="w-6 h-6 text-primary" /> */} Experiência Profissional
-                        {isEditing && (
-                          <button
-                            type="button"
-                            className="ml-1 p-1 rounded-full hover:bg-muted transition"
-                            title="Adicionar experiência"
-                            aria-label="Adicionar experiência"
-                          >
-                            <Plus className="w-5 h-5 text-primary" />
-                          </button>
-                        )}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {experience.map((exp, idx) => (
-                          <div key={exp.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
-                            <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                            <div>
-                              <h3 className="font-semibold text-lg">{exp.title}</h3>
-                              <p className="text-muted-foreground text-base">{exp.company}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {exp.startDate && exp.endDate
-                                  ? `${exp.startDate} - ${exp.endDate}`
-                                  : exp.startDate && !exp.endDate
-                                  ? `${exp.startDate} - Atual`
-                                  : (exp as any).years || ''
-                                }
-                              </p>
-                              {exp.description && <p className="text-sm text-muted-foreground mt-1">{exp.description}</p>}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Formação Acadêmica */}
-                {isSectionVisible('education') && education.length > 0 && (
-                  <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={educationRef}>
-                    <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
-                        {/* <GraduationCap className="w-6 h-6 text-primary" /> */} Formação Acadêmica
-                        {isEditing && (
-                          <button
-                            type="button"
-                            className="ml-1 p-1 rounded-full hover:bg-muted transition"
-                            title="Adicionar formação"
-                            aria-label="Adicionar formação"
-                          >
-                            <Plus className="w-5 h-5 text-primary" />
-                          </button>
-                        )}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {education.map((edu, idx) => (
-                          <div key={edu.id || idx} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
-                            <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                            <div>
-                              <h3 className="font-semibold text-lg">{edu.degree}</h3>
-                              <p className="text-muted-foreground text-base">{edu.institution}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {edu.startDate && edu.endDate
-                                  ? `${edu.startDate} - ${edu.endDate}`
-                                  : edu.startDate && !edu.endDate
-                                  ? `${edu.startDate} - Atual`
-                                  : (edu as any).years || ''
-                                }
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Experiência Profissional */}
+              <div ref={experienceRef}>
+              {isSectionVisible('experience') && experience.length > 0 && (
+                <ExperienceList
+                  experience={experience}
+                  maxToShow={8}
+                  variant="standard"
+                  isCurrentUserProfile={isCurrentUserProfile}
+                />
+              )}
               </div>
-            ) : null}
+
+              {/* Formação Acadêmica */}
+              <div ref={educationRef}>
+              {isSectionVisible('education') && education.length > 0 && (
+                <EducationList
+                  education={education}
+                  maxToShow={8}
+                  variant="standard"
+                  isCurrentUserProfile={isCurrentUserProfile}
+                />
+              )}
+              </div>
+            </div>
 
             {/* Links Sociais */}
             {sortedSocialLinks.length > 0 && (
-              <Card className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors" ref={skillsRef}>
+              <ProfileCardContainer className="bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-transparent backdrop-blur-md rounded-2xl shadow-lg transition-colors">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-2 text-2xl sm:text-3xl font-bold text-foreground">
                     {/* <Users className="w-6 h-6 text-primary" /> */} Links Sociais
@@ -1014,7 +643,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
                     })}
                   </div>
                 </CardContent>
-              </Card>
+              </ProfileCardContainer>
             )}
           </div>
         </div>
@@ -1171,8 +800,14 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
             onClose={() => setIsThemeOpen(false)}
             primaryColor={primaryColorState}
             secondaryColor={secondaryColorState}
-            onPrimaryColorChange={color => { setPrimaryColor(color); setIsThemeOpen(false); }}
-            onSecondaryColorChange={color => { setSecondaryColor(color); setIsThemeOpen(false); }}
+            onPrimaryColorChange={color => {
+              setPrimaryColor(color);
+              saveThemeColors(color, secondaryColorState);
+            }}
+            onSecondaryColorChange={color => {
+              setSecondaryColor(color);
+              saveThemeColors(primaryColorState, color);
+            }}
           />
         </div>
       )}

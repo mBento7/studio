@@ -52,6 +52,29 @@ export function LayoutDecider({
   }
 
   // 🟣 Demais páginas protegidas (ex: feed, dashboard, planos, etc)
+  // Ocultar sidebar esquerda quando em /dashboard
+  if (pathname === "/dashboard") {
+    return (
+      <AppContainer
+        hideSidebar={true}
+        hideRightSidebar={hideRightSidebar}
+      >
+        {children}
+      </AppContainer>
+    );
+  }
+
+  // Ocultar sidebar esquerda quando em /create
+  if (pathname === "/create" || pathname.startsWith("/create")) {
+    return (
+      <AppContainer
+        hideSidebar={true}
+        hideRightSidebar={hideRightSidebar}
+      >
+        {children}
+      </AppContainer>
+    );
+  }
   return (
     <AppContainer
       hideSidebar={hideSidebar}

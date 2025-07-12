@@ -187,3 +187,11 @@ O arquivo `globals.css` centraliza as definições globais de estilos do projeto
 - [Storybook de componentes]
 - [Tokens no código: apps/web/src/app/globals.css]
 - [Documentação Tailwind CSS] 
+
+---
+
+## Referência: Plano de Componentização dos Layouts de Perfil
+
+Para garantir a consistência visual, escalabilidade e facilidade de manutenção dos layouts de perfil, siga o [plano-componentizacao-layouts.md](./plano-componentizacao-layouts.md). Este documento detalha padrões, convenções, exemplos práticos e checklist de refatoração para a componentização dos principais layouts do projeto.
+
+A componentização bem planejada facilita a aplicação dos padrões de UX descritos neste guia, promove reuso e acelera a evolução do frontend. 

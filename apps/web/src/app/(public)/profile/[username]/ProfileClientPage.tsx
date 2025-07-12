@@ -17,6 +17,7 @@ import { PortfolioItemModal } from '@/features/profile/portfolio-item-modal';
 import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
 import { platformIcons } from "@/lib/types";
 import { getUserProfileV2 } from '@/features/profile/new-edit-flow/profile.service';
+import { PrintableBusinessCard } from '@/features/profile/printable-business-card';
 // Removidos notFound e getMockUserByUsername, pois são responsabilidades do Server Component
 // import { notFound } from "next/navigation";
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
@@ -284,6 +285,23 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
       {/* Mobile: apenas o layout do perfil */}
       <div className="block md:hidden">
         {renderProfileLayout()}
+        {userToDisplay.username === 'micaelsants' && (
+          <div className="flex justify-center mt-6">
+            <PrintableBusinessCard
+              user={{
+                name: userToDisplay.name,
+                email: userToDisplay.email,
+                phone: userToDisplay.phone,
+                category: userToDisplay.category,
+                profilePictureUrl: userToDisplay.profile_picture_url,
+                profilePictureDataAiHint: userToDisplay.profilePictureDataAiHint,
+                sociallinks: userToDisplay.sociallinks || []
+              }}
+              qrCodeUrl={qrCodeUrl}
+              primaryColorHex={primaryColorHex}
+            />
+          </div>
+        )}
       </div>
       {/* Desktop: renderização existente */}
       <div className="hidden md:block">
@@ -301,6 +319,23 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
           </Button>
         )}
         {renderProfileLayout()}
+        {userToDisplay.username === 'micaelsants' && (
+          <div className="flex justify-center mt-6">
+            <PrintableBusinessCard
+              user={{
+                name: userToDisplay.name,
+                email: userToDisplay.email,
+                phone: userToDisplay.phone,
+                category: userToDisplay.category,
+                profilePictureUrl: userToDisplay.profile_picture_url,
+                profilePictureDataAiHint: userToDisplay.profilePictureDataAiHint,
+                sociallinks: userToDisplay.sociallinks || []
+              }}
+              qrCodeUrl={qrCodeUrl}
+              primaryColorHex={primaryColorHex}
+            />
+          </div>
+        )}
         <PortfolioItemModal 
           item={selectedPortfolioItem}
           open={isPortfolioModalOpen}

@@ -231,6 +231,7 @@ const ShowcaseFeed = () => {
           <section>
             <h2 className="font-bold text-lg mb-2">EventCard</h2>
             <EventCard
+              id="design-conference-2024"
               name="Workshop de UX/UI"
               date={new Date().toISOString()}
               location="Online"
@@ -299,7 +300,20 @@ const ShowcaseFeed = () => {
               <StoryModal
                 open={storyModalOpen}
                 onClose={() => setStoryModalOpen(false)}
-                story={exampleStory}
+                story={{
+                  id: exampleStory.id,
+                  user: {
+                    name: exampleStory.user.name,
+                    username: exampleStory.user.username,
+                    avatarUrl: exampleStory.user.avatarUrl,
+                  },
+                  mediaUrl: exampleStory.mediaUrl,
+                  description: exampleStory.description,
+                  type: exampleStory.type === 'image' || exampleStory.type === 'video' ? exampleStory.type : 'image',
+                  time: exampleStory.time,
+                  liked: exampleStory.liked,
+                  timeLeft: exampleStory.timeLeft,
+                }}
                 onPrev={() => alert('Anterior')}
                 onNext={() => alert('Próximo')}
               />

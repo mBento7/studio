@@ -64,7 +64,7 @@ export default function ProfileEditV2Page() {
       </Alert>
       <div className="mt-6 flex justify-center">
         <Button asChild variant="outline">
-          <Link href="/dashboard">Voltar ao Dashboard</Link>
+          Voltar ao Dashboard
         </Button>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default function ProfileEditV2Page() {
     <div>
       <div className="flex justify-end mb-4">
         <Button asChild variant="outline" size="sm">
-          <Link href="/dashboard">Voltar ao Dashboard</Link>
+          Voltar ao Dashboard
         </Button>
       </div>
       {success && (

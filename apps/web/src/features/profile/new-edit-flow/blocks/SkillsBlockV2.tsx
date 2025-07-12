@@ -9,12 +9,15 @@ import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
 interface SkillsBlockV2Props {
   skills: string[];
   onChange: (skills: string[]) => void;
+  plan?: PlanType;
 }
 
-export function SkillsBlockV2({ skills, onChange, plan = 'free' }: SkillsBlockV2Props & { plan?: PlanType }) {
+export function SkillsBlockV2({ skills, onChange, plan = PlanType.FREE }: SkillsBlockV2Props) {
   const safeSkills = skills ?? [];
   const [touched, setTouched] = useState(false);
-  const limit = PLAN_LIMITS[plan].tags;
+  // Corrigir indexação para aceitar apenas os valores válidos de PlanType
+  const validPlan = plan === PlanType.FREE || plan === PlanType.STANDARD || plan === PlanType.PREMIUM ? plan : PlanType.FREE;
+  const limit = PLAN_LIMITS[validPlan].tags;
   const addSkill = () => {
     if (safeSkills.length >= limit) return;
     onChange([...safeSkills, ""]);
@@ -49,7 +52,7 @@ export function SkillsBlockV2({ skills, onChange, plan = 'free' }: SkillsBlockV2
         </div>
       ))}
       <Button onClick={addSkill} variant="outline" type="button" className="w-full flex items-center gap-2 justify-center" disabled={safeSkills.length >= limit}>
-        <Plus className="w-4 h-4" /> Adicionar Habilidade
+        <Plus className="w-4 h-4" /> Adicionar Tag
       </Button>
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos uma habilidade.</div>}
       {safeSkills.length >= limit && <div className="text-warning text-xs mt-1">Limite de {limit} tags atingido para seu plano.</div>}

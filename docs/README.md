@@ -2,7 +2,7 @@
 
 Bem-vindo à documentação do projeto WhosDo! Aqui você encontra guias, padrões, processos e referências para desenvolvimento, design, operação e evolução do sistema.
 
-> **Última revisão:** 24/06/2025  
+> **Última revisão:** 10/07/2025  
 > **Responsável:** Micael Bento
 
 ## Índice Geral
@@ -38,6 +38,42 @@ Bem-vindo à documentação do projeto WhosDo! Aqui você encontra guias, padrõ
 - Consulte o [Guia Visual Unificado](./guia-visual/guia-visual-unificado.md) para qualquer dúvida sobre padrões visuais, tokens, temas ou componentes de UI.
 - Para dúvidas sobre processos, arquitetura ou domínio, consulte a seção correspondente.
 - Sempre que atualizar um padrão, processo ou estrutura, lembre-se de atualizar a documentação!
+
+---
+
+## Como rodar o projeto
+
+> O projeto é um monorepo gerenciado com [pnpm](https://pnpm.io/) e workspaces. Sempre use pnpm para instalar dependências e rodar scripts!
+
+1. Instale o pnpm globalmente (se necessário):
+   ```bash
+   npm install -g pnpm
+   ```
+2. Instale as dependências na raiz do projeto:
+   ```bash
+   pnpm install
+   ```
+3. Inicie o app principal:
+   ```bash
+   pnpm --filter nextn dev
+   ```
+
+## Como rodar o Storybook
+
+Se o Storybook estiver configurado no app principal:
+```bash
+pnpm --filter nextn storybook
+```
+
+---
+
+## Troubleshooting
+- **Erro: pnpm não encontrado**
+  - Instale globalmente: `npm install -g pnpm`
+- **Erro: Cannot read properties of null (reading 'matches')**
+  - Sempre use `pnpm install` na raiz do projeto, nunca `npm install`.
+- **Problemas com dependências ou lockfile**
+  - Limpe tudo: `rd /s /q node_modules && del pnpm-lock.yaml && pnpm store prune && pnpm install`
 
 ---
 
@@ -102,18 +138,11 @@ Para garantir a evolução contínua e organizada do projeto, mantenha sempre um
 - Itens concluídos e próximos passos.
 - Responsáveis por cada tarefa ou revisão.
 
-### Revisão mais recente
+---
 
-**Data:** 24/06/2025  
-**Responsável:** Micael Bento
+## Histórico de revisões
 
-**Principais pontos identificados:**
-- README.md (raiz): atualizado com instruções e links.
-- README.md (apps/web): links e exemplos revisados.
-- /docs: índice atualizado, READMEs revisados.
-- project-structure-and-recovery-guide.md: alinhado com a estrutura atual.
-- NEXT_STEPS.md: progresso e próximos passos detalhados.
-- db/, infra/, supabase/: versionamento e documentação em dia.
+- Atualização rápida: 10/07/2025
 
 ---
 

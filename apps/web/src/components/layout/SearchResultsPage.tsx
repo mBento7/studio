@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { AppContainer } from "./app-container";
 import { profileLayouts } from "../profile-layouts";
 import type { UserProfile } from "@/lib/types";
-import FreeSearchResultCard from "../profile-layouts/FreeProfileLayout/SearchResultCard";
-import StandardSearchResultCard from "../profile-layouts/StandardProfileLayout/SearchResultCard";
-import PremiumProfileSearchResultCard from "../profile-layouts/PremiumProfileLayout/SearchResultCard";
+import FreeSearchResultCard from "../profile-layouts/FreeProfileLayout/SearchResultCardFree";
+import StandardSearchResultCard from "../profile-layouts/StandardProfileLayout/SearchResultCardStandard";
+import PremiumProfileSearchResultCard from "../profile-layouts/PremiumProfileLayout/SearchResultCardPremium";
 import { getAllUserProfiles } from '@/services/profile.service';
 
 const SearchResultsPage = () => {

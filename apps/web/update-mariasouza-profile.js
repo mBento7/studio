@@ -34,7 +34,7 @@ async function updateMariasouzaProfile() {
           bio: 'Profissional criativa com experiência em design e desenvolvimento. Apaixonada por criar soluções inovadoras e experiências únicas.',
           category: 'Designer & Desenvolvedora',
           profile_picture_url: 'https://randomuser.me/api/portraits/women/32.jpg',
-          cover_photo_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=675&fit=crop',
+          cover_photo_url: 'https://images.unsplash.com/photo-1579547623912-d11e54051061?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           plan: 'standard',
           layout_template_id: 'standard',
           is_available: true,
@@ -60,7 +60,7 @@ async function updateMariasouzaProfile() {
         .from('profiles')
         .update({
           profile_picture_url: 'https://randomuser.me/api/portraits/women/32.jpg',
-          cover_photo_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=675&fit=crop',
+          cover_photo_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop',
           bio: 'Profissional criativa com experiência em design e desenvolvimento. Apaixonada por criar soluções inovadoras e experiências únicas.',
           category: 'Designer & Desenvolvedora',
           plan: 'standard',
@@ -223,7 +223,7 @@ async function updateMariasouzaProfile() {
 
     console.log('✅ Perfil mariasouza atualizado com todos os exemplos de itens do plano standard!');
     console.log('📸 Foto de perfil: https://randomuser.me/api/portraits/women/32.jpg');
-    console.log('🖼️ Foto de capa: https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=675&fit=crop');
+    console.log('🖼️ Foto de capa: https://images.unsplash.com/photo-1579547623912-d11e54051061?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     console.log('🌐 Acesse: http://localhost:3000/profile/mariasouza');
 
   } catch (error) {

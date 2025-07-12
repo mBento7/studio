@@ -25,7 +25,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
   // Busca dados agregados usando SEMPRE o id do merged
   const [socialLinksRes, couponsRes, reviewsRes, faqsRes, portfolioRes] = await Promise.all([
     supabase.from('social_links').select('*').eq('profile_id', merged.id),
-    supabase.from('coupons').select('*').eq('profile_id', merged.id),
+    supabase.from('coupons').select('*').eq('username', merged.username), // Alterado para buscar por username
     supabase.from('reviews').select('*').eq('reviewed_user_id', merged.id).eq('is_public', true),
     supabase.from('faq').select('*').eq('profile_id', merged.id),
     supabase.from('portfolio_items').select('*').eq('profile_id', merged.id), // <-- ADICIONADO

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LAYOUTS, PlanType } from "./layoutFeatures";
-import { Star as StarIcon, CheckCircle2, Info, Star, User, Briefcase, Award, Layers, Crown, Gem } from "lucide-react";
+import { Star as StarIcon, CheckCircle2, Info, Star, User, Briefcase, Award, Layers, Crown, Gem, MapPin } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
 import { useRouter } from 'next/navigation';
@@ -141,11 +141,14 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <div className="flex items-center gap-1 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <StarIcon key={i} className={`w-4 h-4 ${i < layout.popularity ? 'text-yellow-400' : 'text-gray-300'}`} fill={i < layout.popularity ? '#facc15' : 'none'} />
-                    ))}
-                  </div>
+                  {/* Estrelas de avaliação: exibir apenas para Básico (Free) e Premium */}
+                  {(layout.plan === 'free' || layout.plan === 'premium') && (
+                    <div className="flex items-center gap-1 mb-1">
+                      {[...Array(5)].map((_, i) => (
+                        <StarIcon key={i} className={`w-4 h-4 ${i < layout.popularity ? 'text-yellow-400' : 'text-gray-300'}`} fill={i < layout.popularity ? '#facc15' : 'none'} />
+                      ))}
+                    </div>
+                  )}
                   <span className="text-muted-foreground text-sm mb-1">{layout.description}</span>
                   <ul className="list-none ml-0 text-xs text-muted-foreground mb-2 space-y-1">
                     {layout.features.map(f => {
@@ -164,6 +167,21 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
                       // Destaque Standard para os dois itens
                       const isStandardExclusive = ((layout.plan === 'standard' || layout.plan === 'free') && STANDARD_LIMITS_EXCLUSIVE.includes(f)) ||
                         (layout.plan === 'premium' && (f === 'Vídeo do YouTube integrado' || f === 'Chat integrado'));
+                      if (f.includes("Pino de localização")) {
+                        return (
+                          <li key={f} className="flex items-center gap-2">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span><MapPin className="w-4 h-4 text-red-600" /></span>
+                                </TooltipTrigger>
+                                <TooltipContent side="top">Permite adicionar um link de localização que abre direto no Google Maps</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                            {f}
+                          </li>
+                        );
+                      }
                       return (
                         <li key={f} className={`flex items-center gap-2 ${isPremiumLimit ? 'font-semibold text-yellow-700' : ''} ${isStandardExclusive ? 'font-semibold text-blue-700' : ''}`}>
                           {isPremiumLimit

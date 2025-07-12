@@ -12,6 +12,9 @@ import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
 import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
 import { supabase } from '@/lib/supabase/client';
+import SearchResultCardFree from '@/components/profile-layouts/FreeProfileLayout/SearchResultCardFree';
+import SearchResultCardPremium from '@/components/profile-layouts/PremiumProfileLayout/SearchResultCardPremium';
+import SearchResultCardStandard from '@/components/profile-layouts/StandardProfileLayout/SearchResultCardStandard';
 
 const BANNERS = [
     { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
@@ -335,6 +338,7 @@ export default function SearchShowcase() {
           cover_photo_url: user.cover_photo_url || "",
           isOnlineService: user.is_online_service || false, // Mapeia o campo online
           location: user.location || { city: '', state: '' }, // Mapeia a localização
+          layoutTemplateId: user.layout_template_id || user.layoutTemplateId, // <-- Adicionado!
         }));
         setAllProfiles(mapped as UserProfile[]);
 
@@ -427,57 +431,29 @@ export default function SearchShowcase() {
           )}>
             <AnimatePresence>
               {filteredProfiles.map(profile => {
-                  const Layout = getLayoutComponent(profile.layoutTemplateId);
-                  const SearchResultComponent = Layout?.SearchResultComponent;
-                  
-                  if (SearchResultComponent) {
-                    return (
-                        <motion.div
-                          key={profile.id}
-                          layout
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.3 }}
-                          className="h-full"
-                        >
-                            <SearchResultComponent user={profile} />
-                        </motion.div>
-                    );
-                  }
-
-                  // Fallback para um card genérico caso o layout não seja encontrado
-                  return (
-                    <motion.div
-                      key={profile.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
-                      className="h-full"
-                    >
-                      <Link href={`/profile/${profile.username}`} className="block group h-full focus:outline-none focus:ring-2 focus:ring-primary rounded-xl">
-                        <Card className="flex flex-col items-center justify-center h-full w-full p-5 rounded-xl bg-white dark:bg-slate-900 shadow border border-slate-200 dark:border-slate-800 transition-all duration-200 hover:shadow-lg hover:border-primary/60 cursor-pointer">
-                          <img
-                            src={profile.profile_picture_url && profile.profile_picture_url.trim() !== '' ? profile.profile_picture_url : '/avatar-default.png'}
-                            alt={profile.name}
-                            className="w-16 h-16 rounded-full mb-2 border-2 border-white dark:border-zinc-800 shadow bg-white"
-                          />
-                          <h3 className="text-base font-semibold text-foreground text-center mt-1">{profile.name || 'Usuário'}</h3>
-                          <p className="text-xs text-primary font-medium text-center mb-1">{profile.category}</p>
-                          {profile.bio && (
-                            <p className="text-xs text-muted-foreground text-center mb-2 line-clamp-2">{profile.bio}</p>
-                          )}
-                          <div className="flex flex-wrap gap-1 justify-center mt-1">
-                            {(profile.skills || []).slice(0, 2).map(skill => (
-                              <span key={skill} className="border border-primary/20 text-primary/80 px-2 py-0.5 rounded text-xs bg-primary/5">{skill}</span>
-                            ))}
-                          </div>
-                        </Card>
-                      </Link>
-                    </motion.div>
-                  );
+                // DEBUG: Verificar qual card será renderizado
+                console.log('CARD DEBUG', profile.username, profile.layoutTemplateId);
+                let SearchResultComponent;
+                if (profile.layoutTemplateId === 'premium') {
+                  SearchResultComponent = SearchResultCardPremium;
+                } else if (profile.layoutTemplateId === 'standard') {
+                  SearchResultComponent = SearchResultCardStandard;
+                } else {
+                  SearchResultComponent = SearchResultCardFree;
+                }
+                return (
+                  <motion.div
+                    key={profile.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                    className="h-full"
+                  >
+                    <SearchResultComponent user={profile} />
+                  </motion.div>
+                );
               })}
             </AnimatePresence>
           </div>

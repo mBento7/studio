@@ -108,6 +108,36 @@ export async function saveSocialLinksV2(userId: string, socialLinks: Array<{ pla
   }
 }
 
+// Salva, atualiza e remove cupons na tabela relacional coupons
+export async function saveCouponsV2(userId: string, username: string, coupons: Array<any>) {
+  // Buscar cupons atuais do banco
+  const { data: currentCoupons, error: fetchError } = await supabase
+    .from('coupons')
+    .select('*')
+    .eq('profile_id', userId);
+  if (fetchError) throw fetchError;
+
+  // Mapear por código para facilitar comparação
+  const currentMap = new Map((currentCoupons || []).map((c: any) => [c.code, c]));
+
+  // Remover cupons que não existem mais
+  for (const c of currentCoupons || []) {
+    if (!coupons.find((nc: any) => nc.code === c.code)) {
+      await supabase.from('coupons').delete().eq('id', c.id);
+    }
+  }
+  // Adicionar ou atualizar cupons
+  for (const c of coupons) {
+    const found = (currentCoupons || []).find((cc: any) => cc.code === c.code);
+    const cupomComUsername = { ...c, username };
+    if (!found) {
+      await supabase.from('coupons').insert({ profile_id: userId, ...cupomComUsername });
+    } else {
+      await supabase.from('coupons').update({ ...cupomComUsername }).eq('id', found.id);
+    }
+  }
+}
+
 // Exemplo de uso:
 // const profile = await getUserProfileV2(user.id);
 // await saveUserProfileV2(user.id, profileData); 

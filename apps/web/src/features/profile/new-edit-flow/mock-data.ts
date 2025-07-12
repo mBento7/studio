@@ -60,7 +60,7 @@ export const superPremiumUser = {
     { question: "Como funciona a mentoria?", answer: "A mentoria é personalizada conforme o perfil do cliente." },
     { question: "Atende empresas?", answer: "Sim, consultoria e treinamentos corporativos." }
   ],
-  layoutTemplateId: "super-premium"
+  layoutTemplateId: "premium"
 };
 
 // Card de resultado de pesquisa para o usuário premium

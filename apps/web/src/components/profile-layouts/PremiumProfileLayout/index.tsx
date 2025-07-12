@@ -49,7 +49,7 @@ import { Button } from "@/components/ui/button";
 import Image from 'next/image';
 import { SocialIcon } from 'react-social-icons';
 import CouponCard from '@/components/feed/CouponCard';
-import ProfileHeader from '@/components/layout/ProfileHeader'; // Novo import
+import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
 import { CreateCouponModal } from '@/features/dashboard/create-coupon-modal';
@@ -64,6 +64,21 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import type { PlanType } from '@/features/profile/new-edit-flow/layoutFeatures';
+import { SocialLinks } from "@/components/social/SocialLinks";
+import { SkillsList } from "@/components/skills/SkillsList";
+import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
+import { ServicesList } from "@/components/services/ServicesList";
+import { ExperienceList } from "@/components/experience/ExperienceList";
+import { EducationList } from "@/components/education/EducationList";
+import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
+import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
+import FreeProfileCardHeader from "@/components/profile-layouts/ProfileCardHeader";
+import { FaqSection } from "@/components/profile-layouts/FaqSection";
+import { BannerPremiumSection } from "@/components/profile-layouts/PremiumProfileLayout/BannerPremiumSection";
+import { YoutubeSection } from "@/components/profile-layouts/PremiumProfileLayout/YoutubeSection";
+import { EventList } from "@/components/events/EventList";
+import { useProfileTheme, ProfileTheme } from "@/components/profile-layouts/useProfileTheme";
+import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
 
 export interface UserProfile {
   id: string;
@@ -130,6 +145,8 @@ export interface UserProfile {
     validUntil?: string;
     discount_value?: string; // Adicionado para compatibilidade
     expires_at?: string; // Adicionado para compatibilidade
+    created_at?: string; // Adicionado para compatibilidade
+    regulation?: string; // Adicionado para compatibilidade
   }>;
   faqs?: Array<{
     question: string;
@@ -146,12 +163,19 @@ export interface UserProfile {
   endereco_estado?: string;
   endereco_cep?: string;
   maps_link?: string;
+  events?: Array<{
+    title: string;
+    description: string;
+    date: string;
+    location: string;
+  }>;
 }
 
 interface PortfolioItem {
   id: string;
   caption: string;
   imageUrl: string;
+  description?: string; // Adicionado para permitir a propriedade 'description'
 }
 
 const Badge = React.forwardRef<
@@ -721,7 +745,6 @@ const PremiumProfileLayout: React.FC<{
   primaryColorHex?: string;
   isCurrentUserProfile?: boolean;
   mounted?: boolean;
-  qrCodeUrl?: string;
   onPortfolioItemClick?: (item: PortfolioItem) => void;
   primaryColor?: string;
   secondaryColor?: string;
@@ -830,7 +853,6 @@ const PremiumProfileLayout: React.FC<{
   primaryColorHex = "#6366f1",
   isCurrentUserProfile = false,
   mounted = true,
-  qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com",
   onPortfolioItemClick = () => {},
   primaryColor,
   secondaryColor,
@@ -858,10 +880,8 @@ const PremiumProfileLayout: React.FC<{
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [editServiceIdx, setEditServiceIdx] = useState<number|null>(null);
   const [isThemeOpen, setIsThemeOpen] = useState(false);
-  const [themeCustomizer, setThemeCustomizer] = useState({
-    primary: '#3B82F6',
-    mode: 'light',
-  });
+  const { theme, setTheme, setPrimaryColor, setSecondaryColor, toggleMode } = useProfileTheme();
+  const [showFullSchedule, setShowFullSchedule] = useState(false);
 
   const { toast } = useToast();
 
@@ -971,14 +991,12 @@ const PremiumProfileLayout: React.FC<{
       }
 
       toast({
-        title: "Sucesso!",
-        description: "Sua avaliação foi enviada.",
-        variant: "default",
+        title: "Sucesso",
+        description: "Avaliação enviada com sucesso!",
       });
-      // Opcional: Atualizar a lista de avaliações no frontend sem recarregar a página
-      // Você pode buscar novamente as avaliações ou adicionar a nova avaliação ao estado local
+
     } catch (err: any) {
-      console.error('Erro ao enviar avaliação:', err);
+      console.error("Erro ao enviar avaliação:", err);
       toast({
         title: "Erro",
         description: err.message || 'Não foi possível enviar sua avaliação.',
@@ -1005,7 +1023,6 @@ const PremiumProfileLayout: React.FC<{
     setIsPortfolioModalOpen(true);
   };
 
-  // Adicione antes do return do componente PremiumProfileLayout:
   const portfolioItems = user.portfolio || [];
   let gridCols = "grid-cols-1";
   if (portfolioItems.length === 2) gridCols = "grid-cols-2";
@@ -1036,6 +1053,13 @@ const PremiumProfileLayout: React.FC<{
     ];
   }
 
+  // Atualizar o state de cupons sempre que user.coupons mudar
+  useEffect(() => {
+    setCoupons(user.coupons || []);
+    // Log para depuração sempre que os cupons mudarem
+    console.log('[PremiumProfileLayout] useEffect setCoupons:', user.coupons);
+  }, [user.coupons]);
+
   const sectionRefs = {
     hero: useRef<HTMLDivElement>(null), // Adicionado para a seção Home
     portfolio: useRef<HTMLDivElement>(null),
@@ -1048,8 +1072,12 @@ const PremiumProfileLayout: React.FC<{
     about: useRef<HTMLDivElement>(null), // Manter se for usado em outro lugar
   };
 
-  const handleSectionClick = useCallback((section: keyof typeof sectionRefs) => {
-    sectionRefs[section]?.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleSectionClick = useCallback((section: keyof typeof sectionRefs | string) => { 
+    if (typeof section === 'string' && sectionRefs[section as keyof typeof sectionRefs]) {
+      sectionRefs[section as keyof typeof sectionRefs]?.current?.scrollIntoView({ behavior: 'smooth' });
+    } else if (sectionRefs[section as keyof typeof sectionRefs]) {
+      sectionRefs[section as keyof typeof sectionRefs]?.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [sectionRefs]);
 
   useEffect(() => {
@@ -1097,11 +1125,148 @@ const PremiumProfileLayout: React.FC<{
     return <div className="text-center p-8">Este perfil é privado.</div>;
   }
 
+  // Banner mock visual para teste
+  // <div className="w-full h-24 bg-yellow-400 flex items-center justify-center rounded-lg mb-6 shadow-lg border border-yellow-500">
+  // <span className="text-black text-xl font-bold">
+  //   Promoção exclusiva: Assine o Premium e ganhe benefícios especiais!
+  // </span>
+  // </div>
+
   // Ordenar para WhatsApp primeiro
   const sortedSocialLinks = [
     ...safeUser.sociallinks.filter(link => link.platform === 'whatsapp'),
     ...safeUser.sociallinks.filter(link => link.platform !== 'whatsapp'),
   ];
+
+  // Função auxiliar para renderizar SocialLinks ou mensagem de ausência
+  function RenderSocialLinks({ links }: { links: any[] }) {
+    if (Array.isArray(links) && links.length > 0) {
+      return (
+        <SocialLinks
+          links={links}
+          maxToShow={10}
+          highlightWhatsapp={true}
+          variant="premium"
+        />
+      );
+    }
+    return (
+      <div className="text-xs text-slate-500 dark:text-slate-500 mb-6 text-center">Nenhum link social cadastrado</div>
+    );
+  }
+
+  // Função auxiliar para renderizar Skills Preview
+  function RenderSkillsPreview({ skills }: { skills: string[] }) {
+    if (!skills || skills.length === 0) return null;
+    return (
+      <div className="flex flex-wrap justify-center gap-2">
+        {skills.slice(0, 4).map((skill, index) => (
+          <Badge key={skill + '-' + index} className="bg-blue-100 dark:bg-blue-800/70 text-blue-800 dark:text-blue-100 border-blue-200 dark:border-blue-600/30 text-xs">
+            {skill}
+          </Badge>
+        ))}
+        {skills.length > 4 && (
+          <Badge className="bg-slate-100 dark:bg-slate-700/50 text-slate-700 border-slate-200 dark:border-slate-600/30 text-xs">
+            +{skills.length - 4} mais
+          </Badge>
+        )}
+      </div>
+    );
+  }
+
+  // Função auxiliar para renderizar Avatares de Reviews
+  function RenderReviewAvatars({ reviews }: { reviews: any[] }) {
+    if (!reviews || reviews.length === 0) return null;
+    return (
+      <div className="flex -space-x-2">
+        {reviews.slice(0, 3).map((review, index) => (
+          <Avatar key={review.id || index} className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white">
+            <img src={review.authorAvatarUrl || '/avatar-default.png'} alt={review.authorName || 'Usuário Anônimo'} />
+          </Avatar>
+        ))}
+      </div>
+    );
+  }
+
+  // Bloco de horário de funcionamento (mock)
+  const mockWorkingHours: Record<string, string> = {
+    'segunda-feira': '08:00–21:00',
+    'terça-feira': '08:00–21:00',
+    'quarta-feira': '08:00–21:00',
+    'quinta-feira': '08:00–21:00',
+    'sexta-feira': '08:00–21:00',
+    'sábado': '08:00–21:00',
+    'domingo': '08:00–20:00',
+  };
+  const dias = [
+    'domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'
+  ];
+  const hoje = dias[new Date().getDay()];
+  const agora = new Date();
+  const [horaInicio, horaFim] = mockWorkingHours[hoje].split('–').map((h: string) => h.trim());
+  const [hInicio, mInicio] = horaInicio.split(':').map(Number);
+  const [hFim, mFFim] = horaFim.split(':').map(Number); // Corrigido mFim para mFFim
+  const aberto = (agora.getHours() > hInicio || (agora.getHours() === hInicio && agora.getMinutes() >= mInicio)) &&
+                 (agora.getHours() < hFim || (agora.getHours() === hFim && agora.getMinutes() <= mFFim));
+
+  // Após a definição de 'user', force o portfólio mock para teste:
+  // user.portfolio = [
+  //   { id: '1', caption: 'Website Institucional', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=400&fit=crop' },
+  //   { id: '2', caption: 'App Mobile Delivery', imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600&h=400&fit=crop' },
+  //   { id: '3', caption: 'Identidade Visual Loja', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=600&h=400&fit=crop' }
+  // ];
+
+  // Antes do return do componente PremiumProfileLayout, forçar mocks se portfolio.length === 0
+  let portfolioToShow = portfolio;
+  if (!portfolioToShow || portfolioToShow.length === 0) {
+    portfolioToShow = [
+      {
+        id: '1',
+        caption: 'Website Institucional',
+        imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+        description: 'Site institucional moderno, responsivo e otimizado para SEO.'
+      },
+      {
+        id: '2',
+        caption: 'Campanha de Oferta',
+        imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80',
+        description: 'Landing page de alta conversão para campanha promocional.'
+      },
+      {
+        id: '3',
+        caption: 'Anúncio Patrocinado',
+        imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80',
+        description: 'Criativo para mídia paga com foco em engajamento.'
+      },
+      {
+        id: '4',
+        caption: 'Landing Page Responsiva',
+        imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
+        description: 'Página responsiva para captação de leads.'
+      }
+    ] as PortfolioItem[]; // Cast explícito para PortfolioItem[]
+  }
+
+  console.log("[PremiumProfileLayout] Renderizando PortfolioGrid com", portfolioToShow.length, "itens.");
+  console.log("[PremiumProfileLayout Debug] isSectionVisible('portfolio'):", isSectionVisible('portfolio'));
+  console.log("[PremiumProfileLayout Debug] portfolioToShow.length:", portfolioToShow.length);
+
+  // Dentro do componente PremiumProfileLayout, antes do return (ou logo após a definição de user):
+  // Banner de exemplo para o perfil micaelsants
+  const exemploBannerPremium = {
+    title: "Bem-vindo ao WhosDo Premium!",
+    description: "Aproveite benefícios exclusivos, destaque seu perfil e conquiste mais clientes.",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    ctaText: "Quero ser Premium!"
+  };
+
+  const profileUrl = typeof window !== "undefined" ? window.location.href : "";
+  const { qrCodeUrl, isLoading: isQrLoading } = useProfileQrCode(profileUrl);
+
+  // Filtrar cupons válidos (sem validade ou com validade futura)
+  const cuponsValidos = coupons.filter(
+    c => !c.expires_at || new Date(c.expires_at) >= new Date()
+  );
 
   return (
     <>
@@ -1168,7 +1333,7 @@ const PremiumProfileLayout: React.FC<{
                         whileHover={{ scale: 1.05 }}
                         className="relative mb-6 inline-block"
                       >
-                        <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-white/20 shadow-xl mx-auto">
+                        <Avatar className="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 border-4 border-white/20 shadow-2xl ring-4 ring-primary/60 mx-auto transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:ring-8 hover:ring-primary/80">
                           <img src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} className="w-full h-full object-cover" />
                         </Avatar>
                         <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
@@ -1183,121 +1348,54 @@ const PremiumProfileLayout: React.FC<{
                       {/* Quick Info com espaçamento melhorado */}
                       <div className="space-y-3 mb-6">
                         {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
-                        {(
-                          user.endereco_rua || user.endereco_numero || user.endereco_complemento || user.endereco_bairro || user.endereco_cidade || user.endereco_estado || user.endereco_cep
-                        ) ? (
-                          <div className="flex items-center gap-2">
-                            {user.maps_link ? (
-                              <a
-                                href={user.maps_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                                title="Abrir no Google Maps"
-                                style={{ marginRight: 0 }}
-                              >
-                                <MapPin className="w-5 h-5" />
-                              </a>
-                            ) : (
-                              <MapPin className="w-5 h-5 text-muted-foreground" />
-                            )}
-                            <span>
-                              {user.endereco_rua ? user.endereco_rua : ''}
-                              {user.endereco_numero ? `, ${user.endereco_numero}` : ''}
-                              {user.endereco_complemento ? `, ${user.endereco_complemento}` : ''}
-                              {user.endereco_bairro ? `, ${user.endereco_bairro}` : ''}
-                              {user.endereco_cidade ? `, ${user.endereco_cidade}` : ''}
-                              {user.endereco_estado ? ` - ${user.endereco_estado}` : ''}
-                              {user.endereco_cep ? `, CEP: ${user.endereco_cep}` : ''}
-                            </span>
-                          </div>
-                        ) : (
-                          (user.maps_link || (user.location && user.location.city)) && (
-                            <div className="flex items-center gap-2">
-                              {user.maps_link ? (
-                                <a
-                                  href={user.maps_link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full p-1 transition-colors duration-150 shadow cursor-pointer"
-                                  title="Abrir no Google Maps"
-                                  style={{ marginRight: 0 }}
-                                >
-                                  <MapPin className="w-5 h-5" />
-                                </a>
-                              ) : (
-                                <MapPin className="w-5 h-5 text-muted-foreground" />
-                              )}
-                              <span>
-                                {user.location?.city}
-                                {user.location?.country ? `, ${user.location.country}` : ''}
+                        
+                        <div
+  className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 mb-4 cursor-pointer select-none"
+  onClick={() => setShowFullSchedule((v) => !v)}
+>
+  <Clock className="w-4 h-4" />
+  <span className={`font-bold ${aberto ? 'text-green-600' : 'text-red-500'}`}>{aberto ? 'Aberto' : 'Fechado'}</span>
+  {!aberto && (
+    <span className="text-xs text-gray-500">Abre {dias[(new Date().getDay() + 1) % 7]} às {mockWorkingHours[dias[(new Date().getDay() + 1) % 7]].split('–')[0]}</span>
+  )}
+  {showFullSchedule ? (
+    <ChevronUp className="w-4 h-4 ml-1" />
+  ) : (
+    <ChevronDown className="w-4 h-4 ml-1" />
+  )}
+</div>
+{showFullSchedule && (
+  <div className="mt-1 text-xs text-gray-500 text-center">
+    <div className="font-bold text-white">Horário de funcionamento:</div>
+    <div className="font-bold text-white">{hoje} {mockWorkingHours[hoje]}</div>
+    {dias.filter(d => d !== hoje).map(dia => (
+      <div key={dia}>{dia} {mockWorkingHours[dia]}</div>
+    ))}
+  </div>
+)}
+                       
+                        {/* Social Links com layout responsivo */}
+                        <div className="flex justify-center w-full my-4">
+                          <RenderSocialLinks links={sortedSocialLinks} />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center w-full my-4">
+                        <LocationInfo city={user.location?.city} country={user.location?.country} mapsLink={user.maps_link} />
+                        {(user.email || user.phone) && (
+                          <div className="mt-2 flex flex-col gap-1 items-center">
+                            {user.email && (
+                              <span className="text-sm text-gray-500">
+                                <strong>Email:</strong> {user.email}
                               </span>
-                            </div>
-                          )
+                            )}
+                            {user.phone && (
+                              <span className="text-sm text-gray-500">
+                                <strong>Telefone:</strong> {user.phone}
+                              </span>
+                            )}
+                          </div>
                         )}
-                        <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
-                          <Clock className="w-4 h-4" />
-                          <span className="text-sm">Available for projects</span>
-                        </div>
                       </div>
-
-                      {/* Social Links com layout responsivo */}
-                      {Array.isArray(sortedSocialLinks) && sortedSocialLinks.length > 0 ? (
-                        <div className="flex flex-wrap justify-center gap-2 mb-6">
-                          {sortedSocialLinks.map((link, idx) => {
-                            const platform = link.platform || link.type;
-                            if (typeof platform !== 'string' || !platform.trim() || typeof link.url !== 'string' || !link.url.trim()) return null;
-                            return (
-                              <motion.div
-                                key={link.id || idx}
-                                whileHover={{ scale: 1.15, y: -2 }}
-                                className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-100 dark:bg-slate-700/30 backdrop-blur-sm rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-500 hover:text-white transition-colors border border-slate-200 dark:border-slate-600"
-                              >
-                                <SocialIcon
-                                  url={link.url}
-                                  style={{ width: '36px', height: '36px' }}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                />
-                              </motion.div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <div className="text-xs text-slate-500 dark:text-slate-500 mb-6 text-center">Nenhum link social cadastrado</div>
-                      )}
-
-                      {/* Skills Preview com chips melhorados */}
-                      <div className="mb-6">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="font-semibold text-base text-blue-900 dark:text-blue-100">Tags</span>
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span className="ml-1 cursor-pointer">
-                                  <InformationCircleIcon className="w-4 h-4 text-muted-foreground" />
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent side="top">
-                                Adicione tags com suas habilidades, ferramentas e áreas de atuação. Assim, mais pessoas encontrarão você!
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-2">
-                          {user.skills?.slice(0, 4).map((skill, index) => (
-                            <Badge key={skill + '-' + index} className="bg-blue-100 dark:bg-blue-800/70 text-blue-800 dark:text-blue-100 border-blue-200 dark:border-blue-600/30 text-xs">
-                              {skill}
-                            </Badge>
-                          ))}
-                          {user.skills && user.skills.length > 4 && (
-                            <Badge className="bg-slate-100 dark:bg-slate-700/50 text-slate-700 border-slate-200 dark:border-slate-600 text-xs">
-                              +{user.skills.length - 4} mais
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-
                       {/* Botões de contato com hover effects */}
                       <Button 
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 text-white hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-800 dark:hover:to-blue-600 font-semibold rounded-full text-base sm:text-lg py-2.5 sm:py-3 flex items-center justify-center mb-2 shadow-lg transition-all duration-300 hover:shadow-xl"
@@ -1325,16 +1423,23 @@ const PremiumProfileLayout: React.FC<{
                   transition={{ duration: 0.8 }}
                   className="text-white order-2 lg:order-2"
                 >
+                  
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="inline-flex items-center bg-blue-100 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-200 dark:border-blue-600/30 rounded-full px-4 py-2 mb-6"
+                    transition={{ duration: 0.6, delay: 0.8 }}
+                    className="flex flex-col sm:flex-row items-center gap-4 mt-8"
                   >
-                    <Sparkles className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-300" />
-                    <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Professional {user.category}</span>
+                    <RenderReviewAvatars reviews={user.reviews || []} />
+                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center sm:text-left">
+                      <div className="flex items-center gap-1 mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <span>Trusted by 100+ clients</span>
+                    </div>
                   </motion.div>
-
                   <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -1356,6 +1461,10 @@ const PremiumProfileLayout: React.FC<{
                     {user.bio || "Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados."}
                   </motion.p>
 
+                  <div className="flex flex-col items-center w-full my-4">
+                    
+                  </div>
+
                   {/* Disponível para projetos e tags */}
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -1363,18 +1472,13 @@ const PremiumProfileLayout: React.FC<{
                     transition={{ duration: 0.5, delay: 0.55 }}
                     className="mb-6 flex flex-col items-start gap-2"
                   >
-                    <span className="flex items-center gap-2 text-base text-green-700 dark:text-green-400 font-medium">
-                      <span className="w-2 h-2 rounded-full bg-green-500 inline-block animate-pulse" />
-                      Disponível para projetos
-                    </span>
+                    
                     {user.skills && user.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        {user.skills.map((tag, idx) => (
-                          <Badge key={idx} variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 border-none">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
+                      <SkillsList
+                        skills={user.skills}
+                        maxToShow={20}
+                        variant="premium"
+                      />
                     )}
                   </motion.div>
 
@@ -1406,28 +1510,7 @@ const PremiumProfileLayout: React.FC<{
                   </motion.div>
 
                   {/* Social Proof com layout responsivo */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.8 }}
-                    className="flex flex-col sm:flex-row items-center gap-4 mt-8"
-                  >
-                    <div className="flex -space-x-2">
-                      {user.reviews?.slice(0, 3).map((review, index) => (
-                        <Avatar key={review.id || index} className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white">
-                          <img src={review.authorAvatarUrl || '/avatar-default.png'} alt={review.authorName || 'Usuário Anônimo'} />
-                        </Avatar>
-                      ))}
-                    </div>
-                    <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 text-center sm:text-left">
-                      <div className="flex items-center gap-1 mb-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                      <span>Trusted by 100+ clients</span>
-                    </div>
-                  </motion.div>
+                  
                 </motion.div>
               </div>
             </div>
@@ -1445,7 +1528,6 @@ const PremiumProfileLayout: React.FC<{
                 className="flex flex-col items-center gap-2"
               >
                 <span className="text-xs sm:text-sm text-slate-300">Scroll to explore</span>
-                <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
               </motion.div>
             </motion.div>
           </section>
@@ -1465,42 +1547,32 @@ const PremiumProfileLayout: React.FC<{
           )}
 
           {/* Novo Header de Navegação */}
-          <ProfileHeader handleSectionClick={handleSectionClick} primaryColorHex={primaryColorHex} />
+          <ProfileHeader
+            sections={[
+              { key: 'about', label: 'Sobre' },
+              { key: 'portfolio', label: 'Portfólio' },
+              { key: 'services', label: 'Serviços' },
+              { key: 'experience', label: 'Experiência' },
+              { key: 'education', label: 'Educação' },
+              { key: 'reviews', label: 'Avaliações' },
+              { key: 'faq', label: 'FAQ' },
+              { key: 'contact', label: 'Contato' },
+            ]}
+            sectionRefs={sectionRefs}
+            onSectionClick={handleSectionClick}
+            variant="premium"
+          />
 
           {/* Espaço entre Tabs e Banner Premium */}
           <div className="mt-8" />
 
           {/* Banner Premium destacado após o hero */}
-          {user.premiumBanner && (
-            <section
-              className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-0 px-0"
-              style={{
-                backgroundImage: `url('${user.premiumBanner.imageUrl}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                minHeight: '220px',
-              }}
-            >
-              {/* Overlay para legibilidade do texto */}
-              <div className="w-full h-full absolute inset-0 bg-gradient-to-r from-blue-900/60 to-orange-900/40 pointer-events-none" />
-              <div className="relative flex flex-col md:flex-row items-center md:items-stretch justify-center gap-3 md:gap-8 w-full max-w-5xl mx-auto py-10 px-4">
-                {/* Espaço vazio para alinhar à direita em telas grandes */}
-                <div className="hidden md:block md:flex-1" />
-                <div className="flex flex-col items-center md:items-start justify-center gap-3 md:gap-4 text-center md:text-left md:flex-1">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{user.premiumBanner.title}</h2>
-                  <p className="text-base sm:text-lg text-white/90 drop-shadow">{user.premiumBanner.description}</p>
-                  {user.premiumBanner.ctaText && (
-                    <Button className="bg-white text-blue-700 font-bold hover:bg-blue-100 mt-2 px-6 py-2 text-base rounded-full shadow">
-                      {user.premiumBanner.ctaText}
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </section>
+          {(user.username === "micaelsants" ? true : !!user.premiumBanner) && (
+            <BannerPremiumSection premiumBanner={user.username === "micaelsants" ? exemploBannerPremium : user.premiumBanner} />
           )}
 
           {/* Seção de Serviços acima do Portfólio */}
-          <section id="services" className="py-20 px-4 bg-slate-100 dark:bg-slate-800 scroll-mt-24" ref={sectionRefs.services}>
+          <section id="services" className="py-20 px-4 scroll-mt-24" ref={sectionRefs.services}>
             <div className="w-full flex flex-col items-center justify-center">
               <motion.div
                 initial={{ y: 30, opacity: 0 }}
@@ -1508,35 +1580,20 @@ const PremiumProfileLayout: React.FC<{
                 transition={{ duration: 0.6 }}
                 className="text-center mb-16"
               >
-                <h2 className="text-4xl font-bold mb-4 text-slate-900">Services</h2>
-                <p className="text-xl text-slate-800 dark:text-slate-400">What I can do for you</p>
+                <h2 className="text-4xl font-bold mb-4 text-slate-900 dark:text-white dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">Serviços</h2>
+                <p className="text-xl text-slate-800 dark:text-slate-400">O que posso fazer por você</p>
               </motion.div>
-              <div className="grid gap-4">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 {services.map((service, idx) => (
                   <div key={idx} className="relative">
-                    {/* Card visual original do serviço */}
-                    <Card className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
-                      <div className="font-semibold text-blue-800 dark:text-blue-300">{service.name}</div>
-                      <div className="text-sm text-slate-700 dark:text-slate-300">{service.description}</div>
-                      <div className="text-xs text-slate-600 dark:text-slate-500">{service.price}</div>
+                    <Card className="p-5 bg-white/90 dark:bg-slate-800/90 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 transition hover:scale-[1.02] hover:shadow-lg">
+                      <div className="font-semibold text-blue-800 dark:text-blue-300 text-lg mb-1">{service.name}</div>
+                      <div className="text-sm text-slate-700 dark:text-slate-300 mb-2">{service.description}</div>
+                      {service.price && <div className="text-xs text-primary font-bold mt-2">{service.price}</div>}
                     </Card>
-                    {isCurrentUserProfile && (
-                      <Button size="icon" variant="ghost" className="absolute top-2 right-2" onClick={() => handleEditService(idx)}>
-                        <Pencil />
-                      </Button>
-                    )}
                   </div>
                 ))}
               </div>
-              {isCurrentUserProfile && (
-                <Button
-                  onClick={handleAddService}
-                  disabled={services.length >= PLAN_LIMITS[plano].services}
-                  className="mb-4"
-                >
-                  Adicionar Serviço
-                </Button>
-              )}
             </div>
             {/* Modal de adição/edição de serviço */}
             <Dialog open={showServiceModal} onOpenChange={setShowServiceModal}>
@@ -1556,57 +1613,15 @@ const PremiumProfileLayout: React.FC<{
           {/* Seção de Portfólio */}
           <section id="portfolio" className="py-20 px-4 scroll-mt-24" ref={sectionRefs.portfolio}>
             <div className="w-full flex flex-col items-center justify-center">
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-16"
-              >
-                <h2 className="text-4xl font-bold mb-4">Portfolio Showcase</h2>
-                <p className="text-xl text-slate-800 dark:text-slate-400">Recent projects and creative work</p>
-              </motion.div>
-              <div
-                className={`grid gap-8 w-full max-w-5xl mx-auto ${gridCols}`}
-              >
-                {portfolioItems.map((item, index) => (
-                  <motion.div
-                    key={item.id || index}
-                    initial={{ y: 50, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    whileHover={{ y: -10, scale: 1.02 }}
-                    className="group cursor-pointer flex flex-col items-center"
-                    onClick={() => handlePortfolioItemClick(item)}
-                  >
-                    <Card className="overflow-hidden bg-white/90 dark:bg-slate-800/80 shadow-md hover:shadow-2xl transition-all duration-300 rounded-2xl group-hover:ring-2 group-hover:ring-blue-400 max-w-xs w-full mx-auto">
-                      <div className="aspect-video overflow-hidden rounded-t-2xl">
-                        {item.imageUrl ? (
-                          <Image
-                            src={item.imageUrl || '/banners/institucional1.png'} // Fallback para imagem do portfólio
-                            alt={item.caption}
-                            width={600}
-                            height={400}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-t-2xl shadow"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-700 rounded-t-2xl">Sem imagem</div>
-                        )}
-                      </div>
-                      <div className="p-4 flex flex-col items-center justify-center">
-                        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 text-center truncate w-full">{item.caption}</h3>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-              {isCurrentUserProfile && (
-                <Button
-                  onClick={handleAddPortfolio}
-                  disabled={portfolioItems.length >= PLAN_LIMITS[plano].portfolio}
-                  className="mb-4"
-                >
-                  Adicionar Item ao Portfólio
-                </Button>
+              {console.log("[PremiumProfileLayout Debug] isSectionVisible('portfolio'):", isSectionVisible('portfolio'))}
+              {console.log("[PremiumProfileLayout Debug] portfolioToShow.length:", portfolioToShow.length)}
+              {isSectionVisible('portfolio') && portfolioToShow.length > 0 && (
+                <PortfolioGrid
+                  items={portfolioToShow}
+                  maxToShow={12}
+                  variant="premium"
+                  onItemClick={onPortfolioItemClick}
+                />
               )}
             </div>
             <Suspense fallback={null}>
@@ -1620,29 +1635,13 @@ const PremiumProfileLayout: React.FC<{
 
           {/* Seção de vídeo do YouTube após o portfólio */}
           {user.youtubeVideoUrl && (
-            <section className="w-full flex flex-col items-center justify-center py-12">
-              <div className="w-full max-w-4xl min-h-[220px] md:min-h-[280px] bg-white/90 dark:bg-slate-800/80 rounded-2xl shadow-xl p-6 flex flex-col md:flex-row items-center md:items-stretch gap-8">
-                {/* Texto à esquerda */}
-                <div className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left">
-                  {user.youtubeVideoTitle && (
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">{user.youtubeVideoTitle}</h3>
-                  )}
-                  {user.youtubeVideoDescription && (
-                    <p className="text-base md:text-lg text-slate-700 dark:text-slate-300">{user.youtubeVideoDescription}</p>
-                  )}
-                </div>
-                {/* Vídeo à direita */}
-                <div className="flex-1 w-full max-w-md aspect-video rounded-xl overflow-hidden bg-black self-center min-h-[180px] md:min-h-[220px]">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${user.youtubeVideoUrl.split('v=')[1]}`}
-                    title={user.youtubeVideoTitle || 'Vídeo do YouTube'}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
-                </div>
-              </div>
-            </section>
+            <>
+              <YoutubeSection
+                youtubeVideoUrl={user.youtubeVideoUrl}
+                youtubeVideoTitle={user.youtubeVideoTitle}
+                youtubeVideoDescription={user.youtubeVideoDescription}
+              />
+            </>
           )}
 
           {/* Experiência e Educação */}
@@ -1651,7 +1650,7 @@ const PremiumProfileLayout: React.FC<{
               <div className="grid md:grid-cols-2 gap-8">
                 {(user.experience && user.experience.length > 0) && (
                   <div>
-                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><Briefcase className="w-5 h-5" /> Experiência</h3>
+                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]"><Briefcase className="w-5 h-5" /> Experiência</h3>
                     <div className="space-y-4">
                       {experience?.map((exp, idx) => (
                         <Card key={exp.title + exp.company + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
@@ -1665,7 +1664,7 @@ const PremiumProfileLayout: React.FC<{
                 )}
                 {(user.education && user.education.length > 0) && (
                   <div>
-                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900"><GraduationCap className="w-5 h-5" /> Educação</h3>
+                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]"><GraduationCap className="w-5 h-5" /> Educação</h3>
                     <div className="space-y-4">
                       {user.education?.map((edu, idx) => (
                         <Card key={edu.degree + edu.institution + idx} className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg">
@@ -1691,230 +1690,77 @@ const PremiumProfileLayout: React.FC<{
           )}
 
           {/* Seção de FAQ acima das avaliações */}
-          <section className="py-16 px-4 max-w-5xl mx-auto">
-            <h3 className="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-900"><Sparkles className="w-5 h-5 text-blue-500" /> Perguntas Frequentes</h3>
-            <div className="space-y-4">
-              {faqs.map((faq, idx) => (
-                <Card key={faq.question + idx} className="p-0 bg-white/80 dark:bg-slate-800/80 rounded-lg overflow-hidden">
-                  <button
-                    className="w-full flex justify-between items-center px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400 text-left"
-                    onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                    aria-expanded={expandedFaq === idx}
-                  >
-                    <span className="font-semibold text-blue-800 dark:text-blue-300">{faq.question}</span>
-                    <ChevronDown className={`w-5 h-5 ml-2 transition-transform ${expandedFaq === idx ? 'rotate-180' : ''}`} />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {expandedFaq === idx && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="px-4 pb-4 text-slate-700 dark:text-slate-300"
-                      >
-                        {faq.answer}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </Card>
-              ))}
-            </div>
-            {isCurrentUserProfile && (
-              <Button
-                onClick={handleAddFaq}
-                disabled={faqs.length >= PLAN_LIMITS[plano].faq}
-                className="mb-4"
-              >
-                Adicionar Pergunta
-              </Button>
-            )}
-          </section>
+          <FaqSection
+            faqs={faqs}
+            canAdd={false} // Removido botão de adicionar pergunta
+            onAddFaq={undefined}
+            expandedFaq={expandedFaq}
+            setExpandedFaq={setExpandedFaq}
+            maxFaqs={PLAN_LIMITS[plano]?.faq}
+          />
 
-          {/* Seção de Avaliações (Reviews) */}
-          <section ref={reviewsRef} className="py-16 px-4 max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Avaliações</h2>
-              <p className="text-xl text-slate-600 dark:text-slate-400">
-                O que nossos clientes dizem
-              </p>
-            </div>
-            {/* Bloco de Resumo e Formulário em duas colunas */}
-            <div className="flex flex-col md:flex-row gap-8 mb-8 md:items-start md:justify-center"> {/* Ajustado mb e items para alinhar ao topo */}
-              <div className="flex-1 min-w-[320px]">
-                <ReviewSummary reviewedUserId={user.id} />
-              </div>
-              {isCurrentUserProfile && (
-                <div className="flex-1 min-w-[320px]">
-                  <ReviewForm onSubmit={handleReviewSubmit} />
-                </div>
-              )}
-            </div>
-            {/* Carrossel de Comentários */}
-            {user.reviews && user.reviews.length > 0 ? (
-              <div className="mt-8 w-full flex justify-center">
-                <ReviewList 
-                  reviewedUserId={user.id} 
-                  currentUserId={currentUserId} 
-                  renderAsCarousel 
-                  reviews={user.reviews}
-                />
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="text-gray-500 dark:text-gray-400 mb-4">
-                  <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Nenhuma avaliação ainda
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Seja o primeiro a deixar uma avaliação!
-                </p>
-              </div>
-            )}
-          </section>
+<section ref={reviewsRef} className="py-20 px-6 max-w-6xl mx-auto">
+  <div className="text-center mb-14">
+    <h2 className="text-5xl font-extrabold bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-md">
+      Avaliações
+    </h2>
+    <p className="text-lg text-slate-600 dark:text-slate-400 mt-2">
+      O que nossos clientes dizem
+    </p>
+  </div>
 
-          {/* Seção de Cupons Exclusivos */}
-          {coupons && coupons.length > 0 && (
-            <section className="py-16 px-4 w-full flex flex-col items-center justify-center">
-              <h3 className="text-2xl font-bold mb-8 flex items-center gap-2 text-slate-900 dark:text-white">
-                <Award className="w-5 h-5 text-green-500" /> Cupons Exclusivos
-              </h3>
-              {isCurrentUserProfile && (
-                <Button onClick={() => setShowCouponModal(true)} className="mb-6">Adicionar Cupom</Button>
-              )}
-              <CreateCouponModal
-                isOpen={showCouponModal}
-                onOpenChange={setShowCouponModal}
-                onSave={handleAddCoupon}
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl">
-                {coupons.map((coupon, idx) => (
-                  <div key={coupon.code + idx} className="w-full relative">
-                    <CouponCard
-                      user={{
-                        name: user.name,
-                        username: user.username,
-                        avatarUrl: user.profile_picture_url,
-                      }}
-                      publishedAt={new Date().toISOString()}
-                      discount={coupon.discount || coupon.discount_value || '10%'}
-                      code={coupon.code}
-                      description={coupon.description}
-                      validUntil={coupon.validUntil || coupon.expires_at || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()}
-                      brand={user.name}
-                    />
-                    {isCurrentUserProfile && (
-                      <button onClick={() => handleRemoveCoupon(idx)} className="absolute top-2 right-2 text-xs text-red-600">Remover</button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+  {/* Bloco de Resumo e Formulário em duas colunas */}
+  <div className="flex flex-col md:flex-row gap-10 mb-14 md:items-start md:justify-between">
+    <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
+      <ReviewSummary reviewedUserId={user.id} />
+    </div>
 
-          {/* Seção de Contato */}
-          <section id="contact" className="py-20 px-4 bg-slate-100 dark:bg-slate-800 scroll-mt-24" ref={sectionRefs.contact}>
-            <div className="container mx-auto">
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-16"
-              >
-                <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
-                <p className="text-xl text-slate-600 dark:text-slate-400">Let's work together</p>
-              </motion.div>
-              
-              <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div className="space-y-6">
-                  {user.email && (
-                    <motion.div
-                      whileHover={{ x: 5 }}
-                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Email</h3>
-                        <p className="text-slate-600 dark:text-slate-400">{user.email}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                  
-                  {user.phone && (
-                    <motion.div
-                      whileHover={{ x: 5 }}
-                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <Phone className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Phone</h3>
-                        <p className="text-slate-600 dark:text-slate-400">{user.phone}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                  
-                  {user.location && (
-                    <motion.div
-                      whileHover={{ x: 5 }}
-                      className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
-                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Location</h3>
-                        <p className="text-slate-600 dark:text-slate-400">{user.location.city}, {user.location.country}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-                
-                <div className="flex flex-col items-center justify-center">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg text-center"
-                  >
-                    <h3 className="text-xl font-semibold mb-4">Scan to Connect</h3>
-                    <img src={qrCodeUrl} alt="QR Code" className="w-40 h-40 mx-auto mb-4" />
-                    <Button onClick={handleShare} variant="outline" className="w-full">
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share Profile
-                    </Button>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-          </section>
+    {isCurrentUserProfile && (
+      <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
+        <ReviewForm onSubmit={handleReviewSubmit} />
+      </div>
+    )}
+  </div>
 
-          <footer className="py-12 bg-slate-900 text-white">
-            <div className="container mx-auto px-4 text-center">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col items-center gap-2"
-              >
-                <span>© 2024 {user.name}. All rights reserved.</span>
-                <span className="flex items-center gap-1">
-                  Made with <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> and creativity
-                </span>
-              </motion.div>
-            </div>
-          </footer>
-          <motion.button
-            onClick={scrollToTop}
-            className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 hover:bg-blue-700 ${showScrollTop ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronUp className="w-6 h-6" />
-          </motion.button>
+  {/* Carrossel de Comentários */}
+  {user.reviews && user.reviews.length > 0 ? (
+    <div className="w-full">
+      <ReviewList 
+        reviewedUserId={user.id}
+        currentUserId={currentUserId}
+        renderAsCarousel
+        reviews={user.reviews}
+      />
+    </div>
+  ) : (
+    <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 rounded-xl">
+      <div className="flex flex-col items-center text-gray-500 dark:text-gray-400">
+        <svg className="w-16 h-16 mb-6 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <h3 className="text-xl font-semibold mb-2">Nenhuma avaliação ainda</h3>
+        <p className="text-sm">Seja o primeiro a deixar uma avaliação!</p>
+      </div>
+    </div>
+  )}
+</section>
+
+<Suspense fallback={null}>
+  {/* Conteúdo do modal de eventos */}
+  {/* <ModalCriarEvento
+    open={showCreateEventModal}
+    onOpenChange={setShowCreateEventModal}
+    onSave={(newEvent) => { /* lógica de salvar evento * / }}
+    eventToEdit={editingEvent}
+  /> */}
+</Suspense>
+
+<ThemeCustomizer
+  isOpen={isThemeOpen}
+  onClose={() => setIsThemeOpen(false)}
+  theme={theme}
+  onThemeChange={setTheme} // Corrigido para passar a função setTheme
+/>
         </div>
       </div>
       <motion.button
@@ -1931,9 +1777,89 @@ const PremiumProfileLayout: React.FC<{
           <ThemeCustomizer
             isOpen={isThemeOpen}
             onClose={() => setIsThemeOpen(false)}
-            theme={themeCustomizer}
-            onThemeChange={setThemeCustomizer}
+            theme={theme}
+            onThemeChange={setPrimaryColor}
           />
+        </div>
+      )}
+      <ProfileActions user={user} isCurrentUserProfile={isCurrentUserProfile} />
+      {/* Seção de Eventos */}
+      {user.events && user.events.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Eventos</h2>
+          {isCurrentUserProfile && (user.plan === "standard" || user.plan === "premium") && (
+            <button
+              className="btn btn-primary mb-4"
+              onClick={abrirModalCriarEvento} // Implemente a função para abrir o modal/formulário
+            >
+              Criar novo evento
+            </button>
+          )}
+          <EventList events={user.events} />
+        </section>
+      )}
+      {/* Seção de Contato e QR Code */}
+      <section className="py-12 px-4 sm:px-8 bg-[#f7fafd] dark:bg-gray-950 mt-12 rounded-2xl max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-center justify-center shadow-lg">
+        <div className="flex-1 flex flex-col gap-6 w-full max-w-md">
+          <div className="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <div className="bg-blue-100 text-blue-600 rounded-full p-3 dark:bg-blue-800 dark:text-blue-100">
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M21 8.5V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.5M12 13v.01M12 17a5 5 0 0 0 5-5V7a5 5 0 0 0-10 0v5a5 5 0 0 0 5 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+            <div>
+              <div className="font-semibold text-lg">Email</div>
+              <div className="text-gray-500 dark:text-gray-300">{user.email || 'Não informado'}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <div className="bg-blue-100 text-blue-600 rounded-full p-3 dark:bg-blue-800 dark:text-blue-100">
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+            <div>
+              <div className="font-semibold text-lg">Localização</div>
+              <div className="text-gray-500 dark:text-gray-300">{user.location?.city || ''}{user.location?.country ? ', ' + user.location.country : ''}</div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col items-center w-full max-w-xs">
+          <div className="font-semibold text-lg mb-2">Conecte-se</div>
+          {/* QRCode gerado dinamicamente para o perfil */}
+          <div className="mb-4">
+            {isQrLoading ? (
+              <span>Carregando QR Code...</span>
+            ) : (
+              <img src={qrCodeUrl} alt="QR Code do perfil" width={128} height={128} className="rounded-lg border p-1 bg-white shadow-md" />
+            )}
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 transition dark:border-blue-700 dark:text-blue-200 dark:hover:bg-blue-900 shadow-md shadow-black/10 dark:shadow-none">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M17 8V7a5 5 0 0 0-10 0v1M12 15v2m0 0v2m0-2h2m-2 0H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Compartilhar Perfil
+          </button>
+        </div>
+      </section>
+      {/* Exibir cupons se houver */}
+      {cuponsValidos.length > 0 && (
+        <div className="mt-4 flex flex-col items-center">
+          {cuponsValidos.map((cupom, idx) => {
+            console.log('[PremiumProfileLayout] Renderizando cupom:', cupom);
+            return (
+              <div key={cupom.code || idx} className="w-full max-w-md">
+                <CouponCard
+                  user={{
+                    name: user.name,
+                    username: user.username,
+                    avatarUrl: user.profile_picture_url || '/avatar-default.png',
+                  }}
+                  publishedAt={cupom.created_at || new Date().toISOString()}
+                  discount={cupom.discount_value || cupom.discount || ''}
+                  code={cupom.code || ''}
+                  description={cupom.description || ''}
+                  validUntil={cupom.expires_at || cupom.validUntil || ''}
+                  brand={user.name}
+                  regulation={cupom.regulation || ''}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </>
@@ -1943,10 +1869,10 @@ const PremiumProfileLayout: React.FC<{
 const ThemeCustomizer: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  theme: Theme;
-  onThemeChange: (theme: Theme) => void;
+  theme: ProfileTheme;
+  onThemeChange: (theme: ProfileTheme) => void;
 }> = ({ isOpen, onClose, theme, onThemeChange }) => {
-  const handleColorChange = (key: keyof Theme, color: string) => {
+  const handleColorChange = (key: keyof ProfileTheme, color: string) => {
     const newTheme = { ...theme, [key]: color };
     onThemeChange(newTheme);
   };

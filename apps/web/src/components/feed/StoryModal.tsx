@@ -1,124 +1,166 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { X, ChevronLeft, ChevronRight, Heart, Volume2, MessageCircle, Share2, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Heart, Share2, Bookmark, X, MoreVertical } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { StoryProgressBar } from "./StoryProgressBar";
+import { motion } from "framer-motion";
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 interface StoryModalProps {
   open: boolean;
   onClose: () => void;
   story: {
-    id: string;
-    user: {
-      name: string;
-      avatarUrl: string;
-      username: string;
-    };
+    user: { name: string; username: string; avatarUrl: string };
     mediaUrl: string;
-    type: "image" | "video";
-    timeLeft: number;
-    liked: boolean;
     description?: string;
-    time?: string;
+    type: "image" | "video";
+    time: string;
+    liked: boolean;
   };
-  onPrev: () => void;
-  onNext: () => void;
-  onUserAction?: () => void;
-  progress?: number;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
-const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, onNext, onUserAction }) => {
-  if (!open) return null;
-  const [liked, setLiked] = React.useState(story.liked);
-  const [message, setMessage] = React.useState("");
-  // Handler para pausar ao interagir
-  const handleUserAction = () => {
-    if (onUserAction) onUserAction();
-  };
-  const handleSend = () => {
+const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, onNext }) => {
+  const [liked, setLiked] = useState(story.liked);
+  const [message, setMessage] = useState("");
+  const [showHeart, setShowHeart] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const lastTap = useRef(0);
+
+  useEffect(() => {
+    const video = document.getElementById("story-video") as HTMLVideoElement | null;
+    if (video && open && story.type === "video") video.play().catch(() => {});
+    return () => video?.pause();
+  }, [open, story.type]);
+
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
     if (message.trim()) {
-      // Aqui você pode integrar com o chat do usuário
       setMessage("");
+      if (inputRef.current) inputRef.current.blur();
     }
   };
+
+  // Double tap/click para like
+  const handleDoubleTap = () => {
+    setLiked((prev) => !prev);
+    setShowHeart(true);
+    setTimeout(() => setShowHeart(false), 700);
+  };
+  const handleTouchEnd = () => {
+    const now = Date.now();
+    if (now - lastTap.current < 300) {
+      setLiked((prev) => !prev);
+      setShowHeart(true);
+      setTimeout(() => setShowHeart(false), 700);
+    }
+    lastTap.current = now;
+  };
+
+  if (!open) return null;
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-      onMouseDown={handleUserAction}
-      onKeyDown={handleUserAction}
-      onClick={handleUserAction}
-    >
-      <div className="relative w-full max-w-md mx-auto bg-card rounded-xl shadow p-2 flex flex-col min-h-[500px] sm:min-h-[600px]">
-        {/* Botão fechar e menu de opções no topo direito */}
-        <div className="absolute top-2 right-2 flex gap-2 z-10">
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fechar"><X className="w-5 h-5" /></Button>
-          <Button variant="ghost" size="icon" aria-label="Opções"><MoreVertical className="w-5 h-5" /></Button>
-        </div>
-        {/* Imagem ou vídeo */}
-        <div className="w-full relative">
-          {story.type === "image" ? (
-            <img src={story.mediaUrl} alt="story" className="rounded-xl w-full max-h-72 object-cover" />
-          ) : (
-            <video src={story.mediaUrl} controls className="rounded-xl w-full max-h-72 object-cover" />
-          )}
-          {/* Navegação entre stories */}
-          <button
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-card/80 border border-border rounded-full p-2 shadow-md hover:bg-primary/10 transition focus:ring-2 focus:ring-primary z-10"
-            onClick={e => { e.stopPropagation(); onPrev(); handleUserAction(); }}
-            aria-label="Anterior"
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="bg-black p-0 rounded-xl overflow-hidden w-full max-w-2xl">
+        <VisuallyHidden>
+          <DialogTitle>Visualização de Story de {story.user.name}</DialogTitle>
+        </VisuallyHidden>
+        <div className="relative w-full aspect-[9/16] bg-black">
+          {/* Barra de progresso */}
+          <StoryProgressBar key={story.mediaUrl} duration={6} onComplete={onNext} />
+
+          {/* Mídia */}
+          <div
+            className="w-full h-full absolute inset-0 z-5"
+            onDoubleClick={handleDoubleTap}
+            onTouchEnd={handleTouchEnd}
+            style={{ cursor: 'pointer' }}
           >
-            &lt;
-          </button>
-          <button
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-card/80 border border-border rounded-full p-2 shadow-md hover:bg-primary/10 transition focus:ring-2 focus:ring-primary z-10"
-            onClick={e => { e.stopPropagation(); onNext(); handleUserAction(); }}
-            aria-label="Próximo"
-          >
-            &gt;
-          </button>
-        </div>
-        {/* Linha com avatar, nome e horário */}
-        <div className="flex items-center justify-between mt-3 px-2">
-          <div className="flex items-center gap-2">
-            <img src={story.user.avatarUrl} alt={story.user.name} className="w-8 h-8 rounded-full border border-border" />
-            <span className="font-semibold text-base">{story.user.name}</span>
+            {story.type === "image" ? (
+              <img src={story.mediaUrl} alt="Story" className="object-cover w-full h-full" />
+            ) : (
+              <video id="story-video" src={story.mediaUrl} controls className="w-full h-full object-cover" />
+            )}
+            {/* Coração animado */}
+            {showHeart && (
+              <motion.div
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: [1.2, 1], opacity: [1, 0.8, 0] }}
+                transition={{ duration: 0.7, times: [0, 0.5, 1], ease: "easeOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
+              >
+                <Heart className="w-32 h-32 text-white drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 16px #e11d48)' }} fill="#e11d48" />
+              </motion.div>
+            )}
           </div>
-          <span className="text-xs text-muted-foreground">{story.time || "agora"}</span>
+
+          {/* Header */}
+          <div className="absolute top-0 left-0 w-full p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent z-10">
+            <div className="flex items-center gap-3">
+              <Avatar className="w-9 h-9">
+                <AvatarImage src={story.user.avatarUrl} />
+                <AvatarFallback>{story.user.name[0]}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-white text-sm font-semibold">{story.user.name}</p>
+                <p className="text-white/70 text-xs">@{story.user.username} • {story.time}</p>
+              </div>
+            </div>
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-white">
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Navegação */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20">
+            <Button onClick={onPrev} variant="ghost" size="icon" className="text-white">
+              <ChevronLeft className="w-6 h-6" />
+            </Button>
+          </div>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20">
+            <Button onClick={onNext} variant="ghost" size="icon" className="text-white">
+              <ChevronRight className="w-6 h-6" />
+            </Button>
+          </div>
+
+          {/* Ações rápidas */}
+          <div className="absolute left-0 right-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent z-30">
+            <form className="flex gap-2 items-center" onSubmit={handleSend}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={`text-white hover:text-red-500 ${liked ? 'text-red-500' : ''}`}
+                onClick={() => setLiked(!liked)}
+                aria-label="Curtir"
+              >
+                <Heart className="w-5 h-5" fill={liked ? '#e11d48' : 'none'} />
+              </Button>
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder={`Enviar mensagem para @${story.user.username}`}
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                className="flex-1 rounded-full border px-4 py-2 text-sm bg-white/80 focus:outline-none"
+              />
+              <Button type="submit" className="bg-primary text-white px-4 py-2 text-sm rounded-full" disabled={!message.trim()}>
+                Enviar
+              </Button>
+            </form>
+          </div>
+
+          {/* Descrição (opcional) */}
+          {story.description && (
+            <div className="absolute left-0 right-0 bottom-32 px-4 z-20">
+              <p className="text-white text-sm max-w-[80%] truncate">{story.description}</p>
+            </div>
+          )}
         </div>
-        {/* Descrição, se houver */}
-        {story.description && (
-          <p className="mt-1 text-sm text-foreground line-clamp-3 px-2">{story.description}</p>
-        )}
-        {/* Linha de botões de ação, centralizada e espaçada */}
-        <div className="flex justify-center gap-6 mt-4 mb-2 px-2">
-          <Button variant="ghost" size="icon" aria-label="Curtir" onClick={() => setLiked(!liked)}>
-            <Heart className={`w-7 h-7 transition ${liked ? "text-red-500 fill-red-500 scale-110" : "hover:text-red-500"}`} />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Compartilhar"><Share2 className="w-7 h-7" /></Button>
-          <Button variant="ghost" size="icon" aria-label="Salvar"><Bookmark className="w-7 h-7" /></Button>
-        </div>
-        {/* Input de mensagem direta */}
-        <div className="flex items-center gap-2 px-2 pb-2">
-          <input
-            type="text"
-            placeholder={`Enviar mensagem para @${story.user.username}`}
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            className="flex-1 min-w-0 bg-background border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary outline-none transition"
-            onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
-          />
-          <Button
-            className={message.trim() ? "bg-primary text-primary-foreground px-4 py-2 text-sm" : "bg-muted text-muted-foreground px-4 py-2 text-sm cursor-not-allowed"}
-            size="sm"
-            disabled={!message.trim()}
-            onClick={handleSend}
-            aria-label="Enviar mensagem"
-          >
-            Enviar
-          </Button>
-        </div>
-      </div>
-      {/* Fechar ao clicar fora */}
-      <div className="fixed inset-0 z-40" onClick={onClose} />
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

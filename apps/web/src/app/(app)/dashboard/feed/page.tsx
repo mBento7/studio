@@ -438,6 +438,7 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
       <div className="space-y-4">
         {/* Exemplo fixo de EventCard */}
         <EventCard
+          id="design-conference-2024"
           name="Design Conference 2024"
           date={new Date().toISOString()}
           location="São Paulo, SP"

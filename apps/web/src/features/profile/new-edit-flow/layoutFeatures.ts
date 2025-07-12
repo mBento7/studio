@@ -82,7 +82,8 @@ export const LAYOUTS: LayoutConfig[] = [
       "Tags em destaque (até 3)",
       "Experiência profissional (até 4)",
       "Formação (até 4)",
-      "QR Code para compartilhar perfil"
+      "QR Code para compartilhar perfil",
+      "Pino de localização com acesso direto ao Maps"
     ],
     component: dynamic(() => import("@/components/profile-layouts/FreeProfileLayout")),
     preloadPriority: 'low',
@@ -108,7 +109,8 @@ export const LAYOUTS: LayoutConfig[] = [
       "Experiência profissional (até 8)",
       "Links para redes sociais (até 6)",
       "Botão para contato via WhatsApp",
-      "QR Code para compartilhar perfil"
+      "QR Code para compartilhar perfil",
+      "Pino de localização com acesso direto ao Maps"
     ],
     component: dynamic(() => import("@/components/profile-layouts/StandardProfileLayout")),
     preloadPriority: 'high',
@@ -146,7 +148,8 @@ export const LAYOUTS: LayoutConfig[] = [
       "Links para redes sociais (até 12)",
       "Destaque de depoimentos",
       "Reviews e avaliações integradas",
-      "QR Code para compartilhar perfil"
+      "QR Code para compartilhar perfil",
+      "Pino de localização com acesso direto ao Maps"
     ],
     component: dynamic(() => import("@/components/profile-layouts/PremiumProfileLayout")),
     preloadPriority: 'high',

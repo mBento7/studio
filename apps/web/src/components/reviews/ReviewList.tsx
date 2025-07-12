@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
 
 interface Review {
   id: string;
@@ -43,6 +44,22 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
   const [reviews, setReviews] = useState<any[]>(propReviews || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Embla state para slides visíveis
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center', slidesToScroll: 1 });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+    emblaApi.on('select', onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
 
   // Adicionar log para debug
   useEffect(() => {
@@ -104,59 +121,77 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
 
   if (renderAsCarousel) {
     return (
-      <Carousel className="w-full max-w-2xl mx-auto">
-        <CarouselContent>
-          {reviews.map((review) => (
-            <CarouselItem key={review.id}>
-              <Card className="min-w-[320px] max-w-xs flex-shrink-0 p-4 md:p-6 shadow-md dark:bg-slate-800/80 mx-auto">
-                <div className="flex items-start mb-2">
-                  <Image
-                    src={review.profiles?.avatar_url || '/avatar-default.png'}
-                    alt={review.profiles?.full_name || review.profiles?.username || 'Usuário Anônimo'}
-                    width={40}
-                    height={40}
-                    className="rounded-full mr-3 flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">{review.profiles?.full_name || review.profiles?.username || 'Usuário Anônimo'}</p>
-                    <div className="flex items-center text-sm mb-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
-                        />
-                      ))}
-                      <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">
-                        {review.created_at && !isNaN(new Date(review.created_at).getTime())
-                          ? formatDistanceToNow(new Date(review.created_at), { addSuffix: true, locale: ptBR })
-                          : 'Data inválida'}
-                      </span>
+      <Carousel
+        className="w-full max-w-2xl mx-auto"
+        opts={{ align: 'center', slidesToScroll: 1 }}
+      >
+        <CarouselContent ref={emblaRef}>
+          {reviews.map((review, idx) => {
+            let className = "transition-transform duration-300";
+            if (idx === selectedIndex) className += " is-selected";
+            else if (idx === selectedIndex - 1) className += " is-prev";
+            else if (idx === selectedIndex + 1) className += " is-next";
+            return (
+              <CarouselItem
+                key={review.id}
+                className={className}
+                style={{}}
+              >
+                <Card
+                  className={
+                    "min-w-[320px] max-w-xs flex-shrink-0 p-4 md:p-6 shadow-md dark:bg-slate-800/80 mx-auto review-carousel-card"
+                  }
+                  data-index={idx}
+                >
+                  <div className="flex items-start mb-2">
+                    <Image
+                      src={review.profiles?.avatar_url || '/avatar-default.png'}
+                      alt={review.profiles?.full_name || review.profiles?.username || 'Usuário Anônimo'}
+                      width={40}
+                      height={40}
+                      className="rounded-full mr-3 flex-shrink-0"
+                    />
+                    <div className="flex-1">
+                      <p className="font-semibold text-slate-800 dark:text-slate-200">{review.profiles?.full_name || review.profiles?.username || 'Usuário Anônimo'}</p>
+                      <div className="flex items-center text-sm mb-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
+                          />
+                        ))}
+                        <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">
+                          {review.created_at && !isNaN(new Date(review.created_at).getTime())
+                            ? formatDistanceToNow(new Date(review.created_at), { addSuffix: true, locale: ptBR })
+                            : 'Data inválida'}
+                        </span>
+                      </div>
+                      <p className="text-slate-700 dark:text-slate-300">{review.comment}</p>
                     </div>
-                    <p className="text-slate-700 dark:text-slate-300">{review.comment}</p>
+                    {currentUserId === review.reviewer_id && (
+                      <button
+                        onClick={() => handleDeleteReview(review.id)}
+                        className="ml-4 text-red-500 hover:text-red-700 text-xs flex items-center"
+                      >
+                        <Trash2 className="w-3 h-3 mr-1" /> Excluir
+                      </button>
+                    )}
                   </div>
-                  {currentUserId === review.reviewer_id && (
-                    <button
-                      onClick={() => handleDeleteReview(review.id)}
-                      className="ml-4 text-red-500 hover:text-red-700 text-xs flex items-center"
-                    >
-                      <Trash2 className="w-3 h-3 mr-1" /> Excluir
-                    </button>
+                  {review.reply && (
+                    <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded-md mt-2 ml-13 border-l-2 border-blue-500 dark:border-blue-400">
+                      <p className="font-semibold text-blue-700 dark:text-blue-300">Resposta do Avaliado:</p>
+                      <p className="text-slate-800 dark:text-slate-200 text-sm">{review.reply}</p>
+                    </div>
                   )}
-                </div>
-                {review.reply && (
-                  <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded-md mt-2 ml-13 border-l-2 border-blue-500 dark:border-blue-400">
-                    <p className="font-semibold text-blue-700 dark:text-blue-300">Resposta do Avaliado:</p>
-                    <p className="text-slate-800 dark:text-slate-200 text-sm">{review.reply}</p>
-                  </div>
-                )}
-                {review.verified && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 mt-2 ml-13">
-                    Avaliação Verificada
-                  </span>
-                )}
-              </Card>
-            </CarouselItem>
-          ))}
+                  {review.verified && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 mt-2 ml-13">
+                      Avaliação Verificada
+                    </span>
+                  )}
+                </Card>
+              </CarouselItem>
+            );
+          })}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />

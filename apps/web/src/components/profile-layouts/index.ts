@@ -13,9 +13,9 @@ import { layoutConfig as enhancedConfig } from './EnhancedProfileLayout/config';
 // import SuperPremiumSearchResultCard from './SuperPremiumProfileLayout/SearchResultCard';
 // import { defaultAdvancedProfileLayoutConfig as superPremiumConfig } from './SuperPremiumProfileLayout/config';
 // Importa os componentes de card de resultado de busca
-import FreeSearchResultCard from './FreeProfileLayout/SearchResultCard';
+import SearchResultCardFree from './FreeProfileLayout/SearchResultCardFree';
 import StandardSearchResultCard from './StandardProfileLayout/SearchResultCard';
-import PremiumProfileSearchResultCard from './PremiumProfileLayout/SearchResultCard';
+import SearchResultCardPremium from './PremiumProfileLayout/SearchResultCardPremium';
 
 interface BaseProfileLayout {
   id: string;
@@ -31,7 +31,7 @@ interface BaseProfileLayout {
 }
 
 export const profileLayouts: BaseProfileLayout[] = [
-  { ...defaultFreeProfileLayoutConfig, id: 'free', name: 'Perfil Gratuito', description: 'Layout para usuários gratuitos.', imageUrl: '', plan: 'free', Component: FreeProfileLayout, SearchResultComponent: FreeSearchResultCard },
+  { ...defaultFreeProfileLayoutConfig, id: 'free', name: 'Perfil Gratuito', description: 'Layout para usuários gratuitos.', imageUrl: '', plan: 'free', Component: FreeProfileLayout, SearchResultComponent: SearchResultCardFree },
   { ...defaultStandardProfileLayoutConfig, id: 'standard', name: 'Perfil Standard', description: 'Layout para usuários standard.', imageUrl: '', plan: 'standard', Component: StandardProfileLayout, SearchResultComponent: StandardSearchResultCard },
   // Registro do layout super premium
   // {
@@ -42,7 +42,7 @@ export const profileLayouts: BaseProfileLayout[] = [
   //   Component: SuperPremiumProfileLayout,
   //   SearchResultComponent: SuperPremiumSearchResultCard,
   // },
-  { ...premiumProfileLayoutConfig, Component: PremiumProfileLayout, SearchResultComponent: PremiumProfileSearchResultCard },
+  { ...premiumProfileLayoutConfig, Component: PremiumProfileLayout, SearchResultComponent: SearchResultCardPremium },
   { ...enhancedConfig, Component: EnhancedProfileLayout, SearchResultComponent: undefined },
 ];
 

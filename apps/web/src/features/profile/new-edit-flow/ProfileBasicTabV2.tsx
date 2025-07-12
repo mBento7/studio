@@ -3,11 +3,15 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Image as ImageIcon, MapPin } from "lucide-react";
+import { Camera, Image as ImageIcon, MapPin, CheckCircle, XCircle } from "lucide-react";
 import { Instagram, Linkedin, Facebook, Globe, Github, MessageCircle, Trash2, Plus } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import ImageCropper from "@/components/ImageCropper";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/client";
 
 interface ProfileBasicTabV2Props {
   data: any;
@@ -52,8 +56,58 @@ function getFullSocialUrl(type: string, value: string) {
   }
 }
 
+// Função utilitária para converter base64 ou blob URL para File
+async function urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
+  if (url.startsWith('blob:')) {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: mimeType });
+  } else if (url.startsWith('data:')) {
+    // base64
+    const arr = url.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  } else {
+    // url normal
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: mimeType });
+  }
+}
+
 export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
   // Função de upload local (mock) para foto de perfil e capa
+  const [showCropper, setShowCropper] = React.useState(false);
+  const [tempCover, setTempCover] = React.useState<string | null>(null);
+  const [showAvatarCropper, setShowAvatarCropper] = React.useState(false);
+  const [tempAvatar, setTempAvatar] = React.useState<string | null>(null);
+  const [initialProfilePicture, setInitialProfilePicture] = useState<string | null>(null);
+
+  // Buscar imagem do banco pelo username ao montar
+  useEffect(() => {
+    async function fetchProfilePicture() {
+      if (data.username && !data.profile_picture_url) {
+        const { data: result, error } = await supabase
+          .from('profiles')
+          .select('profile_picture_url')
+          .eq('username', data.username)
+          .single();
+        if (result && result.profile_picture_url) {
+          setInitialProfilePicture(result.profile_picture_url);
+        }
+      } else if (data.profile_picture_url) {
+        setInitialProfilePicture(data.profile_picture_url);
+      }
+    }
+    fetchProfilePicture();
+  }, [data.username, data.profile_picture_url]);
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'cover') => {
     const file = e.target.files?.[0];
     if (file) {
@@ -61,9 +115,11 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
       reader.onloadend = () => {
         const url = reader.result as string;
         if (type === 'avatar') {
-          onChange({ ...data, profile_picture_url: url });
+          setTempAvatar(url);
+          setShowAvatarCropper(true);
         } else {
-          onChange({ ...data, cover_photo_url: url });
+          setTempCover(url);
+          setShowCropper(true);
         }
       };
       reader.readAsDataURL(file);
@@ -127,8 +183,109 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
     socialLinksArr = [];
   }
 
+  // Validação de username estilo Instagram
+  function isValidInstagramUsername(username: string): boolean {
+    // Regex: começa e termina com letra/número, pode conter . e _, sem duplos, min 1, max 30
+    return /^[a-z0-9](?!.*[._]{2})[a-z0-9._]{0,28}[a-z0-9]$/.test(username);
+  }
+  const [usernameError, setUsernameError] = useState<string>("");
+  const [usernameAvailable, setUsernameAvailable] = useState<null | boolean>(null);
+  const [checkingUsername, setCheckingUsername] = useState(false);
+
+  // Supabase client para checagem
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  async function handleCheckUsername() {
+    setUsernameAvailable(null);
+    setUsernameError("");
+    if (!data.username) {
+      setUsernameError("Digite um nome de usuário.");
+      return;
+    }
+    if (!isValidInstagramUsername(data.username)) {
+      setUsernameError("Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.");
+      return;
+    }
+    setCheckingUsername(true);
+    const { data: existing, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', data.username)
+      .neq('id', data.id)
+      .maybeSingle();
+    setCheckingUsername(false);
+    if (error) {
+      setUsernameError("Erro ao verificar disponibilidade. Tente novamente.");
+      setUsernameAvailable(null);
+      return;
+    }
+    if (existing) {
+      setUsernameError("Este nome de usuário já está em uso.");
+      setUsernameAvailable(false);
+    } else {
+      setUsernameError("");
+      setUsernameAvailable(true);
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-4">
+      {showAvatarCropper && tempAvatar && (
+        <ImageCropper
+          image={tempAvatar}
+          aspect={1}
+          onCropComplete={async (croppedImage) => {
+            // Fazer upload para Supabase Storage
+            try {
+              const userId = data.id || 'user';
+              const file = await urlToFile(croppedImage, `${userId}_avatar.jpg`, 'image/jpeg');
+              const filePath = `profile/${userId}_${Date.now()}.jpg`;
+              const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
+              if (uploadError) throw uploadError;
+              const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(filePath);
+              if (!publicUrlData?.publicUrl) throw new Error('Erro ao obter URL pública da imagem');
+              onChange({ ...data, profile_picture_url: publicUrlData.publicUrl });
+            } catch (err) {
+              alert('Erro ao fazer upload do avatar: ' + (err as any).message);
+            }
+            setShowAvatarCropper(false);
+            setTempAvatar(null);
+          }}
+          onCancel={() => {
+            setShowAvatarCropper(false);
+            setTempAvatar(null);
+          }}
+        />
+      )}
+      {showCropper && tempCover && (
+        <ImageCropper
+          image={tempCover}
+          aspect={3.5}
+          onCropComplete={async (croppedImage) => {
+            // Fazer upload para Supabase Storage (bucket covers)
+            try {
+              const userId = data.id || 'user';
+              const file = await urlToFile(croppedImage, `${userId}_cover.jpg`, 'image/jpeg');
+              const filePath = `cover/${userId}_${Date.now()}.jpg`;
+              const { error: uploadError } = await supabase.storage.from('covers').upload(filePath, file, { upsert: true });
+              if (uploadError) throw uploadError;
+              const { data: publicUrlData } = supabase.storage.from('covers').getPublicUrl(filePath);
+              if (!publicUrlData?.publicUrl) throw new Error('Erro ao obter URL pública da imagem');
+              onChange({ ...data, cover_photo_url: publicUrlData.publicUrl });
+            } catch (err) {
+              alert('Erro ao fazer upload da capa: ' + (err as any).message);
+            }
+            setShowCropper(false);
+            setTempCover(null);
+          }}
+          onCancel={() => {
+            setShowCropper(false);
+            setTempCover(null);
+          }}
+        />
+      )}
       <Card className="p-6 space-y-6 shadow-md">
         <h2 className="text-2xl font-bold mb-4">Informações Básicas</h2>
         <div className="space-y-4">
@@ -147,10 +304,43 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <Input
               id="username"
               value={data.username ?? ""}
-              onChange={e => onChange({ ...data, username: e.target.value })}
+              onChange={e => {
+                const value = e.target.value;
+                onChange({ ...data, username: value });
+                setUsernameAvailable(null); // resetar status ao digitar
+                if (!value) {
+                  setUsernameError("");
+                } else if (!isValidInstagramUsername(value)) {
+                  setUsernameError("Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.");
+                } else {
+                  setUsernameError("");
+                }
+              }}
               placeholder="Escolha um nome de usuário"
               className="mt-1"
             />
+            {usernameError && (
+              <span className="text-xs text-red-600 mt-1 block">{usernameError}</span>
+            )}
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                type="button"
+                className="px-3 py-2 rounded bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-60"
+                onClick={handleCheckUsername}
+                disabled={checkingUsername || !data.username}
+              >
+                {checkingUsername ? "Verificando..." : "Verificar"}
+              </button>
+              {usernameAvailable === true && !usernameError && (
+                <span className="flex items-center gap-1 text-green-600 text-sm"><CheckCircle className="w-5 h-5" /> Disponível</span>
+              )}
+              {usernameAvailable === false && !checkingUsername && (
+                <span className="flex items-center gap-1 text-red-600 text-sm"><XCircle className="w-5 h-5" /> Indisponível</span>
+              )}
+              {(!checkingUsername && !usernameAvailable && !usernameError && data.username) && (
+                <span className="text-xs text-muted-foreground">Clique para verificar disponibilidade</span>
+              )}
+            </div>
           </div>
           <div>
             <Label htmlFor="bio">Bio</Label>
@@ -186,8 +376,8 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <Label className="font-semibold flex items-center gap-1"><ImageIcon className="w-5 h-5 text-primary" /> Foto de Perfil (Avatar)</Label>
             <input type="file" accept="image/*" className="hidden" id="avatar-upload" onChange={e => handleUpload(e, 'avatar')} />
             <label htmlFor="avatar-upload" className="cursor-pointer">
-              {data.profile_picture_url ? (
-                <img src={data.profile_picture_url} alt="Avatar" className="w-20 h-20 rounded-full object-cover border-2 border-primary shadow" />
+              {(data.profile_picture_url || initialProfilePicture) ? (
+                <img src={String(data.profile_picture_url || initialProfilePicture || '')} alt="Avatar" className="w-20 h-20 rounded-full object-cover border-2 border-primary shadow" />
               ) : (
                 <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center border-2 border-dashed border-primary text-primary">
                   <Camera className="w-8 h-8" />
@@ -200,11 +390,11 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
           <div className="flex flex-col items-center gap-2 mt-4">
             <Label className="font-semibold flex items-center gap-1"><ImageIcon className="w-5 h-5 text-primary" /> Imagem de Capa</Label>
             <input type="file" accept="image/*" className="hidden" id="cover-upload" onChange={e => handleUpload(e, 'cover')} />
-            <label htmlFor="cover-upload" className="cursor-pointer">
+            <label htmlFor="cover-upload" className="cursor-pointer w-full">
               {data.cover_photo_url ? (
-                <img src={data.cover_photo_url} alt="Capa" className="w-full max-w-lg h-28 object-cover rounded-lg border-2 border-primary shadow" />
+                <img src={data.cover_photo_url} alt="Capa" className="w-full h-40 object-cover rounded-lg border-2 border-primary shadow" />
               ) : (
-                <div className="w-full max-w-lg h-28 rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-primary text-primary">
+                <div className="w-full h-40 rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-primary text-primary">
                   <ImageIcon className="w-8 h-8" />
                 </div>
               )}

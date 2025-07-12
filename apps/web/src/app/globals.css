@@ -141,3 +141,20 @@
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Destaque visual para carrossel de reviews */
+.embla__slide.is-prev,
+.embla__slide.is-next {
+  transform: scale(0.92);
+  opacity: 0.5;
+  filter: blur(1px);
+  z-index: 1;
+  transition: transform 0.3s, opacity 0.3s, filter 0.3s;
+}
+.embla__slide.is-selected {
+  transform: scale(1.05);
+  opacity: 1;
+  z-index: 2;
+  box-shadow: 0 0 0 2px #fbbf24;
+  transition: transform 0.3s, opacity 0.3s, box-shadow 0.3s;
+}

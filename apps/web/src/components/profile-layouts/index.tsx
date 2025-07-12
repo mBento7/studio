@@ -7,10 +7,10 @@ import StandardProfileLayout, { segmentConfig as standardConfig } from './Standa
 // import SuperPremiumSearchResultCard from './SuperPremiumProfileLayout/SearchResultCard';
 // import { defaultAdvancedProfileLayoutConfig as superPremiumConfig } from './SuperPremiumProfileLayout/config';
 // Importa os componentes de card de resultado de busca
-import FreeSearchResultCard from './FreeProfileLayout/SearchResultCard';
+import SearchResultCardFree from './FreeProfileLayout/SearchResultCardFree';
 import StandardSearchResultCard from './StandardProfileLayout/SearchResultCard';
 import PremiumProfileLayout from './PremiumProfileLayout';
-import PremiumProfileSearchResultCard from './PremiumProfileLayout/SearchResultCard';
+import SearchResultCardPremium from './PremiumProfileLayout/SearchResultCardPremium';
 import { premiumProfileLayoutConfig } from './PremiumProfileLayout/config';
 import React, { useState } from 'react';
 import { layoutFeatures, LayoutKey, FeatureKey } from './layoutFeatures';
@@ -97,7 +97,7 @@ export const profileLayouts = [
   {
     ...freeConfig,
     Component: FreeProfileLayout,
-    SearchResultComponent: FreeSearchResultCard,
+    SearchResultComponent: SearchResultCardFree,
   },
   {
     ...standardConfig,
@@ -116,7 +116,7 @@ export const profileLayouts = [
   {
     ...premiumProfileLayoutConfig,
     Component: PremiumProfileLayout,
-    SearchResultComponent: PremiumProfileSearchResultCard,
+    SearchResultComponent: SearchResultCardPremium,
   },
   // Novo layout aprimorado
   // {
