@@ -7,7 +7,7 @@ import { CreditPackagesGrid, CreditPackage } from '@/components/credits/CreditPa
 import { Coins, ArrowUpRight, Gift, History, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import PublicHeader from '@/features/landing/header';
+// import PublicHeader from '@/features/landing/header';
 
 // TODO: Importar e usar os componentes reais quando implementados
 // import { CreditDashboardCard, CreditHistoryTable, CreditPackageCard, BuyCreditsModal, DailyBonusButton, PremiumShortcuts } from '@/src/features/credits';
@@ -46,8 +46,8 @@ export default function CreditsDashboardPage() {
 
   return (
     <>
-      <PublicHeader />
-      <div className="max-w-4xl mx-auto py-10 px-4 pt-16">
+      {/* <PublicHeader /> */}
+      <div className="max-w-4xl mx-auto py-10 px-4">
         <h1 className="text-3xl font-bold mb-2 text-foreground dark:text-white">Painel de Créditos</h1>
         {/* Card de saldo com gradiente e ícone */}
         <Card className="mb-6 bg-card border border-black/5 shadow-xl rounded-lg flex flex-col items-center">
