@@ -27,14 +27,23 @@ RUN pnpm build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+# Instalar pnpm globalmente
+RUN npm install -g pnpm
+
 # Criar usuário não-root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Copiar package.json e instalar apenas dependências de produção
+COPY --from=base /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=base /app/apps/web/package.json ./apps/web/
+RUN pnpm install --prod --frozen-lockfile
+
 # Copiar arquivos necessários
-COPY --from=base /app/apps/web/public ./public
-COPY --from=base --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=base --chown=nextjs:nodejs /app/apps/web/.next/static ./.next/static
+COPY --from=base --chown=nextjs:nodejs /app/apps/web/.next ./apps/web/.next
+COPY --from=base --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+COPY --from=base --chown=nextjs:nodejs /app/apps/web/next.config.js ./apps/web/
+COPY --from=base --chown=nextjs:nodejs /app/apps/web/package.json ./apps/web/
 
 # Configurar usuário
 USER nextjs
@@ -42,10 +51,11 @@ USER nextjs
 # Expor porta
 EXPOSE 3000
 
-# Variáveis de ambiente (fixed format)
+# Variáveis de ambiente
 ENV PORT=3000
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Comando de inicialização
-CMD ["node", "server.js"]
+WORKDIR /app/apps/web
+CMD ["pnpm", "start"]
