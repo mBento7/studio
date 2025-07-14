@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Habilitar output standalone para Docker
+  output: 'standalone',
+  
   eslint: {
     // Enable ESLint during builds
     ignoreDuringBuilds: false,
@@ -30,6 +33,28 @@ const nextConfig = {
     lodash: {
       transform: 'lodash/{{member}}',
     },
+  },
+  
+  // Otimizações para produção
+  swcMinify: true,
+  
+  // Configuração de headers de segurança
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ];
   },
 };
 

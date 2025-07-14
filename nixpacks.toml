@@ -1,0 +1,22 @@
+[phases.setup]
+aptPkgs = ['curl']
+
+[phases.install]
+cmds = [
+  'npm install -g pnpm@latest',
+  'pnpm install --frozen-lockfile'
+]
+
+[phases.build]
+cmds = [
+  'cd apps/web',
+  'pnpm build'
+]
+
+[start]
+cmd = 'cd apps/web && pnpm start'
+
+[variables]
+NODE_ENV = 'production'
+PORT = '3000'
+NEXT_TELEMETRY_DISABLED = '1'
