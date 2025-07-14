@@ -198,6 +198,7 @@ function StoriesCarousel({ userStories, userProfile }: { userStories?: any[]; us
         },
         mediaUrl: s.imageUrl,
         type: 'image' as 'image',
+        time: '24h',
         timeLeft: 24,
         liked: false,
       }))
@@ -210,6 +211,7 @@ function StoriesCarousel({ userStories, userProfile }: { userStories?: any[]; us
         },
         mediaUrl: s.avatar,
         type: 'image' as 'image',
+        time: '24h',
         timeLeft: 24,
         liked: false,
       }));

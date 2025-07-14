@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Instalar pnpm globalmente
 RUN npm install -g pnpm
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copiar arquivos de configuração do workspace
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
