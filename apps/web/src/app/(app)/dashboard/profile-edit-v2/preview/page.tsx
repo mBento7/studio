@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
 import { ProfilePreviewV2 } from "@/features/profile/new-edit-flow/ProfilePreviewV2";
 import { useAuth } from "@/hooks/use-auth";
@@ -35,4 +37,4 @@ export default function ProfileEditV2PreviewPage() {
   const layout = profile.layout || "minimalist";
 
   return <ProfilePreviewV2 profile={profile} plan={plan} layout={layout} />;
-} 
+}

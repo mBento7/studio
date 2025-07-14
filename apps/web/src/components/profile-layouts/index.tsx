@@ -2,10 +2,7 @@
 
 import FreeProfileLayout, { segmentConfig as freeConfig } from './FreeProfileLayout';
 import StandardProfileLayout, { segmentConfig as standardConfig } from './StandardProfileLayout';
-// Importa o layout super premium
-// import SuperPremiumProfileLayout from './SuperPremiumProfileLayout';
-// import SuperPremiumSearchResultCard from './SuperPremiumProfileLayout/SearchResultCard';
-// import { defaultAdvancedProfileLayoutConfig as superPremiumConfig } from './SuperPremiumProfileLayout/config';
+// Layouts removidos: SuperPremiumProfileLayout
 // Importa os componentes de card de resultado de busca
 import SearchResultCardFree from './FreeProfileLayout/SearchResultCardFree';
 import StandardSearchResultCard from './StandardProfileLayout/SearchResultCard';
@@ -91,8 +88,6 @@ export function LayoutBenefitsModal({
   );
 }
 
-export { LayoutBenefitsModal };
-
 export const profileLayouts = [
   {
     ...freeConfig,
@@ -126,4 +121,4 @@ export const profileLayouts = [
   // },
 ];
 
-export type ProfileLayout = typeof profileLayouts[number]; 
+export type ProfileLayout = typeof profileLayouts[number];

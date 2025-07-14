@@ -62,6 +62,13 @@ O Coolify simplifica o deploy, que pode ser feito de duas formas principais:
 *   **Desenvolvimento Local:** Usamos o arquivo `.env.local`, que nunca é enviado para o Git.
 *   **Produção (Coolify):** As variáveis de ambiente (chaves de API, segredos) são inseridas diretamente na interface do Coolify como **"secrets"**. O Coolify as injeta de forma segura na aplicação durante o runtime, garantindo que elas nunca fiquem expostas no repositório.
 
+## 7. 📊 Monitoramento, Escalabilidade e Logs
+
+- Implemente monitoramento de performance e erros (ex: Sentry, LogRocket, APM).
+- Configure healthchecks para todos os serviços críticos.
+- Centralize logs de aplicação e infraestrutura.
+- Planeje escalabilidade horizontal (containers, balanceamento, auto scaling) conforme crescimento.
+
 ## 7. 📦 Ecossistema de Serviços Adicionais na VPS
 
 Com o controle total da VPS, podemos facilmente adicionar outros serviços gerenciados pelo Coolify:

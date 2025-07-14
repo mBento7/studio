@@ -6,6 +6,7 @@ import { AuthProvider } from '@/hooks/use-auth';
 import { MessageRealtimeToastListener } from '@/components/chat/MessageRealtimeToastListener';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PublicFooter } from '@/features/landing/footer';
+import { ProfileLayoutProvider } from '@/contexts/ProfileLayoutContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,8 +37,10 @@ export default function RootLayout({
         <div className="flex-1 flex flex-col">
           <TooltipProvider>
             <AuthProvider>
-              {children}
-              <MessageRealtimeToastListener />
+              <ProfileLayoutProvider>
+                {children}
+                <MessageRealtimeToastListener />
+              </ProfileLayoutProvider>
             </AuthProvider>
           </TooltipProvider>
         </div>

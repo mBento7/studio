@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
 import { ProfileBasicTabV2 } from "@/features/profile/new-edit-flow/ProfileBasicTabV2";
 import { useAuth } from "@/hooks/use-auth";
@@ -55,4 +57,4 @@ export default function ProfileEditV2BasicPage() {
       <button onClick={() => handleSave(profile)} style={{ marginTop: 16 }}>Salvar</button>
     </div>
   );
-} 
+}

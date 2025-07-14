@@ -113,4 +113,6 @@ Este documento consolida diretrizes e recomendações para a evolução do front
 
 ---
 
-> **Este documento deve ser revisado e expandido conforme o produto evolui. Use-o como referência viva para decisões de UX, UI e arquitetura do frontend.** 
+> **Este documento deve ser revisado e expandido conforme o produto evolui. Use-o como referência viva para decisões de UX, UI e arquitetura do frontend.**
+>
+> Consulte também: `onboarding.md` (setup de devs), `testes.md` (estratégia de testes automatizados) e mantenha o Storybook atualizado. 

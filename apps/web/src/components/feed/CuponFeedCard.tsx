@@ -18,15 +18,10 @@ interface CuponFeedCardProps {
   publishedAt: string; // ISO string
 }
 
-function timeAgo(dateString: string) {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (diff < 60) return `${diff}s`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  return `${Math.floor(diff / 86400)}d`;
-}
+// Substituir a função timeAgo por:
+import { timeAgo } from "@/lib/date-utils";
+
+// Remover a função timeAgo definida localmente
 
 const CuponFeedCard: React.FC<CuponFeedCardProps> = ({ user, benefit, description, publishedAt }) => {
   const router = useRouter();
@@ -92,4 +87,4 @@ const CuponFeedCard: React.FC<CuponFeedCardProps> = ({ user, benefit, descriptio
   );
 };
 
-export default CuponFeedCard; 
+export default CuponFeedCard;

@@ -44,43 +44,24 @@
   }
 
   .dark {
-    --background-start-rgb: 17 17 17;
-    --background-end-rgb:   24 24 24;
+    --background-start-rgb: 15 15 15;
+    --background-end-rgb: 25 25 25;
 
-    --background: 220 14% 10%;           /* #181B20 (cinza bem escuro) */
-    --foreground: 0 0% 100%;             /* #FFFFFF (texto claro) */
+    --background: 220 14% 8%;            /* Mais escuro: #141619 */
+    --foreground: 0 0% 95%;              /* Texto mais suave: #F2F2F2 */
 
-    --card: 220 14% 13%;                 /* #22252B (cinza escuro para cards) */
-    --card-foreground: 0 0% 100%;        /* #FFFFFF */
+    --card: 220 14% 11%;                 /* Cards mais contrastantes: #1C1F24 */
+    --card-foreground: 0 0% 95%;         /* #F2F2F2 */
 
-    --popover: 220 14% 13%;              /* Cinza escuro para fundo do tooltip */
-    --popover-foreground: 0 0% 100%;     /* Branco para texto do tooltip */
+    --muted: 220 14% 15%;                /* Áreas neutras: #26292F */
+    --muted-foreground: 0 0% 70%;        /* Texto secundário: #B3B3B3 */
 
-    --primary: 214 89% 52%;           /* #1877F2 (azul Facebook) */
-    --primary-foreground: 0 0% 100%;   /* branco */
+    --border: 220 14% 18%;               /* Bordas mais visíveis: #2D3138 */
+    --input: 220 14% 15%;                /* Inputs: #26292F */
 
-    --secondary: 211 100% 33%;           /* #0056A6 (azul escuro) */
-    --secondary-foreground: 0 0% 100%;   /* branco */
-
-    --accent: 24 89% 55%;              /* #F37021 (laranja vibrante) */
-    --accent-foreground: 0 0% 100%;    /* branco */
-
-    --muted: 220 14% 18%;                /* #23262C (cinza escuro para áreas neutras) */
-    --muted-foreground: 0 0% 80%;        /* #CCCCCC */
-
-    --border: 220 14% 22%;               /* #353841 (cinza médio escuro) */
-    --input: 220 14% 18%;                /* igual ao muted */
-    --ring: 24 89% 55%;                  /* igual ao primary */
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%; 
-
-    --success: 142 72% 40%;
-    --warning: 45 93% 60%;
-    --info: 199 89% 60%;
-
-    --font-geist-sans: 'Geist Sans', 'Inter', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', 'Fira Mono', 'Menlo', 'monospace';
+    /* Adicionar gradientes sutis para cards */
+    --card-gradient-from: 220 14% 11%;
+    --card-gradient-to: 220 14% 13%;
   }
 }
 
@@ -157,4 +138,26 @@
   z-index: 2;
   box-shadow: 0 0 0 2px #fbbf24;
   transition: transform 0.3s, opacity 0.3s, box-shadow 0.3s;
+}
+
+@layer components {
+  .card-dark-enhanced {
+    @apply bg-gradient-to-br from-slate-800/50 to-slate-900/30
+           border border-slate-700/50 shadow-xl
+           dark:shadow-2xl dark:shadow-black/20
+           backdrop-blur-sm;
+  }
+  
+  .card-dark-glass {
+    @apply bg-slate-800/30 backdrop-blur-md
+           border border-slate-700/30
+           shadow-lg dark:shadow-black/40;
+  }
+  
+  .card-dark-elevated {
+    @apply bg-gradient-to-br from-slate-800/60 to-slate-900/40
+           border border-slate-600/40
+           shadow-2xl dark:shadow-black/30
+           ring-1 ring-slate-700/20;
+  }
 }

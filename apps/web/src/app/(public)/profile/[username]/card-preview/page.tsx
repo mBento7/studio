@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 interface CardPreviewPageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default function CardPreviewPage({ params }: CardPreviewPageProps) {
@@ -24,13 +24,17 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const { username } = params;
-    const profileData = getMockUserByUsername(username);
-    if (profileData) {
-      setUser(profileData);
-    } else {
-      notFound();
-    }
+    const loadProfile = async () => {
+      const resolvedParams = await params;
+      const { username } = resolvedParams;
+      const profileData = getMockUserByUsername(username);
+      if (profileData) {
+        setUser(profileData);
+      } else {
+        notFound();
+      }
+    };
+    loadProfile();
   }, [params]);
 
   useEffect(() => {

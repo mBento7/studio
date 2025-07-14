@@ -1,3 +1,16 @@
+# Messenger e Comunicação
+
+Esta pasta reúne documentação sobre o módulo de mensagens e comunicação do Whosfy.
+
+## Arquivos
+- `README.md`: Visão geral e funcionamento do messenger.
+
+## Objetivo
+- Documentar arquitetura, fluxos e integrações do sistema de mensagens.
+- Facilitar manutenção, evolução e onboarding de novos desenvolvedores no módulo.
+
+---
+
 # 📬 Messenger (Chat) — Planejamento, Arquitetura e Roteiro de Implementação
 
 ## Visão Geral

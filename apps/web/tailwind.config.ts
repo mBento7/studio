@@ -139,6 +139,6 @@ export default {
   },
   plugins: [
     require("tailwindcss-animate"),
-    require("@tailwindcss/aspect-ratio"), // útil para cards de mídia/responsivos
+    // require("@tailwindcss/aspect-ratio"), // Removido pois a dependência não existe mais
   ],
 } satisfies Config;

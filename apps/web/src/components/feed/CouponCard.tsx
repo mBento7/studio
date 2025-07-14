@@ -26,15 +26,10 @@ interface CouponCardProps {
   onLike?: (liked: boolean) => void; // Callback opcional para integração backend
 }
 
-function timeAgo(dateString: string) {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (diff < 60) return `${diff}s`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-  return `${Math.floor(diff / 86400)}d`;
-}
+// Substituir a função timeAgo por:
+import { timeAgo } from "@/lib/date-utils";
+
+// Remover a função timeAgo definida localmente
 
 const CouponCard: React.FC<CouponCardProps> = ({
   user,
@@ -138,8 +133,11 @@ const CouponCard: React.FC<CouponCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-      className={`relative w-full overflow-hidden rounded-2xl shadow-xl border border-black/5 dark:border-white/10 bg-card
-        ${expired ? 'opacity-60 grayscale pointer-events-none' : ''}`}
+      // Adicionar classes específicas para dark mode
+      className={`relative w-full overflow-hidden rounded-2xl shadow-xl 
+      border border-black/5 dark:border-white/20 bg-card
+      dark:shadow-2xl dark:shadow-black/30
+      ${expired ? 'opacity-60 grayscale pointer-events-none' : ''}`}
     >
       {/* Efeito visual de destaque animado no fundo */}
       <div className="absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat] [mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)] animate-pulse opacity-100"></div>
@@ -340,4 +338,4 @@ const CouponCard: React.FC<CouponCardProps> = ({
   );
 };
 
-export default CouponCard; 
+export default CouponCard;

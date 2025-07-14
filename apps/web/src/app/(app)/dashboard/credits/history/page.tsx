@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
@@ -27,4 +29,4 @@ export default function CreditsHistoryPage() {
       <p>Veja todas as transações de créditos do usuário.</p>
     </div>
   );
-} 
+}

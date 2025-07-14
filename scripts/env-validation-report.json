@@ -1,0 +1,105 @@
+{
+  "timestamp": "2025-07-14T00:28:34.416Z",
+  "environment": "development",
+  "loadedFiles": [
+    "C:\\Users\\Micael\\Downloads\\studio-master\\apps\\web\\.env.local",
+    "C:\\Users\\Micael\\Downloads\\studio-master\\.env.local"
+  ],
+  "validation": {
+    "NEXT_PUBLIC_SUPABASE_URL": [],
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": [],
+    "SUPABASE_SERVICE_ROLE_KEY": [
+      {
+        "type": "insecure",
+        "message": "Contém valor inseguro ou de exemplo"
+      },
+      {
+        "type": "format",
+        "message": "Formato inválido"
+      },
+      {
+        "type": "weak",
+        "message": "Chave muito curta (< 32 caracteres)"
+      }
+    ],
+    "DB_URL": [
+      {
+        "type": "insecure",
+        "message": "Contém valor inseguro ou de exemplo"
+      }
+    ],
+    "MCP_API_URL": [
+      {
+        "type": "insecure",
+        "message": "Contém valor inseguro ou de exemplo"
+      }
+    ],
+    "NODE_ENV": [],
+    "SUPABASE_LOCAL_URL": [
+      {
+        "type": "insecure",
+        "message": "Contém valor inseguro ou de exemplo"
+      }
+    ],
+    "SUPABASE_LOCAL_ANON_KEY": [
+      {
+        "type": "weak",
+        "message": "Chave muito curta (< 32 caracteres)"
+      }
+    ],
+    "SUPABASE_LOCAL_SERVICE_ROLE_KEY": [
+      {
+        "type": "weak",
+        "message": "Chave muito curta (< 32 caracteres)"
+      }
+    ]
+  },
+  "completeness": {
+    "missing": [],
+    "present": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "DB_URL"
+    ],
+    "required": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "DB_URL"
+    ]
+  },
+  "exposedSecrets": [
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "risk": "high",
+      "message": "Variável sensível que não deve ser exposta no frontend"
+    },
+    {
+      "key": "DB_URL",
+      "risk": "high",
+      "message": "Variável sensível que não deve ser exposta no frontend"
+    },
+    {
+      "key": "SUPABASE_LOCAL_SERVICE_ROLE_KEY",
+      "risk": "high",
+      "message": "Variável sensível que não deve ser exposta no frontend"
+    }
+  ],
+  "security": {
+    "score": 0,
+    "issues": 11
+  },
+  "recommendations": [
+    {
+      "type": "exposed_secrets",
+      "priority": "critical",
+      "message": "Segredos podem estar expostos",
+      "action": "Verifique se variáveis sensíveis não estão sendo enviadas para o frontend"
+    },
+    {
+      "type": "insecure_values",
+      "priority": "high",
+      "message": "Valores de exemplo ou inseguros detectados",
+      "action": "Substitua por valores reais e seguros"
+    }
+  ]
+}

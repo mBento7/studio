@@ -7,7 +7,7 @@ import { CreditPackagesGrid, CreditPackage } from '@/components/credits/CreditPa
 import { Coins, ArrowUpRight, Gift, History, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PublicHeader } from '@/features/landing/header';
+import PublicHeader from '@/features/landing/header';
 
 // TODO: Importar e usar os componentes reais quando implementados
 // import { CreditDashboardCard, CreditHistoryTable, CreditPackageCard, BuyCreditsModal, DailyBonusButton, PremiumShortcuts } from '@/src/features/credits';
@@ -122,4 +122,4 @@ export default function CreditsDashboardPage() {
       </div>
     </>
   );
-} 
+}

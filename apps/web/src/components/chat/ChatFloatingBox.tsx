@@ -9,6 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { DialogTitle } from '@/components/ui/dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { AlertCircle, ImageIcon, Ban } from 'lucide-react';
+import { isValidUUID } from "@/lib/validation";
 
 interface ChatFloatingBoxProps {
   open: boolean;
@@ -31,11 +32,6 @@ interface UserProfileMini {
   username: string;
   name: string;
   profile_picture_url: string;
-}
-
-// Função utilitária para validar UUID
-function isValidUUID(uuid: string) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid);
 }
 
 export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenChange, otherUser }) => {
@@ -389,4 +385,4 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
       </SheetContent>
     </Sheet>
   );
-}; 
+};

@@ -2,6 +2,9 @@
 
 Esta pasta reúne documentos estratégicos de planejamento, roteiros de reestruturação, blueprints e guias de estrutura do projeto WhosDo, servindo de referência para evolução, organização e tomada de decisão.
 
+> **Última revisão:** 10/07/2025  
+> **Responsável:** Micael Bento
+
 ## Objetivo
 - Centralizar planos de arquitetura, refatoração, estrutura e evolução do projeto.
 - Orientar o time sobre próximos passos, decisões e melhores práticas.
@@ -17,6 +20,7 @@ Esta pasta reúne documentos estratégicos de planejamento, roteiros de reestrut
 ## Como usar
 - Consulte este README e os documentos temáticos para planejar e executar mudanças estruturais.
 - Atualize a documentação sempre que houver decisões ou mudanças relevantes.
+- Consulte também o guia de onboarding (`../onboarding.md`) e a estratégia de testes (`../testes.md`) para garantir qualidade e integração contínua.
 
 ## Boas práticas
 - Registre sempre as decisões e aprendizados.

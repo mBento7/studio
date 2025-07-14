@@ -16,3 +16,4 @@ Descreva aqui o objetivo desta área de documentação.
 ## Boas práticas
 - Sempre que criar ou alterar algo relevante nesta área, atualize este README e os arquivos correspondentes.
 - Mantenha exemplos reais e práticos sempre que possível. 
+- Revise segurança, onboarding e testes automatizados ao criar nova área. 

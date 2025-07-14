@@ -6,12 +6,7 @@ import PremiumProfileLayout from './PremiumProfileLayout';
 import { premiumProfileLayoutConfig } from './PremiumProfileLayout/config';
 import StandardProfileLayout from './StandardProfileLayout';
 import { defaultStandardProfileLayoutConfig } from './StandardProfileLayout/config';
-import EnhancedProfileLayout from './EnhancedProfileLayout';
-import { layoutConfig as enhancedConfig } from './EnhancedProfileLayout/config';
-// Importa o layout super premium
-// import SuperPremiumProfileLayout from './SuperPremiumProfileLayout';
-// import SuperPremiumSearchResultCard from './SuperPremiumProfileLayout/SearchResultCard';
-// import { defaultAdvancedProfileLayoutConfig as superPremiumConfig } from './SuperPremiumProfileLayout/config';
+// Layouts removidos: EnhancedProfileLayout e SuperPremiumProfileLayout
 // Importa os componentes de card de resultado de busca
 import SearchResultCardFree from './FreeProfileLayout/SearchResultCardFree';
 import StandardSearchResultCard from './StandardProfileLayout/SearchResultCard';
@@ -43,14 +38,14 @@ export const profileLayouts: BaseProfileLayout[] = [
   //   SearchResultComponent: SuperPremiumSearchResultCard,
   // },
   { ...premiumProfileLayoutConfig, Component: PremiumProfileLayout, SearchResultComponent: SearchResultCardPremium },
-  { ...enhancedConfig, Component: EnhancedProfileLayout, SearchResultComponent: undefined },
+  // { ...enhancedConfig, Component: EnhancedProfileLayout, SearchResultComponent: undefined },
 ];
 
 export {
   FreeProfileLayout,
   PremiumProfileLayout,
   StandardProfileLayout,
-  EnhancedProfileLayout,
+  // EnhancedProfileLayout,
 };
 
-export type ProfileLayout = BaseProfileLayout; // Altere para usar a nova interface 
+export type ProfileLayout = BaseProfileLayout; // Altere para usar a nova interface

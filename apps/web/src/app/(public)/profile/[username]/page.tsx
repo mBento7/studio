@@ -10,7 +10,7 @@ import { LayoutDecider } from '@/components/layout/layout-decider';
 import Link from 'next/link';
 
 interface ProfilePageProps {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
 
 // A página agora é um Server Component assíncrono

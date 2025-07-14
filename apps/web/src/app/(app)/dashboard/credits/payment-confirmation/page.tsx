@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -21,6 +23,11 @@ export default function PaymentConfirmationPage() {
 
   useEffect(() => {
     // Lê os parâmetros do Mercado Pago
+    if (!searchParams) {
+      setStatus('error');
+      setMessage('Parâmetros de pagamento não encontrados.');
+      return;
+    }
     const paymentId = searchParams.get('payment_id');
     const statusParam = searchParams.get('status');
     if (!paymentId) {
@@ -58,4 +65,4 @@ export default function PaymentConfirmationPage() {
       <button onClick={() => router.push('/dashboard/credits')}>Voltar ao painel de créditos</button>
     </div>
   );
-} 
+}

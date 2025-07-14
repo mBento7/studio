@@ -88,6 +88,7 @@ Se o projeto já utiliza migrations versionadas (em `db/schemas/` e `db/policies
 4. Em caso de dúvidas, consulte a documentação do Supabase CLI ou peça orientação ao responsável pelo banco.
 
 > **Importante:** Sempre mantenha a estrutura do projeto e as instruções deste guia atualizadas conforme novas pastas, apps ou serviços forem adicionados ao monorepo.
+> Consulte o checklist de segurança em `../infraestrutura/README.md` e o guia de onboarding em `../onboarding.md` para garantir recuperação segura e setup rápido.
 
 ## 5. 🛡️ Pontos Críticos de Segurança
 

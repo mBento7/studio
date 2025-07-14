@@ -40,7 +40,11 @@ const TestimonialCard = ({ post }: { post: TestimonialPost }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
   >
-    <Card className="overflow-hidden border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+    <Card className="overflow-hidden border-0 shadow-lg 
+      bg-gradient-to-br from-blue-50 to-indigo-50 
+      dark:from-slate-800/40 dark:to-indigo-900/20
+      dark:border dark:border-slate-700/50
+      dark:shadow-2xl dark:shadow-black/25">
       <PostHeader 
         user={post.user} 
         timeAgo={post.timeAgo} 

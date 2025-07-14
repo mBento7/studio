@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
@@ -29,4 +31,4 @@ export default function CreditsBonusPage() {
       <p>Reivindique bônus diários e acompanhe seu progresso.</p>
     </div>
   );
-} 
+}

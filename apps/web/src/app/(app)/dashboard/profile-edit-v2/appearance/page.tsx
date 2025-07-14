@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState, useCallback } from "react";
 import { ProfileAppearanceTabV2 } from "@/features/profile/new-edit-flow/ProfileAppearanceTabV2";
 import { useAuth } from "@/hooks/use-auth";
@@ -57,4 +59,4 @@ export default function ProfileEditV2AppearancePage() {
       <button onClick={handleSave} style={{ marginTop: 16 }}>Salvar</button>
     </div>
   );
-} 
+}

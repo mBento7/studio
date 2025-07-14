@@ -40,6 +40,7 @@ import {
   Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { isValidUUID } from "@/lib/validation";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { ReviewSummary } from "@/components/reviews/ReviewSummary";
@@ -939,10 +940,7 @@ const PremiumProfileLayout: React.FC<{
     }
   };
 
-  // Função utilitária para validar UUID
-  const isValidUUID = (uuid: string) => {
-    return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(uuid);
-  };
+
 
   const handleReviewSubmit = async ({ rating, comment }: { rating: number; comment: string }) => {
     if (!currentUserId) {
@@ -1883,25 +1881,33 @@ const ThemeCustomizer: React.FC<{
           initial={{ opacity: 0, x: 300 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 300 }}
-          className="bg-white rounded-xl shadow-xl p-6 z-30 w-80 border"
+          className="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-6 z-30 w-80 border border-slate-200 dark:border-slate-700 backdrop-blur-lg"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Personalizar Tema</h3>
-            <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded" aria-label="Fechar customizador de tema">
-              <ChevronUp className="w-5 h-5" />
-            </button>
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Personalizar Tema</h3>
+            <motion.button 
+              onClick={onClose} 
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" 
+              aria-label="Fechar customizador de tema"
+              whileHover={{ scale: 1.1, rotate: 180 }}
+              transition={{ duration: 0.3 }}
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Cor Primária</label>
               <div className="flex gap-2">
                 {["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"].map(color => (
-                  <button
+                  <motion.button
                     key={color}
                     onClick={() => handleColorChange('primary', color)}
-                    className={`w-8 h-8 rounded-full border-2 ${theme.primary === color ? 'border-blue-500' : 'border-gray-300'}`}
+                    className={`w-8 h-8 rounded-full border-2 ${theme.primary === color ? 'border-blue-500 scale-110' : 'border-gray-300'}`}
                     style={{ backgroundColor: color }}
                     aria-label={`Selecionar cor primária ${color}`}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
                   />
                 ))}
               </div>
