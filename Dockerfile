@@ -1,6 +1,16 @@
 # Use Node.js 18 Alpine para menor tamanho
 FROM node:18-alpine AS base
 
+# Argumentos de build para variáveis de ambiente
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG SUPABASE_SERVICE_ROLE_KEY
+
+# Definir variáveis de ambiente para o build
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY
+
 # Instalar dependências necessárias
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
