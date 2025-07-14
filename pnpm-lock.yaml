@@ -96,6 +96,9 @@ importers:
       eslint:
         specifier: ^9.31.0
         version: 9.31.0(jiti@1.21.7)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
 
   apps/web:
     dependencies:

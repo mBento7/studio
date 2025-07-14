@@ -134,6 +134,8 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
 
   // Função para compartilhar perfil
   const handleShare = async () => {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+    
     if (navigator.share) {
       try {
         await navigator.share({
@@ -337,4 +339,4 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
   );
 };
 
-export default StandardProfileCardHeader; 
+export default StandardProfileCardHeader;

@@ -20,7 +20,7 @@ export default function ProfileCardHeaderStandardPremium({ user, isCurrentUserPr
   const showPremiumBadge = variant === "premium" && user.isPremium;
   const showExtraLinks = variant === "premium" || variant === "standard";
   // QR Code do perfil
-  const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `/profile/${user.id}`;
+  const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `https://example.com/profile/${user.id}`;
   const { qrCodeUrl, isLoading: qrLoading } = useProfileQrCode(profileUrl);
 
   let displayedSocialLinks = user.socialLinks || [];
@@ -143,4 +143,4 @@ export default function ProfileCardHeaderStandardPremium({ user, isCurrentUserPr
       </section>
     </header>
   );
-} 
+}

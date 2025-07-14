@@ -15,6 +15,7 @@
     "code-health:fix": "node scripts/check-code-health.js --fix",
     "check-orphans": "node scripts/check-orphaned-files.js",
     "check-deps": "node scripts/check-unused-dependencies.js",
+    "pre-deploy": "node scripts/pre-deploy-check.js",
     "precommit-check": "npm run code-health",
     "ci-check": "npm run code-health && npm run lint && npm run type-check"
   },
@@ -23,7 +24,8 @@
     "packages/*"
   ],
   "devDependencies": {
-    "eslint": "^9.31.0"
+    "eslint": "^9.31.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.14",

@@ -30,7 +30,9 @@ const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, o
   const lastTap = useRef(0);
 
   useEffect(() => {
-    const video = document.getElementById("story-video") as HTMLVideoElement | null;
+    if (typeof document === 'undefined') return;
+    
+    const video = typeof document !== 'undefined' ? document.getElementById("story-video") as HTMLVideoElement | null : null;
     if (video && open && story.type === "video") video.play().catch(() => {});
     return () => video?.pause();
   }, [open, story.type]);
@@ -164,4 +166,4 @@ const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, o
   );
 };
 
-export default StoryModal; 
+export default StoryModal;

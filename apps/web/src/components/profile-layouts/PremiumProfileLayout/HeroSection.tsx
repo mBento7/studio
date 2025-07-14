@@ -37,7 +37,11 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
                   size="icon"
                   variant="ghost"
                   className="absolute top-3 right-3 z-20"
-                  onClick={() => window.location.href = '/dashboard/profile-edit-v2'}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.location.href = '/dashboard/profile-edit-v2';
+                    }
+                  }}
                   title="Editar Perfil"
                 >
                   <Pencil className="w-5 h-5" />
@@ -248,4 +252,4 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
     </section>
   );
   // --- FIM DO JSX FIEL DO BLOCO HERO ORIGINAL ---
-} 
+}

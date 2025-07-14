@@ -138,7 +138,9 @@ export const ChatMessengerCard: React.FC<ChatMessengerCardProps> = ({ onOpenMess
             className="w-full flex items-center gap-3 px-4 py-3 border-b hover:bg-muted transition text-left"
             onClick={() => {
               // Abrir chat flutuante com o outro usuário
-              window.dispatchEvent(new CustomEvent('open-chat', { detail: { user: conv.otherUser } }));
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('open-chat', { detail: { user: conv.otherUser } }));
+              }
               setExpanded(false);
             }}
           >
@@ -174,4 +176,4 @@ export const ChatMessengerCard: React.FC<ChatMessengerCardProps> = ({ onOpenMess
       </button>
     </div>
   );
-}; 
+};

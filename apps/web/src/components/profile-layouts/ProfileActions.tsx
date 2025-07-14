@@ -9,14 +9,16 @@ interface ProfileActionsProps {
 
 export function ProfileActions({ user, isCurrentUserProfile }: ProfileActionsProps) {
   const handleShare = () => {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+    
     if (navigator.share) {
       navigator.share({
         title: user.name,
         text: user.bio,
-        url: typeof window !== 'undefined' ? window.location.href : ''
+        url: window.location.href
       });
     } else {
-      navigator.clipboard.writeText(typeof window !== 'undefined' ? window.location.href : '');
+      navigator.clipboard.writeText(window.location.href);
       alert('Link do perfil copiado!');
     }
   };
@@ -35,4 +37,4 @@ export function ProfileActions({ user, isCurrentUserProfile }: ProfileActionsPro
       {/* Botão de editar perfil removido */}
     </div>
   );
-} 
+}

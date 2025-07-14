@@ -80,6 +80,10 @@ export default function ImageCropper({ image, aspect = 1, onCropComplete, onCanc
 
 // Função utilitária para crop
 async function getCroppedImg(imageSrc: string, crop: any): Promise<string> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return "";
+  }
+  
   const image = new window.Image();
   image.src = imageSrc;
   await new Promise((resolve) => { image.onload = resolve; });
@@ -102,4 +106,4 @@ async function getCroppedImg(imageSrc: string, crop: any): Promise<string> {
       resolve(URL.createObjectURL(blob));
     }, "image/jpeg");
   });
-} 
+}

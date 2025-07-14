@@ -27,7 +27,7 @@ export default function ProfileCardHeader({ user, isCurrentUserProfile, variant 
     const showExtraLinks = false;
     const config = defaultFreeProfileLayoutConfig;
     // QR Code do perfil
-    const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `/profile/${user.id}`;
+    const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `https://example.com/profile/${user.id}`;
     const { qrCodeUrl, isLoading: qrLoading } = useProfileQrCode(profileUrl);
 
     // Social links: priorizar WhatsApp e garantir 3 exibidos (com placeholder se faltar)
@@ -171,4 +171,4 @@ export default function ProfileCardHeader({ user, isCurrentUserProfile, variant 
     return <FreeProfileCardHeaderStandardPremium user={user} isCurrentUserProfile={isCurrentUserProfile} variant={variant} />;
   }
   return null;
-} 
+}
