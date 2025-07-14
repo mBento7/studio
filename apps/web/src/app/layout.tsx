@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'WhosDo.com - Sua Identidade Digital',
-  description: 'Crie e compartilhe sua identidade digital profissional com o WhosDo.com.',
+  title: 'Whosfy.com - Sua Identidade Digital',
+    description: 'Crie e compartilhe sua identidade digital profissional com o Whosfy.com.',
 };
 
 export default function RootLayout({

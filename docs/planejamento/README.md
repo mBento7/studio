@@ -1,6 +1,6 @@
 # Planejamento
 
-Esta pasta reúne documentos estratégicos de planejamento, roteiros de reestruturação, blueprints e guias de estrutura do projeto WhosDo, servindo de referência para evolução, organização e tomada de decisão.
+Esta pasta reúne documentos estratégicos de planejamento, roteiros de reestruturação, blueprints e guias de estrutura do projeto Whosfy, servindo de referência para evolução, organização e tomada de decisão.
 
 > **Última revisão:** 10/07/2025  
 > **Responsável:** Micael Bento
@@ -24,4 +24,4 @@ Esta pasta reúne documentos estratégicos de planejamento, roteiros de reestrut
 
 ## Boas práticas
 - Registre sempre as decisões e aprendizados.
-- Mantenha os roteiros e planos alinhados com a evolução do projeto. 
+- Mantenha os roteiros e planos alinhados com a evolução do projeto.

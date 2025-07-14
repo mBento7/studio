@@ -1,4 +1,4 @@
-# WhosDo.com
+# Whosfy.com
 
 > Plataforma de identidade digital profissional para conectar talentos, empresas e oportunidades de forma moderna e segura.
 

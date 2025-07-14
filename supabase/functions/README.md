@@ -1,4 +1,4 @@
-# Edge Functions do Projeto WhosDo
+# Edge Functions do Projeto Whosfy
 
 Esta pasta contém funções serverless (Edge Functions) do Supabase para lógica customizada, automações e integrações escaláveis.
 
@@ -85,4 +85,4 @@ curl -X POST https://<PROJECT>.functions.supabase.co/webhook-handler \
 4. **Referência:**
    - [Documentação oficial de Edge Functions](https://supabase.com/docs/guides/functions)
 
-> Atualize este README sempre que criar ou alterar funções. 
+> Atualize este README sempre que criar ou alterar funções.

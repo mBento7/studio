@@ -1,6 +1,6 @@
-# Páginas Essenciais – Monetização, Créditos e Planos (WhosDo.com)
+# Páginas Essenciais – Monetização, Créditos e Planos (Whosfy)
 
-Este documento lista e detalha todas as páginas recomendadas para cobrir a experiência completa de monetização, planos, créditos e pagamentos na plataforma WhosDo.com, integrando as melhores práticas de UX, frontend e infraestrutura.
+Este documento lista e detalha todas as páginas recomendadas para cobrir a experiência completa de monetização, planos, créditos e pagamentos na plataforma Whosfy, integrando as melhores práticas de UX, frontend e infraestrutura.
 
 ---
 
@@ -207,4 +207,4 @@ flowchart TD
 
 > Após a implementação das APIs e serviço, o fluxo de compra estará completo e pronto para testes integrados.
 
-> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com `"use client"`, permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O fluxo de compra de créditos está funcional no frontend. 
+> [2024-06] Correção aplicada: a página `/dashboard/credits/buy` agora está marcada com `"use client"`, permitindo uso de hooks React (useEffect, useState) conforme exigido pelo Next.js. O fluxo de compra de créditos está funcional no frontend.

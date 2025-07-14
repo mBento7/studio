@@ -1,11 +1,11 @@
-# **App Name**: WhosDo.com
+# **App Name**: Whosfy
 
 ## Core Features:
 
 - Profile Customization: User profile creation with customizable fields like name, bio, profile picture, cover photo, social media links, location, services/products, portfolio images, and a YouTube video. Uses Supabase Auth for registration and login.
-- Public Profile Page: Generates a public profile page for each user with a unique URL (whosdo.com/username or username.whosdo.com for paid clients) displaying their public information, contact buttons, and portfolio.
+- Public Profile Page: Generates a public profile page for each user with a unique URL (whosfy.com/username or username.whosfy.com for paid clients) displaying their public information, contact buttons, and portfolio.
 - Public Search: Implements a search functionality that allows users to find profiles based on city and professional/commercial category, displaying simplified profiles with quick access to user pages.
-- QR Code Generation: Automatic generation of personalized QR codes (with the whosdo.com logo) for each user's public profile, making it easy to share their profile.
+- QR Code Generation: Automatic generation of personalized QR codes (with the whosfy.com logo) for each user's public profile, making it easy to share their profile.
 - Profile Enhancement Suggestions: The tool analyzes user profiles and generates suggestions for profile improvements to attract more visitors. This includes recommendations for bio text, optimal portfolio display, and call-to-action phrases.
 
 ## Style Guidelines:

@@ -1,6 +1,6 @@
-# 🧭 Roteiro de Reestruturação do Projeto WhosDo.com
+# 🧭 Roteiro de Reestruturação do Projeto Whosfy
 
-Este documento serve como guia para a reestruturação completa do projeto **WhosDo.com**, com foco em escalabilidade, manutenibilidade e alinhamento com boas práticas modernas de desenvolvimento.
+Este documento serve como guia para a reestruturação completa do projeto **Whosfy**, com foco em escalabilidade, manutenibilidade e alinhamento com boas práticas modernas de desenvolvimento.
 
 ---
 
@@ -195,4 +195,4 @@ Próximo passo é revisar os demais arquivos informativos e de configuração.
 
 ---
 
-> Criado por Micael Bento | Estrutura recomendada por ChatGPT (OpenAI) 
+> Criado por Micael Bento | Estrutura recomendada por ChatGPT (OpenAI)

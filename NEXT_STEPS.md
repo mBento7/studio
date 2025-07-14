@@ -92,7 +92,7 @@ Bem-vindo ao projeto Whosfy! Siga este manual para começar a contribuir, rodar 
 - [Etapa 6: Documentação e Automação](#etapa-6-documentação-e-automação)
 - [Etapa 7: Testes Automatizados](#etapa-7-testes-automatizados)
 - [Etapa 8: Refatoração de Layouts React/Next.js](#etapa-8-refatoração-de-layouts-reactnextjs)
-- [Etapas para Reconstruir o Projeto na Nova VPS](#-etapas-para-reconstruir-o-projeto-whosfycom-na-nova-vps-supabase-local)
+- [Etapas para Reconstruir o Projeto na Nova VPS](#etapas-para-reconstruir-o-projeto-whosfy-na-nova-vps-supabase-local)
 - [Checklist de Segurança](#checklist-de-segurança-para-apis-e-frontend)
 - [Revisão e Refatoração da Estrutura](#-revisão-e-refatoração-da-estrutura-do-projeto-10072025)
 - [Resumo da Infraestrutura VPS Oracle](#-resumo-da-infraestrutura-vps-oracle--recomendações-para-supabase-local)
@@ -820,7 +820,7 @@ import ChecklistCard from "./extras/ChecklistCard";
 
 ---
 
-## Etapas para Reconstruir o Projeto Whosfy.com na Nova VPS (Supabase Local)
+## Etapas para Reconstruir o Projeto Whosfy na Nova VPS (Supabase Local)
 
 ### 1. Preparação da VPS
 - Acesse a VPS via SSH:
@@ -994,7 +994,7 @@ ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 8000:127.0.0.1:8000
 ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 54323:127.0.0.1:54323 -L 54321:127.0.0.1:54321 -L 54322:127.0.0.1:54322 -N ubuntu@129.146.116.166
 ```
 
-### O que isso significa para o Whosfy.com?
+### O que isso significa para o Whosfy?
 - Ótima base para projetos modernos: recursos suficientes para Docker, Supabase local, Next.js, automações e pequenas/médias cargas de produção.
 - Supabase local roda perfeitamente em containers Docker, aproveitando SSD e múltiplos núcleos.
 - Limite será atingido quando o banco crescer muito ou uso de CPU/RAM/disco ficar alto.

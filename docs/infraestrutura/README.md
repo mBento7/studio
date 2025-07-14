@@ -1,6 +1,6 @@
 # Infraestrutura
 
-Esta pasta centraliza a documentação sobre deploy, operações, monitoramento e estratégias de hospedagem do WhosDo, incluindo guias práticos e recomendações para ambientes de produção e desenvolvimento.
+Esta pasta centraliza a documentação sobre deploy, operações, monitoramento e estratégias de hospedagem do Whosfy, incluindo guias práticos e recomendações para ambientes de produção e desenvolvimento.
 
 > **Última revisão:** 10/07/2025  
 > **Responsável:** Micael Bento
@@ -33,4 +33,4 @@ Esta pasta centraliza a documentação sobre deploy, operações, monitoramento 
 
 ## Boas práticas
 - Documente scripts, automações e rotinas de backup.
-- Mantenha exemplos reais e recomendações de segurança. 
+- Mantenha exemplos reais e recomendações de segurança.

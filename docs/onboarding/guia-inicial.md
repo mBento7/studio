@@ -4,7 +4,7 @@
 > **Responsável:** Micael Bento
 
 ## Objetivo
-Facilitar o início rápido de novos desenvolvedores no projeto Whosfy.com, padronizando setup, boas práticas e links úteis.
+Facilitar o início rápido de novos desenvolvedores no projeto Whosfy, padronizando setup, boas práticas e links úteis.
 
 ## Passos Iniciais
 1. Instale o pnpm globalmente:
@@ -45,4 +45,4 @@ Facilitar o início rápido de novos desenvolvedores no projeto Whosfy.com, padr
 - [Checklist de Segurança](./infraestrutura/README.md)
 - [Estratégia de Testes](./testes.md)
 
-> Mantenha este guia atualizado conforme o time evoluir! 
+> Mantenha este guia atualizado conforme o time evoluir!

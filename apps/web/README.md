@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>WhosDo.com - Sua Identidade Digital Profissional</h1>
+  <h1>Whosfy.com - Sua Identidade Digital Profissional</h1>
   <p>Uma plataforma de identidade digital onde profissionais, freelancers e criadores de conteúdo mostram seu trabalho, serviços e habilidades em um único hub central.</p>
   <p>
     <img src="https://img.shields.io/badge/Next.js-15-black.svg?style=flat-square&logo=next.js" alt="Next.js 15">
@@ -32,7 +32,7 @@
 
 ## 🚀 Visão Geral do Projeto
 
-O **WhosDo.com** é o app principal do monorepo, gerenciado via workspaces do pnpm. Ele deve ser rodado sempre com o filtro `--filter nextn` para garantir o correto funcionamento dos scripts e dependências.
+O **Whosfy.com** é o app principal do monorepo, gerenciado via workspaces do pnpm. Ele deve ser rodado sempre com o filtro `--filter nextn` para garantir o correto funcionamento dos scripts e dependências.
 
 ## ✨ Funcionalidades Chave
 
