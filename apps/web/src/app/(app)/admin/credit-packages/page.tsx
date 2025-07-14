@@ -3,6 +3,9 @@ import React from 'react';
 // TODO: Importar e usar o componente PackageEditor quando implementado
 // import { PackageEditor } from '@/src/features/credits';
 
+// Força a página a ser dinâmica para evitar prerender
+export const dynamic = 'force-dynamic';
+
 export default function AdminCreditPackagesPage() {
   return (
     <div>
@@ -11,4 +14,4 @@ export default function AdminCreditPackagesPage() {
       <p>Gerencie pacotes de créditos disponíveis para venda.</p>
     </div>
   );
-} 
+}
