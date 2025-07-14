@@ -41,10 +41,10 @@ USER nextjs
 # Expor porta
 EXPOSE 3000
 
-# Variáveis de ambiente
-ENV PORT 3000
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Variáveis de ambiente (fixed format)
+ENV PORT=3000
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Comando de inicialização
 CMD ["node", "server.js"]
