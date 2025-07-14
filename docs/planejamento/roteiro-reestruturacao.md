@@ -6,7 +6,7 @@ Este documento serve como guia para a reestruturação completa do projeto **Who
 
 ## ✅ Objetivo
 
-Promover a estrutura do repositório de dentro de `studio-clone/` para a raiz `studio-master/`, organizando as pastas e arquivos segundo uma arquitetura modular e escalável para apps web modernos com suporte a futuras expansões.
+Promover a estrutura do repositório de dentro de `studio-clone/` para a raiz `whosfy/`, organizando as pastas e arquivos segundo uma arquitetura modular e escalável para apps web modernos com suporte a futuras expansões.
 
 ---
 
@@ -51,19 +51,19 @@ packages:
 
 ### 3. Criar e Ajustar `package.json` na Raiz
 
-O `package.json` original da raiz foi removido. Um novo `package.json` foi criado na raiz para gerenciar o monorepo e scripts globais. O `package.json` da `apps/web/` (`name: "nextn"`) foi mantido.
+O `package.json` original da raiz foi removido. Um novo `package.json` foi criado na raiz para gerenciar o monorepo e scripts globais. O `package.json` da `apps/web/` (`name: "whosfy-web"`) foi atualizado.
 
 ```json
 {
-  \"name\": \"studio-master-monorepo\",
+  \"name\": \"whosfy\",
   \"version\": \"1.0.0\",
   \"description\": \"Monorepo para o projeto WhosDo.com\",
   \"private\": true,
   \"scripts\": {
-    \"dev\": \"pnpm --filter nextn dev\",
-    \"build\": \"pnpm --filter nextn build\",
-    \"lint\": \"pnpm --filter nextn lint\",
-    \"start\": \"pnpm --filter nextn start\",
+    \"dev\": \"pnpm --filter whosfy-web dev\",
+    \"build\": \"pnpm --filter whosfy-web build\",
+    \"lint\": \"pnpm --filter whosfy-web lint\",
+    \"start\": \"pnpm --filter whosfy-web start\",
     \"clean\": \"pnpm recursive exec rm -rf node_modules .next\",
     \"full-clean\": \"pnpm recursive exec rm -rf node_modules .next && rm -f pnpm-lock.yaml && pnpm cache clean --force\"
   },
@@ -73,7 +73,7 @@ O `package.json` original da raiz foi removido. Um novo `package.json` foi criad
 }
 ```
 
-> O script `dev` foi ajustado para `--filter nextn` para corresponder ao nome do pacote em `apps/web/package.json`.
+> O script `dev` foi ajustado para `--filter whosfy-web` para corresponder ao nome do pacote em `apps/web/package.json`.
 
 ### 4. Refatorar `src/features/` para estrutura modular
 

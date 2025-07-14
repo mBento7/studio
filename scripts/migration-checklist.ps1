@@ -62,7 +62,7 @@ if ($filesWithComments.Count -gt 0) {
 Write-Host "\n🚀 Verificando se o projeto pode ser executado..." -ForegroundColor Yellow
 if (Test-Path "$projectRoot\apps\web\package.json") {
     Show-TaskStatus "Projeto web encontrado" "✓ OK" "Green"
-    Write-Host "  Para executar o projeto, use: pnpm dev --filter web" -ForegroundColor Cyan
+    Write-Host "  Para executar o projeto, use: pnpm dev --filter whosfy-web" -ForegroundColor Cyan
 } else {
     Show-TaskStatus "Projeto web não encontrado" "❌ ERRO" "Red"
 }
@@ -173,7 +173,7 @@ if ($hasImportCheckScript) {
 }
 
 Write-Host "\n📋 Próximos passos:" -ForegroundColor Cyan
-Write-Host "  1. Execute 'pnpm dev --filter web' para validar o projeto localmente" -ForegroundColor White
+Write-Host "  1. Execute 'pnpm dev --filter whosfy-web' para validar o projeto localmente" -ForegroundColor White
 Write-Host "  2. Atualize o NEXT_STEPS.md com as mudanças realizadas" -ForegroundColor White
 Write-Host "  3. Crie os READMEs faltantes nas pastas principais" -ForegroundColor White
 Write-Host "  4. Revise e refatore os arquivos grandes identificados" -ForegroundColor White

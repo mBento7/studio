@@ -19,11 +19,11 @@
 - `docs/`: documentação do projeto
 
 ## 🚀 Scripts principais
-- `pnpm --filter nextn dev` — inicia o ambiente de desenvolvimento do app principal
-- `pnpm --filter nextn build` — build de produção do app principal
-- `pnpm --filter nextn lint` — checagem de lint
-- `pnpm --filter nextn format` — formatação automática
-- `pnpm --filter nextn storybook` — roda o Storybook (se configurado)
+- `pnpm --filter whosfy-web dev` — inicia o ambiente de desenvolvimento do app principal
+- `pnpm --filter whosfy-web build` — build de produção do app principal
+- `pnpm --filter whosfy-web lint` — checagem de lint
+- `pnpm --filter whosfy-web format` — formatação automática
+- `pnpm --filter whosfy-web storybook` — roda o Storybook (se configurado)
 
 ### Scripts de automação
 - `node scripts/validate-env.js` — valida variáveis de ambiente e segurança
@@ -75,12 +75,12 @@
 
 5. **Inicie o app principal:**
    ```bash
-   pnpm --filter nextn dev
+   pnpm --filter whosfy-web dev
    ```
 
 6. **(Opcional) Rode o Storybook:**
    ```bash
-   pnpm --filter nextn storybook
+   pnpm --filter whosfy-web storybook
    ```
 
 > Para mais detalhes, consulte o [README do app web](./apps/web/README.md) e o [índice de documentação](./docs/README.md).
@@ -92,7 +92,7 @@
   ```bash
   pnpm --filter <nome-do-app-ou-pacote> <script>
   ```
-- O app principal se chama `nextn`.
+- O app principal se chama `whosfy-web`.
 
 ## 🛟 Troubleshooting
 - **Erro: pnpm não encontrado**

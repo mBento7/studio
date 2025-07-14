@@ -1,4 +1,4 @@
-# ✅ Checklist de Implementação - Studio Master
+# ✅ Checklist de Implementação - Whosfy
 
 ## 🎯 Tarefas de Automação e Infraestrutura
 
@@ -113,7 +113,7 @@ APPLY_SEEDS=true node scripts/apply-migrations.js
 ### 3. Desenvolvimento
 ```bash
 # Iniciar aplicação
-pnpm --filter nextn dev
+pnpm --filter whosfy-web dev
 
 # Validar ambiente periodicamente
 node scripts/validate-env.js

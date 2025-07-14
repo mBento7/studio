@@ -5,6 +5,6 @@ export const siteConfig = {
   ogImage: "https://whosfy.com/og.jpg", // Example
   links: {
     twitter: "https://twitter.com/whosfy", // Example
-    github: "https://github.com/your-org/whosfy-repo", // Example
+    github: "https://github.com/whosfy/whosfy", // Atualizar com URL real do repositório
   },
 };

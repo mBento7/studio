@@ -32,7 +32,7 @@
 
 ## 🚀 Visão Geral do Projeto
 
-O **Whosfy.com** é o app principal do monorepo, gerenciado via workspaces do pnpm. Ele deve ser rodado sempre com o filtro `--filter nextn` para garantir o correto funcionamento dos scripts e dependências.
+O **Whosfy.com** é o app principal do monorepo, gerenciado via workspaces do pnpm. Ele deve ser rodado sempre com o filtro `--filter whosfy-web` para garantir o correto funcionamento dos scripts e dependências.
 
 ## ✨ Funcionalidades Chave
 
@@ -83,22 +83,22 @@ Veja a estrutura detalhada no [README principal](../../README.md) e no [índice 
    Crie um arquivo `.env.local` na raiz do projeto e preencha com as credenciais do Supabase.
 3. **Execute o servidor de desenvolvimento:**
    ```bash
-   pnpm --filter nextn dev
+   pnpm --filter whosfy-web dev
    ```
 4. **(Opcional) Rode o Storybook:**
    ```bash
-   pnpm --filter nextn storybook
+   pnpm --filter whosfy-web storybook
    ```
 
 ---
 
 ## ⚙️ Scripts Disponíveis
 
-- `pnpm --filter nextn dev`: Inicia o servidor de desenvolvimento
-- `pnpm --filter nextn build`: Build de produção
-- `pnpm --filter nextn start`: Servidor de produção
-- `pnpm --filter nextn lint`: Lint do código
-- `pnpm --filter nextn storybook`: Storybook (se configurado)
+- `pnpm --filter whosfy-web dev`: Inicia o servidor de desenvolvimento
+- `pnpm --filter whosfy-web build`: Build de produção
+- `pnpm --filter whosfy-web start`: Servidor de produção
+- `pnpm --filter whosfy-web lint`: Lint do código
+- `pnpm --filter whosfy-web storybook`: Storybook (se configurado)
 
 ---
 

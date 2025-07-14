@@ -18,11 +18,11 @@ Facilitar o início rápido de novos desenvolvedores no projeto Whosfy, padroniz
 3. Copie o arquivo `.env.example` para `.env.local` e preencha as variáveis necessárias (solicite ao responsável se não tiver acesso).
 4. Inicie o app principal:
    ```bash
-   pnpm --filter nextn dev
+   pnpm --filter whosfy-web dev
    ```
 5. Consulte o Storybook (se disponível):
    ```bash
-   pnpm --filter nextn storybook
+   pnpm --filter whosfy-web storybook
    ```
 
 ## Padrões de Branch e PR

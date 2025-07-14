@@ -32,7 +32,7 @@ Bem-vindo ao projeto Whosfy! Siga este manual para começar a contribuir, rodar 
      ```
    - Rode o app web:
      ```bash
-     pnpm dev --filter web
+     pnpm dev --filter whosfy-web
      ```
 
 6. **Scripts de Configuração Inicial**
@@ -200,7 +200,7 @@ node scripts/check-code-health.js --fix
     - [x] Remover dependências não usadas do package.json (7 dependências + 14 devDependencies removidas)
     - [x] Limpar código comentado e funções antigas
   5. **Validar e Testar**
-    - [x] Rodar o projeto localmente (pnpm dev --filter web)
+    - [x] Rodar o projeto localmente (pnpm dev --filter whosfy-web)
     - [x] Executar testes automatizados (scripts de verificação implementados)
     - [x] Navegar pelas principais rotas para garantir que nada foi quebrado
   6. **Documentar**
@@ -305,7 +305,7 @@ pnpm run backup-db                        # Backup do banco
 pnpm test                                  # Testar o projeto
 
 # Desenvolvimento
-pnpm dev --filter web                     # Rodar app web
+pnpm dev --filter whosfy-web              # Rodar app web
 supabase start                            # Iniciar Supabase local
 supabase stop                             # Parar Supabase local
 ```
