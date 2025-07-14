@@ -1,3 +1,7 @@
+'use client';
+
+export const dynamic = 'force-dynamic';
+
 import React from 'react';
 
 // TODO: Importar e usar os componentes PremiumFeatureCard, PremiumActionButton, InsufficientCreditsDialog quando implementados
@@ -13,4 +17,4 @@ export default function PremiumDashboardPage() {
       <p>Veja e desbloqueie recursos premium usando créditos.</p>
     </div>
   );
-} 
+}

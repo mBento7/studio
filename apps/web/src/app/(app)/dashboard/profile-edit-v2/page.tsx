@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from "react";
 import ProfileEditPageV2 from "@/features/profile/new-edit-flow/ProfileEditPageV2";
 import { useAuth } from "@/hooks/use-auth";
@@ -88,4 +91,4 @@ export default function ProfileEditV2Page() {
       <ProfileEditPageV2 profile={profile} onProfileChange={setProfile} onSave={handleSave} />
     </div>
   );
-} 
+}

@@ -1,4 +1,6 @@
-'use client';
+"use client";
+
+export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useState } from "react";
 import { ProfileBasicTabV2 } from "@/features/profile/new-edit-flow/ProfileBasicTabV2";

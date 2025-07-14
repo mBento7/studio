@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from "react";
 import { ProfilePreviewV2 } from "@/features/profile/new-edit-flow/ProfilePreviewV2";
 import { useAuth } from "@/hooks/use-auth";

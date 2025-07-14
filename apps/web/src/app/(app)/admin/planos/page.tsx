@@ -3,6 +3,8 @@ import React from 'react';
 // TODO: Importar e usar os componentes PlanEditor, SalesReportTable quando implementados
 // import { PlanEditor, SalesReportTable } from '@/src/features/credits';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminPlanosPage() {
   return (
     <div>
@@ -12,4 +14,4 @@ export default function AdminPlanosPage() {
       <p>Gerencie planos, pacotes e visualize relatórios de vendas.</p>
     </div>
   );
-} 
+}

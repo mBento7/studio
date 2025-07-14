@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from "react";
 import { ProfileContentTabV2 } from "@/features/profile/new-edit-flow/ProfileContentTabV2";
 import { useAuth } from "@/hooks/use-auth";
@@ -65,4 +68,4 @@ export default function ProfileEditV2ContentPage() {
       {/* Botão extra de salvar manual removido, pois agora salva automaticamente */}
     </div>
   );
-} 
+}

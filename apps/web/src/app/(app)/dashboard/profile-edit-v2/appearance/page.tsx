@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState, useCallback } from "react";
 import { ProfileAppearanceTabV2 } from "@/features/profile/new-edit-flow/ProfileAppearanceTabV2";
 import { useAuth } from "@/hooks/use-auth";
