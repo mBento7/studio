@@ -31,7 +31,9 @@ export default function BuyCreditsPage() {
       });
       const data = await res.json();
       if (data.init_point) {
-        window.location.href = data.init_point;
+        if (typeof window !== 'undefined') {
+          window.location.href = data.init_point;
+        }
       } else {
         alert('Erro ao iniciar pagamento.');
       }
@@ -49,4 +51,4 @@ export default function BuyCreditsPage() {
       {isLoading && <p>Redirecionando para o Mercado Pago...</p>}
     </div>
   );
-} 
+}

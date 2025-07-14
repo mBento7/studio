@@ -12,6 +12,8 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'dark') {
       setIsDark(true);
@@ -27,6 +29,8 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   }, []);
 
   const toggleTheme = () => {
+    if (typeof window === 'undefined') return;
+    
     const newIsDark = !isDark;
     setIsDark(newIsDark);
     localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
@@ -91,4 +95,4 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       </div>
     </div>
   )
-} 
+}
