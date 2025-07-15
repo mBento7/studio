@@ -5,11 +5,13 @@ FROM node:18-alpine AS base
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 ARG SUPABASE_SERVICE_ROLE_KEY
+ARG NODE_ENV=production
 
 # Definir variáveis de ambiente para o build
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY
+ENV NODE_ENV=$NODE_ENV
 
 # Instalar dependências necessárias
 RUN apk add --no-cache libc6-compat
@@ -31,6 +33,10 @@ COPY . .
 
 # Build da aplicação web
 WORKDIR /app/apps/web
+
+# Copiar arquivo de ambiente de produção se existir
+COPY apps/web/.env.production* ./
+
 RUN pnpm build
 
 # Estágio de produção
@@ -54,6 +60,7 @@ COPY --from=base --chown=nextjs:nodejs /app/apps/web/.next ./apps/web/.next
 COPY --from=base --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 COPY --from=base --chown=nextjs:nodejs /app/apps/web/next.config.js ./apps/web/
 COPY --from=base --chown=nextjs:nodejs /app/apps/web/package.json ./apps/web/
+COPY --from=base --chown=nextjs:nodejs /app/apps/web/.env.production* ./apps/web/
 
 # Configurar usuário
 USER nextjs
