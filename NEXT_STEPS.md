@@ -68,14 +68,60 @@ Bem-vindo ao projeto Whosfy! Siga este manual para começar a contribuir, rodar 
 
 ## 🎯 Próximo Passo Prioritário
 
-**Status Atual**: Infraestrutura da VPS Oracle configurada com Docker, Supabase CLI e Coolify instalados. Túneis SSH configurados para acesso aos serviços.
+**Status Atual**: Infraestrutura da VPS Oracle configurada com Docker e Coolify instalados. Supabase CLI instalado e projeto inicializado na VPS.
 
-**Próximo Passo**: 
-1. **Acessar o Coolify** via http://localhost:8000 (com túnel SSH ativo)
-2. **Configurar conta de administrador** no Coolify
-3. **Conectar repositório GitHub** do projeto Whosfy
-4. **Clonar o repositório** na VPS para configurar variáveis de ambiente
-5. **Configurar o primeiro deploy** automatizado
+**✅ CONCLUÍDO**: Supabase CLI instalado e funcionando na VPS (129.146.146.242)
+
+**Próximo Passo PRIORITÁRIO**: 
+1. **✅ CONCLUÍDO - Supabase CLI instalado** via npx
+2. **✅ CONCLUÍDO - Projeto Supabase inicializado** em /home/ubuntu/whosfy
+3. **✅ CONCLUÍDO - Supabase local iniciado** com todos os serviços
+4. **✅ CONCLUÍDO - Túnel SSH configurado** para acesso ao Studio
+3. **Acessar o Coolify** via http://localhost:8000 (com túnel SSH ativo)
+4. **Configurar conta de administrador** no Coolify
+5. **Conectar repositório GitHub** do projeto Whosfy
+6. **Clonar o repositório** na VPS para configurar variáveis de ambiente
+7. **Configurar o primeiro deploy** automatizado
+
+## ✅ Checklist de Migração (VPS ATUAL: 129.146.146.242)
+
+### Infraestrutura Base
+- [x] **VPS Oracle configurada** (129.146.146.242)
+- [x] **Docker instalado** ✅
+- [x] **Docker Compose instalado** ✅
+- [x] **Supabase CLI instalado** ✅ **CONCLUÍDO**
+- [x] **Supabase local rodando** ✅ **CONCLUÍDO**
+- [x] **Coolify acessível** ✅ (via túnel SSH)
+- [x] **Túneis SSH para Supabase configurados** ✅ **CONCLUÍDO**
+
+### Instalação do Supabase ✅ CONCLUÍDO
+- [x] **Node.js/npm verificado na VPS**
+- [x] **Supabase CLI instalado via npx**
+- [x] **Projeto Supabase inicializado** (/home/ubuntu/whosfy)
+- [x] **Supabase local iniciado** (supabase start)
+- [x] **Túnel SSH para Supabase Studio funcionando**
+- [x] **Acesso ao Studio confirmado** (http://localhost:54323)
+
+### Configuração do Projeto
+- [ ] **Repositório clonado na VPS**
+- [ ] **Variáveis de ambiente configuradas**
+- [ ] **Dependencies instaladas** (pnpm install)
+- [ ] **Migrations aplicadas**
+- [ ] **Seeds executados**
+
+### Deploy e CI/CD
+- [ ] **Coolify configurado**
+- [ ] **Repositório GitHub conectado**
+- [ ] **Pipeline de deploy configurado**
+- [ ] **Primeiro deploy realizado**
+- [ ] **Testes automatizados funcionando**
+
+### Validação Final
+- [ ] **Aplicação acessível via domínio**
+- [ ] **Banco de dados funcionando**
+- [ ] **Autenticação funcionando**
+- [ ] **APIs funcionando**
+- [ ] **Monitoramento ativo**
 
 ---
 
@@ -281,15 +327,26 @@ node scripts/check-code-health.js --fix
 ## Comandos Rápidos
 
 ```bash
-# Rodar servidor Oracle
-ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" ubuntu@129.146.116.166
+# Rodar servidor Oracle (VPS ATUAL)
+ssh -i "C:\Users\Micael\.ssh\oracle_new" ubuntu@129.146.146.242
 
-# Acessar Supabase Studio via Túnel SSH
-ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 54323:127.0.0.1:54323 -L 54321:127.0.0.1:54321 -L 54322:127.0.0.1:54322 -N ubuntu@129.146.116.166
+# INSTALAR SUPABASE CLI (PRIMEIRO PASSO PRIORITÁRIO)
+npm install -g @supabase/supabase-js@latest
+npm install -g supabase
+supabase --version
+
+# CONFIGURAR PROJETO SUPABASE LOCAL
+mkdir -p /home/ubuntu/whosfy
+cd /home/ubuntu/whosfy
+supabase init
+supabase start
+
+# Acessar Supabase Studio via Túnel SSH (APÓS INSTALAÇÃO)
+ssh -i "C:\Users\Micael\.ssh\oracle_new" -L 54323:127.0.0.1:54323 -L 54321:127.0.0.1:54321 -L 54322:127.0.0.1:54322 -N ubuntu@129.146.146.242
 # Depois acesse: http://localhost:54323 no navegador
 
 # Acessar Coolify (Deploy Platform) via Túnel SSH
-ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 8000:127.0.0.1:8000 -N ubuntu@129.146.116.166
+ssh -i "C:\Users\Micael\.ssh\oracle_new" -L 8000:localhost:8000 ubuntu@129.146.146.242
 # Depois acesse: http://localhost:8000 no navegador
 
 # Scripts de Automação
@@ -297,6 +354,13 @@ node scripts/validate-env.js              # Validar variáveis de ambiente
 node scripts/setup-supabase-local.js      # Configurar Supabase local
 node scripts/version-migrations.js        # Versionar migrations e seeds
 node scripts/apply-migrations.js          # Aplicar migrations com validação
+
+# Scripts de Instalação do Supabase na VPS
+./scripts/install-supabase-vps.sh          # Script Bash para instalar Supabase na VPS
+./scripts/install-supabase-vps.ps1         # Script PowerShell para instalar Supabase na VPS
+./scripts/connect-coolify-auto.sh          # Script para conectar automaticamente ao Coolify
+./scripts/setup-dev.sh                     # Script para configurar ambiente de desenvolvimento
+./scripts/backup-db.sh                     # Script para backup do banco de dados
 
 # Comandos Tradicionais
 pnpm run migrate-all                      # Rodar todas as migrations
@@ -308,6 +372,29 @@ pnpm test                                  # Testar o projeto
 pnpm dev --filter whosfy-web              # Rodar app web
 supabase start                            # Iniciar Supabase local
 supabase stop                             # Parar Supabase local
+```
+
+### Uso dos Scripts de Instalação do Supabase:
+
+**PowerShell (Windows):**
+```powershell
+# Instalação completa
+.\scripts\install-supabase-vps.ps1
+
+# Apenas instalar (sem túnel)
+.\scripts\install-supabase-vps.ps1 -InstallOnly
+
+# Iniciar túnel SSH para Supabase Studio
+.\scripts\install-supabase-vps.ps1 -StartTunnel
+
+# Verificar status do Supabase
+.\scripts\install-supabase-vps.ps1 -CheckStatus
+```
+
+**Bash (Linux/Mac):**
+```bash
+# Executar na VPS via SSH
+ssh -i "C:\Users\Micael\.ssh\oracle_new" ubuntu@129.146.146.242 'bash -s' < ./scripts/install-supabase-vps.sh
 ```
 
 ---
@@ -959,23 +1046,29 @@ graph TD
 
 ---
 
-## 🖥️ Resumo da Infraestrutura VPS Oracle & Recomendações para Supabase Local
+## 🖥️ Resumo da Infraestrutura VPS Oracle & Status Atual
 
-### Infraestrutura Atual
+### Infraestrutura Atual (VPS NOVA)
 - **Provedor:** Oracle Cloud
 - **Tipo:** VM.Standard.A1.Flex (Ampere ARM)
 - **vCPUs:** 4 OCPUs
 - **Disco:** 200GB SSD (paravirtualizado)
 - **Rede:** 4Gbps
 - **SO:** Ubuntu 24.04 LTS
-- **IP Público:** 129.146.116.166
+- **IP Público:** 129.146.146.242
 - **Acesso:** SSH (usuário: ubuntu)
+- **Chave SSH:** C:\Users\Micael\.ssh\oracle_new
 - **Criptografia em trânsito:** Ativada
-- **Docker:** v28.3.2 instalado e funcionando
-- **Docker Compose:** v2.38.2 instalado
-- **Supabase CLI:** v2.30.4 instalado
-- **Supabase Local:** Rodando e acessível via túnel SSH
-- **Coolify:** v4.0.0-beta.420.5 instalado e acessível via túnel SSH (http://localhost:8000)
+- **Docker:** ✅ Instalado e funcionando
+- **Docker Compose:** ✅ Instalado
+- **Supabase CLI:** ❌ **NÃO INSTALADO - USAR SCRIPTS CRIADOS**
+- **Supabase Local:** ❌ **NÃO CONFIGURADO - USAR SCRIPTS CRIADOS**
+- **Coolify:** ✅ Acessível via túnel SSH (http://localhost:8000)
+
+### 🚀 Scripts de Instalação Criados
+- **PowerShell:** `scripts/install-supabase-vps.ps1`
+- **Bash:** `scripts/install-supabase-vps.sh`
+- **Documentação:** `scripts/README-SUPABASE-INSTALL.md`
 
 ### Configuração de Acesso (Firewall Oracle Cloud)
 ⚠️ **IMPORTANTE**: A Oracle Cloud bloqueia portas externas por padrão. Para acessar serviços como Coolify e Supabase Studio, é necessário usar túneis SSH:
@@ -985,13 +1078,13 @@ graph TD
 - **Supabase API (porta 54321)**: Acessível via túnel SSH
 - **PostgreSQL (porta 54322)**: Acessível via túnel SSH
 
-**Comandos de Túnel SSH:**
+**Comandos de Túnel SSH (VPS ATUAL):**
 ```bash
 # Para Coolify
-ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 8000:127.0.0.1:8000 -N ubuntu@129.146.116.166
+ssh -i "C:\Users\Micael\.ssh\oracle_new" -L 8000:localhost:8000 ubuntu@129.146.146.242
 
-# Para Supabase (Studio + API + DB)
-ssh -i "C:\Users\Micael\Downloads\ssh-key-2025-07-13.key" -L 54323:127.0.0.1:54323 -L 54321:127.0.0.1:54321 -L 54322:127.0.0.1:54322 -N ubuntu@129.146.116.166
+# Para Supabase (Studio + API + DB) - APÓS INSTALAÇÃO
+ssh -i "C:\Users\Micael\.ssh\oracle_new" -L 54323:127.0.0.1:54323 -L 54321:127.0.0.1:54321 -L 54322:127.0.0.1:54322 -N ubuntu@129.146.146.242
 ```
 
 ### O que isso significa para o Whosfy?

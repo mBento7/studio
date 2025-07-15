@@ -207,6 +207,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
     onPortfolioItemClick: handleOpenPortfolioModal,
     toast: toast,
     mounted: mounted,
+    onRefreshProfile: fetchAndUpdateProfile,
   };
 
   // Extrair propriedades de aparência customizadas do perfil

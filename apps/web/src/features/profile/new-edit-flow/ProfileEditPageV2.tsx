@@ -54,7 +54,7 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
   const [internalProfile, dispatch] = useReducer(profileReducer, initialProfile);
   const plan = internalProfile.plan || "free";
 
-  const steps = useMemo(() => buildSteps(internalProfile, plan, user?.id, dispatch), [internalProfile, plan, user?.id]);
+  const steps = useMemo(() => buildSteps(internalProfile, plan, dispatch), [internalProfile, plan]);
   const { step, setStep, isFirst, isLast, goNext, goPrev } = useProfileWizard(steps);
   const { save, saving, successMsg, errorMsg } = useSaveProfile(onSave, internalProfile);
   const [finished, setFinished] = useState(false);
@@ -91,8 +91,8 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
           {steps.map((s, idx) => {
             const isActive = idx === step;
             const Icon = stepIcons[s.key as keyof typeof stepIcons] as React.ElementType;
-            const badge = typeof s.badge === 'function' ? s.badge(internalProfile.plan || '') : s.badge;
-            const label = typeof s.label === 'function' ? s.label(internalProfile.plan || '') : s.label;
+            const badge = undefined; // Removido pois não existe no tipo
+            const label = s.label;
             return (
               <button
                 key={s.key}
@@ -160,8 +160,8 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
           {steps.map((s, idx) => {
             const isActive = idx === step;
             const Icon = stepIcons[s.key as keyof typeof stepIcons] as React.ElementType;
-            const badge = typeof s.badge === 'function' ? s.badge(internalProfile.plan || '') : s.badge;
-            const label = typeof s.label === 'function' ? s.label(internalProfile.plan || '') : s.label;
+            const badge = undefined; // Removido pois não existe no tipo
+            const label = s.label;
             return (
               <SwiperSlide key={s.key} style={{ width: 90, minWidth: 72 }}>
                 <button

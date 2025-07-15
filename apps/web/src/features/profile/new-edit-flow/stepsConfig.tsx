@@ -43,8 +43,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
   ];
 
   const [showExampleBanner, setShowExampleBanner] = useState(false);
-  const [showExampleStories, setShowExampleStories] = useState(false);
-  const [showExampleCupons, setShowExampleCupons] = useState(false);
+  // Removido variáveis não utilizadas
 
   function handleAddStory() {
     if (!storyDraft.image || !storyDraft.title) return;
@@ -108,7 +107,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
             <ImageUploadField
               label="Imagem do Story"
               name="storyImage"
-              setValue={(_name, value) => setStoryDraft(d => ({ ...d, image: value }))}
+              setValue={(_name: string, value: string) => setStoryDraft(d => ({ ...d, image: value }))}
               currentImageUrl={storyDraft.image}
               aspectRatio="16/9"
               buttonText="Enviar Story"
@@ -173,12 +172,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
   );
 }
 
-function getYouTubeId(url: string): string | undefined {
-  if (!url) return undefined;
-  const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[1].length === 11 ? match[1] : undefined;
-}
+// Função removida pois não estava sendo utilizada
 
 export const RAW_STEPS = [
   { key: 'basic', label: 'Básico', icon: User, component: ProfileBasicTabV2, requiredPlan: 'free' },
@@ -191,7 +185,7 @@ export const RAW_STEPS = [
 export function buildSteps(
   profile: UserProfileV2,
   plan: string,
-  userId: string | undefined,
+  // userId removido pois não estava sendo utilizado
   dispatch: Dispatch<{ type: "update"; payload: Partial<UserProfileV2> }>
 ) {
   return RAW_STEPS.map(s => {
@@ -203,7 +197,7 @@ export function buildSteps(
           data: profile,
           onChange: (data: UserProfileV2) => dispatch({ type: 'update', payload: data })
         };
-        component = React.createElement(s.component, componentProps);
+        component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
       case 'layout':
         componentProps = {
@@ -218,7 +212,7 @@ export function buildSteps(
           },
           onUpgrade: () => alert('Faça upgrade para acessar este layout!')
         };
-        component = React.createElement(s.component, componentProps);
+        component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
       case 'portfolio':
         componentProps = {
@@ -226,7 +220,7 @@ export function buildSteps(
           onChange: (portfolio: any[]) => dispatch({ type: 'update', payload: { portfolio } }),
           plan,
         };
-        component = React.createElement(s.component, componentProps);
+        component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
       case 'conteudo':
         componentProps = {
@@ -235,7 +229,7 @@ export function buildSteps(
           layout: profile.layout,
           onChange: (data: any) => dispatch({ type: 'update', payload: data })
         };
-        component = React.createElement(s.component, componentProps);
+        component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
       case 'premium':
         componentProps = {
@@ -244,7 +238,7 @@ export function buildSteps(
           layout: profile.layout,
           onChange: (data: any) => dispatch({ type: 'update', payload: data })
         };
-        component = React.createElement(s.component, componentProps);
+        component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
       default:
         component = null;
@@ -271,4 +265,4 @@ export const stepLabels = {
   conteudo: 'Conteúdo',
   portfolio: 'Portfólio',
   premium: 'Premium',
-}; 
+};

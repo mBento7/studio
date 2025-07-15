@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-14T00:28:34.416Z",
+  "timestamp": "2025-07-14T22:51:57.005Z",
   "environment": "development",
   "loadedFiles": [
     "C:\\Users\\Micael\\Downloads\\studio-master\\apps\\web\\.env.local",
@@ -8,20 +8,7 @@
   "validation": {
     "NEXT_PUBLIC_SUPABASE_URL": [],
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": [],
-    "SUPABASE_SERVICE_ROLE_KEY": [
-      {
-        "type": "insecure",
-        "message": "Contém valor inseguro ou de exemplo"
-      },
-      {
-        "type": "format",
-        "message": "Formato inválido"
-      },
-      {
-        "type": "weak",
-        "message": "Chave muito curta (< 32 caracteres)"
-      }
-    ],
+    "SUPABASE_SERVICE_ROLE_KEY": [],
     "DB_URL": [
       {
         "type": "insecure",
@@ -86,7 +73,7 @@
   ],
   "security": {
     "score": 0,
-    "issues": 11
+    "issues": 8
   },
   "recommendations": [
     {

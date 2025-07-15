@@ -20,6 +20,8 @@ interface StoryModalProps {
   };
   onPrev?: () => void;
   onNext?: () => void;
+  onUserAction?: () => void;
+  progress?: number;
 }
 
 const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, onNext }) => {

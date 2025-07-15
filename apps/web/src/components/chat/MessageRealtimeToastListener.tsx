@@ -22,7 +22,7 @@ export const MessageRealtimeToastListener = () => {
       }, async (payload) => {
         const msg = payload.new;
         // Não mostrar toast se já estiver na conversa aberta
-        if (pathname.includes('/dashboard/messages')) return;
+        if (pathname && pathname.includes('/dashboard/messages')) return;
         // Buscar dados do remetente
         const { data: sender } = await supabase
           .from('profiles')
@@ -32,15 +32,10 @@ export const MessageRealtimeToastListener = () => {
         toast({
           title: `Nova mensagem de ${sender?.full_name || 'Usuário'}`,
           description: msg.content,
-          action: {
-            label: 'Abrir',
-            onClick: () => router.push('/dashboard/messages'),
-          },
-          avatar: sender?.profile_picture_url,
         });
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [user?.id, pathname, router, supabase, toast]);
   return null;
-}; 
+};

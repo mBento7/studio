@@ -2,12 +2,35 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
-import { getMockUserByUsername } from '@/lib/mock-data';
+import { getMockUserByUsername, type MockUser } from '@/lib/mock-data';
 import type { UserProfile } from '@/lib/types';
 import { PrintableBusinessCard } from '@/features/profile/printable-business-card';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+
+// Adaptador para converter MockUser em UserProfile
+const adaptMockUserToUserProfile = (mockUser: MockUser): UserProfile => ({
+  id: mockUser.id,
+  username: mockUser.username,
+  name: mockUser.full_name,
+  email: mockUser.email,
+  bio: mockUser.bio || '',
+  profile_picture_url: mockUser.profile_picture_url || '',
+  cover_photo_url: mockUser.cover_photo_url || '',
+  sociallinks: [],
+  services: [],
+  portfolio: [],
+  skills: mockUser.skills || [],
+  experience: [],
+  category: mockUser.category || '',
+  plan: 'free' as const,
+  layoutTemplateId: mockUser.layout || 'minimalist-card',
+  location: mockUser.location ? {
+    city: mockUser.location,
+    country: 'Brasil'
+  } : undefined
+});
 
 interface CardPreviewPageProps {
   params: Promise<{
@@ -27,9 +50,9 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
     const loadProfile = async () => {
       const resolvedParams = await params;
       const { username } = resolvedParams;
-      const profileData = getMockUserByUsername(username);
-      if (profileData) {
-        setUser(profileData);
+      const mockUserData = getMockUserByUsername(username);
+      if (mockUserData) {
+        setUser(adaptMockUserToUserProfile(mockUserData));
       } else {
         notFound();
       }

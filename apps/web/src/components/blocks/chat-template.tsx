@@ -11,9 +11,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-  useSidebar,
   SidebarInset,
-} from "@/components/blocks/sidebar";
+} from "@/components/ui/sidebar";
+
+// Hook simples para controle da sidebar
+const useSidebar = () => {
+  const [isOpen, setIsOpen] = React.useState(true);
+  const toggleSidebar = () => setIsOpen(!isOpen);
+  return { isOpen, toggleSidebar };
+};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -441,4 +447,4 @@ export const Home = () => {
 };
 
 // Exportação padrão para facilitar importação
-export default Home; 
+export default Home;

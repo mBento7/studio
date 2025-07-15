@@ -2,6 +2,26 @@
 
 Este diretório contém scripts utilitários para automação de migrations, seeds, validação de ambiente e configuração do projeto.
 
+## 🆕 Scripts de Instalação VPS
+
+### install-supabase-vps.sh / install-supabase-vps.ps1
+
+Scripts para instalação automatizada do Supabase CLI em VPS.
+
+**Status**: ✅ Supabase CLI instalado e funcionando na VPS Oracle (129.146.146.242)
+
+**Funcionalidades:**
+- Instala Supabase CLI via npx
+- Inicializa projeto Supabase
+- Configura e inicia todos os serviços
+- Estabelece túneis SSH para acesso local
+
+**Serviços configurados:**
+- PostgreSQL (porta 54322)
+- API Supabase (porta 54321) 
+- Supabase Studio (porta 54323)
+- Storage API (porta 54324)
+
 ## 📦 Scripts de Banco de Dados
 
 ### apply-migrations.js

@@ -2,8 +2,19 @@
 
 Esta pasta centraliza a documentação sobre deploy, operações, monitoramento e estratégias de hospedagem do Whosfy, incluindo guias práticos e recomendações para ambientes de produção e desenvolvimento.
 
-> **Última revisão:** 10/07/2025  
+> **Última revisão:** 16/01/2025  
 > **Responsável:** Micael Bento
+
+## Status Atual da Infraestrutura
+
+**VPS Oracle (129.146.146.242)**:
+- ✅ Docker e Docker Compose instalados
+- ✅ Coolify instalado e acessível via túnel SSH
+- ✅ Supabase CLI instalado via npx
+- ✅ Projeto Supabase inicializado em `/home/ubuntu/whosfy`
+- ✅ Todos os serviços Supabase rodando (PostgreSQL, API, Storage, Studio, etc.)
+- ✅ Túneis SSH configurados para acesso aos serviços
+- ✅ Supabase Studio acessível em http://localhost:54323
 
 ## Checklist de Segurança e Escalabilidade
 

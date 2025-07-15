@@ -12,9 +12,36 @@ import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase as ServicesIcon, Image as PortfolioIcon, PlusCircle, Trash2, Upload, ArrowUp, ArrowDown, Loader2, Youtube as YoutubeIcon, Megaphone, Star, Wrench as SkillsIcon, Building as ExperienceIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockCurrentUser, updateMockCurrentUser } from "@/lib/mock-data";
+import { mockCurrentUser, updateMockCurrentUser, type MockUser } from "@/lib/mock-data";
 import type { UserProfile, Service, PortfolioItem, PremiumBanner, ExperienceItem } from "@/lib/types";
 import { useAuth } from '@/hooks/use-auth';
+
+// Adaptador para converter MockUser em UserProfile
+const adaptMockUserToUserProfile = (mockUser: MockUser): UserProfile => ({
+  id: mockUser.id,
+  username: mockUser.username,
+  name: mockUser.full_name,
+  email: mockUser.email,
+  bio: mockUser.bio || '',
+  profile_picture_url: mockUser.profile_picture_url || '',
+  cover_photo_url: mockUser.cover_photo_url || '',
+  sociallinks: [],
+  services: [],
+  portfolio: [],
+  skills: mockUser.skills || [],
+  experience: [],
+  category: mockUser.category || '',
+  plan: 'free' as const,
+  layoutTemplateId: mockUser.layout || 'minimalist-card',
+  location: mockUser.location ? {
+    city: mockUser.location,
+    country: 'Brasil'
+  } : undefined,
+  youtubeVideoUrl: '',
+  youtubeVideoTitle: '',
+  youtubeVideoDescription: '',
+  premiumBanner: undefined
+});
 
 const SERVICE_LIMIT_FREE = 2;
 const SERVICE_LIMIT_STANDARD = 5;
@@ -44,14 +71,19 @@ export default function ContentSettingsPage() {
   const [premiumBanner, setPremiumBanner] = useState<PremiumBanner | null>(null);
 
   useEffect(() => {
-    const profileToLoad = currentUserProfile || mockCurrentUser;
+    const profileToLoad = currentUserProfile || adaptMockUserToUserProfile(mockCurrentUser);
     if (profileToLoad) {
       setActiveProfile(profileToLoad);
       setUserPlan(profileToLoad.plan || 'free');
       setCurrentServices(Array.isArray(profileToLoad.services) ? profileToLoad.services : []);
       setCurrentPortfolio(Array.isArray(profileToLoad.portfolio) ? profileToLoad.portfolio : []);
       setCurrentSkills(Array.isArray(profileToLoad.skills) ? profileToLoad.skills : []);
-      setCurrentExperience(Array.isArray(profileToLoad.experience) ? profileToLoad.experience.map(e => ({...e, id: e.id || Date.now().toString() })) : []);
+      setCurrentExperience(Array.isArray(profileToLoad.experience) ? profileToLoad.experience.map(e => ({
+        ...e, 
+        id: e.id || Date.now().toString(),
+        startDate: e.startDate || '',
+        endDate: e.endDate || null
+      })) : []);
       setYoutubeUrl(profileToLoad.youtubeVideoUrl || '');
       setYoutubeTitle(profileToLoad.youtubeVideoTitle || '');
       setYoutubeDescription(profileToLoad.youtubeVideoDescription || '');
@@ -92,10 +124,16 @@ export default function ContentSettingsPage() {
       toast({ title: "Limite Atingido", description: `Seu plano permite até ${EXPERIENCE_LIMIT_PREMIUM} experiências.`, variant: "destructive" });
       return;
     }
-    setCurrentExperience(prev => [...prev, { id: Date.now().toString(), title: '', company: '', years: '' }]);
+    setCurrentExperience(prev => [...prev, { 
+      id: Date.now().toString(), 
+      title: '', 
+      company: '', 
+      startDate: '', 
+      endDate: null 
+    }]);
   };
   const handleRemoveExperience = (id: string) => setCurrentExperience(prev => prev.filter(exp => exp.id !== id));
-  const handleExperienceChange = (id: string, field: 'title' | 'company' | 'years', value: string) => setCurrentExperience(prev => prev.map(exp => exp.id === id ? { ...exp, [field]: value } : exp));
+  const handleExperienceChange = (id: string, field: 'title' | 'company' | 'startDate' | 'endDate', value: string) => setCurrentExperience(prev => prev.map(exp => exp.id === id ? { ...exp, [field]: field === 'endDate' ? (value || null) : value } : exp));
 
   const handleAddService = () => {
     const limits = { free: SERVICE_LIMIT_FREE, standard: SERVICE_LIMIT_STANDARD, premium: SERVICE_LIMIT_PREMIUM };

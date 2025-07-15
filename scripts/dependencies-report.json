@@ -1,15 +1,17 @@
 {
-  "timestamp": "2025-07-14T01:03:27.988Z",
+  "timestamp": "2025-07-14T22:51:48.026Z",
   "statistics": {
-    "totalDependencies": 48,
+    "totalDependencies": 49,
     "totalDevDependencies": 9,
     "usedPackages": 48,
-    "unusedDeps": 0,
+    "unusedDeps": 1,
     "unusedDevDeps": 0,
     "missingDeps": 0,
     "devDepsInProd": 0
   },
-  "unusedDependencies": [],
+  "unusedDependencies": [
+    "tailwindcss-animate"
+  ],
   "unusedDevDependencies": [],
   "missingDependencies": [],
   "devDependenciesInProduction": [],
@@ -64,7 +66,7 @@
     "zod"
   ],
   "commands": {
-    "removeUnusedDeps": null,
+    "removeUnusedDeps": "npm uninstall tailwindcss-animate",
     "removeUnusedDevDeps": null,
     "installMissingDeps": null
   }

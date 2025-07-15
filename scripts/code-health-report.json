@@ -1,24 +1,30 @@
 {
-  "timestamp": "2025-07-14T01:03:27.999Z",
+  "timestamp": "2025-07-14T22:51:48.044Z",
   "summary": {
-    "totalIssues": 133,
+    "totalIssues": 134,
     "criticalIssues": 0,
-    "warnings": 133,
+    "warnings": 134,
     "suggestions": [
       {
         "type": "warning",
         "category": "cleanup",
         "message": "133 arquivos órfãos encontrados",
         "action": "Verifique se podem ser removidos com segurança"
+      },
+      {
+        "type": "warning",
+        "category": "cleanup",
+        "message": "1 dependencies não utilizadas",
+        "action": "Execute: npm uninstall tailwindcss-animate"
       }
     ]
   },
   "details": {
     "orphanedFiles": {
-      "timestamp": "2025-07-14T01:03:27.826Z",
+      "timestamp": "2025-07-14T22:51:47.536Z",
       "statistics": {
-        "totalFiles": 240,
-        "importedFiles": 79,
+        "totalFiles": 238,
+        "importedFiles": 78,
         "orphanedFiles": 133,
         "brokenImports": 0
       },
@@ -197,8 +203,6 @@
         "apps/web/src/app/layout.tsx",
         "apps/web/src/app/page.tsx",
         "apps/web/src/app/planos/page.tsx",
-        "apps/web/src/app/search/SearchShowcase.tsx",
-        "apps/web/src/app/search/page.tsx",
         "apps/web/src/components/ImageCropper.tsx",
         "apps/web/src/components/OnlyClient.tsx",
         "apps/web/src/components/ProtectedRoute.tsx",
@@ -404,7 +408,6 @@
         "apps/web/src/app/(app)/dashboard/feed/feed-scrollbar.css",
         "apps/web/src/app/(app)/dashboard/profile-edit-v2/page.tsx",
         "apps/web/src/app/globals.css",
-        "apps/web/src/app/search/SearchShowcase.tsx",
         "apps/web/src/components/anuncios/AnuncioLateralCard.tsx",
         "apps/web/src/components/anuncios/BannerBuscaTopo.tsx",
         "apps/web/src/components/anuncios/CarrosselAnuncios.tsx",
@@ -483,17 +486,19 @@
       ]
     },
     "dependencies": {
-      "timestamp": "2025-07-14T01:03:27.988Z",
+      "timestamp": "2025-07-14T22:51:48.026Z",
       "statistics": {
-        "totalDependencies": 48,
+        "totalDependencies": 49,
         "totalDevDependencies": 9,
         "usedPackages": 48,
-        "unusedDeps": 0,
+        "unusedDeps": 1,
         "unusedDevDeps": 0,
         "missingDeps": 0,
         "devDepsInProd": 0
       },
-      "unusedDependencies": [],
+      "unusedDependencies": [
+        "tailwindcss-animate"
+      ],
       "unusedDevDependencies": [],
       "missingDependencies": [],
       "devDependenciesInProduction": [],
@@ -548,7 +553,7 @@
         "zod"
       ],
       "commands": {
-        "removeUnusedDeps": null,
+        "removeUnusedDeps": "npm uninstall tailwindcss-animate",
         "removeUnusedDevDeps": null,
         "installMissingDeps": null
       }
@@ -562,6 +567,12 @@
         "category": "cleanup",
         "message": "133 arquivos órfãos encontrados",
         "action": "Verifique se podem ser removidos com segurança"
+      },
+      {
+        "type": "warning",
+        "category": "cleanup",
+        "message": "1 dependencies não utilizadas",
+        "action": "Execute: npm uninstall tailwindcss-animate"
       }
     ]
   },

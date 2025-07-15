@@ -2,6 +2,8 @@
 
 Este diretório centraliza toda a documentação institucional, técnica, de onboarding, qualidade, infraestrutura e planejamento do projeto.
 
+**Status Atual**: Supabase CLI instalado e funcionando na VPS Oracle (129.146.146.242). Projeto inicializado e todos os serviços rodando localmente na VPS.
+
 ## Sumário
 
 - [Apresentação Institucional e Técnica](./apresentacao/)
@@ -15,4 +17,4 @@ Este diretório centraliza toda a documentação institucional, técnica, de onb
 - [Edição Visual e Layouts](./edicao-visual/)
 - [Messenger e Comunicação](./messenger/)
 
-> Mantenha cada área atualizada e alinhada com a evolução do produto. 
+> Mantenha cada área atualizada e alinhada com a evolução do produto.

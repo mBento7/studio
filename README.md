@@ -131,5 +131,6 @@ Veja documentação completa em [`scripts/README.md`](./scripts/README.md).
 - **24/06/2025**: Atualização rápida
 - **10/07/2025**: Melhoria de boas práticas, troubleshooting e exemplos
 - **15/01/2025**: Scripts de automação, validação de ambiente, Supabase local, versionamento de migrations/seeds
+- **16/01/2025**: Atualização da documentação e configuração do Supabase na VPS
 
-Atualizado automaticamente em: 15/01/2025
+Atualizado automaticamente em: 16/01/2025

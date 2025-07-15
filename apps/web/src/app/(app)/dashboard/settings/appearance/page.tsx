@@ -13,9 +13,19 @@ import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Palette, LayoutGrid, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { UserProfile, AccentColor, LayoutTemplate } from "@/lib/types";
+import type { UserProfile, LayoutTemplate } from "@/lib/types";
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
+
+// Mock user para desenvolvimento
+const mockCurrentUser = {
+  id: '1',
+  name: 'Usuário Demo',
+  username: 'demo',
+  email: 'demo@example.com',
+  plan: 'free' as const,
+  layoutTemplateId: 'minimalist-card'
+};
 
 // Constantes de configuração
 const accentColors: AccentColor[] = [
