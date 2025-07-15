@@ -3,13 +3,79 @@
 import { createClient } from "@/lib/supabase/server";
 import type { UserProfile } from "@/lib/types";
 
+// Função para detectar se estamos em modo mock
+function isMockMode(): boolean {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return supabaseUrl?.includes('mock') || supabaseAnonKey?.includes('mock') || false;
+}
+
+// Mock data para quando estamos em modo mock
+function getMockUserProfileById(userId: string): UserProfile | null {
+  // Dados mock baseados nos usuários de teste
+  const mockProfiles: Record<string, UserProfile> = {
+    '1': {
+      id: '1',
+      username: 'test',
+      name: 'Usuário de Teste',
+      email: 'test@example.com',
+      phone: '+5511999999999',
+      whatsappNumber: '+5511999999999',
+      bio: 'Usuário de teste no modo mock',
+      profile_picture_url: '',
+      cover_photo_url: '',
+      category: 'Tecnologia',
+      plan: 'free',
+      layoutTemplateId: 'free',
+      isAvailable: true,
+      location: { city: 'São Paulo', country: 'Brasil' },
+      skills: ['JavaScript', 'React', 'Node.js'],
+      sociallinks: [],
+      services: [],
+      portfolio: [],
+      experience: [],
+      education: [],
+      reviews: [],
+      coupons: [],
+      faqs: []
+    },
+    '2': {
+      id: '2',
+      username: 'admin',
+      name: 'Admin Whosfy',
+      email: 'admin@whosfy.com',
+      phone: '+5511888888888',
+      whatsappNumber: '+5511888888888',
+      bio: 'Administrador do sistema Whosfy',
+      profile_picture_url: '',
+      cover_photo_url: '',
+      category: 'Administração',
+      plan: 'premium',
+      layoutTemplateId: 'premium',
+      isAvailable: true,
+      location: { city: 'São Paulo', country: 'Brasil' },
+      skills: ['Gestão', 'Liderança', 'Estratégia'],
+      sociallinks: [],
+      services: [],
+      portfolio: [],
+      experience: [],
+      education: [],
+      reviews: [],
+      coupons: [],
+      faqs: []
+    }
+  };
+  
+  return mockProfiles[userId] || null;
+}
+
 // Esta função substitui 'getMockUserByUsername'
 export async function getUserProfileByUsername(username: string): Promise<UserProfile | null> {
   // Busca real no Supabase
   const supabase = await createClient();
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('*, profile_snapshot')
+    .select('*')
     .eq('username', username)
     .single();
 
@@ -18,9 +84,8 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     return null;
   }
 
-  // Merge automático dos campos do snapshot para o objeto principal
-  const snapshot = profile.profile_snapshot || {};
-  const merged = { ...profile, ...snapshot };
+  // Usar o perfil diretamente sem snapshot
+  const merged = { ...profile };
 
   // Busca dados agregados usando SEMPRE o id do merged
   const [socialLinksRes, couponsRes, reviewsRes, faqsRes, portfolioRes] = await Promise.all([
@@ -231,21 +296,21 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
 }
 
 export async function refreshProfileSnapshot(profileId: string) {
-  const supabase = await createClient();
-  const { error } = await supabase.rpc('refresh_profile_snapshot', { p_profile_id: profileId });
-
-  if (error) {
-    console.error("Erro ao atualizar snapshot do perfil:", error);
-    throw error;
-  }
+  // Snapshot removido para compatibilidade com banco local
 }
 
 // Busca perfil completo por ID, incluindo dados relacionados
 export async function getUserProfileById(userId: string): Promise<UserProfile | null> {
+  // Se estamos em modo mock, retorna dados mock
+  if (isMockMode()) {
+    console.log('[Profile Service] Modo MOCK ativado - retornando dados mock para userId:', userId);
+    return getMockUserProfileById(userId);
+  }
+  
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
-    .select('*, profile_snapshot')
+    .select('*')
     .eq('id', userId)
     .single();
 
@@ -263,10 +328,6 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     cover_photo_url: data.cover_photo_url,
     whatsappNumber: data.whatsapp_number,
     sociallinks: (() => {
-      // Tenta pegar do snapshot, depois do próprio profile
-      if (data.profile_snapshot?.sociallinks) {
-        return data.profile_snapshot.sociallinks;
-      }
       if (data.sociallinks) {
         if (typeof data.sociallinks === 'string') {
           try {
@@ -282,11 +343,11 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
       }
       return [];
     })(),
-    services: (data.profile_snapshot?.services || []).map((s: any) => ({ ...s, icon: s.icon || undefined })),
-    portfolio: (data.profile_snapshot?.portfolio || []),
-    experience: (data.profile_snapshot?.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
-    education: (data.profile_snapshot?.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
-    reviews: (data.profile_snapshot?.reviews || []),
+    services: (data.services || []).map((s: any) => ({ ...s, icon: s.icon || undefined })),
+    portfolio: (data.portfolio || []),
+    experience: (data.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
+    education: (data.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
+    reviews: (data.reviews || []),
     skills: data.skills ?? [],
   };
 
@@ -390,7 +451,7 @@ export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
   const supabase = await createClient();
   const { data: profiles, error } = await supabase
     .from('profiles')
-    .select('*, profile_snapshot')
+    .select('*')
     .limit(limit);
 
   if (error || !profiles) {
@@ -418,10 +479,6 @@ export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
       skills: profile.skills || [],
       premiumBanner: profile.premium_banner || undefined,
       sociallinks: (() => {
-        // Tenta pegar do snapshot, depois do próprio profile
-        if (profile.profile_snapshot?.sociallinks) {
-          return profile.profile_snapshot.sociallinks;
-        }
         if (profile.sociallinks) {
           if (typeof profile.sociallinks === 'string') {
             try {
@@ -437,11 +494,11 @@ export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
         }
         return [];
       })() as UserProfile['sociallinks'],
-      services: (profile.profile_snapshot?.services || []).map((s: any) => ({ ...s, icon: s.icon || undefined })) as UserProfile['services'],
-      portfolio: (profile.profile_snapshot?.portfolio || []) as UserProfile['portfolio'],
-      experience: (profile.profile_snapshot?.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['experience'],
-      education: (profile.profile_snapshot?.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['education'],
-      reviews: (profile.profile_snapshot?.reviews || []) as UserProfile['reviews'],
+      services: (profile.services || []).map((s: any) => ({ ...s, icon: s.icon || undefined })) as UserProfile['services'],
+      portfolio: (profile.portfolio || []) as UserProfile['portfolio'],
+      experience: (profile.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['experience'],
+      education: (profile.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['education'],
+      reviews: (profile.reviews || []) as UserProfile['reviews'],
     };
     return userProfile;
   });
