@@ -47,22 +47,171 @@ export default function AuthPage() {
   const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmittingEmail(true);
+    
+    // Validações básicas
+    if (!loginEmail.trim()) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, insira seu email.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    if (!loginPassword.trim()) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, insira sua senha.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    console.log('[Login] Tentando fazer login com:', loginEmail);
+    
     try {
       await signInWithEmail(loginEmail, loginPassword);
+      console.log('[Login] Login bem-sucedido');
       // O redirecionamento será feito pelo useEffect
     } catch (error: any) {
+      console.error('[Login] Erro no login:', error);
+      
+      let errorMessage = "Não foi possível fazer login. Verifique suas credenciais.";
+      
+      if (error?.message?.includes('Invalid login credentials')) {
+        errorMessage = "Email ou senha incorretos. Verifique suas credenciais e tente novamente.";
+      } else if (error?.message?.includes('Email not confirmed')) {
+        errorMessage = "Seu email ainda não foi confirmado. Verifique sua caixa de entrada e clique no link de confirmação.";
+      } else if (error?.message?.includes('Too many requests')) {
+        errorMessage = "Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente.";
+      }
+      
       toast({
         title: "Erro ao fazer login",
-        description: error?.message || "Não foi possível fazer login. Verifique suas credenciais.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
       setIsSubmittingEmail(false);
     }
   };
-  const handleRegisterSubmit = async (event: React.FormEvent<HTMLFormElement>) => { /* ... */ };
-  const handleForgotPasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => { /* ... */ };
-  const handleGoogleSignIn = async () => { /* ... */ };
+  const handleRegisterSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmittingEmail(true);
+    
+    // Validações básicas
+    if (!registerName.trim()) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, insira seu nome completo.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    if (!registerEmail.trim()) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, insira um email válido.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    if (registerPassword.length < 6) {
+      toast({
+        title: "Erro de validação",
+        description: "A senha deve ter pelo menos 6 caracteres.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    if (registerPassword !== registerConfirmPassword) {
+      toast({
+        title: "Erro de validação",
+        description: "As senhas não coincidem.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    try {
+       await signUpWithEmail(registerEmail, registerPassword, registerName);
+      
+      toast({
+        title: "Conta criada com sucesso!",
+        description: "Bem-vindo ao WhosDo! Você será redirecionado em instantes.",
+        variant: "default",
+      });
+      
+      // O redirecionamento será feito pelo useEffect quando user for atualizado
+    } catch (error: any) {
+      console.error('Erro no registro:', error);
+      toast({
+        title: "Erro ao criar conta",
+        description: error?.message || "Não foi possível criar sua conta. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingEmail(false);
+    }
+  };
+  
+  const handleForgotPasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmittingEmail(true);
+    
+    if (!forgotEmail.trim()) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, insira seu email.",
+        variant: "destructive",
+      });
+      setIsSubmittingEmail(false);
+      return;
+    }
+    
+    try {
+      await sendPasswordResetEmail(forgotEmail);
+      toast({
+        title: "Email enviado!",
+        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+        variant: "default",
+      });
+      setActiveTab("login");
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar email",
+        description: error?.message || "Não foi possível enviar o email de recuperação.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingEmail(false);
+    }
+  };
+  
+  const handleGoogleSignIn = async () => {
+    setIsSubmittingEmail(true);
+    try {
+      await signInWithGoogle();
+      // O redirecionamento será feito pelo useEffect
+    } catch (error: any) {
+      toast({
+        title: "Erro ao fazer login com Google",
+        description: error?.message || "Não foi possível fazer login com Google.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingEmail(false);
+    }
+  };
 
   const isLoading = authLoading || isSubmittingEmail;
 

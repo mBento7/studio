@@ -129,17 +129,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signInWithEmail = async (email: string, password: string) => {
-    setLoading(true);
-    console.log('[Auth] Iniciando login com email:', email);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      handleAuthError(error, "Login com Email");
-      setLoading(false);
+    try {
+      console.log('[Auth] Iniciando login com email:', email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      console.log('[Auth] Resposta do Supabase:', { data, error });
+
+      if (error) {
+        console.error('[Auth] Erro do Supabase:', error);
+        handleAuthError(error, "Login com Email");
+        throw error;
+      }
+
+      console.log('[Auth] Login bem-sucedido:', data.user?.email);
+      return data;
+    } catch (error) {
+      console.error('[Auth] Erro capturado:', error);
+      handleAuthError(error as Error, "Login com Email");
       throw error;
-    } else {
-      console.log('[Auth] Login com email enviado para Supabase');
     }
-    // O onAuthStateChange cuidará do resto
   };
 
   const sendPasswordResetEmail = async (email: string) => {

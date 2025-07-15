@@ -1,15 +1,23 @@
 {
   "mcpServers": {
     "supabase": {
-      "command": "cmd",
+      "command": "npx",
       "args": [
-        "/c",
-        "npx",
-        "-y",
         "@supabase/mcp-server-supabase@dev",
         "--access-token",
         "sbp_4448ee512a0156b0f28c9cdad0d9eba8b9006409"
       ]
+    },
+    "coolify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@masonator/coolify-mcp"
+      ],
+      "env": {
+        "COOLIFY_ACCESS_TOKEN": "3|nrgAkXW2aF4GqvoiTyjYAjxjBqYkDVrinenvWPOzcbe2eafe",
+        "COOLIFY_BASE_URL": "http://localhost:8000"
+      }
     }
   }
 }
