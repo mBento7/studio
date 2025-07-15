@@ -245,7 +245,7 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
-    .select('*, social_links(*), services(*), portfolio_items(*), experience(*), education(*), reviews(*)')
+    .select('*, profile_snapshot')
     .eq('id', userId)
     .single();
 
@@ -262,12 +262,31 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     profile_picture_url: data.profile_picture_url,
     cover_photo_url: data.cover_photo_url,
     whatsappNumber: data.whatsapp_number,
-    sociallinks: data.social_links?.map((link: any) => ({ ...link, id: String(link.id) })) || [],
-    services: data.services?.map((service: any) => ({ ...service, id: String(service.id), icon: service.icon || undefined })) || [],
-    portfolio: data.portfolio_items?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
-    experience: data.experience?.map((item: any) => ({ ...item, id: String(item.id), startDate: item.start_date || undefined, endDate: item.end_date || undefined })) || [],
-    education: data.education?.map((item: any) => ({ ...item, id: String(item.id), startDate: item.start_date || undefined, endDate: item.end_date || undefined })) || [],
-    reviews: data.reviews?.map((item: any) => ({ ...item, id: String(item.id) })) || [],
+    sociallinks: (() => {
+      // Tenta pegar do snapshot, depois do próprio profile
+      if (data.profile_snapshot?.sociallinks) {
+        return data.profile_snapshot.sociallinks;
+      }
+      if (data.sociallinks) {
+        if (typeof data.sociallinks === 'string') {
+          try {
+            const arr = JSON.parse(data.sociallinks);
+            return Array.isArray(arr) ? arr : [];
+          } catch {
+            return [];
+          }
+        }
+        if (Array.isArray(data.sociallinks)) {
+          return data.sociallinks;
+        }
+      }
+      return [];
+    })(),
+    services: (data.profile_snapshot?.services || []).map((s: any) => ({ ...s, icon: s.icon || undefined })),
+    portfolio: (data.profile_snapshot?.portfolio || []),
+    experience: (data.profile_snapshot?.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
+    education: (data.profile_snapshot?.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
+    reviews: (data.profile_snapshot?.reviews || []),
     skills: data.skills ?? [],
   };
 

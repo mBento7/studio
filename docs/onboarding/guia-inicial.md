@@ -15,7 +15,16 @@ Facilitar o início rápido de novos desenvolvedores no projeto Whosfy, padroniz
    ```bash
    pnpm install
    ```
-3. Copie o arquivo `.env.example` para `.env.local` e preencha as variáveis necessárias (solicite ao responsável se não tiver acesso).
+3. Copie o arquivo `.env.example` para `.env.local` e preencha as variáveis necessárias:
+   ```bash
+   # Configurações do Supabase (Projeto Whosfy)
+   NEXT_PUBLIC_SUPABASE_URL=https://wkwhvjsnqsognjorjsgf.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=[solicite ao responsável]
+   SUPABASE_SERVICE_ROLE_KEY=[solicite ao responsável]
+   
+   # Para desenvolvimento local com Supabase CLI
+   SUPABASE_DB_URL=postgresql://postgres:[password]@localhost:54322/postgres
+   ```
 4. Inicie o app principal:
    ```bash
    pnpm --filter whosfy-web dev
@@ -37,12 +46,54 @@ Facilitar o início rápido de novos desenvolvedores no projeto Whosfy, padroniz
 - Consulte sempre os READMEs das subpastas e o índice geral em `docs/README.md`.
 - Em caso de dúvida, pergunte ao responsável ou abra uma issue.
 
+## Configuração do Supabase
+
+### Projeto Ativo
+- **Nome:** Whosfy (wkwhvjsnqsognjorjsgf)
+- **Status:** ✅ Ativo e operacional
+- **Região:** us-east-1
+- **Banco:** PostgreSQL 17.2.0
+- **URL:** https://wkwhvjsnqsognjorjsgf.supabase.co
+
+### Setup Local (Opcional)
+```bash
+# Instalar Supabase CLI
+npm install -g supabase
+
+# Inicializar projeto local
+supabase start
+
+# Aplicar migrations
+supabase db reset
+
+# Verificar status
+supabase status
+```
+
+### Recursos Disponíveis
+- ✅ **Database:** 5 perfis ativos, 7 migrations aplicadas
+- ✅ **Auth:** Email/senha configurado
+- ✅ **Storage:** Buckets para imagens e documentos
+- ✅ **Edge Functions:** 4 funções deployadas
+- ✅ **Realtime:** Ativo para mensagens
+
+### Monitoramento via MCP
+O projeto utiliza MCP Supabase para monitoramento:
+```
+# Exemplos de comandos via MCP
+"Verifique o status do projeto Whosfy"
+"Liste todas as tabelas do banco"
+"Obtenha logs da API dos últimos minutos"
+"Verifique avisos de segurança"
+```
+
 ## Links Úteis
-- [README principal](./README.md)
-- [Guia de Infraestrutura](./infraestrutura/README.md)
-- [Planejamento e Blueprints](./planejamento/README.md)
-- [Guia Visual e UX](./guia-visual/guia-visual-unificado.md)
-- [Checklist de Segurança](./infraestrutura/README.md)
-- [Estratégia de Testes](./testes.md)
+- [README principal](../../README.md)
+- [Guia de Infraestrutura](../infraestrutura/README.md)
+- [Guia MCP Supabase](../infraestrutura/supabase-mcp-guia.md)
+- [Planejamento e Blueprints](../planejamento/README.md)
+- [Guia Visual e UX](../guia-visual/guia-visual-unificado.md)
+- [Checklist de Segurança](../infraestrutura/README.md)
+- [Dashboard Supabase](https://supabase.com/dashboard/project/wkwhvjsnqsognjorjsgf)
 
 > Mantenha este guia atualizado conforme o time evoluir!

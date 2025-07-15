@@ -12,14 +12,35 @@
 
 ## 2. Configuração do Supabase
 
-#### 2.1. Credenciais do Projeto
-*   **ID do Projeto:** `[ID encontrado no painel do Supabase]`
-*   **URL do Projeto:** `https://[ID-do-projeto].supabase.co`
+#### 2.1. Detalhes do Projeto
+*   **Nome do Projeto:** Whosfy
+*   **ID do Projeto:** wkwhvjsnqsognjorjsgf
+*   **Região:** us-east-1
+*   **Banco de Dados:** PostgreSQL 17.2.0
+*   **URL do Projeto:** https://wkwhvjsnqsognjorjsgf.supabase.co
+*   **Status:** ✅ Ativo e operacional
+*   **Última verificação:** 15/01/2025
 *   **Chave de API Pública (Anon Key):** `[Chave pública para uso no frontend]`
 *   **Chave de Serviço (Service Role Key):** `[Chave secreta para uso no backend/Server Actions]` - **TRATAR COMO SENHA!**
 
 #### 2.2. Estrutura do Banco de Dados (PostgreSQL)
-*   **Schema SQL Completo:** Arquive o script `CREATE TABLE` para cada uma das suas tabelas. Isso é o bem mais valioso da sua aplicação.
+O banco de dados inclui as seguintes tabelas principais:
+*   `profiles` - Informações de perfil do usuário (5 perfis ativos)
+*   `social_links` - Links de redes sociais para perfis
+*   `services` - Serviços oferecidos pelos usuários
+*   `activities` - Rastreamento de atividades do usuário
+*   `reviews` - Avaliações e classificações de usuários
+*   `faq` - Perguntas frequentes
+*   `coupon_likes` - Sistema de curtidas em cupons
+
+**Extensões Instaladas:**
+*   `pg_graphql` - Suporte GraphQL
+*   `pgcrypto` - Funções criptográficas
+*   `uuid-ossp` - Geração de UUID
+*   `pg_stat_statements` - Estatísticas de consultas
+*   `supabase_vault` - Gerenciamento de segredos
+
+**Schema SQL Completo:** Arquive o script `CREATE TABLE` para cada uma das suas tabelas.
     ```sql
     -- Exemplo para a tabela 'profiles'
     CREATE TABLE public.profiles (
@@ -30,7 +51,8 @@
         updated_at TIMESTAMPTZ DEFAULT NOW()
     );
     ```
-*   **Políticas de Segurança (Row Level Security - RLS):** Para cada tabela, documente as políticas que definem quem pode ler, escrever, atualizar ou deletar dados.
+
+**Políticas de Segurança (Row Level Security - RLS):**
     ```sql
     -- Exemplo de política RLS
     -- "Permite que usuários leiam seu próprio perfil."
@@ -45,13 +67,46 @@
     ```
 
 #### 2.3. Autenticação
-*   **Provedores Habilitados:** (ex: Email/Senha, Google, GitHub).
-*   **Templates de Email:** Documente quais templates de email (confirmação, reset de senha) foram customizados.
+*   **Provedores Habilitados:** Email/Senha, provedores de login social configurados
+*   **Templates de Email:** Documente quais templates de email (confirmação, reset de senha) foram customizados
 *   **URL de Redirecionamento:** `[URL para onde o usuário é enviado após o login]`
+*   **⚠️ Atenção:** Proteção contra senhas vazadas desabilitada
+*   **⚠️ Atenção:** Configuração MFA insuficiente
 
 #### 2.4. Storage
-*   **Buckets Criados:** Liste os nomes dos buckets (ex: `avatars`, `public-assets`).
-*   **Políticas de Acesso dos Buckets:** Para cada bucket, descreva as regras de segurança (quem pode fazer upload, download, etc.).
+*   **Buckets Criados:** Bucket público para imagens de perfil, bucket privado para documentos do usuário
+*   **CDN:** Habilitado para entrega rápida de conteúdo
+*   **Políticas de Acesso dos Buckets:** Para cada bucket, descreva as regras de segurança (quem pode fazer upload, download, etc.)
+
+#### 2.5. Edge Functions
+Funções deployadas (4 ativas):
+*   `chat-message` - Mensagens em tempo real
+*   `send-notification` - Notificações push
+*   `spend-credits` - Gerenciamento do sistema de créditos
+*   `webhook-handler` - Processamento de webhooks externos
+
+#### 2.6. Configurações de Segurança
+**✅ Implementado:**
+*   RLS habilitado na maioria das tabelas
+*   Políticas de acesso configuradas
+*   Autenticação JWT
+*   HTTPS obrigatório
+
+**⚠️ Pontos de Atenção:**
+1. **RLS Desabilitado:** Tabelas `public.faq` e `public.coupon_likes`
+2. **Search Path:** Função `public.update_user_plan` com search_path mutável
+3. **Proteção de senhas:** Verificação de senhas vazadas desabilitada
+4. **MFA:** Configuração de autenticação multifator insuficiente
+
+**🔧 Ações Recomendadas:**
+```sql
+-- Habilitar RLS nas tabelas
+ALTER TABLE public.faq ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.coupon_likes ENABLE ROW LEVEL SECURITY;
+
+-- Corrigir search_path da função
+ALTER FUNCTION public.update_user_plan() SET search_path = '';
+```
 
 ---
 

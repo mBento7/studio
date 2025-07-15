@@ -12,6 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
           alt="Paisagem natural com rio e montanhas"
           fill
+          sizes="(max-width: 768px) 0px, (max-width: 1024px) 619px, 700px"
           className="object-cover scale-105 hover:scale-100 transition-transform duration-500"
           priority
         />

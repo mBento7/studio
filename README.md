@@ -2,9 +2,9 @@
 
 > Plataforma de identidade digital profissional para conectar talentos, empresas e oportunidades de forma moderna e segura.
 
-## �� Stack
+## 🛠️ Stack
 - [Next.js 15](https://nextjs.org/) (App Router)
-- [Supabase](https://supabase.com/)
+- [Supabase](https://supabase.com/) - Projeto Whosfy (wkwhvjsnqsognjorjsgf) ✅ Ativo
 - [Tailwind CSS](https://tailwindcss.com/) + [Shadcn/UI](https://ui.shadcn.com/)
 - [TypeScript 5](https://www.typescriptlang.org/)
 - [pnpm](https://pnpm.io/) + monorepo (workspaces)
@@ -50,7 +50,11 @@
    # Copie o arquivo de exemplo
    cp apps/web/.env.example apps/web/.env.local
    
-   # Edite .env.local com suas configurações
+   # Configure Supabase (Projeto Whosfy)
+   NEXT_PUBLIC_SUPABASE_URL=https://wkwhvjsnqsognjorjsgf.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=[solicite ao responsável]
+   SUPABASE_SERVICE_ROLE_KEY=[solicite ao responsável]
+   
    # Valide a configuração
    node scripts/validate-env.js
    ```
@@ -126,11 +130,38 @@ Veja documentação completa em [`scripts/README.md`](./scripts/README.md).
 
 ---
 
+## 📊 Status do Projeto Supabase
+
+**Projeto:** Whosfy (wkwhvjsnqsognjorjsgf)  
+**Status:** ✅ Ativo e operacional  
+**Região:** us-east-1  
+**Banco:** PostgreSQL 17.2.0  
+
+### Recursos Ativos
+- ✅ **Database:** 5 perfis ativos, 7 migrations aplicadas
+- ✅ **Auth:** Email/senha configurado
+- ✅ **Storage:** Buckets para imagens e documentos
+- ✅ **Edge Functions:** 4 funções deployadas
+- ✅ **Realtime:** Ativo para mensagens
+- ✅ **MCP Integration:** Monitoramento via Model Context Protocol
+
+### Monitoramento
+O projeto utiliza MCP Supabase para monitoramento em tempo real:
+- Verificação de status e logs
+- Análise de segurança automatizada
+- Gestão de migrations e deployments
+- Monitoramento de performance
+
+Consulte o [Guia MCP Supabase](./docs/infraestrutura/supabase-mcp-guia.md) para mais detalhes.
+
+---
+
 ### Histórico de revisões
 
 - **24/06/2025**: Atualização rápida
 - **10/07/2025**: Melhoria de boas práticas, troubleshooting e exemplos
 - **15/01/2025**: Scripts de automação, validação de ambiente, Supabase local, versionamento de migrations/seeds
 - **16/01/2025**: Atualização da documentação e configuração do Supabase na VPS
+- **15/01/2025**: Atualização completa da documentação Supabase com status atual e MCP
 
-Atualizado automaticamente em: 16/01/2025
+Atualizado automaticamente em: 15/01/2025
