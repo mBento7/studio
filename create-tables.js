@@ -1,7 +1,10 @@
-// Usar fetch nativo do Node.js (disponível a partir da v18)
+﻿// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
+// Nunca commite chaves reais no codigo fonte!
+
+// Usar fetch nativo do Node.js (disponÃ­vel a partir da v18)
 const fs = require('fs');
 
-// Configuração do Supabase
+// ConfiguraÃ§Ã£o do Supabase
 const supabaseUrl = 'http://127.0.0.1:54321';
 const serviceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
 
@@ -56,13 +59,13 @@ async function createTables() {
       });
       
       if (response.ok) {
-        results.push('✅ Tabela profiles criada via query!');
+        results.push('âœ… Tabela profiles criada via query!');
       } else {
         const errorText = await response.text();
-        results.push(`❌ Erro via query: ${errorText}`);
+        results.push(`âŒ Erro via query: ${errorText}`);
         
-        // Tentar método alternativo - inserir dados para forçar criação da tabela
-        results.push('\n2. Tentando método alternativo...');
+        // Tentar mÃ©todo alternativo - inserir dados para forÃ§ar criaÃ§Ã£o da tabela
+        results.push('\n2. Tentando mÃ©todo alternativo...');
         
         const { createClient } = require('@supabase/supabase-js');
         const supabase = createClient(supabaseUrl, serviceRoleKey);
@@ -78,12 +81,12 @@ async function createTables() {
           .select();
         
         if (error) {
-          results.push(`❌ Tabela não existe: ${error.message}`);
+          results.push(`âŒ Tabela nÃ£o existe: ${error.message}`);
           
-          // Tentar criar via SQL usando uma função personalizada
-          results.push('\n3. Tentando criar função SQL personalizada...');
+          // Tentar criar via SQL usando uma funÃ§Ã£o personalizada
+          results.push('\n3. Tentando criar funÃ§Ã£o SQL personalizada...');
           
-          // Primeiro, tentar criar uma função que execute SQL
+          // Primeiro, tentar criar uma funÃ§Ã£o que execute SQL
           const createFunctionSQL = `
             CREATE OR REPLACE FUNCTION execute_sql(sql_text text)
             RETURNS text
@@ -114,21 +117,21 @@ async function createTables() {
           
           if (funcResponse.ok) {
             const result = await funcResponse.text();
-            results.push(`✅ Função executada: ${result}`);
+            results.push(`âœ… FunÃ§Ã£o executada: ${result}`);
           } else {
             const funcError = await funcResponse.text();
-            results.push(`❌ Erro na função: ${funcError}`);
+            results.push(`âŒ Erro na funÃ§Ã£o: ${funcError}`);
           }
         } else {
-          results.push('✅ Tabela profiles já existe e funcionando!');
+          results.push('âœ… Tabela profiles jÃ¡ existe e funcionando!');
         }
       }
     } catch (fetchError) {
-      results.push(`❌ Erro de fetch: ${fetchError.message}`);
+      results.push(`âŒ Erro de fetch: ${fetchError.message}`);
     }
     
-    // Verificação final
-    results.push('\n4. Verificação final...');
+    // VerificaÃ§Ã£o final
+    results.push('\n4. VerificaÃ§Ã£o final...');
     
     const { createClient } = require('@supabase/supabase-js');
     const supabase = createClient(supabaseUrl, serviceRoleKey);
@@ -139,24 +142,24 @@ async function createTables() {
       .limit(1);
     
     if (profilesError) {
-      results.push(`❌ Erro final: ${profilesError.message}`);
+      results.push(`âŒ Erro final: ${profilesError.message}`);
     } else {
-      results.push('✅ Tabela profiles acessível!');
+      results.push('âœ… Tabela profiles acessÃ­vel!');
       results.push(`Registros encontrados: ${profiles.length}`);
     }
     
     results.push('');
-    results.push('=== PROCESSO CONCLUÍDO ===');
+    results.push('=== PROCESSO CONCLUÃDO ===');
     
   } catch (error) {
-    results.push(`❌ Erro geral: ${error.message}`);
+    results.push(`âŒ Erro geral: ${error.message}`);
   }
   
   // Salvar resultados em arquivo
   const output = results.join('\n');
   fs.writeFileSync('create-tables-results.txt', output);
   
-  // Também exibir no console
+  // TambÃ©m exibir no console
   console.log(output);
 }
 

@@ -1,8 +1,11 @@
+﻿// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
+// Nunca commite chaves reais no codigo fonte!
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  'https://wkwhvjsnqsognjorjsgf.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrd2h2anNucXNvZ25qb3Jqc2dmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDAxOTMxMSwiZXhwIjoyMDY1NTk1MzExfQ.HjnU6EwPy1-KXQ8loIZ0i0ojnL6YeI78D4kVzj2-zEI'
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
 async function updateMariasouzaProfile() {
@@ -22,7 +25,7 @@ async function updateMariasouzaProfile() {
     let profileId = profiles?.id;
 
     if (!profiles) {
-      console.log('Perfil mariasouza não encontrado. Criando...');
+      console.log('Perfil mariasouza nÃ£o encontrado. Criando...');
       
       // Create the profile if it doesn't exist
       const { data: newProfile, error: createError } = await supabase
@@ -31,14 +34,14 @@ async function updateMariasouzaProfile() {
           username: 'mariasouza',
           full_name: 'Maria Souza',
           email: 'mariasouza@exemplo.com',
-          bio: 'Profissional criativa com experiência em design e desenvolvimento. Apaixonada por criar soluções inovadoras e experiências únicas.',
+          bio: 'Profissional criativa com experiÃªncia em design e desenvolvimento. Apaixonada por criar soluÃ§Ãµes inovadoras e experiÃªncias Ãºnicas.',
           category: 'Designer & Desenvolvedora',
           profile_picture_url: 'https://randomuser.me/api/portraits/women/32.jpg',
           cover_photo_url: 'https://images.unsplash.com/photo-1579547623912-d11e54051061?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           plan: 'standard',
           layout_template_id: 'standard',
           is_available: true,
-          location: { city: 'São Paulo', country: 'Brasil' },
+          location: { city: 'SÃ£o Paulo', country: 'Brasil' },
           skills: ['Design', 'UI/UX', 'React', 'TypeScript', 'Figma', 'Photoshop']
         })
         .select()
@@ -61,12 +64,12 @@ async function updateMariasouzaProfile() {
         .update({
           profile_picture_url: 'https://randomuser.me/api/portraits/women/32.jpg',
           cover_photo_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop',
-          bio: 'Profissional criativa com experiência em design e desenvolvimento. Apaixonada por criar soluções inovadoras e experiências únicas.',
+          bio: 'Profissional criativa com experiÃªncia em design e desenvolvimento. Apaixonada por criar soluÃ§Ãµes inovadoras e experiÃªncias Ãºnicas.',
           category: 'Designer & Desenvolvedora',
           plan: 'standard',
           layout_template_id: 'standard',
           is_available: true,
-          location: { city: 'São Paulo', country: 'Brasil' },
+          location: { city: 'SÃ£o Paulo', country: 'Brasil' },
           skills: ['Design', 'UI/UX', 'React', 'TypeScript', 'Figma', 'Photoshop']
         })
         .eq('username', 'mariasouza')
@@ -83,7 +86,7 @@ async function updateMariasouzaProfile() {
       console.log('Dados do perfil:', updatedProfile);
     }
 
-    // PORTFÓLIO
+    // PORTFÃ“LIO
     await supabase.from('portfolio_items').delete().eq('profile_id', profileId);
     await supabase.from('portfolio_items').insert([
       {
@@ -102,16 +105,16 @@ async function updateMariasouzaProfile() {
         profile_id: profileId,
         image_url: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400',
         caption: 'Campanha Digital',
-        description: 'Criação de peças para campanha digital de grande alcance.'
+        description: 'CriaÃ§Ã£o de peÃ§as para campanha digital de grande alcance.'
       }
     ]);
 
-    // SERVIÇOS
+    // SERVIÃ‡OS
     await supabase.from('services').delete().eq('profile_id', profileId);
     await supabase.from('services').insert([
       {
         profile_id: profileId,
-        name: 'Criação de Logotipo',
+        name: 'CriaÃ§Ã£o de Logotipo',
         description: 'Desenvolvimento de identidade visual profissional.'
       },
       {
@@ -122,34 +125,34 @@ async function updateMariasouzaProfile() {
       {
         profile_id: profileId,
         name: 'Consultoria de Branding',
-        description: 'Orientação estratégica para marcas.'
+        description: 'OrientaÃ§Ã£o estratÃ©gica para marcas.'
       }
     ]);
 
-    // EXPERIÊNCIA
+    // EXPERIÃŠNCIA
     await supabase.from('experience').delete().eq('profile_id', profileId);
     await supabase.from('experience').insert([
       {
         profile_id: profileId,
-        title: 'Designer Sênior',
+        title: 'Designer SÃªnior',
         company: 'Tech Solutions',
         years: '2022-Atual'
       },
       {
         profile_id: profileId,
         title: 'UI/UX Designer',
-        company: 'Startup Inovação',
+        company: 'Startup InovaÃ§Ã£o',
         years: '2020-2022'
       }
     ]);
 
-    // EDUCAÇÃO
+    // EDUCAÃ‡ÃƒO
     await supabase.from('education').delete().eq('profile_id', profileId);
     await supabase.from('education').insert([
       {
         profile_id: profileId,
         degree: 'Bacharel em Design',
-        institution: 'Universidade de São Paulo',
+        institution: 'Universidade de SÃ£o Paulo',
         years: '2016-2020'
       }
     ]);
@@ -179,13 +182,13 @@ async function updateMariasouzaProfile() {
     await supabase.from('faq').insert([
       {
         profile_id: profileId,
-        question: 'Como funciona o processo de criação?',
-        answer: 'O processo é colaborativo, com reuniões para entender as necessidades e entregas em etapas.'
+        question: 'Como funciona o processo de criaÃ§Ã£o?',
+        answer: 'O processo Ã© colaborativo, com reuniÃµes para entender as necessidades e entregas em etapas.'
       },
       {
         profile_id: profileId,
-        question: 'Quais são as formas de pagamento?',
-        answer: 'Aceito transferência, boleto e cartão de crédito.'
+        question: 'Quais sÃ£o as formas de pagamento?',
+        answer: 'Aceito transferÃªncia, boleto e cartÃ£o de crÃ©dito.'
       }
     ]);
 
@@ -194,10 +197,10 @@ async function updateMariasouzaProfile() {
     await supabase.from('reviews').insert([
       {
         profile_id: profileId,
-        author_name: 'João Pedro',
+        author_name: 'JoÃ£o Pedro',
         author_avatar_url: 'https://randomuser.me/api/portraits/men/45.jpg',
         rating: 5,
-        comment: 'Maria é uma profissional incrível! Recomendo muito.',
+        comment: 'Maria Ã© uma profissional incrÃ­vel! Recomendo muito.',
         created_at: new Date().toISOString()
       },
       {
@@ -205,26 +208,26 @@ async function updateMariasouzaProfile() {
         author_name: 'Marina Souza',
         author_avatar_url: 'https://randomuser.me/api/portraits/women/44.jpg',
         rating: 5,
-        comment: 'Trabalho impecável e entrega rápida.',
+        comment: 'Trabalho impecÃ¡vel e entrega rÃ¡pida.',
         created_at: new Date().toISOString()
       }
     ]);
 
-    // BANNER PREMIUM (opcional, para referência)
+    // BANNER PREMIUM (opcional, para referÃªncia)
     await supabase.from('profiles').update({
       premium_banner: {
         title: 'Consultoria Premium',
-        description: 'Transforme sua marca com uma consultoria personalizada! Agende uma sessão.',
+        description: 'Transforme sua marca com uma consultoria personalizada! Agende uma sessÃ£o.',
         imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=600',
         ctaText: 'Agendar agora',
         ctaLink: '/contato'
       }
     }).eq('id', profileId);
 
-    console.log('✅ Perfil mariasouza atualizado com todos os exemplos de itens do plano standard!');
-    console.log('📸 Foto de perfil: https://randomuser.me/api/portraits/women/32.jpg');
-    console.log('🖼️ Foto de capa: https://images.unsplash.com/photo-1579547623912-d11e54051061?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-    console.log('🌐 Acesse: http://localhost:3000/profile/mariasouza');
+    console.log('âœ… Perfil mariasouza atualizado com todos os exemplos de itens do plano standard!');
+    console.log('ðŸ“¸ Foto de perfil: https://randomuser.me/api/portraits/women/32.jpg');
+    console.log('ðŸ–¼ï¸ Foto de capa: https://images.unsplash.com/photo-1579547623912-d11e54051061?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    console.log('ðŸŒ Acesse: http://localhost:3000/profile/mariasouza');
 
   } catch (error) {
     console.error('Erro geral:', error);

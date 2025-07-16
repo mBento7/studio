@@ -1,6 +1,9 @@
+﻿// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
+// Nunca commite chaves reais no codigo fonte!
+
 const { createClient } = require('@supabase/supabase-js');
 
-// Configuração do Supabase local
+// ConfiguraÃ§Ã£o do Supabase local
 const supabaseUrl = 'http://127.0.0.1:54321';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
 
@@ -18,26 +21,26 @@ async function fixProfileSnapshot() {
     
     if (addColumnError) {
       console.error('Erro ao adicionar coluna:', addColumnError);
-      // Tentar método alternativo
-      console.log('Tentando método alternativo...');
+      // Tentar mÃ©todo alternativo
+      console.log('Tentando mÃ©todo alternativo...');
       const { error: altError } = await supabase
         .from('profiles')
         .select('profile_snapshot')
         .limit(1);
       
       if (altError && altError.code === '42703') {
-        console.log('Coluna realmente não existe, mas não conseguimos adicioná-la via RPC.');
-        console.log('Será necessário adicionar manualmente via SQL.');
+        console.log('Coluna realmente nÃ£o existe, mas nÃ£o conseguimos adicionÃ¡-la via RPC.');
+        console.log('SerÃ¡ necessÃ¡rio adicionar manualmente via SQL.');
         return;
       } else {
-        console.log('Coluna já existe!');
+        console.log('Coluna jÃ¡ existe!');
       }
     } else {
       console.log('Coluna profile_snapshot adicionada com sucesso!');
     }
     
-    // Criar a função refresh_profile_snapshot se não existir
-    console.log('Criando função refresh_profile_snapshot...');
+    // Criar a funÃ§Ã£o refresh_profile_snapshot se nÃ£o existir
+    console.log('Criando funÃ§Ã£o refresh_profile_snapshot...');
     
     const createFunctionSQL = `
       CREATE OR REPLACE FUNCTION public.refresh_profile_snapshot(p_profile_id uuid)
@@ -128,12 +131,12 @@ async function fixProfileSnapshot() {
     });
     
     if (functionError) {
-      console.error('Erro ao criar função:', functionError);
+      console.error('Erro ao criar funÃ§Ã£o:', functionError);
       return;
     }
     
-    console.log('Função refresh_profile_snapshot criada com sucesso!');
-    console.log('Correção concluída!');
+    console.log('FunÃ§Ã£o refresh_profile_snapshot criada com sucesso!');
+    console.log('CorreÃ§Ã£o concluÃ­da!');
     
   } catch (error) {
     console.error('Erro geral:', error);

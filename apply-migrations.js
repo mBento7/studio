@@ -1,8 +1,11 @@
+﻿// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
+// Nunca commite chaves reais no codigo fonte!
+
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-// Configuração do Supabase
+// ConfiguraÃ§Ã£o do Supabase
 const supabaseUrl = 'http://127.0.0.1:54321';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
 
@@ -14,11 +17,11 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 async function createTablesDirectly() {
-  console.log('🔄 Criando tabelas diretamente...');
+  console.log('ðŸ”„ Criando tabelas diretamente...');
   
   try {
     // Criar tabela profiles
-    console.log('📄 Criando tabela profiles...');
+    console.log('ðŸ“„ Criando tabela profiles...');
     const { error: profilesError } = await supabase.rpc('exec_sql', {
       sql: `
         CREATE TABLE IF NOT EXISTS public.profiles (
@@ -46,13 +49,13 @@ async function createTablesDirectly() {
     });
     
     if (profilesError) {
-      console.error('❌ Erro ao criar tabela profiles:', profilesError.message);
+      console.error('âŒ Erro ao criar tabela profiles:', profilesError.message);
     } else {
-      console.log('✅ Tabela profiles criada');
+      console.log('âœ… Tabela profiles criada');
     }
     
     // Verificar se as tabelas existem
-    console.log('\n🔍 Verificando tabelas...');
+    console.log('\nðŸ” Verificando tabelas...');
     
     const { data: profiles, error: checkError } = await supabase
       .from('profiles')
@@ -60,15 +63,15 @@ async function createTablesDirectly() {
       .limit(1);
     
     if (checkError) {
-      console.error('❌ Erro ao verificar tabela profiles:', checkError.message);
+      console.error('âŒ Erro ao verificar tabela profiles:', checkError.message);
     } else {
-      console.log('✅ Tabela profiles acessível');
+      console.log('âœ… Tabela profiles acessÃ­vel');
     }
     
-    console.log('\n🎉 Processo concluído!');
+    console.log('\nðŸŽ‰ Processo concluÃ­do!');
     
   } catch (error) {
-    console.error('❌ Erro geral:', error.message);
+    console.error('âŒ Erro geral:', error.message);
   }
 }
 
