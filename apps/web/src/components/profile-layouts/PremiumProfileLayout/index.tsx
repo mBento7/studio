@@ -40,6 +40,7 @@ import {
   Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sanitizeObject, validateUserProfileSecurity, secureLog } from "@/lib/security";
 import { isValidUUID } from "@/lib/validation";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
@@ -928,14 +929,14 @@ const PremiumProfileLayout: React.FC<{
       try {
         await navigator.share(shareData);
       } catch (err) {
-        console.log('Share failed');
+        toast.error('Falha ao compartilhar perfil');
       }
     } else {
       try {
         await navigator.clipboard.writeText(shareUrl);
-        console.log('Link copied!');
+        toast.success('Link copiado para a área de transferência!');
       } catch (err) {
-        console.log('Copy failed');
+        toast.error('Falha ao copiar link');
       }
     }
   };
@@ -1014,7 +1015,7 @@ const PremiumProfileLayout: React.FC<{
     ...user,
     sociallinks: Array.isArray(socialLinksArr) ? socialLinksArr : [],
   };
-  console.log('safeUser.sociallinks', safeUser.sociallinks);
+  // Debug log removido para produção
 
   const handlePortfolioItemClick = (item: PortfolioItem) => {
     setSelectedPortfolioItem(item);
@@ -1055,7 +1056,7 @@ const PremiumProfileLayout: React.FC<{
   useEffect(() => {
     setCoupons(user.coupons || []);
     // Log para depuração sempre que os cupons mudarem
-    console.log('[PremiumProfileLayout] useEffect setCoupons:', user.coupons);
+    // Debug log removido para produção
   }, [user.coupons]);
 
   const sectionRefs = {
@@ -1245,9 +1246,7 @@ const PremiumProfileLayout: React.FC<{
     ] as PortfolioItem[]; // Cast explícito para PortfolioItem[]
   }
 
-  console.log("[PremiumProfileLayout] Renderizando PortfolioGrid com", portfolioToShow.length, "itens.");
-  console.log("[PremiumProfileLayout Debug] isSectionVisible('portfolio'):", isSectionVisible('portfolio'));
-  console.log("[PremiumProfileLayout Debug] portfolioToShow.length:", portfolioToShow.length);
+  // Debug logs removidos para produção
 
   // Dentro do componente PremiumProfileLayout, antes do return (ou logo após a definição de user):
   // Banner de exemplo para o perfil micaelsants
@@ -1611,8 +1610,7 @@ const PremiumProfileLayout: React.FC<{
           {/* Seção de Portfólio */}
           <section id="portfolio" className="py-20 px-4 scroll-mt-24" ref={sectionRefs.portfolio}>
             <div className="w-full flex flex-col items-center justify-center">
-              {console.log("[PremiumProfileLayout Debug] isSectionVisible('portfolio'):", isSectionVisible('portfolio'))}
-              {console.log("[PremiumProfileLayout Debug] portfolioToShow.length:", portfolioToShow.length)}
+              {/* Debug logs removidos para produção */}
               {isSectionVisible('portfolio') && portfolioToShow.length > 0 && (
                 <PortfolioGrid
                   items={portfolioToShow}
@@ -1838,7 +1836,7 @@ const PremiumProfileLayout: React.FC<{
       {cuponsValidos.length > 0 && (
         <div className="mt-4 flex flex-col items-center">
           {cuponsValidos.map((cupom, idx) => {
-            console.log('[PremiumProfileLayout] Renderizando cupom:', cupom);
+            // Debug log removido para produção
             return (
               <div key={cupom.code || idx} className="w-full max-w-md">
                 <CouponCard

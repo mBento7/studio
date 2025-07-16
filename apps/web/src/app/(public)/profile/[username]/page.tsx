@@ -8,6 +8,7 @@ import { isPremiumLayout, getLayoutTier } from "@/lib/isPremiumLayout";
 import { ProfileLayoutProvider } from '@/contexts/ProfileLayoutContext';
 import { LayoutDecider } from '@/components/layout/layout-decider';
 import Link from 'next/link';
+import { logger } from '@/lib/logger';
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -28,10 +29,12 @@ export default async function ProfileServerPage({ params }: ProfilePageProps) {
     notFound();
   }
 
-  console.log('userProfile:', userProfile);
-  console.log('userProfile.plan:', userProfile.plan);
-  console.log('userProfile.layoutTemplateId:', userProfile.layoutTemplateId);
-  console.log('isPremiumLayout:', isPremiumLayout(userProfile));
+  logger.profile('Profile page loaded', {
+    username: userProfile.username,
+    plan: userProfile.plan,
+    layoutTemplateId: userProfile.layoutTemplateId,
+    isPremium: isPremiumLayout(userProfile)
+  });
 
   return (
     <ProfileLayoutProvider hideRightSidebar={isPremiumLayout(userProfile)} layoutTier={getLayoutTier(userProfile)}>

@@ -1,5 +1,7 @@
 "use client";
 
+import { logger } from '@/lib/logger';
+
 // Mock do cliente Supabase para desenvolvimento local
 interface MockUser {
   id: string;
@@ -47,9 +49,8 @@ class MockSupabaseClient {
 
   auth = {
     signInWithPassword: async ({ email, password }: { email: string; password: string }): Promise<MockAuthResponse> => {
-      console.log('[Mock Auth] Tentando login com:', email);
-      console.log('[Mock Auth] Senha recebida:', password);
-      console.log('[Mock Auth] Usuários disponíveis:', this.mockUsers.map(u => ({ email: u.email, password: u.password })));
+      logger.auth('Tentando login mock', { email });
+      logger.debug('Usuários mock disponíveis', { count: this.mockUsers.length });
       
       // Simular delay de rede
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -57,9 +58,7 @@ class MockSupabaseClient {
       const mockUser = this.mockUsers.find(u => u.email === email && u.password === password);
       
       if (!mockUser) {
-        console.log('[Mock Auth] Credenciais inválidas - usuário não encontrado');
-        console.log('[Mock Auth] Email procurado:', email);
-        console.log('[Mock Auth] Senha procurada:', password);
+        logger.auth('Credenciais inválidas - usuário não encontrado', { email });
         return {
           data: { user: null, session: null },
           error: new Error('Invalid login credentials')
@@ -85,7 +84,7 @@ class MockSupabaseClient {
         this.listeners.forEach(listener => listener('SIGNED_IN', session));
       }, 100);
       
-      console.log('[Mock Auth] Login bem-sucedido:', user.email);
+      logger.auth('Login mock bem-sucedido', { email: user.email });
       
       return {
         data: { user, session },
@@ -94,7 +93,7 @@ class MockSupabaseClient {
     },
 
     signUp: async ({ email, password, options }: { email: string; password: string; options?: any }): Promise<MockAuthResponse> => {
-      console.log('[Mock Auth] Tentando cadastro com:', email);
+      logger.auth('Tentando cadastro mock', { email });
       
       // Simular delay de rede
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -138,7 +137,7 @@ class MockSupabaseClient {
         this.listeners.forEach(listener => listener('SIGNED_IN', session));
       }, 100);
       
-      console.log('[Mock Auth] Cadastro bem-sucedido:', user.email);
+      logger.auth('Cadastro mock bem-sucedido', { email: user.email });
       
       return {
         data: { user, session },
@@ -147,7 +146,7 @@ class MockSupabaseClient {
     },
 
     signInWithOAuth: async ({ provider }: { provider: string }) => {
-      console.log('[Mock Auth] OAuth não implementado no modo mock');
+      logger.warn('OAuth não implementado no modo mock');
       return {
         data: { user: null, session: null },
         error: new Error('OAuth not available in mock mode')
@@ -155,14 +154,14 @@ class MockSupabaseClient {
     },
 
     resetPasswordForEmail: async (email: string) => {
-      console.log('[Mock Auth] Reset de senha para:', email);
+      logger.auth('Reset de senha mock', { email });
       // Simular delay
       await new Promise(resolve => setTimeout(resolve, 500));
       return { error: null };
     },
 
     signOut: async () => {
-      console.log('[Mock Auth] Fazendo logout');
+      logger.auth('Fazendo logout mock');
       this.currentUser = null;
       
       // Notificar listeners

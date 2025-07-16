@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { PlusCircle, Trash2, Instagram, Linkedin, Github, Facebook, Twitter, Youtube, Globe } from "lucide-react";
 import { FilterButton } from '@/components/ui/filter-button';
 import { User, Phone, Image as ImageIcon, MapPin, Briefcase, BookOpen, Star } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -158,7 +159,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit,
 
   // Crie uma função onSubmit interna para logar e repassar
   const handleInternalSubmit = (data: ProfileFormValues) => {
-    console.log('SUBMIT DISPARADO', data);
+    logger.debug('Profile form submitted');
     onSubmit(data);
   };
 

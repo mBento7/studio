@@ -12,6 +12,7 @@ import type { UserProfile } from '@/lib/types';
 import Link from "next/link";
 import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
 import { supabase } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import SearchResultCardFree from '@/components/profile-layouts/FreeProfileLayout/SearchResultCardFree';
 import SearchResultCardPremium from '@/components/profile-layouts/PremiumProfileLayout/SearchResultCardPremium';
 import SearchResultCardStandard from '@/components/profile-layouts/StandardProfileLayout/SearchResultCardStandard';
@@ -348,8 +349,7 @@ export default function SearchShowcase() {
         setAvailableCities(uniqueCities.sort()); // Opcional: ordenar alfabeticamente
         setAvailableStates(uniqueStates.sort()); // Opcional: ordenar alfabeticamente
 
-        console.log("Unique Cities:", uniqueCities);
-        console.log("Unique States:", uniqueStates);
+        logger.debug('Location data loaded', { citiesCount: uniqueCities.length, statesCount: uniqueStates.length });
       }
     };
     fetchProfiles();
@@ -432,7 +432,7 @@ export default function SearchShowcase() {
             <AnimatePresence>
               {filteredProfiles.map(profile => {
                 // DEBUG: Verificar qual card será renderizado
-                console.log('CARD DEBUG', profile.username, profile.layoutTemplateId);
+                logger.debug('Rendering search card', { username: profile.username, layoutTemplate: profile.layoutTemplateId });
                 let SearchResultComponent;
                 if (profile.layoutTemplateId === 'premium') {
                   SearchResultComponent = SearchResultCardPremium;
@@ -479,4 +479,4 @@ export default function SearchShowcase() {
   );
 }
 
-export { BannerCarousel as SearchBannerCarousel }; 
+export { BannerCarousel as SearchBannerCarousel };

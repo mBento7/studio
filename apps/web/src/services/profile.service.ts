@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { UserProfile } from "@/lib/types";
+import { logger } from "@/lib/logger";
 
 // Função para detectar se estamos em modo mock
 function isMockMode(): boolean {
@@ -97,7 +98,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
   ]);
 
   // Log detalhado do resultado bruto da query de reviews
-  console.log('🔍 DEBUG - reviewsRes.data:', reviewsRes.data);
+  logger.debug('Reviews query result', { reviewsCount: reviewsRes.data?.length || 0 });
 
   // Mapeamento correto dos campos de reviews
   const reviews = (reviewsRes.data || []).map((rev) => ({
@@ -122,7 +123,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
   }));
 
   // Log para depuração
-  console.log('DEBUG FINAL userProfile.reviews:', reviews);
+  logger.debug('Profile reviews processed', { reviewsCount: reviews.length });
 
   // Monta o objeto UserProfile final, agora com todos os arrays disponíveis na raiz
   const userProfile: UserProfile = {
@@ -303,7 +304,7 @@ export async function refreshProfileSnapshot(profileId: string) {
 export async function getUserProfileById(userId: string): Promise<UserProfile | null> {
   // Se estamos em modo mock, retorna dados mock
   if (isMockMode()) {
-    console.log('[Profile Service] Modo MOCK ativado - retornando dados mock para userId:', userId);
+    logger.profile('Modo MOCK ativado - retornando dados mock', { userId });
     return getMockUserProfileById(userId);
   }
   
@@ -384,7 +385,7 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
     whatsapp_number: whatsappNumber,
   };
 
-  console.log('Dados enviados para profiles:', updateData);
+  logger.debug('Profile update initiated', { userId, fieldsCount: Object.keys(updateData).length });
 
   const { error: profileError } = await supabase
     .from('profiles')

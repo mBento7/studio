@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 import { Mail, Lock, User, Loader2, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -69,11 +70,11 @@ export default function AuthPage() {
       return;
     }
     
-    console.log('[Login] Tentando fazer login com:', loginEmail);
+    logger.auth('Tentando fazer login', { email: loginEmail });
     
     try {
       await signInWithEmail(loginEmail, loginPassword);
-      console.log('[Login] Login bem-sucedido');
+      logger.auth('Login bem-sucedido');
       // O redirecionamento será feito pelo useEffect
     } catch (error: any) {
       console.error('[Login] Erro no login:', error);

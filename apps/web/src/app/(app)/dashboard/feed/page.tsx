@@ -40,6 +40,7 @@ import { useRouter } from 'next/navigation';
 import { Button as UIButton } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
 import BannerCard from '@/components/feed/BannerCard';
 import CouponCard from '@/components/feed/CouponCard';
@@ -115,7 +116,7 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Creating coupon:', couponData);
+    logger.debug('Coupon creation initiated', { hasCode: !!couponData.code, hasDescription: !!couponData.description });
     onOpenChange(false);
     setCouponData({ code: '', description: '', discount: '', validUntil: '' });
   };

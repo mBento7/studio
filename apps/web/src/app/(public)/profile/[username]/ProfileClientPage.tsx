@@ -18,6 +18,7 @@ import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display'
 import { platformIcons } from "@/lib/types";
 import { getUserProfileV2 } from '@/features/profile/new-edit-flow/profile.service';
 import { PrintableBusinessCard } from '@/features/profile/printable-business-card';
+import { logger } from '@/lib/logger';
 // Removidos notFound e getMockUserByUsername, pois são responsabilidades do Server Component
 // import { notFound } from "next/navigation";
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
@@ -103,8 +104,10 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   // Adicionar log para debug das reviews
   useEffect(() => {
     if (initialUserProfile) {
-      console.log('🔍 DEBUG - userProfile.reviews:', initialUserProfile.reviews);
-      console.log('🔍 DEBUG - userProfile.reviews.length:', initialUserProfile.reviews?.length);
+      logger.debug('Profile reviews loaded', {
+        reviewsCount: initialUserProfile.reviews?.length || 0,
+        hasReviews: !!initialUserProfile.reviews?.length
+      });
     }
   }, [initialUserProfile]);
 

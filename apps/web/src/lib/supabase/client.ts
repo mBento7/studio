@@ -2,14 +2,17 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 import { mockSupabase } from "./mock-client";
+import { logger } from '@/lib/logger';
 
 // Verificar se as variáveis de ambiente existem antes de criar o cliente
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Debug: Log das variáveis de ambiente
-console.log('[Supabase Client] URL:', supabaseUrl);
-console.log('[Supabase Client] Anon Key:', supabaseAnonKey ? 'Presente' : 'Ausente');
+logger.debug('Supabase Client configuração', { 
+  hasUrl: !!supabaseUrl, 
+  hasAnonKey: !!supabaseAnonKey 
+});
 
 // Verificar se estamos em modo mock
 const isMockMode = supabaseUrl?.includes('mock') || supabaseAnonKey?.includes('mock');
@@ -17,10 +20,8 @@ const isMockMode = supabaseUrl?.includes('mock') || supabaseAnonKey?.includes('m
 // Função para criar o cliente apropriado
 function createSupabaseClient() {
   if (isMockMode) {
-    console.log('[Supabase Client] 🎭 Modo MOCK ativado - usando cliente simulado');
-    console.log('[Supabase Client] Usuários de teste disponíveis:');
-    console.log('[Supabase Client] - test@example.com / 123456');
-    console.log('[Supabase Client] - admin@whosfy.com / admin123');
+    logger.info('Modo MOCK ativado - usando cliente simulado');
+    logger.info('Usuários de teste disponíveis: test@example.com, admin@whosfy.com');
     
     return mockSupabase;
   } else {
@@ -39,7 +40,7 @@ function createSupabaseClient() {
       throw new Error('Invalid Supabase URL format');
     }
 
-    console.log('[Supabase Client] Cliente real criado com sucesso');
+    logger.info('Cliente Supabase real criado com sucesso');
     return createBrowserClient(
       supabaseUrl || '',
       supabaseAnonKey || ''

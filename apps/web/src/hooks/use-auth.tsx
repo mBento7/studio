@@ -7,6 +7,7 @@ import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { UserProfile } from '@/lib/types';
 import { supabase } from '@/lib/supabase/client';
 import { getUserProfileById } from '@/services/profile.service';
+import { logger } from '@/lib/logger';
 
 interface AuthContextType {
   user: SupabaseUser | null;
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Função para buscar o perfil do usuário no banco de dados real
     const fetchUserProfile = async (supabaseUser: SupabaseUser) => {
       setLoading(true);
-      console.log('[Auth] Buscando perfil do usuário:', supabaseUser.id);
+      logger.auth('Buscando perfil do usuário', { userId: supabaseUser.id });
       try {
         const userProfile = await getUserProfileById(supabaseUser.id);
         setCurrentUserProfile(userProfile);
@@ -50,11 +51,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           await signOutUser();
           return;
         }
-        console.log('[Auth] Perfil carregado com sucesso:', userProfile);
+        logger.auth('Perfil carregado com sucesso', { username: userProfile?.username });
       } catch (err) {
         setLoading(false);
         toast({ title: 'Erro ao carregar perfil', description: String(err), variant: 'destructive' });
-        console.error('[Auth] Erro ao carregar perfil:', err);
+        logger.error('Erro ao carregar perfil', { error: err });
       }
     };
 
@@ -86,7 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [supabase, router, toast]);
 
   const handleAuthError = (error: Error, context: string) => {
-    console.error(`Erro em ${context}:`, error.message);
+    logger.error(`Erro em ${context}`, { error: error.message });
     toast({
       title: `Falha em ${context}`,
       description: error.message || `Ocorreu um erro durante a operação.`,
@@ -130,25 +131,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithEmail = async (email: string, password: string) => {
     try {
-      console.log('[Auth] Iniciando login com email:', email);
+      logger.auth('Iniciando login', { email });
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      console.log('[Auth] Resposta do Supabase:', { data, error });
+      logger.auth('Resposta do login', { hasData: !!data, hasError: !!error });
 
       if (error) {
-        console.error('[Auth] Erro do Supabase:', error);
+        logger.error('Erro do Supabase no login', { error });
         handleAuthError(error, "Login com Email");
         throw error;
       }
 
-      console.log('[Auth] Login bem-sucedido:', data.user?.email);
+      logger.auth('Login bem-sucedido', { email: data.user?.email });
       return data;
     } catch (error) {
-      console.error('[Auth] Erro capturado:', error);
+      logger.error('Erro capturado no login', { error });
       handleAuthError(error as Error, "Login com Email");
       throw error;
     }
@@ -171,12 +172,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOutUser = async () => {
     setLoading(true);
-    console.log('[Auth] Iniciando logout...');
+    logger.auth('Iniciando logout');
     const { error } = await supabase.auth.signOut();
     if (error) handleAuthError(error, "Logout");
     else {
       toast({ title: 'Logout bem-sucedido', variant: 'success', duration: 2000 });
-      console.log('[Auth] Logout bem-sucedido!');
+      logger.auth('Logout bem-sucedido');
     }
     setLoading(false);
   };

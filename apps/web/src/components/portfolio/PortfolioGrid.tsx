@@ -26,7 +26,7 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({
   variant = "free",
   onItemClick,
 }) => {
-  console.log("[PortfolioGrid] items recebidos:", items);
+  // Debug log removido para produção
   const displayed = items.slice(0, maxToShow);
 
   return (
@@ -89,4 +89,4 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({
       </div>
     </div>
   );
-}; 
+};

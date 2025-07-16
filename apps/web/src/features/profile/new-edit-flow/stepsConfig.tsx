@@ -1,4 +1,5 @@
 import { User, Award, Camera, Layout, FolderOpen, Sparkles, Eye, Megaphone, TicketPercent } from "lucide-react";
+import { logger } from '@/lib/logger';
 import { ProfileBasicTabV2 } from "./ProfileBasicTabV2";
 import { MinimalistBlockV2 } from "./blocks/MinimalistBlockV2";
 import { LayoutSelectBlockV2 } from "./LayoutSelectBlockV2";
@@ -204,10 +205,10 @@ export function buildSteps(
           currentPlan: plan,
           selectedLayout: profile.layout || 'minimalist',
           onSelect: (layoutKey: string) => {
-            console.log('[DEBUG] Layout selecionado:', layoutKey);
+            logger.debug('Layout selecionado', { layoutKey });
             dispatch({ type: 'update', payload: { layout: layoutKey } });
             setTimeout(() => {
-              console.log('[DEBUG] Novo estado do perfil após seleção:', JSON.stringify(profile));
+              logger.debug('Novo estado do perfil após seleção', { profileId: profile.id, layout: layoutKey });
             }, 100);
           },
           onUpgrade: () => alert('Faça upgrade para acessar este layout!')
