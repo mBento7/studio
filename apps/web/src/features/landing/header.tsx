@@ -152,7 +152,7 @@ export default function PublicHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={`/profile/${currentUserProfile.username}`} className="flex items-center gap-2">
+                  <Link href={`/${currentUserProfile.username}`} className="flex items-center gap-2">
                     <IoHomeOutline className="h-4 w-4 mr-2" />
                     Ver perfil
                   </Link>

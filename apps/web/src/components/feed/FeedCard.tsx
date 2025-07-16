@@ -60,7 +60,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
 
   const handleContato = () => {
     const username = usuario.nome?.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    router.push(`/profile/${username}`);
+    router.push(`/${username}`);
   };
 
   const config = tipoConfig[tipo] || tipoConfig['oferta_produto'];

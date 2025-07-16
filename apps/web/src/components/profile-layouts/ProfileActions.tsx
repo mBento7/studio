@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Share2, Edit } from "lucide-react";
 import Link from "next/link";
+import { getFullProfileUrl } from "@/lib/profile-url";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProfileActionsProps {
   user: any;
@@ -8,18 +10,36 @@ interface ProfileActionsProps {
 }
 
 export function ProfileActions({ user, isCurrentUserProfile }: ProfileActionsProps) {
-  const handleShare = () => {
+  const { toast } = useToast();
+  
+  const handleShare = async () => {
     if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
     
+    const profileUrl = getFullProfileUrl(user.username);
+    
     if (navigator.share) {
-      navigator.share({
-        title: user.name,
-        text: user.bio,
-        url: window.location.href
-      });
+      try {
+        await navigator.share({
+          title: user.full_name || user.name,
+          text: user.bio,
+          url: profileUrl
+        });
+      } catch (error) {
+        // Fallback para clipboard se o usuário cancelar o compartilhamento
+        if (error instanceof Error && error.name !== 'AbortError') {
+          await navigator.clipboard.writeText(profileUrl);
+          toast({
+            title: "Link copiado!",
+            description: "O link do perfil foi copiado para a área de transferência.",
+          });
+        }
+      }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link do perfil copiado!');
+      await navigator.clipboard.writeText(profileUrl);
+      toast({
+        title: "Link copiado!",
+        description: "O link do perfil foi copiado para a área de transferência.",
+      });
     }
   };
 

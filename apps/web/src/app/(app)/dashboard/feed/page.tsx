@@ -901,7 +901,7 @@ export default function FeedPage() {
           tipo: 'banner',
           imagem: u.cover_photo_url || 'https://picsum.photos/seed/banner/400/200',
           texto: `Conheça o perfil de ${u.name}`,
-          link: `/profile/${u.username}`,
+          link: `/${u.username}`,
         },
         // EventCard
         {
@@ -910,14 +910,14 @@ export default function FeedPage() {
           data: '15/08/2024',
           local: u.location?.city || 'Online',
           imagem: u.profile_picture_url || 'https://picsum.photos/seed/event/400/200',
-          link: `/profile/${u.username}`,
+          link: `/${u.username}`,
         },
         // InviteCard
         {
           tipo: 'convite',
           texto: `Convide amigos para conhecer ${u.name}!`,
           bonus: `${5 + idx} créditos`,
-          link: `/profile/${u.username}`,
+          link: `/${u.username}`,
         },
         // SponsoredAdCard
         {
@@ -925,7 +925,7 @@ export default function FeedPage() {
           titulo: `Destaque: ${u.name}`,
           descricao: u.bio || 'Profissional em destaque na plataforma.',
           imagem: u.profile_picture_url || 'https://picsum.photos/seed/ad/400/200',
-          link: `/profile/${u.username}`,
+          link: `/${u.username}`,
           usuarioId: u.id,
         },
         // TestimonialCard

@@ -25,7 +25,7 @@ const SearchResultCardFree: React.FC<SearchResultCardFreeProps> = ({ user }) => 
   const hasCover = !!user.cover_photo_url && !coverError;
 
   return (
-    <Link href={`/profile/${user.username}`} className="block group h-full w-full">
+    <Link href={`/${user.username}`} className="block group h-full w-full">
       <Card className="relative flex flex-col items-center justify-start overflow-hidden rounded-2xl border bg-white shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 min-h-[300px]">
 
         {/* Capa ou padrão visual */}

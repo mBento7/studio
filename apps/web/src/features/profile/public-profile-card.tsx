@@ -28,7 +28,7 @@ export function PublicProfileCard({ profile }: PublicProfileCardProps) {
   };
 
   return (
-    <Link href={`/profile/${profile.username}`} className="w-full h-full group">
+    <Link href={`/${profile.username}`} className="w-full h-full group">
       <Card className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 ease-in-out flex flex-col h-full bg-card group-hover:border-primary">
         <CardHeader className="p-0 relative h-24 xxs:h-20 sm:h-28">
            <Image

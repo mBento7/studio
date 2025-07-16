@@ -24,9 +24,9 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
   const handleDownloadQrCode = async () => {
     if (!user || !primaryColorHex) return;
     
-    const profileUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/profile/${user.username}` 
-        : `${siteConfig.url}/profile/${user.username}`; // Fallback for server/static generation context
+    const profileUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/${user.username}`
+    : `${siteConfig.url}/${user.username}`; // Fallback for server/static generation context
 
     const bgColorForDownload = 'FFFFFF'; // White background for better print/scan compatibility
     const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorHex.replace("#","")}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
@@ -53,7 +53,7 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
 
   const handleViewCardPreview = () => {
     if (typeof window !== 'undefined' && user.username) {
-      window.open(`/profile/${user.username}/card-preview`, '_blank');
+      window.open(`/${user.username}/card-preview`, '_blank');
     } else {
       toast({ title: "Erro", description: "Não foi possível abrir a pré-visualização do cartão.", variant: "destructive"});
     }
@@ -132,7 +132,7 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
         )}
         <div className="flex items-center gap-2 text-muted-foreground">
           <LinkIcon className="w-4 h-4 text-primary" />
-          <Link href={`/profile/${user.username}`} target="_blank" className="hover:underline break-all">
+          <Link href={`/${user.username}`} target="_blank" className="hover:underline break-all">
             {siteConfig.url.replace('https://', '')}/{user.username}
           </Link>
         </div>

@@ -126,7 +126,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
   };
 
   const formattedDate = new Date(validUntil).toLocaleDateString('pt-BR');
-  const profileUrl = `/profile/${username}`;
+  const profileUrl = `/${username}`;
   const validadeFormatada = validUntil ? new Date(validUntil).toLocaleDateString('pt-BR') : '';
 
   return (
@@ -207,7 +207,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
 
       {/* Header com perfil e cabeçalho do cupom */}
       <div className="relative px-6 pt-6 pb-2 flex flex-col gap-2">
-        <div className="flex items-center gap-3 cursor-pointer" tabIndex={0} onClick={() => typeof window !== 'undefined' && window.open(`/profile/${username}`, '_blank')}>
+        <div className="flex items-center gap-3 cursor-pointer" tabIndex={0} onClick={() => typeof window !== 'undefined' && window.open(`/${username}`, '_blank')}>
           <img 
             src={avatarUrl} 
             alt={`Foto de perfil de ${name}`} 

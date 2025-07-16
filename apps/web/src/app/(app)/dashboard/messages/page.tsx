@@ -131,7 +131,7 @@ const MessagesPage = () => {
               {conversations.map((conv) => (
                 <Link
                   key={conv.id}
-                  href={`/profile/${conv.otherUser.username}?openChat=true`} // Abre o chat na página de perfil
+                  href={`/${conv.otherUser.username}?openChat=true`} // Abre o chat na página de perfil
                   onClick={() => {
                     // Dispara evento para abrir o chat flutuante na ProfileClientPage
                     window.dispatchEvent(

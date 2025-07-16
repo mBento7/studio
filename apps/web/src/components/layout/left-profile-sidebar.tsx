@@ -190,7 +190,7 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
   const userProfile: Partial<UserProfile> = currentUserProfile || profile || {};
 
   const stats = profile?.stats || { views: 1234, connections: 89, projects: 12 };
-  const publicProfileLink = userProfile.username ? `/profile/${userProfile.username}` : '/dashboard';
+  const publicProfileLink = userProfile.username ? `/${userProfile.username}` : '/dashboard';
 
   return (
     <aside className="flex flex-col gap-4 max-w-[280px] xl:max-w-[320px] 2xl:max-w-[350px] w-full">
@@ -272,4 +272,4 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
       <ActivityStats />
     </aside>
   );
-} 
+}

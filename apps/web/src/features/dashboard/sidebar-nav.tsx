@@ -43,7 +43,7 @@ interface SidebarNavProps {
 export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
   const pathname = usePathname();
   const { user, signOutUser, loading: authLoading, currentUserProfile } = useAuth();
-  const publicProfileLink = currentUserProfile ? `/profile/${currentUserProfile.username}` : (user ? "/search" : "/login");
+  const publicProfileLink = currentUserProfile ? `/${currentUserProfile.username}` : (user ? "/search" : "/login");
 
   // Itens de navegação com sub-itens para "Meu Perfil"
   const navItems: NavItem[] = [

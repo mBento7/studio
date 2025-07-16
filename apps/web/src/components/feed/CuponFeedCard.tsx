@@ -74,7 +74,7 @@ const CuponFeedCard: React.FC<CuponFeedCardProps> = ({ user, benefit, descriptio
               <Button
                 size="sm"
                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full px-4 py-1.5 shadow-sm flex items-center gap-1"
-                onClick={() => router.push(`/profile/${user.username}`)}
+                onClick={() => router.push(`/${user.username}`)}
               >
                 <span>Ver código</span>
                 <ExternalLink className="w-4 h-4" />

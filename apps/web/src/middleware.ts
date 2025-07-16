@@ -1,8 +1,42 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Lista de rotas reservadas que NÃO devem ser tratadas como usernames
+const RESERVED_ROUTES = [
+  'api',
+  '_next',
+  'auth',
+  'login',
+  'register',
+  'dashboard',
+  'admin',
+  'profile',
+  'home',
+  'about',
+  'contact',
+  'terms',
+  'privacy',
+  'help',
+  'support',
+  'blog',
+  'docs',
+  'app',
+  'www',
+  'mail',
+  'ftp',
+  'cdn',
+  'assets',
+  'static',
+  'public',
+  'favicon.ico',
+  'robots.txt',
+  'sitemap.xml'
+];
+
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
+  const url = request.nextUrl.clone();
+  const pathname = url.pathname;
 
   // Adicionar headers de segurança
   response.headers.set('X-Frame-Options', 'DENY');
@@ -29,8 +63,6 @@ export function middleware(request: NextRequest) {
 
   // Em produção, bloquear acesso a rotas de desenvolvimento
   if (process.env.NODE_ENV === 'production') {
-    const url = request.nextUrl.pathname;
-    
     // Bloquear rotas de desenvolvimento/debug
     const blockedPaths = [
       '/api/debug',
@@ -39,9 +71,38 @@ export function middleware(request: NextRequest) {
       '/showcase-',
     ];
     
-    if (blockedPaths.some(path => url.startsWith(path))) {
+    if (blockedPaths.some(path => pathname.startsWith(path))) {
       return new NextResponse('Not Found', { status: 404 });
     }
+  }
+
+  // ===== LÓGICA DE URL PERSONALIZADA =====
+  
+  // Extrair o primeiro segmento da URL (possível username)
+  const segments = pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+
+  // Se não há segmentos, é a página inicial
+  if (!firstSegment) {
+    return response;
+  }
+
+  // Se é uma rota reservada, não processar como username
+  if (RESERVED_ROUTES.includes(firstSegment.toLowerCase())) {
+    return response;
+  }
+
+  // Se já está na estrutura /profile/[username], não reescrever
+  if (pathname.startsWith('/profile/')) {
+    return response;
+  }
+
+  // Validar se o primeiro segmento parece um username válido
+  const usernameRegex = /^[a-z0-9](?!.*[._]{2})[a-z0-9._]{0,28}[a-z0-9]$/;
+  if (usernameRegex.test(firstSegment)) {
+    // Reescrever para a rota de perfil
+    url.pathname = `/profile/${firstSegment}`;
+    return NextResponse.rewrite(url);
   }
 
   return response;

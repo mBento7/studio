@@ -114,7 +114,7 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
   const [isEditing, setIsEditing] = useState(false);
 
   // QR Code do perfil
-  const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `/profile/${user.id}`;
+  const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/${user.username}` : `/${user.username}`;
   const { qrCodeUrl, isLoading: qrLoading } = useProfileQrCode(profileUrl);
 
   // Social links: priorizar WhatsApp e garantir 3 exibidos (com placeholder se faltar)
@@ -136,18 +136,24 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
     
+    const shareUrl = typeof window !== 'undefined' ? window.location.origin + `/${user.username}` : `/${user.username}`;
+    
     if (navigator.share) {
       try {
         await navigator.share({
-          title: user.name,
+          title: user.full_name || user.name,
           text: user.bio,
-          url: window.location.href,
+          url: shareUrl,
         });
       } catch (error) {
-        // fallback
+        // fallback para clipboard se cancelar
+        if (error instanceof Error && error.name !== 'AbortError') {
+          await navigator.clipboard.writeText(shareUrl);
+          alert('Link copiado para a área de transferência!');
+        }
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(shareUrl);
       alert('Link copiado para a área de transferência!');
     }
   };

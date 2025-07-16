@@ -33,7 +33,7 @@ const StoryHeader: React.FC<StoryHeaderProps> = ({ story, onClose, onUserAction,
       <div className="flex items-center gap-2">
         <img src={story.user.avatarUrl} alt={story.user.name} className="w-8 h-8 rounded-full border border-border" />
         <div>
-          <a href={`/profile/${story.user.username}`} className="font-semibold text-foreground hover:underline focus:underline outline-none" onClick={handleAction}>{story.user.name}</a>
+          <a href={`/${story.user.username}`} className="font-semibold text-foreground hover:underline focus:underline outline-none" onClick={handleAction}>{story.user.name}</a>
           <span className="text-xs text-muted-foreground ml-2">@{story.user.username}</span>
         </div>
       </div>
@@ -62,4 +62,4 @@ const StoryHeader: React.FC<StoryHeaderProps> = ({ story, onClose, onUserAction,
   );
 };
 
-export default StoryHeader; 
+export default StoryHeader;
