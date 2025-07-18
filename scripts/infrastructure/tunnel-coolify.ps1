@@ -1,14 +1,15 @@
 # Script para estabelecer tunel SSH com Coolify
-# Configuracoes
-$SERVER_IP = "129.146.116.166"
-$SSH_KEY = "~/.ssh/whosfy-production-key"
+# Configurações
+$SSH_KEY = "C:\Users\Micael\.ssh\oracle_new"
+$VPS_IP = "129.146.146.242"
+$VPS_USER = "ubuntu"
 $LOCAL_PORT = 8000
-$REMOTE_PORT = 80
+$REMOTE_PORT = 8000
 
-Write-Host "Estabelecendo tunel SSH com Coolify..." -ForegroundColor Cyan
-Write-Host "Servidor: $SERVER_IP" -ForegroundColor White
-Write-Host "Chave SSH: $SSH_KEY" -ForegroundColor White
-Write-Host "Porta local: $LOCAL_PORT" -ForegroundColor White
+Write-Host "🔗 Criando túnel SSH para Coolify..." -ForegroundColor Cyan
+Write-Host "VPS Oracle: $VPS_USER@$VPS_IP" -ForegroundColor Yellow
+Write-Host "Túnel: localhost:$LOCAL_PORT -> $VPS_IP:$REMOTE_PORT" -ForegroundColor Yellow
+Write-Host "Acesse: http://localhost:$LOCAL_PORT" -ForegroundColor Green
 
 # Verificar se a chave SSH existe
 if (!(Test-Path $SSH_KEY)) {
@@ -20,8 +21,8 @@ if (!(Test-Path $SSH_KEY)) {
 try {
     Write-Host "Conectando ao servidor..." -ForegroundColor Yellow
     
-    # Comando SSH para tunel
-    $sshCommand = "ssh -L ${LOCAL_PORT}:localhost:${REMOTE_PORT} -i $SSH_KEY -o StrictHostKeyChecking=no root@$SERVER_IP"
+    # Comando SSH
+    $sshCommand = "ssh -i `"$SSH_KEY`" -L $LOCAL_PORT`:localhost:$REMOTE_PORT -N $VPS_USER@$VPS_IP"
     
     Write-Host "Comando: $sshCommand" -ForegroundColor Gray
     

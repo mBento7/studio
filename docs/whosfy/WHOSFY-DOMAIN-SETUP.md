@@ -10,7 +10,7 @@
 ## 🎯 Informações do Sistema
 
 - **Domínio:** whosfy.com
-- **Servidor VPS:** 194.164.72.183 (Oracle Cloud)
+- **Servidor VPS:** 129.146.146.242 (Oracle Cloud)
 - **Aplicação Coolify:** w4kocsog4kkok48sgow48kc4
 - **Status:** running:unhealthy
 - **FQDN Configurado:** http://whosfy.com
@@ -30,14 +30,14 @@
 # Registro A - Domínio principal
 Tipo: A
 Nome: @
-Conteúdo: 194.164.72.183
+Conteúdo: 129.146.146.242
 TTL: Auto
 Proxy: 🔴 DNS only (desabilitado)
 
 # Registro A - Subdomínio www
 Tipo: A
 Nome: www
-Conteúdo: 194.164.72.183
+Conteúdo: 129.146.146.242
 TTL: Auto
 Proxy: 🔴 DNS only (desabilitado)
 ```
@@ -47,7 +47,7 @@ Proxy: 🔴 DNS only (desabilitado)
 ### 2. 🔧 Verificar Configuração no Coolify
 
 #### Acesse o painel do Coolify:
-1. URL: http://194.164.72.183:8000
+1. URL: http://129.146.146.242:8000
 2. Vá para **Applications** → **Whosfy App**
 3. Verifique as configurações:
 
@@ -66,7 +66,7 @@ nslookup whosfy.com
 
 # Resultado esperado:
 Nome: whosfy.com
-Address: 194.164.72.183
+Address: 129.146.146.242
 ```
 
 **Tempo de propagação:** 5-30 minutos
@@ -75,10 +75,10 @@ Address: 194.164.72.183
 
 ```bash
 # Teste 1: Ping direto
-ping 194.164.72.183
+ping 129.146.146.242
 
 # Teste 2: Curl direto no IP
-curl -H "Host: whosfy.com" http://194.164.72.183
+curl -H "Host: whosfy.com" http://129.146.146.242
 
 # Teste 3: Curl no domínio (após propagação)
 curl http://whosfy.com

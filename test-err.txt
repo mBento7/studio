@@ -1,1 +1,0 @@
-Coolify MCP server running on stdio

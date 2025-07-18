@@ -38,3 +38,26 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Temporary files and folders
+temp/
+*.tmp
+*.temp
+
+# Build artifacts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Test results and logs
+test-*.txt
+*-results.txt
+
+# Scripts de organização
+organize-project.ps1
+
+# Arquivos de chaves SSH (segurança)
+eval*
+*.pub
+
+# Arquivos de configuração local
+*.local

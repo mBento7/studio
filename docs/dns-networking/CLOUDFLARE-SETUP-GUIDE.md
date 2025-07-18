@@ -7,7 +7,7 @@ Este guia detalha como configurar o Cloudflare para o domínio `whosfy.com` apó
 ## 🎯 Informações do Projeto
 
 - **Domínio:** whosfy.com
-- **Servidor VPS:** 194.164.72.183 (Oracle Cloud)
+- **Servidor VPS:** 129.146.146.242 (Oracle Cloud)
 - **Aplicação:** http://w4kocsog4kkok48sgow48kc4.129.146.146.242.sslip.io
 - **Painel Coolify:** http://194.164.72.183:8000
 
@@ -29,14 +29,14 @@ Este guia detalha como configurar o Cloudflare para o domínio `whosfy.com` apó
 # Registro A - Domínio principal
 Tipo: A
 Nome: @
-Conteúdo: 194.164.72.183
+Conteúdo: 129.146.146.242
 TTL: Auto
 Proxy: ✅ Proxied
 
 # Registro A - Subdomínio www
 Tipo: A
 Nome: www
-Conteúdo: 194.164.72.183
+Conteúdo: 129.146.146.242
 TTL: Auto
 Proxy: ✅ Proxied
 
@@ -153,7 +153,7 @@ curl -I https://whosfy.com
 
 ### 8. 📱 Configurar Domínio no Coolify
 
-1. Acesse o painel: http://194.164.72.183:8000
+1. Acesse o painel: http://129.146.146.242:8000
 2. Vá para **Projects** → **Whosfy App**
 3. Clique em **Domains**
 4. Adicione os domínios:

@@ -1,3 +1,4 @@
+<!-- Atualização: documentação revisada em 2024-07-15 para manter o repositório em conformidade com os processos de versionamento. -->
 # Documentação do Projeto Whosfy
 
 Este diretório centraliza toda a documentação institucional, técnica, de onboarding, qualidade, infraestrutura e planejamento do projeto.

@@ -1,4 +1,4 @@
-﻿// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
+// SEGURANCA: Chaves JWT removidas e substituidas por variaveis de ambiente
 // Nunca commite chaves reais no codigo fonte!
 
 const { createClient } = require('@supabase/supabase-js');

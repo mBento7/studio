@@ -1,11 +1,19 @@
 # ========================================
-# ANALISE CORRIGIDA: IP DO SERVIDOR WHOSFY
+# SCRIPT DE CORREÇÃO: IP DO SERVIDOR WHOSFY
 # ========================================
 
-Write-Host "=== ANALISE CORRIGIDA ===" -ForegroundColor White
-Write-Host "INFORMACAO ATUALIZADA: 129.146.146.242 eh o IP CORRETO da VPS Oracle!" -ForegroundColor Green
-Write-Host "Configuracao Geral Coolify: IP 194.164.72.183 (INCORRETO)" -ForegroundColor Red
-Write-Host "Servidor whosfy-production-server: IP 129.146.146.242 (CORRETO)" -ForegroundColor Green
+# IP CORRETO da VPS Oracle (confirmado pelo usuário)
+$IP_CORRETO = "129.146.146.242"
+
+# Informações de conexão SSH
+$SSH_KEY = "C:\Users\Micael\.ssh\oracle_new"
+$SSH_USER = "ubuntu"
+
+Write-Host "=== VERIFICAÇÃO DO SERVIDOR WHOSFY ===" -ForegroundColor White
+Write-Host "🔧 VERIFICANDO CONFIGURAÇÃO DO SERVIDOR WHOSFY" -ForegroundColor Yellow
+Write-Host "IP da VPS Oracle: $IP_CORRETO" -ForegroundColor Green
+Write-Host "Usuário SSH: $SSH_USER" -ForegroundColor Green
+Write-Host "Chave SSH: $SSH_KEY" -ForegroundColor Green
 Write-Host ""
 
 Write-Host "=== CORRECAO NECESSARIA ===" -ForegroundColor White
@@ -13,30 +21,23 @@ Write-Host "A configuracao geral do Coolify precisa usar o IP da VPS Oracle!" -F
 Write-Host "IP Correto da VPS Oracle: 129.146.146.242" -ForegroundColor Green
 Write-Host ""
 
-# Teste de conectividade
-Write-Host "=== TESTANDO CONECTIVIDADE ===" -ForegroundColor White
-Write-Host "Testando IP da VPS Oracle (129.146.146.242)..." -ForegroundColor Cyan
+# Testar conectividade SSH
+Write-Host "📡 Testando conectividade SSH..." -ForegroundColor Cyan
 try {
-    $oracleIpTest = Test-NetConnection -ComputerName "129.146.146.242" -Port 22 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
-    if ($oracleIpTest.TcpTestSucceeded) {
-        Write-Host "✓ IP da VPS Oracle (129.146.146.242) esta acessivel" -ForegroundColor Green
-    } else {
-        Write-Host "✗ IP da VPS Oracle (129.146.146.242) nao esta acessivel" -ForegroundColor Red
-    }
+    ssh -i "$SSH_KEY" -o ConnectTimeout=10 $SSH_USER@$IP_CORRETO "echo 'Conexão SSH OK'"
+    Write-Host "✅ SSH funcionando" -ForegroundColor Green
 } catch {
-    Write-Host "✗ Erro ao testar IP da VPS Oracle" -ForegroundColor Red
+    Write-Host "❌ Erro na conexão SSH: $_" -ForegroundColor Red
 }
 
-Write-Host "Testando IP incorreto da config geral (194.164.72.183)..." -ForegroundColor Cyan
+# Verificar Docker no servidor
+Write-Host "🐳 Verificando Docker..." -ForegroundColor Cyan
 try {
-    $wrongIpTest = Test-NetConnection -ComputerName "194.164.72.183" -Port 22 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
-    if ($wrongIpTest.TcpTestSucceeded) {
-        Write-Host "? IP 194.164.72.183 tambem esta acessivel (pode ser outro servidor)" -ForegroundColor Yellow
-    } else {
-        Write-Host "✗ IP 194.164.72.183 nao esta acessivel" -ForegroundColor Red
-    }
+    $dockerStatus = ssh -i "$SSH_KEY" $SSH_USER@$IP_CORRETO "sudo docker ps --format 'table {{.Names}}\t{{.Status}}'"
+    Write-Host "Docker containers:" -ForegroundColor Green
+    Write-Host $dockerStatus
 } catch {
-    Write-Host "✗ Erro ao testar IP 194.164.72.183" -ForegroundColor Red
+    Write-Host "❌ Erro ao verificar Docker: $_" -ForegroundColor Red
 }
 Write-Host ""
 
