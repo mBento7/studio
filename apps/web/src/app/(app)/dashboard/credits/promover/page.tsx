@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+  CardTitle
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Zap,
   ArrowUp,
@@ -22,14 +22,14 @@ import {
   QrCode,
   Rocket,
   Info,
-  Sparkles,
-} from "lucide-react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+  Sparkles
+} from 'lucide-react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import {
   PromotionModal,
-  PromotionOption,
-} from "@/features/credits/promotion-modal";
+  PromotionOption
+} from '@/features/credits/promotion-modal';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { LayoutDecider } from '@/components/layout/layout-decider';
@@ -37,82 +37,82 @@ import { LayoutDecider } from '@/components/layout/layout-decider';
 const userCredits = 1000000; // mock
 const promotionOptions: PromotionOption[] = [
   {
-    title: "Banner na Busca (24h)",
-    description: "Seu anúncio em destaque no carrossel da página de busca por 24h.",
+    title: 'Banner na Busca (24h)',
+    description: 'Seu anúncio em destaque no carrossel da página de busca por 24h.',
     cost: 50,
     icon: <ImageIcon className="w-6 h-6 text-blue-500" />,
-    type: "banner-busca",
+    type: 'banner-busca',
     highlight: true,
     badge: <Badge className="bg-gradient-to-r from-blue-500 to-blue-300 text-white animate-pulse">Popular</Badge>,
-    iconButton: <ImageIcon className="w-5 h-5" />,
+    iconButton: <ImageIcon className="w-5 h-5" />
   },
   {
-    title: "Destacar Anúncio (7 dias)",
-    description: "Seu anúncio ou perfil aparecerá com destaque na plataforma.",
+    title: 'Destacar Anúncio (7 dias)',
+    description: 'Seu anúncio ou perfil aparecerá com destaque na plataforma.',
     cost: 20,
     icon: <Star className="w-6 h-6 text-yellow-500" />,
-    type: "destaque",
+    type: 'destaque',
     highlight: false,
     badge: null,
-    iconButton: <Star className="w-5 h-5" />,
+    iconButton: <Star className="w-5 h-5" />
   },
   {
-    title: "Topo da Busca (24h)",
-    description: "Garanta que seu perfil seja o primeiro a ser visto nas buscas.",
+    title: 'Topo da Busca (24h)',
+    description: 'Garanta que seu perfil seja o primeiro a ser visto nas buscas.',
     cost: 10,
     icon: <ArrowUp className="w-6 h-6 text-green-500" />,
-    type: "topo-busca",
+    type: 'topo-busca',
     highlight: false,
     badge: null,
-    iconButton: <ArrowUp className="w-5 h-5" />,
+    iconButton: <ArrowUp className="w-5 h-5" />
   },
   {
-    title: "Cartão Digital com QR Code",
-    description: "Crie um cartão de visitas digital exclusivo com QR Code.",
+    title: 'Cartão Digital com QR Code',
+    description: 'Crie um cartão de visitas digital exclusivo com QR Code.',
     cost: 30,
     icon: <Zap className="w-6 h-6 text-purple-500" />,
-    type: "cartao-digital"
+    type: 'cartao-digital'
   },
   {
-    title: "Story Patrocinado",
-    description: "Seu anúncio em formato de story no topo do feed.",
+    title: 'Story Patrocinado',
+    description: 'Seu anúncio em formato de story no topo do feed.',
     cost: 40,
     icon: <Sparkles className="w-6 h-6 text-pink-500" />,
-    type: "story",
+    type: 'story',
     highlight: true,
     badge: <Badge className="bg-gradient-to-r from-pink-500 to-pink-300 text-white animate-pulse">Novo</Badge>,
-    iconButton: <Sparkles className="w-5 h-5" />,
+    iconButton: <Sparkles className="w-5 h-5" />
   },
   {
-    title: "Carrossel de Anúncios",
-    description: "Vários anúncios em sequência, deslizando horizontalmente no feed.",
+    title: 'Carrossel de Anúncios',
+    description: 'Vários anúncios em sequência, deslizando horizontalmente no feed.',
     cost: 60,
     icon: <Rocket className="w-6 h-6 text-indigo-500" />,
-    type: "carrossel",
+    type: 'carrossel',
     highlight: false,
     badge: null,
-    iconButton: <Rocket className="w-5 h-5" />,
+    iconButton: <Rocket className="w-5 h-5" />
   },
   {
-    title: "Anúncio em Vídeo",
-    description: "Anúncio em vídeo curto, com autoplay e destaque visual.",
+    title: 'Anúncio em Vídeo',
+    description: 'Anúncio em vídeo curto, com autoplay e destaque visual.',
     cost: 70,
     icon: <ImageIcon className="w-6 h-6 text-red-500" />,
-    type: "video",
+    type: 'video',
     highlight: false,
     badge: null,
-    iconButton: <ImageIcon className="w-5 h-5" />,
+    iconButton: <ImageIcon className="w-5 h-5" />
   },
   {
-    title: "Notificação Patrocinada",
-    description: "Notificação enviada ao usuário, destacando promoções ou perfis.",
+    title: 'Notificação Patrocinada',
+    description: 'Notificação enviada ao usuário, destacando promoções ou perfis.',
     cost: 25,
     icon: <Star className="w-6 h-6 text-orange-500" />,
-    type: "notificacao",
+    type: 'notificacao',
     highlight: false,
     badge: null,
-    iconButton: <Star className="w-5 h-5" />,
-  },
+    iconButton: <Star className="w-5 h-5" />
+  }
 ];
 
 export default function PromotePage() {

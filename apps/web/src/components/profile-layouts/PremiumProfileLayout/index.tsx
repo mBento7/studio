@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from "framer-motion";
+import React, { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, MotionValue } from 'framer-motion';
 import {
   Star,
   MapPin,
@@ -37,21 +37,21 @@ import {
   Github,
   Settings,
   Sun,
-  Moon,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { sanitizeObject, validateUserProfileSecurity, secureLog } from "@/lib/security";
-import { isValidUUID } from "@/lib/validation";
-import { ReviewForm } from "@/components/reviews/ReviewForm";
-import { ReviewList } from "@/components/reviews/ReviewList";
-import { ReviewSummary } from "@/components/reviews/ReviewSummary";
+  Moon
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { sanitizeObject, validateUserProfileSecurity, secureLog } from '@/lib/security';
+import { isValidUUID } from '@/lib/validation';
+import { ReviewForm } from '@/components/reviews/ReviewForm';
+import { ReviewList } from '@/components/reviews/ReviewList';
+import { ReviewSummary } from '@/components/reviews/ReviewSummary';
 import { supabase } from '@/lib/supabase/client';
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { SocialIcon } from 'react-social-icons';
 import CouponCard from '@/components/feed/CouponCard';
-import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
+import { ProfileHeader } from '@/components/profile-layouts/ProfileHeader';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
 import { CreateCouponModal } from '@/features/dashboard/create-coupon-modal';
@@ -63,24 +63,24 @@ import {
   DialogHeader,
   DialogFooter,
   DialogTitle,
-  DialogDescription,
+  DialogDescription
 } from '@/components/ui/dialog';
 import type { PlanType } from '@/features/profile/new-edit-flow/layoutFeatures';
-import { SocialLinks } from "@/components/social/SocialLinks";
-import { SkillsList } from "@/components/skills/SkillsList";
-import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
-import { ServicesList } from "@/components/services/ServicesList";
-import { ExperienceList } from "@/components/experience/ExperienceList";
-import { EducationList } from "@/components/education/EducationList";
-import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
-import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
-import FreeProfileCardHeader from "@/components/profile-layouts/ProfileCardHeader";
-import { FaqSection } from "@/components/profile-layouts/FaqSection";
-import { BannerPremiumSection } from "@/components/profile-layouts/PremiumProfileLayout/BannerPremiumSection";
-import { YoutubeSection } from "@/components/profile-layouts/PremiumProfileLayout/YoutubeSection";
-import { EventList } from "@/components/events/EventList";
-import { useProfileTheme, ProfileTheme } from "@/components/profile-layouts/useProfileTheme";
-import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
+import { SocialLinks } from '@/components/social/SocialLinks';
+import { SkillsList } from '@/components/skills/SkillsList';
+import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid';
+import { ServicesList } from '@/components/services/ServicesList';
+import { ExperienceList } from '@/components/experience/ExperienceList';
+import { EducationList } from '@/components/education/EducationList';
+import { ProfileActions } from '@/components/profile-layouts/ProfileActions';
+import { LocationInfo } from '@/components/profile-layouts/LocationInfo';
+import FreeProfileCardHeader from '@/components/profile-layouts/ProfileCardHeader';
+import { FaqSection } from '@/components/profile-layouts/FaqSection';
+import { BannerPremiumSection } from '@/components/profile-layouts/PremiumProfileLayout/BannerPremiumSection';
+import { YoutubeSection } from '@/components/profile-layouts/PremiumProfileLayout/YoutubeSection';
+import { EventList } from '@/components/events/EventList';
+import { useProfileTheme, ProfileTheme } from '@/components/profile-layouts/useProfileTheme';
+import { useProfileQrCode } from '@/components/profile-layouts/useProfileQrCode';
 
 export interface UserProfile {
   id: string;
@@ -183,21 +183,21 @@ interface PortfolioItem {
 const Badge = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {
-    variant?: "default" | "secondary" | "destructive" | "outline";
+    variant?: 'default' | 'secondary' | 'destructive' | 'outline';
   }
->(({ className, variant = "default", ...props }, ref) => {
+>(({ className, variant = 'default', ...props }, ref) => {
   const variantClasses = {
-    default: "bg-primary text-primary-foreground hover:bg-primary/80",
-    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-    destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/80",
-    outline: "text-foreground border border-input",
+    default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+    destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/80',
+    outline: 'text-foreground border border-input'
   };
 
   return (
     <div
       ref={ref}
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
         variantClasses[variant],
         className
       )}
@@ -205,7 +205,7 @@ const Badge = React.forwardRef<
     />
   );
 });
-Badge.displayName = "Badge";
+Badge.displayName = 'Badge';
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -214,13 +214,13 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      'rounded-lg border bg-card text-card-foreground shadow-sm',
       className
     )}
     {...props}
   />
 ));
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
 const Avatar = React.forwardRef<
   HTMLDivElement,
@@ -229,34 +229,34 @@ const Avatar = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
       className
     )}
     {...props}
   />
 ));
-Avatar.displayName = "Avatar";
+Avatar.displayName = 'Avatar';
 
 const Separator = React.forwardRef<
-  React.ElementRef<"div">,
-  React.ComponentPropsWithoutRef<"div"> & {
-    orientation?: "horizontal" | "vertical";
+  React.ElementRef<'div'>,
+  React.ComponentPropsWithoutRef<'div'> & {
+    orientation?: 'horizontal' | 'vertical';
     decorative?: boolean;
   }
->(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
+>(({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (
   <div
     ref={ref}
-    role={decorative ? "none" : "separator"}
+    role={decorative ? 'none' : 'separator'}
     aria-orientation={orientation}
     className={cn(
-      "shrink-0 bg-border",
-      orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
+      'shrink-0 bg-border',
+      orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
       className
     )}
     {...props}
   />
 ));
-Separator.displayName = "Separator";
+Separator.displayName = 'Separator';
 
 const Tabs = React.forwardRef<
   HTMLDivElement,
@@ -264,11 +264,11 @@ const Tabs = React.forwardRef<
     defaultValue?: string;
     value?: string;
     onValueChange?: (value: string) => void;
-  }
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("w-full", className)} {...props} />
-));
-Tabs.displayName = "Tabs";
+      }
+      >(({ className, ...props }, ref) => (
+        <div ref={ref} className={cn('w-full', className)} {...props} />
+      ));
+Tabs.displayName = 'Tabs';
 
 const TabsList = React.forwardRef<
   HTMLDivElement,
@@ -277,13 +277,13 @@ const TabsList = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-slate-100 dark:bg-transparent shadow-md border border-slate-200 dark:border-0 py-2 rounded-full",
+      'inline-flex h-10 items-center justify-center rounded-md bg-slate-100 dark:bg-transparent shadow-md border border-slate-200 dark:border-0 py-2 rounded-full',
       className
     )}
     {...props}
   />
 ));
-TabsList.displayName = "TabsList";
+TabsList.displayName = 'TabsList';
 
 const TabsTrigger = React.forwardRef<
   HTMLButtonElement,
@@ -294,20 +294,20 @@ const TabsTrigger = React.forwardRef<
   <button
     ref={ref}
     className={cn(
-      "px-6 py-2 flex items-center justify-center rounded-full font-semibold bg-white text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-100",
-      "data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-lg",
+      'px-6 py-2 flex items-center justify-center rounded-full font-semibold bg-white text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-100',
+      'data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-400 data-[state=active]:text-white data-[state=active]:shadow-lg',
       className
     )}
     {...props}
   />
 ));
-TabsTrigger.displayName = "TabsTrigger";
+TabsTrigger.displayName = 'TabsTrigger';
 
 const TextShimmer = ({
   children,
   className,
   duration = 2,
-  spread = 2,
+  spread = 2
 }: {
   children: string;
   className?: string;
@@ -330,12 +330,12 @@ const TextShimmer = ({
       transition={{
         repeat: Infinity,
         duration,
-        ease: 'linear',
+        ease: 'linear'
       }}
       style={
         {
           '--spread': `${dynamicSpread}px`,
-          backgroundImage: `var(--bg), linear-gradient(var(--base-color), var(--base-color))`,
+          backgroundImage: `var(--bg), linear-gradient(var(--base-color), var(--base-color))`
         } as React.CSSProperties
       }
     >
@@ -345,20 +345,20 @@ const TextShimmer = ({
 };
 
 const BackgroundGradientAnimation = ({
-  gradientBackgroundStart = "rgb(108, 0, 162)",
-  gradientBackgroundEnd = "rgb(0, 17, 82)",
-  firstColor = "18, 113, 255",
-  secondColor = "221, 74, 255",
-  thirdColor = "100, 220, 255",
-  fourthColor = "200, 50, 50",
-  fifthColor = "180, 180, 50",
-  pointerColor = "140, 100, 255",
-  size = "80%",
-  blendingValue = "hard-light",
+  gradientBackgroundStart = 'rgb(108, 0, 162)',
+  gradientBackgroundEnd = 'rgb(0, 17, 82)',
+  firstColor = '18, 113, 255',
+  secondColor = '221, 74, 255',
+  thirdColor = '100, 220, 255',
+  fourthColor = '200, 50, 50',
+  fifthColor = '180, 180, 50',
+  pointerColor = '140, 100, 255',
+  size = '80%',
+  blendingValue = 'hard-light',
   children,
   className,
   interactive = true,
-  containerClassName,
+  containerClassName
 }: {
   gradientBackgroundStart?: string;
   gradientBackgroundEnd?: string;
@@ -382,16 +382,16 @@ const BackgroundGradientAnimation = ({
   const [tgY, setTgY] = useState(0);
 
   useEffect(() => {
-    document.body.style.setProperty("--gradient-background-start", gradientBackgroundStart);
-    document.body.style.setProperty("--gradient-background-end", gradientBackgroundEnd);
-    document.body.style.setProperty("--first-color", firstColor);
-    document.body.style.setProperty("--second-color", secondColor);
-    document.body.style.setProperty("--third-color", thirdColor);
-    document.body.style.setProperty("--fourth-color", fourthColor);
-    document.body.style.setProperty("--fifth-color", fifthColor);
-    document.body.style.setProperty("--pointer-color", pointerColor);
-    document.body.style.setProperty("--size", size);
-    document.body.style.setProperty("--blending-value", blendingValue);
+    document.body.style.setProperty('--gradient-background-start', gradientBackgroundStart);
+    document.body.style.setProperty('--gradient-background-end', gradientBackgroundEnd);
+    document.body.style.setProperty('--first-color', firstColor);
+    document.body.style.setProperty('--second-color', secondColor);
+    document.body.style.setProperty('--third-color', thirdColor);
+    document.body.style.setProperty('--fourth-color', fourthColor);
+    document.body.style.setProperty('--fifth-color', fifthColor);
+    document.body.style.setProperty('--pointer-color', pointerColor);
+    document.body.style.setProperty('--size', size);
+    document.body.style.setProperty('--blending-value', blendingValue);
   }, []);
 
   useEffect(() => {
@@ -415,11 +415,11 @@ const BackgroundGradientAnimation = ({
   return (
     <div
       className={cn(
-        "h-screen w-screen relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        'h-screen w-screen relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]',
         containerClassName
       )}
     >
-      <div className={cn("", className)}>{children}</div>
+      <div className={cn('', className)}>{children}</div>
       <div className="gradients-container h-full w-full blur-lg">
         <div className="absolute [background:radial-gradient(circle_at_center,_var(--first-color)_0,_var(--first-color)_50%)_no-repeat] [mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)] animate-pulse opacity-100"></div>
         <div className="absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat] [mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)] animate-pulse opacity-100"></div>
@@ -437,14 +437,14 @@ const BackgroundGradientAnimation = ({
 
 const ContainerScroll = ({
   titleComponent,
-  children,
+  children
 }: {
   titleComponent: string | React.ReactNode;
   children: React.ReactNode;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: containerRef
   });
   const [isMobile, setIsMobile] = React.useState(false);
 
@@ -453,9 +453,9 @@ const ContainerScroll = ({
       setIsMobile(window.innerWidth <= 768);
     };
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
     return () => {
-      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener('resize', checkMobile);
     };
   }, []);
 
@@ -475,7 +475,7 @@ const ContainerScroll = ({
       <div
         className="py-10 md:py-40 w-full relative"
         style={{
-          perspective: "1000px",
+          perspective: '1000px'
         }}
       >
         <Header translate={translate} titleComponent={titleComponent} />
@@ -491,7 +491,7 @@ const Header = ({ translate, titleComponent }: any) => {
   return (
     <motion.div
       style={{
-        translateY: translate,
+        translateY: translate
       }}
       className="div max-w-5xl mx-auto text-center"
     >
@@ -503,7 +503,7 @@ const Header = ({ translate, titleComponent }: any) => {
 const ScrollCard = ({
   rotate,
   scale,
-  children,
+  children
 }: {
   rotate: MotionValue<number>;
   scale: MotionValue<number>;
@@ -516,7 +516,7 @@ const ScrollCard = ({
         rotateX: rotate,
         scale,
         boxShadow:
-          "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
+          '0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003'
       }}
       className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
     >
@@ -528,15 +528,15 @@ const ScrollCard = ({
 };
 
 const Particles = ({
-  className = "",
+  className = '',
   quantity = 100,
   staticity = 50,
   ease = 50,
   size = 0.4,
   refresh = false,
-  color = "#ffffff",
+  color = '#ffffff',
   vx = 0,
-  vy = 0,
+  vy = 0
 }: {
   className?: string;
   quantity?: number;
@@ -564,13 +564,13 @@ const Particles = ({
   useEffect(() => {
     if (!ready) return;
     if (canvasRef.current) {
-      context.current = canvasRef.current.getContext("2d");
+      context.current = canvasRef.current.getContext('2d');
     }
     initCanvas();
     animate();
-    window.addEventListener("resize", initCanvas);
+    window.addEventListener('resize', initCanvas);
     return () => {
-      window.removeEventListener("resize", initCanvas);
+      window.removeEventListener('resize', initCanvas);
     };
   }, [color, ready]);
 
@@ -618,17 +618,17 @@ const Particles = ({
       targetAlpha,
       dx,
       dy,
-      magnetism,
+      magnetism
     };
   };
 
   const hexToRgb = (hex: string): number[] => {
-    hex = hex.replace("#", "");
+    hex = hex.replace('#', '');
     if (hex.length === 3) {
       hex = hex
-        .split("")
+        .split('')
         .map((char) => char + char)
-        .join("");
+        .join('');
     }
     const hexInt = parseInt(hex, 16);
     const red = (hexInt >> 16) & 255;
@@ -645,7 +645,7 @@ const Particles = ({
       context.current.translate(translateX, translateY);
       context.current.beginPath();
       context.current.arc(x, y, size, 0, 2 * Math.PI);
-      context.current.fillStyle = `rgba(${rgb.join(", ")}, ${alpha})`;
+      context.current.fillStyle = `rgba(${rgb.join(', ')}, ${alpha})`;
       context.current.fill();
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
 
@@ -661,7 +661,7 @@ const Particles = ({
         0,
         0,
         canvasSize.current.w,
-        canvasSize.current.h,
+        canvasSize.current.h
       );
     }
   };
@@ -680,7 +680,7 @@ const Particles = ({
     start1: number,
     end1: number,
     start2: number,
-    end2: number,
+    end2: number
   ): number => {
     const remapped =
       ((value - start1) * (end2 - start2)) / (end1 - start1) + start2;
@@ -694,11 +694,11 @@ const Particles = ({
         circle.x + circle.translateX - circle.size,
         canvasSize.current.w - circle.x - circle.translateX - circle.size,
         circle.y + circle.translateY - circle.size,
-        canvasSize.current.h - circle.y - circle.translateY - circle.size,
+        canvasSize.current.h - circle.y - circle.translateY - circle.size
       ];
       const closestEdge = edge.reduce((a, b) => Math.min(a, b));
       const remapClosestEdge = parseFloat(
-        remapValue(closestEdge, 0, 20, 0, 1).toFixed(2),
+        remapValue(closestEdge, 0, 20, 0, 1).toFixed(2)
       );
       if (remapClosestEdge > 1) {
         circle.alpha += 0.02;
@@ -734,7 +734,7 @@ const Particles = ({
   };
 
   return (
-    <div className={cn("pointer-events-none", className)} ref={canvasContainerRef} aria-hidden="true">
+    <div className={cn('pointer-events-none', className)} ref={canvasContainerRef} aria-hidden="true">
       {ready && <canvas ref={canvasRef} className="size-full" />}
     </div>
   );
@@ -758,80 +758,80 @@ const PremiumProfileLayout: React.FC<{
   editingServiceIndex?: number | null;
 }> = ({
   user = {
-    id: "1",
-    name: "Alex Rodriguez",
-    username: "alexrod",
-    email: "alex@example.com",
-    phone: "+1 (555) 123-4567",
-    bio: "Creative designer and developer passionate about building beautiful digital experiences.",
-    category: "UI/UX Designer & Developer",
-    profile_picture_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    cover_photo_url: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop",
+    id: '1',
+    name: 'Alex Rodriguez',
+    username: 'alexrod',
+    email: 'alex@example.com',
+    phone: '+1 (555) 123-4567',
+    bio: 'Creative designer and developer passionate about building beautiful digital experiences.',
+    category: 'UI/UX Designer & Developer',
+    profile_picture_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+    cover_photo_url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop',
     location: {
-      city: "San Francisco",
-      country: "USA"
+      city: 'San Francisco',
+      country: 'USA'
     },
-    whatsappNumber: "+15551234567",
+    whatsappNumber: '+15551234567',
     sociallinks: [
-      { id: "1", platform: "instagram", url: "https://instagram.com/alexrod" },
-      { id: "2", platform: "twitter", url: "https://twitter.com/alexrod" },
-      { id: "3", platform: "linkedin", url: "https://linkedin.com/in/alexrod" }
+      { id: '1', platform: 'instagram', url: 'https://instagram.com/alexrod' },
+      { id: '2', platform: 'twitter', url: 'https://twitter.com/alexrod' },
+      { id: '3', platform: 'linkedin', url: 'https://linkedin.com/in/alexrod' }
     ],
-    skills: ["React", "TypeScript", "Figma", "Node.js", "Python", "UI/UX Design", "Framer Motion", "Tailwind CSS"],
+    skills: ['React', 'TypeScript', 'Figma', 'Node.js', 'Python', 'UI/UX Design', 'Framer Motion', 'Tailwind CSS'],
     portfolio: [
-      { id: "1", caption: "E-commerce Platform", imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop" },
-      { id: "2", caption: "Mobile App Design", imageUrl: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" },
-      { id: "3", caption: "Brand Identity", imageUrl: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&h=400&fit=crop" }
+      { id: '1', caption: 'E-commerce Platform', imageUrl: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop' },
+      { id: '2', caption: 'Mobile App Design', imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop' },
+      { id: '3', caption: 'Brand Identity', imageUrl: 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&h=400&fit=crop' }
     ],
     stories: [
-      { title: "Behind the Scenes", imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop" },
-      { title: "Latest Project", imageUrl: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=200&h=200&fit=crop" }
+      { title: 'Behind the Scenes', imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop' },
+      { title: 'Latest Project', imageUrl: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=200&h=200&fit=crop' }
     ],
     premiumBanner: {
-      title: "Transform Your Vision",
+      title: 'Transform Your Vision',
       description: "Let's create something extraordinary together",
-      imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop",
-      ctaText: "Start Project"
+      imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop',
+      ctaText: 'Start Project'
     },
     services: [
-      { name: "UI/UX Design", description: "Complete design solutions from wireframes to high-fidelity prototypes", price: "$2,500" },
-      { name: "Web Development", description: "Modern, responsive websites built with latest technologies", price: "$3,500" },
-      { name: "Brand Identity", description: "Comprehensive branding packages including logo and guidelines", price: "$1,800" }
+      { name: 'UI/UX Design', description: 'Complete design solutions from wireframes to high-fidelity prototypes', price: '$2,500' },
+      { name: 'Web Development', description: 'Modern, responsive websites built with latest technologies', price: '$3,500' },
+      { name: 'Brand Identity', description: 'Comprehensive branding packages including logo and guidelines', price: '$1,800' }
     ],
     experience: [
-      { title: "Senior Designer", company: "Tech Corp", years: "2022 - Present" },
-      { title: "UI Designer", company: "Startup Inc", years: "2020 - 2022" }
+      { title: 'Senior Designer', company: 'Tech Corp', years: '2022 - Present' },
+      { title: 'UI Designer', company: 'Startup Inc', years: '2020 - 2022' }
     ],
     education: [
-      { degree: "Master of Design", institution: "Design University", years: "2018 - 2020" },
-      { degree: "Bachelor of Computer Science", institution: "Tech Institute", years: "2014 - 2018" }
+      { degree: 'Master of Design', institution: 'Design University', years: '2018 - 2020' },
+      { degree: 'Bachelor of Computer Science', institution: 'Tech Institute', years: '2014 - 2018' }
     ],
     reviews: [
       {
-        id: "1",
-        authorName: "Sarah Johnson",
-        authorAvatarUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+        id: '1',
+        authorName: 'Sarah Johnson',
+        authorAvatarUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face',
         rating: 5,
-        comment: "Exceptional work! Alex delivered beyond our expectations.",
-        createdAt: "2024-01-15"
+        comment: 'Exceptional work! Alex delivered beyond our expectations.',
+        createdAt: '2024-01-15'
       },
       {
-        id: "2",
-        authorName: "Mike Chen",
-        authorAvatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+        id: '2',
+        authorName: 'Mike Chen',
+        authorAvatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
         rating: 5,
-        comment: "Professional, creative, and delivered on time. Highly recommended!",
-        createdAt: "2024-01-10"
+        comment: 'Professional, creative, and delivered on time. Highly recommended!',
+        createdAt: '2024-01-10'
       }
     ],
     coupons: [
-      { code: "FIRST20", description: "20% off your first project with us" },
-      { code: "BUNDLE50", description: "50% off when you book 3 or more services" }
+      { code: 'FIRST20', description: '20% off your first project with us' },
+      { code: 'BUNDLE50', description: '50% off when you book 3 or more services' }
     ],
     faqs: [
       { question: 'Como contratar?', answer: 'Clique no botão "Get Quote" em um dos serviços e envie sua solicitação.' },
       { question: 'Quais formas de pagamento?', answer: 'Aceito Pix, boleto e cartão de crédito.' },
-      { question: 'Prazo de entrega?', answer: 'O prazo depende do serviço, mas geralmente entre 7 e 30 dias.' },
+      { question: 'Prazo de entrega?', answer: 'O prazo depende do serviço, mas geralmente entre 7 e 30 dias.' }
     ],
     public_visibility: true,
     public_sections: {
@@ -841,18 +841,18 @@ const PremiumProfileLayout: React.FC<{
       skills: true,
       portfolio: true,
       services: true,
-      youtube: true,
+      youtube: true
     },
-    endereco_rua: "Rua Exemplo",
-    endereco_numero: "123",
-    endereco_complemento: "Apto 404",
-    endereco_bairro: "Bairro Exemplo",
-    endereco_cidade: "São Paulo",
-    endereco_estado: "SP",
-    endereco_cep: "01310-100",
-    maps_link: "https://maps.google.com/?q=Rua+Exemplo+123+Apto+404+Bairro+Exemplo+São+Paulo+SP+01310-100"
+    endereco_rua: 'Rua Exemplo',
+    endereco_numero: '123',
+    endereco_complemento: 'Apto 404',
+    endereco_bairro: 'Bairro Exemplo',
+    endereco_cidade: 'São Paulo',
+    endereco_estado: 'SP',
+    endereco_cep: '01310-100',
+    maps_link: 'https://maps.google.com/?q=Rua+Exemplo+123+Apto+404+Bairro+Exemplo+São+Paulo+SP+01310-100'
   },
-  primaryColorHex = "#6366f1",
+  primaryColorHex = '#6366f1',
   isCurrentUserProfile = false,
   mounted = true,
   onPortfolioItemClick = () => {},
@@ -863,7 +863,7 @@ const PremiumProfileLayout: React.FC<{
   onEditService = () => {},
   isServiceModalOpen = false,
   onCloseServiceModal = () => {},
-  editingServiceIndex = null,
+  editingServiceIndex = null
 }) => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
@@ -923,7 +923,7 @@ const PremiumProfileLayout: React.FC<{
     const shareData = {
       title: user.name,
       text: `Check out ${user.name}'s profile!`,
-      url: shareUrl,
+      url: shareUrl
     };
     if (navigator.share) {
       try {
@@ -941,32 +941,30 @@ const PremiumProfileLayout: React.FC<{
     }
   };
 
-
-
   const handleReviewSubmit = async ({ rating, comment }: { rating: number; comment: string }) => {
     if (!currentUserId) {
       toast({
-        title: "Erro",
-        description: "Você precisa estar logado para enviar uma avaliação.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Você precisa estar logado para enviar uma avaliação.',
+        variant: 'destructive'
       });
       return;
     }
 
     if (currentUserId === user?.id) {
       toast({
-        title: "Erro",
-        description: "Você não pode avaliar seu próprio perfil.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Você não pode avaliar seu próprio perfil.',
+        variant: 'destructive'
       });
       return;
     }
 
     if (!isValidUUID(currentUserId) || !isValidUUID(user?.id)) {
       toast({
-        title: "Erro",
-        description: "ID de usuário inválido para avaliação.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'ID de usuário inválido para avaliação.',
+        variant: 'destructive'
       });
       return;
     }
@@ -979,8 +977,8 @@ const PremiumProfileLayout: React.FC<{
           reviewer_id: currentUserId,
           reviewed_user_id: user?.id,
           rating,
-          comment,
-        }),
+          comment
+        })
       });
 
       const data = await response.json();
@@ -990,16 +988,16 @@ const PremiumProfileLayout: React.FC<{
       }
 
       toast({
-        title: "Sucesso",
-        description: "Avaliação enviada com sucesso!",
+        title: 'Sucesso',
+        description: 'Avaliação enviada com sucesso!'
       });
 
     } catch (err: any) {
-      console.error("Erro ao enviar avaliação:", err);
+      console.error('Erro ao enviar avaliação:', err);
       toast({
-        title: "Erro",
+        title: 'Erro',
         description: err.message || 'Não foi possível enviar sua avaliação.',
-        variant: "destructive",
+        variant: 'destructive'
       });
     }
   };
@@ -1013,7 +1011,7 @@ const PremiumProfileLayout: React.FC<{
   }
   const safeUser = {
     ...user,
-    sociallinks: Array.isArray(socialLinksArr) ? socialLinksArr : [],
+    sociallinks: Array.isArray(socialLinksArr) ? socialLinksArr : []
   };
   // Debug log removido para produção
 
@@ -1023,31 +1021,31 @@ const PremiumProfileLayout: React.FC<{
   };
 
   const portfolioItems = user.portfolio || [];
-  let gridCols = "grid-cols-1";
-  if (portfolioItems.length === 2) gridCols = "grid-cols-2";
-  else if (portfolioItems.length === 3) gridCols = "grid-cols-3";
-  else if (portfolioItems.length === 4) gridCols = "grid-cols-2 md:grid-cols-4";
-  else if (portfolioItems.length >= 5) gridCols = "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+  let gridCols = 'grid-cols-1';
+  if (portfolioItems.length === 2) gridCols = 'grid-cols-2';
+  else if (portfolioItems.length === 3) gridCols = 'grid-cols-3';
+  else if (portfolioItems.length === 4) gridCols = 'grid-cols-2 md:grid-cols-4';
+  else if (portfolioItems.length >= 5) gridCols = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 
   // Dentro do componente PremiumProfileLayout, logo após a definição de user (antes de const [expandedFaq, ...]):
   // Adiciona 2 cupons de exemplo automaticamente para o usuário "joaosilva"
-  if (user?.username === "joaosilva") {
+  if (user?.username === 'joaosilva') {
     user.coupons = [
       {
-        code: "JOAO10",
-        description: "10% de desconto na primeira compra",
-        discount: "10%",
-        validUntil: "2099-12-31T23:59:59.000Z", // Data futura para manter o cupom ativo
-        discount_value: "10%", // Adicionado para compatibilidade
-        expires_at: "2099-11-30T23:59:59.000Z" // Adicionado para compatibilidade
+        code: 'JOAO10',
+        description: '10% de desconto na primeira compra',
+        discount: '10%',
+        validUntil: '2099-12-31T23:59:59.000Z', // Data futura para manter o cupom ativo
+        discount_value: '10%', // Adicionado para compatibilidade
+        expires_at: '2099-11-30T23:59:59.000Z' // Adicionado para compatibilidade
       },
       {
-        code: "FRETEGRATIS",
-        description: "Frete grátis para todo o Brasil",
-        discount: "Frete Grátis",
-        validUntil: "2099-11-30T23:59:59.000Z", // Data futura para manter o cupom ativo
-        discount_value: "Frete Grátis", // Adicionado para compatibilidade
-        expires_at: "2099-11-30T23:59:59.000Z" // Adicionado para compatibilidade
+        code: 'FRETEGRATIS',
+        description: 'Frete grátis para todo o Brasil',
+        discount: 'Frete Grátis',
+        validUntil: '2099-11-30T23:59:59.000Z', // Data futura para manter o cupom ativo
+        discount_value: 'Frete Grátis', // Adicionado para compatibilidade
+        expires_at: '2099-11-30T23:59:59.000Z' // Adicionado para compatibilidade
       }
     ];
   }
@@ -1068,10 +1066,10 @@ const PremiumProfileLayout: React.FC<{
     skills: useRef<HTMLDivElement>(null),
     experience: useRef<HTMLDivElement>(null),
     education: useRef<HTMLDivElement>(null),
-    about: useRef<HTMLDivElement>(null), // Manter se for usado em outro lugar
+    about: useRef<HTMLDivElement>(null) // Manter se for usado em outro lugar
   };
 
-  const handleSectionClick = useCallback((section: keyof typeof sectionRefs | string) => { 
+  const handleSectionClick = useCallback((section: keyof typeof sectionRefs | string) => {
     if (typeof section === 'string' && sectionRefs[section as keyof typeof sectionRefs]) {
       sectionRefs[section as keyof typeof sectionRefs]?.current?.scrollIntoView({ behavior: 'smooth' });
     } else if (sectionRefs[section as keyof typeof sectionRefs]) {
@@ -1134,7 +1132,7 @@ const PremiumProfileLayout: React.FC<{
   // Ordenar para WhatsApp primeiro
   const sortedSocialLinks = [
     ...safeUser.sociallinks.filter(link => link.platform === 'whatsapp'),
-    ...safeUser.sociallinks.filter(link => link.platform !== 'whatsapp'),
+    ...safeUser.sociallinks.filter(link => link.platform !== 'whatsapp')
   ];
 
   // Função auxiliar para renderizar SocialLinks ou mensagem de ausência
@@ -1195,7 +1193,7 @@ const PremiumProfileLayout: React.FC<{
     'quinta-feira': '08:00–21:00',
     'sexta-feira': '08:00–21:00',
     'sábado': '08:00–21:00',
-    'domingo': '08:00–20:00',
+    'domingo': '08:00–20:00'
   };
   const dias = [
     'domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'
@@ -1251,13 +1249,13 @@ const PremiumProfileLayout: React.FC<{
   // Dentro do componente PremiumProfileLayout, antes do return (ou logo após a definição de user):
   // Banner de exemplo para o perfil micaelsants
   const exemploBannerPremium = {
-    title: "Bem-vindo ao WhosDo Premium!",
-    description: "Aproveite benefícios exclusivos, destaque seu perfil e conquiste mais clientes.",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    ctaText: "Quero ser Premium!"
+    title: 'Bem-vindo ao WhosDo Premium!',
+    description: 'Aproveite benefícios exclusivos, destaque seu perfil e conquiste mais clientes.',
+    imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+    ctaText: 'Quero ser Premium!'
   };
 
-  const profileUrl = typeof window !== "undefined" ? window.location.href : "";
+  const profileUrl = typeof window !== 'undefined' ? window.location.href : '';
   const { qrCodeUrl, isLoading: isQrLoading } = useProfileQrCode(profileUrl);
 
   // Filtrar cupons válidos (sem validade ou com validade futura)
@@ -1341,36 +1339,36 @@ const PremiumProfileLayout: React.FC<{
                       {/* Nome do usuário dentro do card de perfil */}
                       <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-slate-900 dark:text-white leading-tight">{user.name}</h3>
                       <p className="text-blue-700 dark:text-blue-400 font-medium mb-4">{user.category}</p>
-                      
+
                       {/* Quick Info com espaçamento melhorado */}
                       <div className="space-y-3 mb-6">
                         {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
-                        
+
                         <div
-  className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 mb-4 cursor-pointer select-none"
-  onClick={() => setShowFullSchedule((v) => !v)}
->
-  <Clock className="w-4 h-4" />
-  <span className={`font-bold ${aberto ? 'text-green-600' : 'text-red-500'}`}>{aberto ? 'Aberto' : 'Fechado'}</span>
-  {!aberto && (
-    <span className="text-xs text-gray-500">Abre {dias[(new Date().getDay() + 1) % 7]} às {mockWorkingHours[dias[(new Date().getDay() + 1) % 7]].split('–')[0]}</span>
-  )}
-  {showFullSchedule ? (
-    <ChevronUp className="w-4 h-4 ml-1" />
-  ) : (
-    <ChevronDown className="w-4 h-4 ml-1" />
-  )}
-</div>
-{showFullSchedule && (
-  <div className="mt-1 text-xs text-gray-500 text-center">
-    <div className="font-bold text-white">Horário de funcionamento:</div>
-    <div className="font-bold text-white">{hoje} {mockWorkingHours[hoje]}</div>
-    {dias.filter(d => d !== hoje).map(dia => (
-      <div key={dia}>{dia} {mockWorkingHours[dia]}</div>
-    ))}
-  </div>
-)}
-                       
+                          className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 mb-4 cursor-pointer select-none"
+                          onClick={() => setShowFullSchedule((v) => !v)}
+                        >
+                          <Clock className="w-4 h-4" />
+                          <span className={`font-bold ${aberto ? 'text-green-600' : 'text-red-500'}`}>{aberto ? 'Aberto' : 'Fechado'}</span>
+                          {!aberto && (
+                            <span className="text-xs text-gray-500">Abre {dias[(new Date().getDay() + 1) % 7]} às {mockWorkingHours[dias[(new Date().getDay() + 1) % 7]].split('–')[0]}</span>
+                          )}
+                          {showFullSchedule ? (
+                            <ChevronUp className="w-4 h-4 ml-1" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 ml-1" />
+                          )}
+                        </div>
+                        {showFullSchedule && (
+                          <div className="mt-1 text-xs text-gray-500 text-center">
+                            <div className="font-bold text-white">Horário de funcionamento:</div>
+                            <div className="font-bold text-white">{hoje} {mockWorkingHours[hoje]}</div>
+                            {dias.filter(d => d !== hoje).map(dia => (
+                              <div key={dia}>{dia} {mockWorkingHours[dia]}</div>
+                            ))}
+                          </div>
+                        )}
+
                         {/* Social Links com layout responsivo */}
                         <div className="flex justify-center w-full my-4">
                           <RenderSocialLinks links={sortedSocialLinks} />
@@ -1394,14 +1392,14 @@ const PremiumProfileLayout: React.FC<{
                         )}
                       </div>
                       {/* Botões de contato com hover effects */}
-                      <Button 
+                      <Button
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 text-white hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-800 dark:hover:to-blue-600 font-semibold rounded-full text-base sm:text-lg py-2.5 sm:py-3 flex items-center justify-center mb-2 shadow-lg transition-all duration-300 hover:shadow-xl"
                         onClick={() => {/* lógica para abrir chat */}}
                       >
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                         Chamar no Chat
                       </Button>
-                      <Button 
+                      <Button
                         variant="outline"
                         className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center"
                         onClick={handleShare}
@@ -1420,7 +1418,7 @@ const PremiumProfileLayout: React.FC<{
                   transition={{ duration: 0.8 }}
                   className="text-white order-2 lg:order-2"
                 >
-                  
+
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -1455,11 +1453,11 @@ const PremiumProfileLayout: React.FC<{
                     transition={{ duration: 0.6, delay: 0.5 }}
                     className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl"
                   >
-                    {user.bio || "Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados."}
+                    {user.bio || 'Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados.'}
                   </motion.p>
 
                   <div className="flex flex-col items-center w-full my-4">
-                    
+
                   </div>
 
                   {/* Disponível para projetos e tags */}
@@ -1469,7 +1467,7 @@ const PremiumProfileLayout: React.FC<{
                     transition={{ duration: 0.5, delay: 0.55 }}
                     className="mb-6 flex flex-col items-start gap-2"
                   >
-                    
+
                     {user.skills && user.skills.length > 0 && (
                       <SkillsList
                         skills={user.skills}
@@ -1479,8 +1477,6 @@ const PremiumProfileLayout: React.FC<{
                     )}
                   </motion.div>
 
-                 
-
                   {/* CTA Buttons com espaçamento melhorado */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -1488,16 +1484,16 @@ const PremiumProfileLayout: React.FC<{
                     transition={{ duration: 0.6, delay: 0.7 }}
                     className="flex flex-col sm:flex-row gap-3 sm:gap-4"
                   >
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       className="bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                     >
                       <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Start Project
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="lg" 
+                    <Button
+                      variant="outline"
+                      size="lg"
                       className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 hover:scale-105"
                       onClick={() => handleSectionClick('portfolio')}
                     >
@@ -1507,7 +1503,7 @@ const PremiumProfileLayout: React.FC<{
                   </motion.div>
 
                   {/* Social Proof com layout responsivo */}
-                  
+
                 </motion.div>
               </div>
             </div>
@@ -1553,7 +1549,7 @@ const PremiumProfileLayout: React.FC<{
               { key: 'education', label: 'Educação' },
               { key: 'reviews', label: 'Avaliações' },
               { key: 'faq', label: 'FAQ' },
-              { key: 'contact', label: 'Contato' },
+              { key: 'contact', label: 'Contato' }
             ]}
             sectionRefs={sectionRefs}
             onSectionClick={handleSectionClick}
@@ -1564,8 +1560,8 @@ const PremiumProfileLayout: React.FC<{
           <div className="mt-8" />
 
           {/* Banner Premium destacado após o hero */}
-          {(user.username === "micaelsants" ? true : !!user.premiumBanner) && (
-            <BannerPremiumSection premiumBanner={user.username === "micaelsants" ? exemploBannerPremium : user.premiumBanner} />
+          {(user.username === 'micaelsants' ? true : !!user.premiumBanner) && (
+            <BannerPremiumSection premiumBanner={user.username === 'micaelsants' ? exemploBannerPremium : user.premiumBanner} />
           )}
 
           {/* Seção de Serviços acima do Portfólio */}
@@ -1695,68 +1691,68 @@ const PremiumProfileLayout: React.FC<{
             maxFaqs={PLAN_LIMITS[plano]?.faq}
           />
 
-<section ref={reviewsRef} className="py-20 px-6 max-w-6xl mx-auto">
-  <div className="text-center mb-14">
-    <h2 className="text-5xl font-extrabold bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-md">
+          <section ref={reviewsRef} className="py-20 px-6 max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <h2 className="text-5xl font-extrabold bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-md">
       Avaliações
-    </h2>
-    <p className="text-lg text-slate-600 dark:text-slate-400 mt-2">
+              </h2>
+              <p className="text-lg text-slate-600 dark:text-slate-400 mt-2">
       O que nossos clientes dizem
-    </p>
-  </div>
+              </p>
+            </div>
 
-  {/* Bloco de Resumo e Formulário em duas colunas */}
-  <div className="flex flex-col md:flex-row gap-10 mb-14 md:items-start md:justify-between">
-    <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
-      <ReviewSummary reviewedUserId={user.id} />
-    </div>
+            {/* Bloco de Resumo e Formulário em duas colunas */}
+            <div className="flex flex-col md:flex-row gap-10 mb-14 md:items-start md:justify-between">
+              <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
+                <ReviewSummary reviewedUserId={user.id} />
+              </div>
 
-    {isCurrentUserProfile && (
-      <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
-        <ReviewForm onSubmit={handleReviewSubmit} />
-      </div>
-    )}
-  </div>
+              {isCurrentUserProfile && (
+                <div className="flex-1 min-w-[320px] bg-white dark:bg-slate-800 shadow-md rounded-2xl p-6">
+                  <ReviewForm onSubmit={handleReviewSubmit} />
+                </div>
+              )}
+            </div>
 
-  {/* Carrossel de Comentários */}
-  {user.reviews && user.reviews.length > 0 ? (
-    <div className="w-full">
-      <ReviewList 
-        reviewedUserId={user.id}
-        currentUserId={currentUserId}
-        renderAsCarousel
-        reviews={user.reviews}
-      />
-    </div>
-  ) : (
-    <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 rounded-xl">
-      <div className="flex flex-col items-center text-gray-500 dark:text-gray-400">
-        <svg className="w-16 h-16 mb-6 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-        <h3 className="text-xl font-semibold mb-2">Nenhuma avaliação ainda</h3>
-        <p className="text-sm">Seja o primeiro a deixar uma avaliação!</p>
-      </div>
-    </div>
-  )}
-</section>
+            {/* Carrossel de Comentários */}
+            {user.reviews && user.reviews.length > 0 ? (
+              <div className="w-full">
+                <ReviewList
+                  reviewedUserId={user.id}
+                  currentUserId={currentUserId}
+                  renderAsCarousel
+                  reviews={user.reviews}
+                />
+              </div>
+            ) : (
+              <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 rounded-xl">
+                <div className="flex flex-col items-center text-gray-500 dark:text-gray-400">
+                  <svg className="w-16 h-16 mb-6 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <h3 className="text-xl font-semibold mb-2">Nenhuma avaliação ainda</h3>
+                  <p className="text-sm">Seja o primeiro a deixar uma avaliação!</p>
+                </div>
+              </div>
+            )}
+          </section>
 
-<Suspense fallback={null}>
-  {/* Conteúdo do modal de eventos */}
-  {/* <ModalCriarEvento
+          <Suspense fallback={null}>
+            {/* Conteúdo do modal de eventos */}
+            {/* <ModalCriarEvento
     open={showCreateEventModal}
     onOpenChange={setShowCreateEventModal}
     onSave={(newEvent) => { /* lógica de salvar evento * / }}
     eventToEdit={editingEvent}
   /> */}
-</Suspense>
+          </Suspense>
 
-<ThemeCustomizer
-  isOpen={isThemeOpen}
-  onClose={() => setIsThemeOpen(false)}
-  theme={theme}
-  onThemeChange={setTheme} // Corrigido para passar a função setTheme
-/>
+          <ThemeCustomizer
+            isOpen={isThemeOpen}
+            onClose={() => setIsThemeOpen(false)}
+            theme={theme}
+            onThemeChange={setTheme} // Corrigido para passar a função setTheme
+          />
         </div>
       </div>
       <motion.button
@@ -1783,7 +1779,7 @@ const PremiumProfileLayout: React.FC<{
       {user.events && user.events.length > 0 && (
         <section className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Eventos</h2>
-          {isCurrentUserProfile && (user.plan === "standard" || user.plan === "premium") && (
+          {isCurrentUserProfile && (user.plan === 'standard' || user.plan === 'premium') && (
             <button
               className="btn btn-primary mb-4"
               onClick={abrirModalCriarEvento} // Implemente a função para abrir o modal/formulário
@@ -1843,7 +1839,7 @@ const PremiumProfileLayout: React.FC<{
                   user={{
                     name: user.name,
                     username: user.username,
-                    avatarUrl: user.profile_picture_url || '/avatar-default.png',
+                    avatarUrl: user.profile_picture_url || '/avatar-default.png'
                   }}
                   publishedAt={cupom.created_at || new Date().toISOString()}
                   discount={cupom.discount_value || cupom.discount || ''}
@@ -1883,9 +1879,9 @@ const ThemeCustomizer: React.FC<{
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Personalizar Tema</h3>
-            <motion.button 
-              onClick={onClose} 
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full" 
+            <motion.button
+              onClick={onClose}
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
               aria-label="Fechar customizador de tema"
               whileHover={{ scale: 1.1, rotate: 180 }}
               transition={{ duration: 0.3 }}
@@ -1897,7 +1893,7 @@ const ThemeCustomizer: React.FC<{
             <div>
               <label className="block text-sm font-medium mb-2">Cor Primária</label>
               <div className="flex gap-2">
-                {["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"].map(color => (
+                {['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'].map(color => (
                   <motion.button
                     key={color}
                     onClick={() => handleColorChange('primary', color)}

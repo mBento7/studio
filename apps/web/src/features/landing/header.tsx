@@ -15,7 +15,7 @@ import {
   IoMailOutline,
   IoSettingsOutline,
   IoPencilOutline,
-  IoNewspaperOutline,
+  IoNewspaperOutline
 } from 'react-icons/io5';
 import {
   DropdownMenu,
@@ -23,14 +23,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
+  DropdownMenuLabel
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Logo } from '@/components/common/logo';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export default function PublicHeader() {
   const { user, currentUserProfile, loading, signOutUser } = useAuth();
@@ -61,7 +61,7 @@ export default function PublicHeader() {
     { href: '/dashboard/feed', label: 'Home', icon: IoHomeOutline },
     { href: '/portal',         label: 'Portal', icon: IoNewspaperOutline },
     { href: '/search',         label: 'Buscar', icon: IoSearchOutline },
-    { href: '/create',         label: 'Criar',  icon: IoAddCircleOutline },
+    { href: '/create',         label: 'Criar',  icon: IoAddCircleOutline }
   ];
 
   return (
@@ -88,8 +88,8 @@ export default function PublicHeader() {
               )}
             >
               <Icon className={cn(
-                "h-5 w-5",
-                pathname === href ? "text-orange-500" : ""
+                'h-5 w-5',
+                pathname === href ? 'text-orange-500' : ''
               )} />
               <span className="hidden md:inline">{label}</span>
             </Link>
@@ -111,8 +111,8 @@ export default function PublicHeader() {
               )}
             >
               <Icon className={cn(
-                "h-5 w-5",
-                pathname === href ? "text-orange-500" : ""
+                'h-5 w-5',
+                pathname === href ? 'text-orange-500' : ''
               )} />
             </Link>
           ))}

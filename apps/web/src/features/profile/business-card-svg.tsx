@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { UserProfile } from '@/lib/types';
 
@@ -15,35 +14,35 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
   primaryColorHex,
   id
 }) => {
-  const cardWidth = 320; 
+  const cardWidth = 320;
   const cardHeight = 200;
-  const borderRadius = 10; 
+  const borderRadius = 10;
   const padding = 12;
   const fontFamily = "'Inter', Arial, sans-serif";
 
   const brandColor = `#${primaryColorHex}`;
-  const textColorLight = "#FFFFFF";
-  const textColorDark = "#2D3748"; 
-  const textColorSubtle = "#4A5568";
+  const textColorLight = '#FFFFFF';
+  const textColorDark = '#2D3748';
+  const textColorSubtle = '#4A5568';
 
   const leftColumnWidth = cardWidth * 0.38;
   const qrCodeSize = leftColumnWidth * 0.6;
   const qrCodeX = (leftColumnWidth - qrCodeSize) / 2;
   const qrCodeY = padding * 2;
-  
+
   const whosDoTextFontSize = 10; // Alterado para whosDo
   const whosDoUsernameFontSize = 8; // Alterado para whosDo
   const whosDoLogoTextY = qrCodeY + qrCodeSize + padding * 1.5;
   const whosDoUsernameY = whosDoLogoTextY + whosDoTextFontSize + 3;
-  const whosDoTextX = leftColumnWidth / 2; 
+  const whosDoTextX = leftColumnWidth / 2;
 
   const rightColumnX = leftColumnWidth;
   const rightColumnWidth = cardWidth - leftColumnWidth;
   const contentStartX = rightColumnX + padding;
-  const contentWidth = rightColumnWidth - padding * 1.5; 
+  const contentWidth = rightColumnWidth - padding * 1.5;
 
   const profileImageSize = 64;
-  const profileImageRadius = 8; 
+  const profileImageRadius = 8;
   const profileImageX = contentStartX;
   const profileImageY = padding * 1.5;
   const profileImageClipPathId = `profileRectClip-${id || 'card'}`;
@@ -82,7 +81,7 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
     maxLines: number,
     fontSize: number,
     fill: string,
-    fontWeight: string = "normal"
+    fontWeight: string = 'normal'
   ) => {
     if (!text) return null;
     const words = text.split(' ');
@@ -106,12 +105,12 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
       }
     }
     if (currentLine) lines.push(currentLine.substring(0, Math.floor(maxWidth / avgCharWidth)));
-    
+
     return lines.slice(0, maxLines).map((line, index) => (
       <tspan key={index} x={x} dy={index === 0 ? 0 : lineHeight}>{line}</tspan>
     ));
   };
-  
+
   const formatAddress = () => {
     if (!user.location) return '';
     let address = user.location.address || '';
@@ -138,17 +137,17 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
       </style>
       <defs>
         <clipPath id={profileImageClipPathId}>
-          <rect 
-            x={profileImageX} 
-            y={profileImageY} 
-            width={profileImageSize} 
-            height={profileImageSize} 
-            rx={profileImageRadius} 
-            ry={profileImageRadius} 
+          <rect
+            x={profileImageX}
+            y={profileImageY}
+            width={profileImageSize}
+            height={profileImageSize}
+            rx={profileImageRadius}
+            ry={profileImageRadius}
           />
         </clipPath>
         <clipPath id={`clipCardArea-${id}`}>
-             <rect width={cardWidth} height={cardHeight} rx={borderRadius} ry={borderRadius} />
+          <rect width={cardWidth} height={cardHeight} rx={borderRadius} ry={borderRadius} />
         </clipPath>
       </defs>
 
@@ -156,12 +155,12 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
         <rect x={leftColumnWidth} y="0" width={rightColumnWidth} height={cardHeight} fill="#FFFFFF" />
         <rect x="0" y="0" width={leftColumnWidth} height={cardHeight} fill={brandColor} />
       </g>
-      
+
       {qrCodeUrl && (
         <image href={qrCodeUrl} x={qrCodeX} y={qrCodeY} width={qrCodeSize} height={qrCodeSize} />
       )}
       <text x={whosDoTextX} y={whosDoLogoTextY} fontSize={whosDoTextFontSize} fill={textColorLight} textAnchor="middle" className="font-inter font-semibold">
-        whosdo.com 
+        whosdo.com
       </text>
       <text x={whosDoTextX} y={whosDoUsernameY} fontSize={whosDoUsernameFontSize} fill={textColorLight} textAnchor="middle" opacity="0.85" className="font-inter">
         /{user.username}
@@ -201,17 +200,17 @@ export const BusinessCardSVG: React.FC<BusinessCardSVGProps> = ({
 
       {user.location?.city && (
         <g transform={`translate(${profileImageX}, ${currentInfoY})`}>
-           <svg x="0" y="1" width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={textColorSubtle} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg x="0" y="1" width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke={textColorSubtle} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <LocationIcon />
           </svg>
           <text fontSize={infoTextFontSize} fill={textColorSubtle} className="font-inter" y={infoTextFontSize +1}>
             {renderWrappedText(
               formatAddress(),
               iconSize + iconTextGap,
-              0, 
-              contentWidth - (iconSize + iconTextGap), 
-              infoTextFontSize * 1.2, 
-              1, 
+              0,
+              contentWidth - (iconSize + iconTextGap),
+              infoTextFontSize * 1.2,
+              1,
               infoTextFontSize,
               textColorSubtle
             )}

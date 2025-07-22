@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { X, ChevronLeft, ChevronRight, Heart, Volume2, MessageCircle, Share2, Bookmark } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { StoryProgressBar } from "./StoryProgressBar";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useRef } from 'react';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { X, ChevronLeft, ChevronRight, Heart, Volume2, MessageCircle, Share2, Bookmark } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { StoryProgressBar } from './StoryProgressBar';
+import { motion } from 'framer-motion';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 interface StoryModalProps {
@@ -14,7 +14,7 @@ interface StoryModalProps {
     user: { name: string; username: string; avatarUrl: string };
     mediaUrl: string;
     description?: string;
-    type: "image" | "video";
+    type: 'image' | 'video';
     time: string;
     liked: boolean;
   };
@@ -26,23 +26,23 @@ interface StoryModalProps {
 
 const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, onNext }) => {
   const [liked, setLiked] = useState(story.liked);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [showHeart, setShowHeart] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastTap = useRef(0);
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    
-    const video = typeof document !== 'undefined' ? document.getElementById("story-video") as HTMLVideoElement | null : null;
-    if (video && open && story.type === "video") video.play().catch(() => {});
+
+    const video = typeof document !== 'undefined' ? document.getElementById('story-video') as HTMLVideoElement | null : null;
+    if (video && open && story.type === 'video') video.play().catch(() => {});
     return () => video?.pause();
   }, [open, story.type]);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      setMessage("");
+      setMessage('');
       if (inputRef.current) inputRef.current.blur();
     }
   };
@@ -82,7 +82,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, o
             onTouchEnd={handleTouchEnd}
             style={{ cursor: 'pointer' }}
           >
-            {story.type === "image" ? (
+            {story.type === 'image' ? (
               <img src={story.mediaUrl} alt="Story" className="object-cover w-full h-full" />
             ) : (
               <video id="story-video" src={story.mediaUrl} controls className="w-full h-full object-cover" />
@@ -92,7 +92,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ open, onClose, story, onPrev, o
               <motion.div
                 initial={{ scale: 0.7, opacity: 0 }}
                 animate={{ scale: [1.2, 1], opacity: [1, 0.8, 0] }}
-                transition={{ duration: 0.7, times: [0, 0.5, 1], ease: "easeOut" }}
+                transition={{ duration: 0.7, times: [0, 0.5, 1], ease: 'easeOut' }}
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
               >
                 <Heart className="w-32 h-32 text-white drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 16px #e11d48)' }} fill="#e11d48" />

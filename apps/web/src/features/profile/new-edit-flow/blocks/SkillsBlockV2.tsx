@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
 import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
 
 interface SkillsBlockV2Props {
@@ -20,7 +20,7 @@ export function SkillsBlockV2({ skills, onChange, plan = PlanType.FREE }: Skills
   const limit = PLAN_LIMITS[validPlan].tags;
   const addSkill = () => {
     if (safeSkills.length >= limit) return;
-    onChange([...safeSkills, ""]);
+    onChange([...safeSkills, '']);
     setTouched(true);
   };
   const removeSkill = (idx: number) => {
@@ -40,7 +40,7 @@ export function SkillsBlockV2({ skills, onChange, plan = PlanType.FREE }: Skills
           <Label htmlFor={`skill-${idx}`} className="sr-only">Habilidade</Label>
           <Input
             id={`skill-${idx}`}
-            value={skill ?? ""}
+            value={skill ?? ''}
             onChange={e => updateSkill(idx, e.target.value)}
             placeholder="Ex: React, Gestão de Projetos, Inglês..."
             className="flex-1"
@@ -58,4 +58,4 @@ export function SkillsBlockV2({ skills, onChange, plan = PlanType.FREE }: Skills
       {safeSkills.length >= limit && <div className="text-warning text-xs mt-1">Limite de {limit} tags atingido para seu plano.</div>}
     </div>
   );
-} 
+}

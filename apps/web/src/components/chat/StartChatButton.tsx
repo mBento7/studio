@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { MessageCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type StartChatButtonProps = {
   targetUserId: string;
@@ -24,8 +24,8 @@ export function StartChatButton({ targetUserId, targetUserName, className }: Sta
 
   const handleOpenChat = () => {
     window.dispatchEvent(
-      new CustomEvent("open-chat", {
-        detail: { recipientId: targetUserId },
+      new CustomEvent('open-chat', {
+        detail: { recipientId: targetUserId }
       })
     );
   };
@@ -33,9 +33,9 @@ export function StartChatButton({ targetUserId, targetUserName, className }: Sta
   if (!canChat) return null;
 
   return (
-    <Button onClick={handleOpenChat} className={cn("glass-btn", className)}>
+    <Button onClick={handleOpenChat} className={cn('glass-btn', className)}>
       <MessageCircle className="w-4 h-4 mr-2" />
-      {`Conversar${targetUserName ? ` com ${targetUserName}` : ""}`}
+      {`Conversar${targetUserName ? ` com ${targetUserName}` : ''}`}
     </Button>
   );
-} 
+}

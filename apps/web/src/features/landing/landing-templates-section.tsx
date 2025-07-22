@@ -1,34 +1,33 @@
-
-"use client";
+'use client';
 
 import React from 'react';
 import Image from 'next/image';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+  CarouselPrevious
+} from '@/components/ui/carousel';
 
 const templates = [
   {
-    name: "Web Comercial",
-    image: "https://d33wubrfki0l68.cloudfront.net/654c642d996d3d00085a2665/screenshot_2023-11-09-06-25-02-0000.png",
+    name: 'Web Comercial',
+    image: 'https://d33wubrfki0l68.cloudfront.net/654c642d996d3d00085a2665/screenshot_2023-11-09-06-25-02-0000.png'
   },
   {
-    name: "Foco em Portfólio",
-    image: "https://d33wubrfki0l68.cloudfront.net/654c6403178a460008034d65/screenshot_2023-11-09-06-24-20-0000.png",
+    name: 'Foco em Portfólio',
+    image: 'https://d33wubrfki0l68.cloudfront.net/654c6403178a460008034d65/screenshot_2023-11-09-06-24-20-0000.png'
   },
   {
-    name: "Cartão Minimalista",
-    image: "https://d33wubrfki0l68.cloudfront.net/654c63cf996d3d00085a265d/screenshot_2023-11-09-06-23-28-0000.png",
+    name: 'Cartão Minimalista',
+    image: 'https://d33wubrfki0l68.cloudfront.net/654c63cf996d3d00085a265d/screenshot_2023-11-09-06-23-28-0000.png'
   },
-    {
-    name: "Padrão",
-    image: "https://d33wubrfki0l68.cloudfront.net/654b9582b13783000877a561/screenshot_2023-11-08-12-14-11-0000.png",
-  },
+  {
+    name: 'Padrão',
+    image: 'https://d33wubrfki0l68.cloudfront.net/654b9582b13783000877a561/screenshot_2023-11-08-12-14-11-0000.png'
+  }
 ];
 
 export function LandingTemplatesSection() {
@@ -44,8 +43,8 @@ export function LandingTemplatesSection() {
 
         <Carousel
           opts={{
-            align: "start",
-            loop: true,
+            align: 'start',
+            loop: true
           }}
           className="w-full max-w-4xl mx-auto"
         >
@@ -55,16 +54,16 @@ export function LandingTemplatesSection() {
                 <div className="p-1">
                   <Card className="overflow-hidden">
                     <CardContent className="flex aspect-video items-center justify-center p-0">
-                       <Image
-                          src={template.image}
-                          alt={`Exemplo do template ${template.name}`}
-                          width={800}
-                          height={600}
-                          className="object-cover w-full h-full"
-                        />
+                      <Image
+                        src={template.image}
+                        alt={`Exemplo do template ${template.name}`}
+                        width={800}
+                        height={600}
+                        className="object-cover w-full h-full"
+                      />
                     </CardContent>
                   </Card>
-                   <p className="text-center mt-4 font-semibold text-muted-foreground">{template.name}</p>
+                  <p className="text-center mt-4 font-semibold text-muted-foreground">{template.name}</p>
                 </div>
               </CarouselItem>
             ))}

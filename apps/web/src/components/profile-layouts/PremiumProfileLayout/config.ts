@@ -11,7 +11,7 @@ export const defaultAdvancedProfileLayoutConfig: AdvancedProfileLayoutConfig = {
   showSkills: true,
   showExperience: true,
   showEducation: true,
-  themeColor: '#2563eb',
+  themeColor: '#2563eb'
 };
 
 export const premiumProfileLayoutConfig = {
@@ -20,5 +20,5 @@ export const premiumProfileLayoutConfig = {
   description: 'Layout exclusivo para o plano Premium',
   imageUrl: 'https://picsum.photos/seed/layout-premium/300/200',
   plan: 'premium',
-  ...defaultAdvancedProfileLayoutConfig,
-}; 
+  ...defaultAdvancedProfileLayoutConfig
+};

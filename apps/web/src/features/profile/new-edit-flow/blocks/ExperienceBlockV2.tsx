@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
 import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface ExperienceItem {
   title: string;
@@ -38,7 +38,7 @@ export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }
     setIsModalOpen(true);
   };
   const handleSave = () => {
-    let newExperience = [...safeExperience];
+    const newExperience = [...safeExperience];
     if (editingIndex !== null) {
       newExperience[editingIndex] = currentItem;
     } else {
@@ -66,7 +66,7 @@ export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }
                 <Label htmlFor={`exp-title-${idx}`}>Título</Label>
                 <Input
                   id={`exp-title-${idx}`}
-                  value={item.title ?? ""}
+                  value={item.title ?? ''}
                   placeholder="Cargo ou função"
                   autoComplete="off"
                   readOnly
@@ -77,7 +77,7 @@ export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }
                 <Label htmlFor={`exp-company-${idx}`}>Empresa</Label>
                 <Input
                   id={`exp-company-${idx}`}
-                  value={item.company ?? ""}
+                  value={item.company ?? ''}
                   placeholder="Nome da empresa"
                   autoComplete="off"
                   readOnly
@@ -88,7 +88,7 @@ export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }
                 <Label htmlFor={`exp-years-${idx}`}>Período</Label>
                 <Input
                   id={`exp-years-${idx}`}
-                  value={item.years ?? ""}
+                  value={item.years ?? ''}
                   placeholder="Ex: 2020-2023"
                   autoComplete="off"
                   readOnly
@@ -125,4 +125,4 @@ export function ExperienceBlockV2({ experience, onChange, plan = PlanType.FREE }
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos uma experiência.</div>}
     </div>
   );
-} 
+}

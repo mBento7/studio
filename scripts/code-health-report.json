@@ -1,14 +1,14 @@
 {
-  "timestamp": "2025-07-14T22:51:48.044Z",
+  "timestamp": "2025-07-18T15:45:08.098Z",
   "summary": {
-    "totalIssues": 134,
+    "totalIssues": 140,
     "criticalIssues": 0,
-    "warnings": 134,
+    "warnings": 140,
     "suggestions": [
       {
         "type": "warning",
         "category": "cleanup",
-        "message": "133 arquivos órfãos encontrados",
+        "message": "138 arquivos órfãos encontrados",
         "action": "Verifique se podem ser removidos com segurança"
       },
       {
@@ -16,24 +16,32 @@
         "category": "cleanup",
         "message": "1 dependencies não utilizadas",
         "action": "Execute: npm uninstall tailwindcss-animate"
+      },
+      {
+        "type": "warning",
+        "category": "cleanup",
+        "message": "1 devDependencies não utilizadas",
+        "action": "Execute: npm uninstall --save-dev eslint-config-next"
       }
     ]
   },
   "details": {
     "orphanedFiles": {
-      "timestamp": "2025-07-14T22:51:47.536Z",
+      "timestamp": "2025-07-18T15:45:07.946Z",
       "statistics": {
-        "totalFiles": 238,
-        "importedFiles": 78,
-        "orphanedFiles": 133,
+        "totalFiles": 248,
+        "importedFiles": 79,
+        "orphanedFiles": 138,
         "brokenImports": 0
       },
       "orphanedFiles": [
         "apps/web/src/ai/dev.ts",
         "apps/web/src/ai/genkit.ts",
         "apps/web/src/app/(auth)/AuthLayout.tsx",
+        "apps/web/src/app/api/health/route.ts",
         "apps/web/src/app/api/reviews/route.ts",
         "apps/web/src/app/api/reviews/summary/route.ts",
+        "apps/web/src/app/api/route.ts",
         "apps/web/src/app/api/update-user-plan/route.ts",
         "apps/web/src/components/ImageCropper.tsx",
         "apps/web/src/components/OnlyClient.tsx",
@@ -150,7 +158,10 @@
         "apps/web/src/hooks/use-toast.ts",
         "apps/web/src/lib/date-utils.ts",
         "apps/web/src/lib/isPremiumLayout.ts",
+        "apps/web/src/lib/logger.ts",
         "apps/web/src/lib/mock-data.ts",
+        "apps/web/src/lib/profile-url.ts",
+        "apps/web/src/lib/security.ts",
         "apps/web/src/lib/supabase/client.ts",
         "apps/web/src/lib/supabase/server.ts",
         "apps/web/src/lib/types.ts",
@@ -197,12 +208,17 @@
         "apps/web/src/app/(auth)/AuthLayout.tsx",
         "apps/web/src/app/(auth)/layout.tsx",
         "apps/web/src/app/(auth)/login/page.tsx",
+        "apps/web/src/app/api/health/route.ts",
         "apps/web/src/app/api/reviews/route.ts",
         "apps/web/src/app/api/reviews/summary/route.ts",
+        "apps/web/src/app/api/route.ts",
         "apps/web/src/app/api/update-user-plan/route.ts",
         "apps/web/src/app/layout.tsx",
         "apps/web/src/app/page.tsx",
         "apps/web/src/app/planos/page.tsx",
+        "apps/web/src/app/portal/page.tsx",
+        "apps/web/src/app/privacy/page.tsx",
+        "apps/web/src/app/terms/page.tsx",
         "apps/web/src/components/ImageCropper.tsx",
         "apps/web/src/components/OnlyClient.tsx",
         "apps/web/src/components/ProtectedRoute.tsx",
@@ -389,12 +405,17 @@
         "apps/web/src/hooks/use-toast.ts",
         "apps/web/src/lib/date-utils.ts",
         "apps/web/src/lib/isPremiumLayout.ts",
+        "apps/web/src/lib/logger.ts",
         "apps/web/src/lib/mock-data.ts",
+        "apps/web/src/lib/profile-url.ts",
+        "apps/web/src/lib/security.ts",
         "apps/web/src/lib/supabase/client.ts",
+        "apps/web/src/lib/supabase/mock-client.ts",
         "apps/web/src/lib/supabase/server.ts",
         "apps/web/src/lib/types.ts",
         "apps/web/src/lib/utils.ts",
         "apps/web/src/lib/validation.ts",
+        "apps/web/src/middleware.ts",
         "apps/web/src/pages/api/unread-messages.ts",
         "apps/web/src/services/profile.service.ts",
         "src/app/layout.tsx",
@@ -482,24 +503,27 @@
         "apps/web/src/features/profile/new-edit-flow/stepsConfig.tsx",
         "apps/web/src/features/profile/new-edit-flow/types.ts",
         "apps/web/src/features/profile/new-edit-flow/useProfileWizard.ts",
-        "apps/web/src/features/profile/new-edit-flow/useSaveProfile.ts"
+        "apps/web/src/features/profile/new-edit-flow/useSaveProfile.ts",
+        "apps/web/src/lib/supabase/mock-client.ts"
       ]
     },
     "dependencies": {
-      "timestamp": "2025-07-14T22:51:48.026Z",
+      "timestamp": "2025-07-18T15:45:08.087Z",
       "statistics": {
         "totalDependencies": 49,
-        "totalDevDependencies": 9,
+        "totalDevDependencies": 10,
         "usedPackages": 48,
         "unusedDeps": 1,
-        "unusedDevDeps": 0,
+        "unusedDevDeps": 1,
         "missingDeps": 0,
         "devDepsInProd": 0
       },
       "unusedDependencies": [
         "tailwindcss-animate"
       ],
-      "unusedDevDependencies": [],
+      "unusedDevDependencies": [
+        "eslint-config-next"
+      ],
       "missingDependencies": [],
       "devDependenciesInProduction": [],
       "usedPackages": [
@@ -554,7 +578,7 @@
       ],
       "commands": {
         "removeUnusedDeps": "npm uninstall tailwindcss-animate",
-        "removeUnusedDevDeps": null,
+        "removeUnusedDevDeps": "npm uninstall --save-dev eslint-config-next",
         "installMissingDeps": null
       }
     }
@@ -565,7 +589,7 @@
       {
         "type": "warning",
         "category": "cleanup",
-        "message": "133 arquivos órfãos encontrados",
+        "message": "138 arquivos órfãos encontrados",
         "action": "Verifique se podem ser removidos com segurança"
       },
       {
@@ -573,6 +597,12 @@
         "category": "cleanup",
         "message": "1 dependencies não utilizadas",
         "action": "Execute: npm uninstall tailwindcss-animate"
+      },
+      {
+        "type": "warning",
+        "category": "cleanup",
+        "message": "1 devDependencies não utilizadas",
+        "action": "Execute: npm uninstall --save-dev eslint-config-next"
       }
     ]
   },

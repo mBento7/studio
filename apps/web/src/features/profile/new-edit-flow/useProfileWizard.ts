@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useProfileWizard(steps: any[]) {
   const [step, setStep] = useState(0);
@@ -7,4 +7,4 @@ export function useProfileWizard(steps: any[]) {
   const goNext = () => { if (!isLast) setStep(s => s + 1); };
   const goPrev = () => { if (!isFirst) setStep(s => s - 1); };
   return { step, setStep, isFirst, isLast, goNext, goPrev };
-} 
+}

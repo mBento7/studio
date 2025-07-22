@@ -4,12 +4,12 @@ export const dynamic = 'force-dynamic';
 
 import React from 'react';
 import Link from 'next/link';
-import { 
-  ArrowRight, Check, Star, Menu, X, Zap, Shield, Users, Globe, 
-  ChevronDown, Flame, Heart, MessageCircle, Share2, Bookmark, 
-  Crown, Rocket, Sparkles, Brain, AlertCircle, TrendingUp, 
-  Wallet, Target, BarChart, Lock, Smartphone, LayoutGrid, 
-  Laptop, SmartphoneCharging, CreditCard, Gift, Award, 
+import {
+  ArrowRight, Check, Star, Menu, X, Zap, Shield, Users, Globe,
+  ChevronDown, Flame, Heart, MessageCircle, Share2, Bookmark,
+  Crown, Rocket, Sparkles, Brain, AlertCircle, TrendingUp,
+  Wallet, Target, BarChart, Lock, Smartphone, LayoutGrid,
+  Laptop, SmartphoneCharging, CreditCard, Gift, Award,
   BarChart2, PieChart, LineChart, Activity, Calendar, Barcode, Tag
 } from 'lucide-react';
 import { Card, CardTitle } from '@/components/ui/card';
@@ -41,7 +41,7 @@ const plans = [
     cta: 'Começar Gratuitamente',
     color: 'from-gray-100 to-gray-50',
     border: 'border-gray-200',
-    iconButton: <Zap className="w-5 h-5" />,
+    iconButton: <Zap className="w-5 h-5" />
   },
   {
     id: 'standard',
@@ -63,7 +63,7 @@ const plans = [
     cta: 'Escolher Standard',
     color: 'from-blue-100 to-blue-50',
     border: 'border-blue-400',
-    iconButton: <Crown className="w-5 h-5" />,
+    iconButton: <Crown className="w-5 h-5" />
   },
   {
     id: 'premium',
@@ -85,7 +85,7 @@ const plans = [
     cta: 'Escolher Premium',
     color: 'from-yellow-100 to-yellow-50',
     border: 'border-yellow-400',
-    iconButton: <Rocket className="w-5 h-5" />,
+    iconButton: <Rocket className="w-5 h-5" />
   }
 ];
 
@@ -98,7 +98,7 @@ const comparisonFeatures = [
   { name: 'Banner no Perfil', free: false, standard: false, premium: true },
   { name: 'YouTube / Calendly / Estatísticas', free: false, standard: false, premium: true },
   { name: 'Suporte Prioritário', free: false, standard: false, premium: true },
-  { name: 'Acesso a ações pagas com créditos', free: true, standard: true, premium: '✅ (com desconto)' },
+  { name: 'Acesso a ações pagas com créditos', free: true, standard: true, premium: '✅ (com desconto)' }
 ];
 
 // Componente UpgradeBanner visual e funcional
@@ -163,7 +163,7 @@ export default function PlanosPage() {
         </div>
         <h1 className="text-4xl font-bold mb-2 text-center">Planos e Assinaturas</h1>
         <p className="mb-8 text-lg text-muted-foreground text-center">Escolha o plano ideal para você e desbloqueie mais recursos na plataforma.</p>
-        
+
         <div className="flex flex-col md:flex-row gap-8 justify-center items-stretch mb-12">
           {plans.map((plan) => (
             <Card key={plan.id} className="relative flex-1 flex flex-col p-5 shadow-xl shadow-black/20 rounded-lg bg-card border border-black/5 transition-transform duration-300 hover:scale-105">
@@ -248,7 +248,7 @@ export default function PlanosPage() {
             </Accordion>
           </div>
         </Card>
-        
+
         <div className="flex justify-center mt-12">
           <Button asChild size="lg" variant="outline" className="px-8 py-4 text-lg rounded-lg border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] shadow-md">
             <Link href="/dashboard/credits" className="flex items-center gap-2">

@@ -1,33 +1,32 @@
-
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Ana Clara S.",
-    role: "Fotógrafa Freelancer",
-    image: "https://picsum.photos/seed/testimonial1/100/100",
-    imageHint: "mulher sorrindo",
-    text: "O WhosDo.com revolucionou a forma como apresento meu trabalho. Agora, envio um único link para clientes com meu portfólio, serviços e redes sociais. É profissional, simples e economiza muito tempo!",
-    rating: 5,
+    name: 'Ana Clara S.',
+    role: 'Fotógrafa Freelancer',
+    image: 'https://picsum.photos/seed/testimonial1/100/100',
+    imageHint: 'mulher sorrindo',
+    text: 'O WhosDo.com revolucionou a forma como apresento meu trabalho. Agora, envio um único link para clientes com meu portfólio, serviços e redes sociais. É profissional, simples e economiza muito tempo!',
+    rating: 5
   },
   {
-    name: "Bruno M.",
-    role: "Consultor de TI",
-    image: "https://picsum.photos/seed/testimonial2/100/100",
-    imageHint: "homem profissional",
-    text: "Em eventos de networking, simplesmente mostro meu QR code. As pessoas escaneiam e têm acesso a tudo, do meu LinkedIn aos meus projetos. É muito mais eficaz que um cartão de visita tradicional.",
-    rating: 5,
+    name: 'Bruno M.',
+    role: 'Consultor de TI',
+    image: 'https://picsum.photos/seed/testimonial2/100/100',
+    imageHint: 'homem profissional',
+    text: 'Em eventos de networking, simplesmente mostro meu QR code. As pessoas escaneiam e têm acesso a tudo, do meu LinkedIn aos meus projetos. É muito mais eficaz que um cartão de visita tradicional.',
+    rating: 5
   },
   {
-    name: "Juliana P.",
-    role: "Criadora de Conteúdo",
-    image: "https://picsum.photos/seed/testimonial3/100/100",
-    imageHint: "pessoa pensando",
-    text: "Adoro a variedade de templates. Pude escolher um que se alinha perfeitamente com minha marca pessoal e destacar meus vídeos e parcerias. A plataforma é super intuitiva.",
-    rating: 5,
-  },
+    name: 'Juliana P.',
+    role: 'Criadora de Conteúdo',
+    image: 'https://picsum.photos/seed/testimonial3/100/100',
+    imageHint: 'pessoa pensando',
+    text: 'Adoro a variedade de templates. Pude escolher um que se alinha perfeitamente com minha marca pessoal e destacar meus vídeos e parcerias. A plataforma é super intuitiva.',
+    rating: 5
+  }
 ];
 
 export function LandingTestimonialsSection() {
@@ -52,7 +51,7 @@ export function LandingTestimonialsSection() {
                       src={testimonial.image}
                       alt={testimonial.name}
                       fill
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: 'cover' }}
                       data-ai-hint={testimonial.imageHint}
                     />
                   </div>

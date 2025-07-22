@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,8 +29,8 @@ export default function BuyCreditsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          package: pkg,
-        }),
+          package: pkg
+        })
       });
       const data = await res.json();
       if (data.init_point) {

@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Image, MapPin, Smile, User, DollarSign, Zap, Phone, X, Tag } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { tipoConfig } from "@/config/feed";
-import { WhosdoIcon } from "@/components/icons/whosdo-icon";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, MapPin, Smile, User, DollarSign, Zap, Phone, X, Tag } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
+import { tipoConfig } from '@/config/feed';
+import { WhosdoIcon } from '@/components/icons/whosdo-icon';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 interface FeedPostEditorProps {
   onPost?: (data: {
@@ -27,15 +27,15 @@ interface FeedPostEditorProps {
 }
 
 export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
-  const [postText, setPostText] = useState("");
+  const [postText, setPostText] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [showPreco, setShowPreco] = useState(false);
   const [showLocalizacao, setShowLocalizacao] = useState(false);
-  const [preco, setPreco] = useState("");
-  const [localizacao, setLocalizacao] = useState("");
+  const [preco, setPreco] = useState('');
+  const [localizacao, setLocalizacao] = useState('');
   const [tipoPost, setTipoPost] = useState<'oferta_servico' | 'oferta_produto' | 'solicitacao_servico' | 'solicitacao_produto' | null>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
+  const [tagInput, setTagInput] = useState('');
   const [showTagInput, setShowTagInput] = useState(false);
   const [showTipoPost, setShowTipoPost] = useState(false);
   const { toast } = useToast();
@@ -45,7 +45,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
   useEffect(() => {
     const textarea = textRef.current;
     if (textarea) {
-      textarea.style.height = "auto";
+      textarea.style.height = 'auto';
       const { scrollHeight } = textarea;
       textarea.style.height = `${scrollHeight}px`;
     }
@@ -63,15 +63,15 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
     if (!textRef.current) return;
-    
+
     const { selectionStart, selectionEnd } = textRef.current;
-    const newText = 
-      postText.substring(0, selectionStart) + 
-      emojiData.emoji + 
+    const newText =
+      postText.substring(0, selectionStart) +
+      emojiData.emoji +
       postText.substring(selectionEnd);
-      
+
     setPostText(newText);
-    
+
     setTimeout(() => {
       if (textRef.current) {
         textRef.current.selectionStart = textRef.current.selectionEnd = selectionStart + emojiData.emoji.length;
@@ -82,7 +82,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
 
   const handlePost = () => {
     if (!postText.trim()) {
-      toast({ title: "Oops!", description: "A postagem não pode estar vazia.", variant: "destructive" });
+      toast({ title: 'Oops!', description: 'A postagem não pode estar vazia.', variant: 'destructive' });
       return;
     }
 
@@ -93,21 +93,21 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
         preco: showPreco ? preco : undefined,
         localizacao: showLocalizacao ? localizacao : undefined,
         tipo: tipoPost ?? undefined,
-        tags,
+        tags
       });
     }
-    setPostText("");
+    setPostText('');
     setImage(null);
-    setPreco("");
-    setLocalizacao("");
+    setPreco('');
+    setLocalizacao('');
     setTipoPost(null);
     setTags([]);
-    setTagInput("");
+    setTagInput('');
     setShowTipoPost(false);
     toast({
-      title: "Post publicado!",
-      description: "Sua postagem foi enviada com sucesso.",
-      variant: "default",
+      title: 'Post publicado!',
+      description: 'Sua postagem foi enviada com sucesso.',
+      variant: 'default'
     });
   };
 
@@ -121,20 +121,20 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
 
   const activeOptions = [
     showPreco && 'preco',
-    showLocalizacao && 'localizacao',
+    showLocalizacao && 'localizacao'
   ].filter(Boolean);
 
   // Função para formatar valor como moeda brasileira
   function formatarMoeda(valor: string) {
     // Remove tudo que não for número
-    let v = valor.replace(/\D/g, "");
-    if (!v) return "";
+    let v = valor.replace(/\D/g, '');
+    if (!v) return '';
     v = (parseInt(v, 10)).toString();
     // Adiciona zeros à esquerda se necessário
-    while (v.length < 3) v = "0" + v;
+    while (v.length < 3) v = '0' + v;
     // Formata para 0.000,00
-    v = v.replace(/(\d+)(\d{2})$/, "$1,$2");
-    v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    v = v.replace(/(\d+)(\d{2})$/, '$1,$2');
+    v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     return v;
   }
 
@@ -159,8 +159,8 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           />
           <div className="absolute bottom-2 right-3 flex justify-end">
             <span className={cn(
-              "text-xs transition-colors",
-              postText.length > 500 ? "text-destructive" : "text-muted-foreground"
+              'text-xs transition-colors',
+              postText.length > 500 ? 'text-destructive' : 'text-muted-foreground'
             )}>
               {postText.length}/500
             </span>
@@ -176,7 +176,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
             aria-expanded={showTipoPost}
           >
             <Tag className="w-4 h-4 text-primary" />
-            {showTipoPost ? "Ocultar tipo de postagem" : tipoPost ? `Tipo: ${tipoConfig[tipoPost]?.badge}` : "Selecionar tipo de postagem (opcional)"}
+            {showTipoPost ? 'Ocultar tipo de postagem' : tipoPost ? `Tipo: ${tipoConfig[tipoPost]?.badge}` : 'Selecionar tipo de postagem (opcional)'}
           </button>
           {showTipoPost && (
             <div className="grid grid-cols-1 gap-2 mt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -191,14 +191,14 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                         whileHover={{ scale: 1.08 }}
                         whileTap={{ scale: 0.96 }}
                         className={cn(
-                          "flex items-center justify-center text-sm px-0 py-2 border rounded-lg transition-all font-medium text-left focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none min-h-[48px] w-full",
+                          'flex items-center justify-center text-sm px-0 py-2 border rounded-lg transition-all font-medium text-left focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none min-h-[48px] w-full',
                           isActive
-                            ? "bg-primary text-primary-foreground font-semibold shadow-md border-transparent"
-                            : "bg-transparent border-primary/50 text-primary hover:bg-primary/10"
+                            ? 'bg-primary text-primary-foreground font-semibold shadow-md border-transparent'
+                            : 'bg-transparent border-primary/50 text-primary hover:bg-primary/10'
                         )}
                       >
-                        {React.cloneElement(config.icon, { 
-                          className: cn("w-5 h-5", isActive ? "text-primary-foreground" : "text-primary") 
+                        {React.cloneElement(config.icon, {
+                          className: cn('w-5 h-5', isActive ? 'text-primary-foreground' : 'text-primary')
                         })}
                       </motion.button>
                     </TooltipTrigger>
@@ -216,7 +216,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           {image && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
+              animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="relative rounded-xl overflow-hidden border bg-muted/20"
             >
@@ -237,7 +237,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
           {activeOptions.length > 0 || showTagInput || tags.length > 0 ? (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
+              animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="space-y-4 p-3 sm:p-4 bg-muted/20 rounded-xl border"
             >
@@ -300,7 +300,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                           if (cleanTag && !tags.includes(cleanTag)) {
                             setTags([...tags, cleanTag]);
                           }
-                          setTagInput("");
+                          setTagInput('');
                         }
                       }}
                     />
@@ -334,7 +334,7 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => toggleOption(key)}
-                className={cn("transition-colors", active ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
+                className={cn('transition-colors', active ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-primary')}
               >
                 <Icon className="w-5 h-5" />
               </Button>
@@ -347,15 +347,15 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
                 toggleOption('tag');
                 setTagInput((prev) => prev.startsWith('#') ? prev : '#' + prev);
               }}
-              className={cn("transition-colors", showTagInput ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
+              className={cn('transition-colors', showTagInput ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-primary')}
             >
               <Tag className="w-5 h-5" />
             </Button>
           </div>
 
-          <Button 
-            onClick={handlePost} 
-            disabled={!postText.trim()} 
+          <Button
+            onClick={handlePost}
+            disabled={!postText.trim()}
             className="px-8 rounded-full bg-primary text-primary-foreground font-semibold shadow-md hover:brightness-110 w-full sm:w-auto"
           >
             Publicar
@@ -364,4 +364,4 @@ export function FeedPostEditor({ onPost }: FeedPostEditorProps) {
       </div>
     </motion.div>
   );
-} 
+}

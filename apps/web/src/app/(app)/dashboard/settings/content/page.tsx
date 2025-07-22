@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
-import { useToast } from "@/hooks/use-toast";
-import { Briefcase as ServicesIcon, Image as PortfolioIcon, PlusCircle, Trash2, Upload, ArrowUp, ArrowDown, Loader2, Youtube as YoutubeIcon, Megaphone, Star, Wrench as SkillsIcon, Building as ExperienceIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { mockCurrentUser, updateMockCurrentUser, type MockUser } from "@/lib/mock-data";
-import type { UserProfile, Service, PortfolioItem, PremiumBanner, ExperienceItem } from "@/lib/types";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
+import { Briefcase as ServicesIcon, Image as PortfolioIcon, PlusCircle, Trash2, Upload, ArrowUp, ArrowDown, Loader2, Youtube as YoutubeIcon, Megaphone, Star, Wrench as SkillsIcon, Building as ExperienceIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { mockCurrentUser, updateMockCurrentUser, type MockUser } from '@/lib/mock-data';
+import type { UserProfile, Service, PortfolioItem, PremiumBanner, ExperienceItem } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 
 // Adaptador para converter MockUser em UserProfile
@@ -57,7 +57,7 @@ const EXPERIENCE_LIMIT_PREMIUM = 10;
 export default function ContentSettingsPage() {
   const { toast } = useToast();
   const { currentUserProfile, updateUserProfile } = useAuth();
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [activeProfile, setActiveProfile] = useState<UserProfile | null>(null);
   const [userPlan, setUserPlan] = useState<'free' | 'standard' | 'premium'>('free');
@@ -79,7 +79,7 @@ export default function ContentSettingsPage() {
       setCurrentPortfolio(Array.isArray(profileToLoad.portfolio) ? profileToLoad.portfolio : []);
       setCurrentSkills(Array.isArray(profileToLoad.skills) ? profileToLoad.skills : []);
       setCurrentExperience(Array.isArray(profileToLoad.experience) ? profileToLoad.experience.map(e => ({
-        ...e, 
+        ...e,
         id: e.id || Date.now().toString(),
         startDate: e.startDate || '',
         endDate: e.endDate || null
@@ -111,8 +111,8 @@ export default function ContentSettingsPage() {
   const handleAddSkill = () => {
     const limits = { free: SKILLS_LIMIT_FREE, standard: SKILLS_LIMIT_STANDARD, premium: SKILLS_LIMIT_PREMIUM };
     if (currentSkills.length >= limits[userPlan]) {
-        toast({ title: "Limite Atingido", description: `Seu plano permite até ${limits[userPlan]} habilidades.`, variant: "destructive" });
-        return;
+      toast({ title: 'Limite Atingido', description: `Seu plano permite até ${limits[userPlan]} habilidades.`, variant: 'destructive' });
+      return;
     }
     setCurrentSkills(prev => [...prev, '']);
   };
@@ -121,15 +121,15 @@ export default function ContentSettingsPage() {
 
   const handleAddExperience = () => {
     if (currentExperience.length >= EXPERIENCE_LIMIT_PREMIUM) {
-      toast({ title: "Limite Atingido", description: `Seu plano permite até ${EXPERIENCE_LIMIT_PREMIUM} experiências.`, variant: "destructive" });
+      toast({ title: 'Limite Atingido', description: `Seu plano permite até ${EXPERIENCE_LIMIT_PREMIUM} experiências.`, variant: 'destructive' });
       return;
     }
-    setCurrentExperience(prev => [...prev, { 
-      id: Date.now().toString(), 
-      title: '', 
-      company: '', 
-      startDate: '', 
-      endDate: null 
+    setCurrentExperience(prev => [...prev, {
+      id: Date.now().toString(),
+      title: '',
+      company: '',
+      startDate: '',
+      endDate: null
     }]);
   };
   const handleRemoveExperience = (id: string) => setCurrentExperience(prev => prev.filter(exp => exp.id !== id));
@@ -138,7 +138,7 @@ export default function ContentSettingsPage() {
   const handleAddService = () => {
     const limits = { free: SERVICE_LIMIT_FREE, standard: SERVICE_LIMIT_STANDARD, premium: SERVICE_LIMIT_PREMIUM };
     if (currentServices.length >= limits[userPlan]) {
-      toast({ title: "Limite Atingido", description: `Seu plano permite até ${limits[userPlan]} serviços.`, variant: "destructive" });
+      toast({ title: 'Limite Atingido', description: `Seu plano permite até ${limits[userPlan]} serviços.`, variant: 'destructive' });
       return;
     }
     setCurrentServices(prev => [...prev, { id: Date.now().toString(), name: '', description: '' }]);
@@ -149,7 +149,7 @@ export default function ContentSettingsPage() {
   const handleAddPortfolioItem = () => {
     const limits = { free: PORTFOLIO_LIMIT_FREE, standard: PORTFOLIO_LIMIT_STANDARD, premium: PORTFOLIO_LIMIT_PREMIUM };
     if (currentPortfolio.length >= limits[userPlan]) {
-      toast({ title: "Limite Atingido", description: `Seu plano permite até ${limits[userPlan]} itens no portfólio.`, variant: "destructive" });
+      toast({ title: 'Limite Atingido', description: `Seu plano permite até ${limits[userPlan]} itens no portfólio.`, variant: 'destructive' });
       return;
     }
     setCurrentPortfolio(prev => [...prev, { id: Date.now().toString(), imageUrl: `https://picsum.photos/seed/new-item/400/300`, caption: '', description: '' }]);
@@ -162,12 +162,12 @@ export default function ContentSettingsPage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCurrentPortfolio(prev => prev.map(item => item.id === itemId ? { ...item, imageUrl: reader.result as string } : item));
-        toast({ title: "Imagem Pronta", description: "Nova imagem carregada. Salve para aplicar." });
+        toast({ title: 'Imagem Pronta', description: 'Nova imagem carregada. Salve para aplicar.' });
       };
       reader.readAsDataURL(file);
     }
   };
-  
+
   const getYouTubeVideoId = (url:string) => {
     if (!url) return null;
     let videoId = null;
@@ -179,13 +179,13 @@ export default function ContentSettingsPage() {
 
   const handleAddBanner = () => {
     if (userPlan === 'premium') {
-      setPremiumBanner({ imageUrl: "https://picsum.photos/seed/default-banner/600/400", title: "Título do Banner", description: "Descrição padrão para o seu novo banner promocional.", ctaText: "Clique Aqui", ctaLink: "#" });
-      toast({ title: "Banner Adicionado", description: "Um novo banner foi adicionado. Edite e salve as alterações." });
+      setPremiumBanner({ imageUrl: 'https://picsum.photos/seed/default-banner/600/400', title: 'Título do Banner', description: 'Descrição padrão para o seu novo banner promocional.', ctaText: 'Clique Aqui', ctaLink: '#' });
+      toast({ title: 'Banner Adicionado', description: 'Um novo banner foi adicionado. Edite e salve as alterações.' });
     }
   };
   const handleRemoveBanner = () => {
     setPremiumBanner(null);
-    toast({ title: "Banner Removido", description: "O banner promocional foi removido. Salve para aplicar a alteração." });
+    toast({ title: 'Banner Removido', description: 'O banner promocional foi removido. Salve para aplicar a alteração.' });
   };
   const handleBannerChange = (field: keyof PremiumBanner, value: string) => setPremiumBanner(prev => prev ? { ...prev, [field]: value } : null);
   const handleBannerImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,7 +194,7 @@ export default function ContentSettingsPage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPremiumBanner(prev => prev ? { ...prev, imageUrl: reader.result as string } : null);
-        toast({ title: "Imagem Pronta", description: "Nova imagem do banner carregada. Salve para aplicar." });
+        toast({ title: 'Imagem Pronta', description: 'Nova imagem do banner carregada. Salve para aplicar.' });
       };
       reader.readAsDataURL(file);
     }
@@ -202,42 +202,42 @@ export default function ContentSettingsPage() {
 
   const handleAddYoutubeVideo = () => {
     if (userPlan === 'premium') {
-        setYoutubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); 
-        setYoutubeTitle("Título do Vídeo");
-        setYoutubeDescription("Descrição do seu vídeo em destaque.");
-        toast({ title: "Seção de Vídeo Adicionada", description: "Cole a URL do seu vídeo e edite os detalhes." });
+      setYoutubeUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+      setYoutubeTitle('Título do Vídeo');
+      setYoutubeDescription('Descrição do seu vídeo em destaque.');
+      toast({ title: 'Seção de Vídeo Adicionada', description: 'Cole a URL do seu vídeo e edite os detalhes.' });
     }
   };
   const handleRemoveYoutubeVideo = () => {
     setYoutubeUrl('');
     setYoutubeTitle('');
     setYoutubeDescription('');
-    toast({ title: "Vídeo Removido", description: "O vídeo em destaque foi removido. Salve para aplicar a alteração." });
+    toast({ title: 'Vídeo Removido', description: 'O vídeo em destaque foi removido. Salve para aplicar a alteração.' });
   };
-  
+
   const handleSaveContent = () => {
     if (!activeProfile) return;
-    const updatedProfile: UserProfile = { 
-        ...activeProfile, 
-        services: currentServices, 
-        portfolio: currentPortfolio,
-        skills: userPlan === 'premium' ? currentSkills.filter(skill => skill.trim() !== '') : [],
-        experience: userPlan === 'premium' ? currentExperience : [],
-        youtubeVideoUrl: youtubeUrl,
-        youtubeVideoTitle: youtubeTitle,
-        youtubeVideoDescription: youtubeDescription,
-        premiumBanner: premiumBanner,
+    const updatedProfile: UserProfile = {
+      ...activeProfile,
+      services: currentServices,
+      portfolio: currentPortfolio,
+      skills: userPlan === 'premium' ? currentSkills.filter(skill => skill.trim() !== '') : [],
+      experience: userPlan === 'premium' ? currentExperience : [],
+      youtubeVideoUrl: youtubeUrl,
+      youtubeVideoTitle: youtubeTitle,
+      youtubeVideoDescription: youtubeDescription,
+      premiumBanner: premiumBanner
     };
     updateUserProfile(updatedProfile);
-    updateMockCurrentUser(updatedProfile); 
-    toast({ title: "Conteúdo Salvo", description: "Suas seções de conteúdo foram atualizadas com sucesso!" });
+    updateMockCurrentUser(updatedProfile);
+    toast({ title: 'Conteúdo Salvo', description: 'Suas seções de conteúdo foram atualizadas com sucesso!' });
   };
 
   if (isLoading) return <div className="flex h-full items-center justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>;
 
   return (
     <div className="space-y-6">
-       <Card>
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><SkillsIcon />Gerenciar Habilidades</CardTitle>
           <CardDescription>
@@ -298,15 +298,15 @@ export default function ContentSettingsPage() {
               <Button variant="outline" onClick={handleAddExperience}><PlusCircle className="mr-2 h-4 w-4"/>Adicionar Experiência</Button>
             </>
           ) : (
-             <div className="p-4 rounded-md bg-amber-50 border border-amber-200 text-center">
-                <Star className="mx-auto h-8 w-8 text-amber-500 mb-2" />
-                <p className="font-semibold text-amber-800">Este é um recurso Premium.</p>
-                <p className="text-sm text-amber-700">Faça upgrade para gerenciar e exibir sua experiência.</p>
+            <div className="p-4 rounded-md bg-amber-50 border border-amber-200 text-center">
+              <Star className="mx-auto h-8 w-8 text-amber-500 mb-2" />
+              <p className="font-semibold text-amber-800">Este é um recurso Premium.</p>
+              <p className="text-sm text-amber-700">Faça upgrade para gerenciar e exibir sua experiência.</p>
             </div>
           )}
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><ServicesIcon />Gerenciar Serviços/Produtos</CardTitle>
@@ -329,12 +329,12 @@ export default function ContentSettingsPage() {
           <Button variant="outline" onClick={handleAddService}><PlusCircle className="mr-2 h-4 w-4"/>Adicionar Serviço</Button>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><PortfolioIcon />Gerenciar Portfólio</CardTitle><CardDescription>Mostre seus melhores trabalhos.</CardDescription></CardHeader>
         <CardContent className="space-y-4">
           {currentPortfolio.map((item, index) => (
-             <div key={item.id} className="p-4 border rounded-md bg-muted/50 space-y-3">
+            <div key={item.id} className="p-4 border rounded-md bg-muted/50 space-y-3">
               <div className="flex justify-between items-center"><Label className="font-semibold">Item #{index+1}</Label>
                 <div className="flex items-center gap-1">
                   <Button type="button" variant="ghost" size="icon" onClick={()=>handleMoveComplexItem(currentPortfolio,setCurrentPortfolio,index,'up')} disabled={index===0}><ArrowUp className="w-4 h-4"/></Button>
@@ -353,7 +353,7 @@ export default function ContentSettingsPage() {
                   <Textarea value={item.description||''} onChange={(e)=>handlePortfolioItemChange(item.id,'description',e.target.value)} placeholder="Descrição (opcional)"/>
                 </div>
               </div>
-             </div>
+            </div>
           ))}
           <Button variant="outline" onClick={handleAddPortfolioItem}><PlusCircle className="mr-2 h-4 w-4"/>Adicionar Item ao Portfólio</Button>
         </CardContent>
@@ -399,30 +399,30 @@ export default function ContentSettingsPage() {
           )}
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
-            <CardTitle className="flex items-center gap-2"><YoutubeIcon />Vídeo do YouTube em Destaque</CardTitle>
-            <CardDescription>Incorpore um vídeo do YouTube para se destacar no seu perfil.</CardDescription>
+          <CardTitle className="flex items-center gap-2"><YoutubeIcon />Vídeo do YouTube em Destaque</CardTitle>
+          <CardDescription>Incorpore um vídeo do YouTube para se destacar no seu perfil.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {userPlan === 'premium' ? (
             youtubeUrl ? (
               <>
                 <div>
-                    <Label htmlFor="youtube-url">URL do Vídeo do YouTube</Label>
-                    <div className="flex items-center gap-2">
-                        <YoutubeIcon className="text-red-500"/>
-                        <Input id="youtube-url" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="https://www.youtube.com/watch?v=..." />
-                    </div>
+                  <Label htmlFor="youtube-url">URL do Vídeo do YouTube</Label>
+                  <div className="flex items-center gap-2">
+                    <YoutubeIcon className="text-red-500"/>
+                    <Input id="youtube-url" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="https://www.youtube.com/watch?v=..." />
+                  </div>
                 </div>
                 <div><Label htmlFor="youtube-title">Título do Vídeo</Label><Input id="youtube-title" value={youtubeTitle} onChange={(e) => setYoutubeTitle(e.target.value)} placeholder="Título do seu vídeo" /></div>
                 <div><Label htmlFor="youtube-description">Descrição do Vídeo</Label><Textarea id="youtube-description" value={youtubeDescription} onChange={(e) => setYoutubeDescription(e.target.value)} placeholder="Uma breve descrição sobre o seu vídeo..." /></div>
-                
+
                 {getYouTubeVideoId(youtubeUrl) && (
-                    <div className="mt-4 rounded-lg overflow-hidden aspect-video">
-                        <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${getYouTubeVideoId(youtubeUrl)}`} title="Pré-visualização do vídeo do YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    </div>
+                  <div className="mt-4 rounded-lg overflow-hidden aspect-video">
+                    <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${getYouTubeVideoId(youtubeUrl)}`} title="Pré-visualização do vídeo do YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  </div>
                 )}
                 <Button type="button" variant="destructive" size="sm" onClick={handleRemoveYoutubeVideo}><Trash2 className="mr-2 h-3 w-3" />Remover Vídeo</Button>
               </>

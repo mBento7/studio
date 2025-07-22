@@ -1,105 +1,105 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { isValidUUID } from "@/lib/validation";
-import { 
-  StartChatButton } from "@/components/chat/StartChatButton";
-import { 
-  ReviewForm } from "@/components/reviews/ReviewForm";
-import { 
-  ReviewList } from "@/components/reviews/ReviewList";
-import { 
-  ReviewSummary } from "@/components/reviews/ReviewSummary";
-import { 
-  Youtube, 
-  Linkedin, 
-  Twitter, 
-  Instagram, 
-  Github, 
-  Globe, 
-  Mail, 
-  MapPin, 
-  QrCode, 
-  Download, 
-  Edit3, 
-  MessageSquare, 
-  Briefcase, 
-  ArrowRight, 
-  Loader2, 
-  Building, 
-  GraduationCap, 
-  Star, 
-  Palette, 
-  Facebook, 
-  Twitch, 
-  Save, 
-  Eye, 
-  Link as LinkIcon, 
-  Maximize, 
-  Phone, 
-  Calendar, 
-  Award, 
-  Users, 
-  TrendingUp, 
-  CheckCircle, 
-  ExternalLink, 
-  Share2, 
-  ChevronRight, 
-  ChevronDown, 
-  ChevronUp, 
-  MessageCircle, 
-  Heart, 
-  X, 
-  Play, 
-  Sparkles, 
-  Zap, 
-  Clock, 
-  Plus, 
-  ArrowUp, 
-  Settings, 
-  Sun, 
-  Moon 
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import type { UserProfile, PortfolioItem, SocialLink, ProfileLayoutProps } from "@/lib/types";
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { isValidUUID } from '@/lib/validation';
+import {
+  StartChatButton } from '@/components/chat/StartChatButton';
+import {
+  ReviewForm } from '@/components/reviews/ReviewForm';
+import {
+  ReviewList } from '@/components/reviews/ReviewList';
+import {
+  ReviewSummary } from '@/components/reviews/ReviewSummary';
+import {
+  Youtube,
+  Linkedin,
+  Twitter,
+  Instagram,
+  Github,
+  Globe,
+  Mail,
+  MapPin,
+  QrCode,
+  Download,
+  Edit3,
+  MessageSquare,
+  Briefcase,
+  ArrowRight,
+  Loader2,
+  Building,
+  GraduationCap,
+  Star,
+  Palette,
+  Facebook,
+  Twitch,
+  Save,
+  Eye,
+  Link as LinkIcon,
+  Maximize,
+  Phone,
+  Calendar,
+  Award,
+  Users,
+  TrendingUp,
+  CheckCircle,
+  ExternalLink,
+  Share2,
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  Heart,
+  X,
+  Play,
+  Sparkles,
+  Zap,
+  Clock,
+  Plus,
+  ArrowUp,
+  Settings,
+  Sun,
+  Moon
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import type { UserProfile, PortfolioItem, SocialLink, ProfileLayoutProps } from '@/lib/types';
 import { supabase } from '@/lib/supabase/client';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import { useFeatureAccess } from '@/features/profile/new-edit-flow/useFeatureAccess';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
 import Image from 'next/image';
-import { platformIcons } from "@/lib/types";
+import { platformIcons } from '@/lib/types';
 import QRCode from 'react-qr-code';
-import { SocialLinks } from "@/components/social/SocialLinks";
-import { SkillsList } from "@/components/skills/SkillsList";
-import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
-import { ServicesList } from "@/components/services/ServicesList";
-import { ExperienceList } from "@/components/experience/ExperienceList";
-import { EducationList } from "@/components/education/EducationList";
-import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
-import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
-import StandardProfileCardHeader from "../StandardProfileCardHeader";
-import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
-import { ProfileCardContainer } from "@/components/profile-layouts/ProfileCardContainer";
-import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
+import { SocialLinks } from '@/components/social/SocialLinks';
+import { SkillsList } from '@/components/skills/SkillsList';
+import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid';
+import { ServicesList } from '@/components/services/ServicesList';
+import { ExperienceList } from '@/components/experience/ExperienceList';
+import { EducationList } from '@/components/education/EducationList';
+import { ProfileActions } from '@/components/profile-layouts/ProfileActions';
+import { LocationInfo } from '@/components/profile-layouts/LocationInfo';
+import StandardProfileCardHeader from '../StandardProfileCardHeader';
+import { ProfileHeader } from '@/components/profile-layouts/ProfileHeader';
+import { ProfileCardContainer } from '@/components/profile-layouts/ProfileCardContainer';
+import { useProfileQrCode } from '@/components/profile-layouts/useProfileQrCode';
 
-const BGPattern = ({ variant = 'grid', mask = 'fade-edges', className }: { 
-  variant?: 'dots' | 'grid' | 'diagonal-stripes'; 
-  mask?: 'fade-edges' | 'fade-center' | 'none'; 
-  className?: string; 
+const BGPattern = ({ variant = 'grid', mask = 'fade-edges', className }: {
+  variant?: 'dots' | 'grid' | 'diagonal-stripes';
+  mask?: 'fade-edges' | 'fade-center' | 'none';
+  className?: string;
 }) => {
   const maskClasses = {
     'fade-edges': '[mask-image:radial-gradient(ellipse_at_center,var(--background),transparent)]',
     'fade-center': '[mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]',
-    'none': '',
+    'none': ''
   };
 
   const getBgImage = (variant: string) => {
@@ -121,7 +121,7 @@ const BGPattern = ({ variant = 'grid', mask = 'fade-edges', className }: {
       className={cn('absolute inset-0 z-[-10] size-full', maskClasses[mask], className)}
       style={{
         backgroundImage: getBgImage(variant),
-        backgroundSize: '24px 24px',
+        backgroundSize: '24px 24px'
       }}
     />
   );
@@ -135,10 +135,10 @@ interface Theme {
 }
 const defaultTheme: Theme = {
   primary: '#3B82F6',
-  mode: 'light',
+  mode: 'light'
 };
-const DEFAULT_PRIMARY = "#E5E7EB";
-const DEFAULT_SECONDARY = "#F4F4F5";
+const DEFAULT_PRIMARY = '#E5E7EB';
+const DEFAULT_SECONDARY = '#F4F4F5';
 // 1. Novo componente ThemeCustomizer para StandardProfileLayout (apenas cor primária)
 const StandardThemeCustomizer: React.FC<{
   isOpen: boolean;
@@ -176,7 +176,7 @@ const StandardThemeCustomizer: React.FC<{
                 <Star className="w-4 h-4 text-yellow-400 dark:text-yellow-300" />
               </button>
               {/* Outras cores */}
-              {["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"].map(color => (
+              {['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'].map(color => (
                 <button
                   key={color}
                   onClick={() => onPrimaryColorChange(color)}
@@ -200,7 +200,7 @@ const StandardThemeCustomizer: React.FC<{
                 <Star className="w-4 h-4 text-yellow-400 dark:text-yellow-300" />
               </button>
               {/* Outras cores */}
-              {["#8B5CF6", "#F59E0B", "#10B981", "#EF4444", "#3B82F6"].map(color => (
+              {['#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#3B82F6'].map(color => (
                 <button
                   key={color}
                   onClick={() => onSecondaryColorChange(color)}
@@ -222,15 +222,15 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
   primaryColor?: string;
   secondaryColor?: string;
   font?: string;
-}> = ({ 
-  user, 
-  isCurrentUserProfile, 
-  onPortfolioItemClick, 
-  primaryColor, 
-  secondaryColor, 
+}> = ({
+  user,
+  isCurrentUserProfile,
+  onPortfolioItemClick,
+  primaryColor,
+  secondaryColor,
   font,
-  qrCodeUrl,  
-  toast      
+  qrCodeUrl,
+  toast
 }) => {
   // Adiciona os estados para as cores primária e secundária
   const [primaryColorState, setPrimaryColorState] = useState(primaryColor || DEFAULT_PRIMARY);
@@ -273,7 +273,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     services: servicesRef,
     experience: experienceRef,
     education: educationRef,
-    youtube: youtubeRef,
+    youtube: youtubeRef
   };
 
   // Função para salvar as cores (pode ser customizada conforme necessidade)
@@ -282,7 +282,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     setSecondaryColorState(secondary);
     // Aqui você pode adicionar lógica para persistir as cores, se necessário
   };
-  
+
   useEffect(() => {
     // Removed setMounted(true) call
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -313,7 +313,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
     if (!user) return;
     const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${user.username}` : `https://idbox.site/profile/${user.username}`;
     const bgColorForDownload = 'FFFFFF';
-    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorState?.replace("#", "")}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
+    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorState?.replace('#', '')}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
 
     try {
       const response = await fetch(qrCodeUrlForDownload);
@@ -328,7 +328,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Erro ao baixar QR Code:", error);
+      console.error('Erro ao baixar QR Code:', error);
     }
   };
 
@@ -338,7 +338,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
         await navigator.share({
           title: user.name,
           text: user.bio,
-          url: window.location.href,
+          url: window.location.href
         });
         console.log('Conteúdo compartilhado com sucesso!');
       } catch (error) {
@@ -354,27 +354,27 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
   const handleReviewSubmit = async ({ rating, comment }: { rating: number; comment: string }) => {
     if (!currentUserId) {
       toast({
-        title: "Erro",
-        description: "Você precisa estar logado para enviar uma avaliação.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Você precisa estar logado para enviar uma avaliação.',
+        variant: 'destructive'
       });
       return;
     }
 
     if (currentUserId === user.id) {
       toast({
-        title: "Erro",
-        description: "Você não pode avaliar seu próprio perfil.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Você não pode avaliar seu próprio perfil.',
+        variant: 'destructive'
       });
       return;
     }
 
     if (!isValidUUID(currentUserId) || !isValidUUID(user.id)) {
       toast({
-        title: "Erro",
-        description: "ID de usuário inválido para avaliação.",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'ID de usuário inválido para avaliação.',
+        variant: 'destructive'
       });
       return;
     }
@@ -387,8 +387,8 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
           reviewer_id: currentUserId,
           reviewed_user_id: user.id,
           rating,
-          comment,
-        }),
+          comment
+        })
       });
 
       const data = await response.json();
@@ -398,18 +398,18 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
       }
 
       toast({
-        title: "Sucesso!",
-        description: "Sua avaliação foi enviada.",
-        variant: "default",
+        title: 'Sucesso!',
+        description: 'Sua avaliação foi enviada.',
+        variant: 'default'
       });
       // Opcional: Atualizar a lista de avaliações no frontend sem recarregar a página
       // Você pode buscar novamente as avaliações ou adicionar a nova avaliação ao estado local
     } catch (err: any) {
       console.error('Erro ao enviar avaliação:', err);
       toast({
-        title: "Erro",
+        title: 'Erro',
         description: err.message || 'Não foi possível enviar sua avaliação.',
-        variant: "destructive",
+        variant: 'destructive'
       });
     }
   };
@@ -456,7 +456,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
               { key: 'portfolio', label: 'Portfólio' },
               { key: 'services', label: 'Serviços' },
               { key: 'experience', label: 'Experiência' },
-              { key: 'education', label: 'Educação' },
+              { key: 'education', label: 'Educação' }
             ]}
             sectionRefs={sectionRefs}
             onSectionClick={handleSectionClick}
@@ -477,26 +477,26 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
 
             {/* Serviços */}
             <div ref={servicesRef}>
-            {isSectionVisible('services') && services.length > 0 && (
-              <ServicesList
-                services={services}
-                maxToShow={8}
-                variant="standard"
-                isCurrentUserProfile={isCurrentUserProfile}
-              />
-            )}
+              {isSectionVisible('services') && services.length > 0 && (
+                <ServicesList
+                  services={services}
+                  maxToShow={8}
+                  variant="standard"
+                  isCurrentUserProfile={isCurrentUserProfile}
+                />
+              )}
             </div>
 
             {/* Meu Portfólio */}
             <div ref={portfolioRef}>
-            {isSectionVisible('portfolio') && portfolio.length > 0 && (
-              <PortfolioGrid
-                items={portfolio}
-                maxToShow={9}
-                variant="standard"
-                onItemClick={onPortfolioItemClick}
-              />
-            )}
+              {isSectionVisible('portfolio') && portfolio.length > 0 && (
+                <PortfolioGrid
+                  items={portfolio}
+                  maxToShow={9}
+                  variant="standard"
+                  onItemClick={onPortfolioItemClick}
+                />
+              )}
             </div>
 
             {/* Mídia (YouTube) */}
@@ -537,26 +537,26 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Experiência Profissional */}
               <div ref={experienceRef}>
-              {isSectionVisible('experience') && experience.length > 0 && (
-                <ExperienceList
-                  experience={experience}
-                  maxToShow={8}
-                  variant="standard"
-                  isCurrentUserProfile={isCurrentUserProfile}
-                />
-              )}
+                {isSectionVisible('experience') && experience.length > 0 && (
+                  <ExperienceList
+                    experience={experience}
+                    maxToShow={8}
+                    variant="standard"
+                    isCurrentUserProfile={isCurrentUserProfile}
+                  />
+                )}
               </div>
 
               {/* Formação Acadêmica */}
               <div ref={educationRef}>
-              {isSectionVisible('education') && education.length > 0 && (
-                <EducationList
-                  education={education}
-                  maxToShow={8}
-                  variant="standard"
-                  isCurrentUserProfile={isCurrentUserProfile}
-                />
-              )}
+                {isSectionVisible('education') && education.length > 0 && (
+                  <EducationList
+                    education={education}
+                    maxToShow={8}
+                    variant="standard"
+                    isCurrentUserProfile={isCurrentUserProfile}
+                  />
+                )}
               </div>
             </div>
 
@@ -688,7 +688,7 @@ const StandardProfileLayout: React.FC<ProfileLayoutProps & {
               company: experienceForm.company,
               startDate: '',
               endDate: '',
-              description: experienceForm.description,
+              description: experienceForm.description
             }, ...items]);
             setIsExperienceModalOpen(false);
             setExperienceForm({ title: '', company: '', years: '', description: '' });
@@ -767,5 +767,5 @@ export const segmentConfig = {
   name: 'Perfil Avançado',
   description: 'Um layout profissional e completo, com abas, navegação rápida, capa e vídeo do YouTube.',
   imageUrl: 'https://picsum.photos/seed/layout-advanced/300/200',
-  plan: 'standard',
+  plan: 'standard'
 };

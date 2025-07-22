@@ -25,4 +25,4 @@ const AnuncioLateralCard = ({ imagem, titulo, descricao, link }: AnuncioLateralC
   );
 };
 
-export default AnuncioLateralCard; 
+export default AnuncioLateralCard;

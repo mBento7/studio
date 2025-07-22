@@ -22,13 +22,13 @@ export const layoutFeatures: LayoutFeaturesMap = {
     portfolio: true,
     experiencia: true,
     habilidades: true,
-    depoimentos: true,
+    depoimentos: true
   },
   StandardProfileLayout: {
     servicos: true,
     portfolio: true,
     experiencia: true,
     habilidades: true,
-    depoimentos: true,
-  },
-}; 
+    depoimentos: true
+  }
+};

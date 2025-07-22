@@ -9,7 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { DialogTitle } from '@/components/ui/dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { AlertCircle, ImageIcon, Ban } from 'lucide-react';
-import { isValidUUID } from "@/lib/validation";
+import { isValidUUID } from '@/lib/validation';
 
 interface ChatFloatingBoxProps {
   open: boolean;
@@ -108,7 +108,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
         .from('blocked_users')
         .insert({
           blocker_id: user.id,
-          blocked_id: otherUser.id,
+          blocked_id: otherUser.id
         });
 
       if (error) console.error('Erro ao bloquear:', error);
@@ -123,7 +123,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
     const fetchOrCreateConversation = async () => {
       setLoading(true);
       // Buscar conversa existente
-      let { data: conv } = await supabase
+      const { data: conv } = await supabase
         .from('conversations')
         .select('id, expires_at')
         .or(`and(user1_id.eq.${user.id},user2_id.eq.${otherUser.id}),and(user1_id.eq.${otherUser.id},user2_id.eq.${user.id})`)
@@ -135,7 +135,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
           .insert({
             user1_id: user.id,
             user2_id: otherUser.id,
-            expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 48 horas no futuro
+            expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString() // 48 horas no futuro
           })
           .select('id, expires_at')
           .single();
@@ -172,7 +172,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
   useEffect(() => {
     if (!conversationId) return;
     const fetchMessages = async () => {
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from('messages')
         .select('*, read_at') // Buscar read_at também
         .eq('conversation_id', conversationId)
@@ -224,7 +224,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
         sender_id: user.id,
         content: messageContent,
         type: messageType,
-        image_url: imageUrl,
+        image_url: imageUrl
       });
 
     if (!error) {
@@ -233,7 +233,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
         fileInputRef.current.value = '';
       }
       // Atualiza mensagens
-      let { data: newMessages } = await supabase
+      const { data: newMessages } = await supabase
         .from('messages')
         .select('*')
         .eq('conversation_id', conversationId)
@@ -256,7 +256,7 @@ export const ChatFloatingBox: React.FC<ChatFloatingBoxProps> = ({ open, onOpenCh
         id: data.id,
         username: data.username,
         name: data.full_name || 'Usuário',
-        profile_picture_url: data.profile_picture_url || '',
+        profile_picture_url: data.profile_picture_url || ''
       });
     }
   }, [otherUser?.id, supabase]);

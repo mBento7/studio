@@ -25,4 +25,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (msgs && msgs.length > 0) count++;
   }
   return res.status(200).json({ count });
-} 
+}

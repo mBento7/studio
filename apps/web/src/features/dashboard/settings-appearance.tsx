@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Image from "next/image";
-import { Palette, LayoutGrid, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { AccentColor, LayoutTemplate } from "@/lib/types";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import Image from 'next/image';
+import { Palette, LayoutGrid, ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { AccentColor, LayoutTemplate } from '@/lib/types';
 
 interface AppearanceSettingsProps {
   theme: 'light' | 'dark';
@@ -37,7 +37,7 @@ export function AppearanceSettings({
   layoutTemplates,
   selectedLayoutTemplate,
   setSelectedLayoutTemplate,
-  onSaveAndContinue,
+  onSaveAndContinue
 }: AppearanceSettingsProps) {
 
   const handleLayoutTemplateChange = (layoutId: string) => {
@@ -60,7 +60,7 @@ export function AppearanceSettings({
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="flex items-center space-x-2">
-          <Switch id="darkMode" checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
+          <Switch id="darkMode" checked={theme === 'dark'} onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} />
           <Label htmlFor="darkMode">Modo Escuro (Interface)</Label>
         </div>
         <div className="space-y-4">
@@ -80,15 +80,15 @@ export function AppearanceSettings({
                 key={color.name}
                 htmlFor={`color-${color.name.replace(/\s+/g, '-')}`}
                 className={cn(
-                  "flex items-center justify-center rounded-md border-2 px-4 py-3 cursor-pointer transition-all",
+                  'flex items-center justify-center rounded-md border-2 px-4 py-3 cursor-pointer transition-all',
                   selectedAccentColor?.name === color.name
                     ? `border-white/80 ring-2 ring-offset-2 ring-offset-background ring-[hsl(${color.value})]`
-                    : "border-transparent",
-                  isFreeUser && "cursor-not-allowed opacity-60"
+                    : 'border-transparent',
+                  isFreeUser && 'cursor-not-allowed opacity-60'
                 )}
-                style={{ 
-                    backgroundColor: `hsl(${color.value})`,
-                    color: `hsl(${color.foreground})` 
+                style={{
+                  backgroundColor: `hsl(${color.value})`,
+                  color: `hsl(${color.foreground})`
                 }}
               >
                 <span className="text-sm font-medium">{color.name}</span>
@@ -110,11 +110,11 @@ export function AppearanceSettings({
               if (!template) return null;
               const isSelectable = userPlan === 'premium' || (userPlan === 'standard' && template.availableFor.includes('standard')) || (userPlan === 'free' && template.availableFor.length === 0);
               return (
-                <Label key={template.id} htmlFor={`layout-${template.id}`} className={cn("border-2 rounded-lg p-4 flex flex-col cursor-pointer transition-all", selectedLayoutTemplate === template.id && "border-primary ring-2 ring-primary/50", !isSelectable && "opacity-50 cursor-not-allowed")}>
+                <Label key={template.id} htmlFor={`layout-${template.id}`} className={cn('border-2 rounded-lg p-4 flex flex-col cursor-pointer transition-all', selectedLayoutTemplate === template.id && 'border-primary ring-2 ring-primary/50', !isSelectable && 'opacity-50 cursor-not-allowed')}>
                   <div className="flex items-center justify-between w-full mb-3">
                     <div className="flex items-center gap-3"><RadioGroupItem value={template.id} id={`layout-${template.id}`} disabled={!isSelectable} /><span className="font-semibold">{template.name}</span></div>
                   </div>
-                  <div className="w-full h-32 relative bg-muted rounded-md border"><Image src={template.imageUrl} alt={template.name} fill sizes="(max-width: 768px) 100vw, 400px" style={{objectFit: "cover"}} className="rounded-md"/></div>
+                  <div className="w-full h-32 relative bg-muted rounded-md border"><Image src={template.imageUrl} alt={template.name} fill sizes="(max-width: 768px) 100vw, 400px" style={{objectFit: 'cover'}} className="rounded-md"/></div>
                   <p className="text-xs mt-2 text-muted-foreground">{template.description}</p>
                   {!isSelectable && <p className="text-xs mt-1 font-semibold text-amber-600">Requer plano {template.availableFor[0] || 'superior'}</p>}
                 </Label>

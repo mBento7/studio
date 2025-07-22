@@ -13,7 +13,7 @@ interface ResultadoPromovidoCardProps {
 
 const ResultadoPromovidoCard = ({ avatar, nome, linkPerfil, destaque }: ResultadoPromovidoCardProps) => {
   return (
-    <Card className={cn("max-w-lg flex items-center gap-4 p-4", destaque && "border-2 border-yellow-400")}> 
+    <Card className={cn('max-w-lg flex items-center gap-4 p-4', destaque && 'border-2 border-yellow-400')}>
       <Avatar>
         <AvatarImage src={avatar} alt={nome} />
         <AvatarFallback>{nome[0]}</AvatarFallback>
@@ -27,4 +27,4 @@ const ResultadoPromovidoCard = ({ avatar, nome, linkPerfil, destaque }: Resultad
   );
 };
 
-export default ResultadoPromovidoCard; 
+export default ResultadoPromovidoCard;

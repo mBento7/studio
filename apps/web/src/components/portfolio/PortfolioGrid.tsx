@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 /**
  * Props para o componente PortfolioGrid
@@ -16,15 +16,15 @@ export interface PortfolioItem {
 export interface PortfolioGridProps {
   items: PortfolioItem[];
   maxToShow?: number;
-  variant?: "free" | "standard" | "premium";
+  variant?: 'free' | 'standard' | 'premium';
   onItemClick?: (item: PortfolioItem) => void;
 }
 
 export const PortfolioGrid: React.FC<PortfolioGridProps> = ({
   items = [],
   maxToShow = 6,
-  variant = "free",
-  onItemClick,
+  variant = 'free',
+  onItemClick
 }) => {
   // Debug log removido para produção
   const displayed = items.slice(0, maxToShow);
@@ -35,19 +35,19 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({
       <p className="text-center text-muted-foreground mb-8 text-base md:text-lg">Veja alguns dos meus trabalhos recentes e projetos criativos.</p>
       <div
         className={
-          (variant === "premium"
-            ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-            : variant === "standard"
-            ? "grid grid-cols-2 md:grid-cols-3 gap-6"
-            : "grid grid-cols-2 gap-4") +
-          " w-full max-w-6xl mx-auto px-4 bg-transparent"
+          (variant === 'premium'
+            ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'
+            : variant === 'standard'
+              ? 'grid grid-cols-2 md:grid-cols-3 gap-6'
+              : 'grid grid-cols-2 gap-4') +
+          ' w-full max-w-6xl mx-auto px-4 bg-transparent'
         }
       >
         {displayed.map((item) => {
           const imageUrlToUse =
-            item.imageUrl && item.imageUrl.trim() !== ""
+            item.imageUrl && item.imageUrl.trim() !== ''
               ? item.imageUrl
-              : "/avatar-default.png";
+              : '/avatar-default.png';
 
           const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -66,7 +66,7 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({
               )}
               <img
                 src={imageUrlToUse}
-                alt={item.caption || "Imagem do portfólio"}
+                alt={item.caption || 'Imagem do portfólio'}
                 className={`w-full h-full object-cover aspect-[4/3] transition-opacity duration-300 rounded-2xl ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageLoaded(true)}

@@ -1,6 +1,6 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { platformIcons } from "@/lib/types";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { platformIcons } from '@/lib/types';
 
 /**
  * Props para o componente SocialLinks
@@ -20,7 +20,7 @@ interface SocialLinksProps {
   links: SocialLink[];
   maxToShow?: number;
   highlightWhatsapp?: boolean;
-  variant?: "free" | "standard" | "premium";
+  variant?: 'free' | 'standard' | 'premium';
   showMoreButton?: boolean;
 }
 
@@ -28,13 +28,13 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   links = [],
   maxToShow = 3,
   highlightWhatsapp = true,
-  variant = "free",
-  showMoreButton = false,
+  variant = 'free',
+  showMoreButton = false
 }) => {
   // Ordena WhatsApp primeiro
   const sortedLinks = [
-    ...links.filter((l) => l.platform === "whatsapp"),
-    ...links.filter((l) => l.platform !== "whatsapp"),
+    ...links.filter((l) => l.platform === 'whatsapp'),
+    ...links.filter((l) => l.platform !== 'whatsapp')
   ];
   const displayedLinks = sortedLinks.slice(0, maxToShow);
   const extraCount = sortedLinks.length - displayedLinks.length;
@@ -43,17 +43,17 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
     <div className="flex gap-2 flex-wrap items-center">
       {displayedLinks.map((link) => {
         // Corrigir: evitar <a> aninhado para WhatsApp
-        const Icon = platformIcons[link.platform] || platformIcons["globe"];
-        const isWhatsapp = link.platform === "whatsapp" && highlightWhatsapp;
+        const Icon = platformIcons[link.platform] || platformIcons['globe'];
+        const isWhatsapp = link.platform === 'whatsapp' && highlightWhatsapp;
         return (
           <Button
             asChild
             key={link.id}
-            variant={isWhatsapp ? "default" : "outline"}
+            variant={isWhatsapp ? 'default' : 'outline'}
             size="icon"
             className={`rounded-full transition-all duration-200 focus:ring-2 focus:ring-primary ${
-              isWhatsapp ? "bg-green-500 text-white hover:bg-green-600" : ""
-            } ${variant === "premium" ? "shadow-lg" : ""}`}
+              isWhatsapp ? 'bg-green-500 text-white hover:bg-green-600' : ''
+            } ${variant === 'premium' ? 'shadow-lg' : ''}`}
             aria-label={link.platform}
             title={link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
           >
@@ -76,4 +76,4 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
       )}
     </div>
   );
-}; 
+};

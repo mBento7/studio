@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
         'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY || '',
         'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY || ''}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=representation',
+        'Prefer': 'return=representation'
       },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan })
     });
 
     if (!res.ok) {
@@ -28,4 +28,4 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: error?.toString() || 'Erro desconhecido' }, { status: 500 });
   }
-} 
+}

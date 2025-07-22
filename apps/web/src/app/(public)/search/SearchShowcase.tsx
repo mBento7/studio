@@ -1,15 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox"; // Importe o componente Checkbox
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox'; // Importe o componente Checkbox
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SearchIcon, X, Star, ExternalLink, Share2, Bookmark, Flame, Heart, MessageCircle, MoreHorizontal, SlidersHorizontal, LayoutGrid, List } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { SearchIcon, X, Star, ExternalLink, Share2, Bookmark, Flame, Heart, MessageCircle, MoreHorizontal, SlidersHorizontal, LayoutGrid, List } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import type { UserProfile } from '@/lib/types';
-import Link from "next/link";
+import Link from 'next/link';
 import { profileLayouts, ProfileLayout } from '@/components/profile-layouts';
 import { supabase } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
@@ -18,14 +18,14 @@ import SearchResultCardPremium from '@/components/profile-layouts/PremiumProfile
 import SearchResultCardStandard from '@/components/profile-layouts/StandardProfileLayout/SearchResultCardStandard';
 
 const BANNERS = [
-    { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
-    { id: 2, image: 'https://picsum.photos/seed/banner-oferta/1200/400', link: '/planos', type: 'Oferta', title: 'Planos com até 50% de Desconto' },
-    { id: 3, image: 'https://picsum.photos/seed/banner-patrocinado/1200/400', link: '/dashboard/credits/promover', type: 'Patrocinado', title: 'Promova seu Perfil e Ganhe Destaque' },
+  { id: 1, image: 'https://picsum.photos/seed/banner-institucional/1200/400', link: '/#beneficios', type: 'Institucional', title: 'Conheça os Benefícios da Whosdo' },
+  { id: 2, image: 'https://picsum.photos/seed/banner-oferta/1200/400', link: '/planos', type: 'Oferta', title: 'Planos com até 50% de Desconto' },
+  { id: 3, image: 'https://picsum.photos/seed/banner-patrocinado/1200/400', link: '/dashboard/credits/promover', type: 'Patrocinado', title: 'Promova seu Perfil e Ganhe Destaque' }
 ];
 
-const categories: string[] = ["Serviços", "Produtos", "Lojas e Estabelecimentos"];
+const categories: string[] = ['Serviços', 'Produtos', 'Lojas e Estabelecimentos'];
 // Removidas as constantes globais cities e states, pois serão gerenciadas por estado local.
-const ALL_VALUE = "all";
+const ALL_VALUE = 'all';
 
 // A função getLayoutComponent agora pode ser mais genérica
 const getLayoutComponent = (layoutId?: string): ProfileLayout | undefined => {
@@ -105,12 +105,12 @@ function SocialCard({ item }: { item: any }) {
                 {item.category}
               </span>
               <Button onClick={handleBookmark} variant="ghost" className={cn(
-                "p-2 rounded-lg transition-all",
-                isBookmarked 
-                  ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10" 
-                  : "text-muted-foreground hover:bg-background/50"
+                'p-2 rounded-lg transition-all',
+                isBookmarked
+                  ? 'text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10'
+                  : 'text-muted-foreground hover:bg-background/50'
               )}>
-                <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-current")}/>
+                <Bookmark className={cn('w-4 h-4', isBookmarked && 'fill-current')}/>
               </Button>
             </div>
             <div>
@@ -129,15 +129,15 @@ function SocialCard({ item }: { item: any }) {
           </div>
         </CardContent>
         <div className="px-3 pb-3 border-t border-border/10 pt-2 flex items-center justify-between text-muted-foreground">
-          <Button 
-            onClick={handleLike} 
+          <Button
+            onClick={handleLike}
             variant="ghost"
             className={cn(
-              "flex items-center gap-1.5 text-xs hover:text-red-500 transition-colors",
-              isLiked && "text-red-500"
+              'flex items-center gap-1.5 text-xs hover:text-red-500 transition-colors',
+              isLiked && 'text-red-500'
             )}
           >
-            <Heart className={cn("w-4 h-4", isLiked && "fill-current")}/> {likes}
+            <Heart className={cn('w-4 h-4', isLiked && 'fill-current')}/> {likes}
           </Button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" className="flex items-center gap-1.5 text-xs hover:text-primary">
@@ -153,31 +153,31 @@ function SocialCard({ item }: { item: any }) {
   );
 }
 
-function SearchHeader({ 
-  searchTerm, 
-  setSearchTerm, 
-  selectedCategory, 
-  setSelectedCategory, 
-  selectedCity, 
+function SearchHeader({
+  searchTerm,
+  setSearchTerm,
+  selectedCategory,
+  setSelectedCategory,
+  selectedCity,
   setSelectedCity,
   selectedState,
   setSelectedState,
-  hasActiveFilters, 
+  hasActiveFilters,
   clearFilters,
   isOnlineService, // Novo prop
   setIsOnlineService, // Novo prop
   availableCities, // Novo prop
   availableStates // Novo prop
-}: { 
-  searchTerm: string, 
-  setSearchTerm: (v: string) => void, 
-  selectedCategory: string, 
-  setSelectedCategory: (v: string) => void, 
-  selectedCity: string, 
-  setSelectedCity: (v: string) => void, 
+}: {
+  searchTerm: string,
+  setSearchTerm: (v: string) => void,
+  selectedCategory: string,
+  setSelectedCategory: (v: string) => void,
+  selectedCity: string,
+  setSelectedCity: (v: string) => void,
   selectedState: string,
   setSelectedState: (v: string) => void,
-  hasActiveFilters: boolean, 
+  hasActiveFilters: boolean,
   clearFilters: () => void,
   isOnlineService: boolean; // Novo tipo
   setIsOnlineService: (v: boolean) => void; // Novo tipo
@@ -211,15 +211,15 @@ function SearchHeader({
             Buscar
           </Button>
         </div>
-        
+
         {/* Botões de filtro com quebra de linha e centralizados */}
         <div className="flex items-center justify-center gap-2">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className={cn(
-  "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
-  "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-  selectedCategory !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
-)}>
+              'rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]',
+              'bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700',
+              selectedCategory !== ALL_VALUE ? 'border-[#14b8a6]' : 'border-slate-200'
+            )}>
               <SelectValue placeholder="Categoria" />
             </SelectTrigger>
             <SelectContent>
@@ -231,9 +231,9 @@ function SearchHeader({
           </Select>
           <Select value={selectedState} onValueChange={setSelectedState}>
             <SelectTrigger className={cn(
-              "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
-              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-              selectedState !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
+              'rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]',
+              'bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700',
+              selectedState !== ALL_VALUE ? 'border-[#14b8a6]' : 'border-slate-200'
             )}>
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
@@ -246,9 +246,9 @@ function SearchHeader({
           </Select>
           <Select value={selectedCity} onValueChange={setSelectedCity}>
             <SelectTrigger className={cn(
-              "rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]",
-              "bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700",
-              selectedCity !== ALL_VALUE ? "border-[#14b8a6]" : "border-slate-200"
+              'rounded-lg px-2 h-8 text-xs transition-colors border border-slate-200 shadow-sm focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]',
+              'bg-muted/50 hover:bg-muted dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700',
+              selectedCity !== ALL_VALUE ? 'border-[#14b8a6]' : 'border-slate-200'
             )}>
               <SelectValue placeholder="Cidade" />
             </SelectTrigger>
@@ -292,7 +292,7 @@ function SearchHeader({
 }
 
 export default function SearchShowcase() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(ALL_VALUE);
   const [selectedCity, setSelectedCity] = useState(ALL_VALUE);
   const [selectedState, setSelectedState] = useState(ALL_VALUE);
@@ -332,14 +332,14 @@ export default function SearchShowcase() {
       if (!error && data) {
         const mapped = data.map((user: any) => ({
           ...user,
-          name: user.full_name || user.name || "Usuário",
-          profile_picture_url: user.profile_picture_url || user.avatar_url || "/avatar-default.png",
-          category: user.category || "Categoria Exemplo",
-          bio: user.bio || "",
-          cover_photo_url: user.cover_photo_url || "",
+          name: user.full_name || user.name || 'Usuário',
+          profile_picture_url: user.profile_picture_url || user.avatar_url || '/avatar-default.png',
+          category: user.category || 'Categoria Exemplo',
+          bio: user.bio || '',
+          cover_photo_url: user.cover_photo_url || '',
           isOnlineService: user.is_online_service || false, // Mapeia o campo online
           location: user.location || { city: '', state: '' }, // Mapeia a localização
-          layoutTemplateId: user.layout_template_id || user.layoutTemplateId, // <-- Adicionado!
+          layoutTemplateId: user.layout_template_id || user.layoutTemplateId // <-- Adicionado!
         }));
         setAllProfiles(mapped as UserProfile[]);
 
@@ -388,7 +388,7 @@ export default function SearchShowcase() {
     setSelectedCategory(ALL_VALUE);
     setSelectedCity(ALL_VALUE);
     setSelectedState(ALL_VALUE);
-    setSearchTerm("");
+    setSearchTerm('');
     setIsOnlineService(false); // Limpar o filtro de serviço online
   };
 
@@ -426,8 +426,8 @@ export default function SearchShowcase() {
           </div>
 
           <div className={cn(
-            "grid gap-4 md:gap-6",
-            "grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 auto-rows-fr"
+            'grid gap-4 md:gap-6',
+            'grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 auto-rows-fr'
           )}>
             <AnimatePresence>
               {filteredProfiles.map(profile => {

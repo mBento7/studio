@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,96 +17,96 @@ function cn(...classes: (string | undefined | null | false)[]): string {
 
 // Site config
 const siteConfig = {
-  name: "WhosDo",
-  description: "Crie um perfil profissional que se destaca"
+  name: 'WhosDo',
+  description: 'Crie um perfil profissional que se destaca'
 };
 
 // Data
 const plans: Plan[] = [
   {
-    id: "free",
-    name: "Free",
+    id: 'free',
+    name: 'Free',
     price: 0,
-    interval: "mês",
-    description: "Para novos usuários e perfis em fase de criação/teste",
+    interval: 'mês',
+    description: 'Para novos usuários e perfis em fase de criação/teste',
     icon: <Zap className="h-6 w-6 text-primary" />,
     features: [
-      "Perfil com link público",
-      "Upload de foto e capa",
-      "Bio, contatos, redes sociais (limitado a 3 links)",
+      'Perfil com link público',
+      'Upload de foto e capa',
+      'Bio, contatos, redes sociais (limitado a 3 links)',
       "Acesso ao Feed (limitado a 'Novos')",
-      "Stories efêmeros (até 5 simultâneos)",
-      "Painel de Créditos",
-      "Ganho de bônus por ações",
-      "Recursos pagos via créditos"
+      'Stories efêmeros (até 5 simultâneos)',
+      'Painel de Créditos',
+      'Ganho de bônus por ações',
+      'Recursos pagos via créditos'
     ],
     credits: 0,
     highlight: false,
-    cta: "Começar Gratuitamente"
+    cta: 'Começar Gratuitamente'
   },
   {
-    id: "standard",
-    name: "Standard",
+    id: 'standard',
+    name: 'Standard',
     price: 29.90,
-    interval: "mês",
-    description: "Profissionais que buscam visibilidade moderada e recursos de conversão",
+    interval: 'mês',
+    description: 'Profissionais que buscam visibilidade moderada e recursos de conversão',
     icon: <Crown className="h-6 w-6 text-primary" />,
     features: [
-      "Tudo do plano Free",
-      "Serviços e portfólio ativados",
-      "Stories ilimitados",
+      'Tudo do plano Free',
+      'Serviços e portfólio ativados',
+      'Stories ilimitados',
       "Feed 'Recomendados'",
-      "Acesso ao StoriesCarousel",
-      "Cupons promocionais",
-      "Compra de pacotes de créditos",
-      "Recursos pagos via créditos"
+      'Acesso ao StoriesCarousel',
+      'Cupons promocionais',
+      'Compra de pacotes de créditos',
+      'Recursos pagos via créditos'
     ],
     credits: 30,
     highlight: true,
-    cta: "Escolher Standard"
+    cta: 'Escolher Standard'
   },
   {
-    id: "premium",
-    name: "Premium",
+    id: 'premium',
+    name: 'Premium',
     price: 59.90,
-    interval: "mês",
-    description: "Máxima personalização, alcance e conversão",
+    interval: 'mês',
+    description: 'Máxima personalização, alcance e conversão',
     icon: <Rocket className="h-6 w-6 text-primary" />,
     features: [
-      "Tudo do plano Standard",
-      "Boost no TrendingAds",
-      "Cupons em CouponsWidget (ilimitados)",
-      "Banner Promocional no Perfil",
-      "Estatísticas avançadas",
-      "Integração com YouTube e Calendly",
-      "Suporte prioritário",
-      "Descontos em ações premium (10-20% menos créditos)"
+      'Tudo do plano Standard',
+      'Boost no TrendingAds',
+      'Cupons em CouponsWidget (ilimitados)',
+      'Banner Promocional no Perfil',
+      'Estatísticas avançadas',
+      'Integração com YouTube e Calendly',
+      'Suporte prioritário',
+      'Descontos em ações premium (10-20% menos créditos)'
     ],
     credits: 100,
     highlight: false,
-    cta: "Escolher Premium"
+    cta: 'Escolher Premium'
   }
 ];
 
 const creditActions: CreditAction[] = [
-  { name: "Destaque por 7 dias", cost: 20 },
-  { name: "Cupom Premium", cost: 10 },
-  { name: "Story Patrocinado", cost: 5 },
-  { name: "QR Code estilizado", cost: 30 },
-  { name: "Subir para topo por 24h", cost: 15 },
-  { name: "Tags adicionais no perfil", cost: 8 }
+  { name: 'Destaque por 7 dias', cost: 20 },
+  { name: 'Cupom Premium', cost: 10 },
+  { name: 'Story Patrocinado', cost: 5 },
+  { name: 'QR Code estilizado', cost: 30 },
+  { name: 'Subir para topo por 24h', cost: 15 },
+  { name: 'Tags adicionais no perfil', cost: 8 }
 ];
 
 const comparisonFeatures: ComparisonFeature[] = [
-  { name: "Stories (24h)", free: "5", standard: "Ilimitado", premium: "Ilimitado" },
-  { name: "Feed", free: "Novos", standard: "Recomendados", premium: "Trending" },
-  { name: "Portfólio e Serviços", free: false, standard: "✅ (limitado)", premium: "✅ (ilimitado)" },
-  { name: "CouponsWidget", free: false, standard: true, premium: "✅ (destaque)" },
-  { name: "Créditos Mensais", free: "❌", standard: "+30", premium: "+100" },
-  { name: "Banner no Perfil", free: false, standard: false, premium: true },
-  { name: "YouTube / Calendly / Estatísticas", free: false, standard: false, premium: true },
-  { name: "Suporte Prioritário", free: false, standard: false, premium: true },
-  { name: "Acesso a ações pagas com créditos", free: true, standard: true, premium: "✅ (com desconto)" }
+  { name: 'Stories (24h)', free: '5', standard: 'Ilimitado', premium: 'Ilimitado' },
+  { name: 'Feed', free: 'Novos', standard: 'Recomendados', premium: 'Trending' },
+  { name: 'Portfólio e Serviços', free: false, standard: '✅ (limitado)', premium: '✅ (ilimitado)' },
+  { name: 'CouponsWidget', free: false, standard: true, premium: '✅ (destaque)' },
+  { name: 'Créditos Mensais', free: '❌', standard: '+30', premium: '+100' },
+  { name: 'Banner no Perfil', free: false, standard: false, premium: true },
+  { name: 'YouTube / Calendly / Estatísticas', free: false, standard: false, premium: true },
+  { name: 'Suporte Prioritário', free: false, standard: false, premium: true },
+  { name: 'Acesso a ações pagas com créditos', free: true, standard: true, premium: '✅ (com desconto)' }
 ];
 
 // Types
@@ -158,69 +158,69 @@ interface ComparisonFeature {
 // Glow Component
 const Glow = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { variant?: "top" | "above" | "bottom" | "below" | "center" }
->(({ className, variant = "top", ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { variant?: 'top' | 'above' | 'bottom' | 'below' | 'center' }
+>(({ className, variant = 'top', ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "absolute w-full",
-      variant === "top" && "top-0",
-      variant === "above" && "-top-[128px]",
-      variant === "bottom" && "bottom-0",
-      variant === "below" && "-bottom-[128px]",
-      variant === "center" && "top-[50%]",
+      'absolute w-full',
+      variant === 'top' && 'top-0',
+      variant === 'above' && '-top-[128px]',
+      variant === 'bottom' && 'bottom-0',
+      variant === 'below' && '-bottom-[128px]',
+      variant === 'center' && 'top-[50%]',
       className
     )}
     {...props}
   >
     <div
       className={cn(
-        "absolute left-1/2 h-[256px] w-[60%] -translate-x-1/2 scale-[2.5] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/.5)_10%,_hsl(var(--primary)/0)_60%)] sm:h-[512px]",
-        variant === "center" && "-translate-y-1/2",
+        'absolute left-1/2 h-[256px] w-[60%] -translate-x-1/2 scale-[2.5] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/.5)_10%,_hsl(var(--primary)/0)_60%)] sm:h-[512px]',
+        variant === 'center' && '-translate-y-1/2'
       )}
     />
     <div
       className={cn(
-        "absolute left-1/2 h-[128px] w-[40%] -translate-x-1/2 scale-[2] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/.3)_10%,_hsl(var(--primary)/0)_60%)] sm:h-[256px]",
-        variant === "center" && "-translate-y-1/2",
+        'absolute left-1/2 h-[128px] w-[40%] -translate-x-1/2 scale-[2] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/.3)_10%,_hsl(var(--primary)/0)_60%)] sm:h-[256px]',
+        variant === 'center' && '-translate-y-1/2'
       )}
     />
   </div>
 ));
-Glow.displayName = "Glow";
+Glow.displayName = 'Glow';
 
 // Mockup Components
 const Mockup = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { type?: "mobile" | "responsive" }
->(({ className, type = "responsive", ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { type?: 'mobile' | 'responsive' }
+>(({ className, type = 'responsive', ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "flex relative z-10 overflow-hidden shadow-2xl border border-border/5 border-t-border/15",
-      type === "mobile" ? "rounded-[48px] max-w-[350px]" : "rounded-md",
+      'flex relative z-10 overflow-hidden shadow-2xl border border-border/5 border-t-border/15',
+      type === 'mobile' ? 'rounded-[48px] max-w-[350px]' : 'rounded-md',
       className
     )}
     {...props}
   />
 ));
-Mockup.displayName = "Mockup";
+Mockup.displayName = 'Mockup';
 
 const MockupFrame = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { size?: "small" | "large" }
->(({ className, size = "small", ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { size?: 'small' | 'large' }
+>(({ className, size = 'small', ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "bg-accent/5 flex relative z-10 overflow-hidden rounded-2xl",
-      size === "small" ? "p-2" : "p-4",
+      'bg-accent/5 flex relative z-10 overflow-hidden rounded-2xl',
+      size === 'small' ? 'p-2' : 'p-4',
       className
     )}
     {...props}
   />
 ));
-MockupFrame.displayName = "MockupFrame";
+MockupFrame.displayName = 'MockupFrame';
 
 // Upgrade Banner Component
 function UpgradeBanner({ onClose }: { onClose?: () => void }) {
@@ -269,9 +269,9 @@ function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: boolean }) {
       className="relative"
     >
       <Card className={cn(
-        "h-full transition-all duration-300",
-        plan.highlight && "border-primary shadow-lg scale-105",
-        "hover:shadow-xl"
+        'h-full transition-all duration-300',
+        plan.highlight && 'border-primary shadow-lg scale-105',
+        'hover:shadow-xl'
       )}>
         {plan.highlight && (
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -280,12 +280,12 @@ function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: boolean }) {
             </Badge>
           </div>
         )}
-        
+
         <CardHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
             <div className={cn(
-              "p-3 rounded-full",
-              plan.highlight ? "bg-primary/10" : "bg-muted"
+              'p-3 rounded-full',
+              plan.highlight ? 'bg-primary/10' : 'bg-muted'
             )}>
               {plan.icon}
             </div>
@@ -318,14 +318,14 @@ function PlanCard({ plan, isPopular }: { plan: Plan; isPopular?: boolean }) {
             ))}
           </ul>
 
-          <Button 
+          <Button
             className={cn(
-              "w-full mt-6",
-              plan.highlight 
-                ? "bg-primary hover:bg-primary/90" 
-                : "variant-outline"
+              'w-full mt-6',
+              plan.highlight
+                ? 'bg-primary hover:bg-primary/90'
+                : 'variant-outline'
             )}
-            variant={plan.highlight ? "default" : "outline"}
+            variant={plan.highlight ? 'default' : 'outline'}
           >
             {plan.cta}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -378,7 +378,7 @@ function ComparisonTable() {
       <div className="p-6 bg-muted/30 border-b">
         <h3 className="text-xl font-semibold text-center">Comparação Detalhada de Recursos</h3>
       </div>
-      
+
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -455,7 +455,7 @@ function LandingHeroSection() {
             <span className="text-primary block">Profissional</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Destaque-se no mercado com um perfil profissional único e impactante. 
+            Destaque-se no mercado com um perfil profissional único e impactante.
             Planos flexíveis com sistema de créditos para máxima personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -479,23 +479,23 @@ function LandingBenefitsSection() {
   const benefits = [
     {
       icon: Zap,
-      title: "Sistema de Créditos",
-      description: "Use WhoCoins para liberar recursos premium sob demanda"
+      title: 'Sistema de Créditos',
+      description: 'Use WhoCoins para liberar recursos premium sob demanda'
     },
     {
       icon: Shield,
-      title: "Perfil Verificado",
-      description: "Ganhe credibilidade com perfil profissional verificado"
+      title: 'Perfil Verificado',
+      description: 'Ganhe credibilidade com perfil profissional verificado'
     },
     {
       icon: Users,
-      title: "Networking Eficaz",
-      description: "Conecte-se com profissionais da sua área"
+      title: 'Networking Eficaz',
+      description: 'Conecte-se com profissionais da sua área'
     },
     {
       icon: Globe,
-      title: "Visibilidade Global",
-      description: "Seja encontrado por clientes do mundo todo"
+      title: 'Visibilidade Global',
+      description: 'Seja encontrado por clientes do mundo todo'
     }
   ];
 
@@ -552,113 +552,113 @@ function PremiumPricing() {
 
   const pricingPlans: PricingTier[] = [
     {
-      name: "Free",
-      subtitle: "Para novos usuários",
+      name: 'Free',
+      subtitle: 'Para novos usuários',
       price: { monthly: 0, yearly: 0 },
-      description: "Perfeito para começar e testar a plataforma",
+      description: 'Perfeito para começar e testar a plataforma',
       icon: Zap,
-      gradient: "from-blue-500/20 to-cyan-500/20",
-      borderGradient: "from-blue-400 to-cyan-400",
+      gradient: 'from-blue-500/20 to-cyan-500/20',
+      borderGradient: 'from-blue-400 to-cyan-400',
       features: [
-        "Perfil com link público",
-        "Upload de foto e capa",
-        "Bio, contatos, redes sociais",
-        "Acesso ao Feed (limitado)",
-        "Stories efêmeros (até 5)",
-        "Painel de Créditos",
-        "Ganho de bônus por ações"
+        'Perfil com link público',
+        'Upload de foto e capa',
+        'Bio, contatos, redes sociais',
+        'Acesso ao Feed (limitado)',
+        'Stories efêmeros (até 5)',
+        'Painel de Créditos',
+        'Ganho de bônus por ações'
       ],
       highlight: false,
       badge: null
     },
     {
-      name: "Standard",
-      subtitle: "Mais popular",
+      name: 'Standard',
+      subtitle: 'Mais popular',
       price: { monthly: 29.90, yearly: 299 },
-      description: "Para profissionais que buscam visibilidade moderada",
+      description: 'Para profissionais que buscam visibilidade moderada',
       icon: Crown,
-      gradient: "from-indigo-500/20 to-purple-500/20",
-      borderGradient: "from-indigo-400 to-purple-400",
+      gradient: 'from-indigo-500/20 to-purple-500/20',
+      borderGradient: 'from-indigo-400 to-purple-400',
       features: [
-        "Tudo do plano Free",
-        "Serviços e portfólio ativados",
-        "Stories ilimitados",
+        'Tudo do plano Free',
+        'Serviços e portfólio ativados',
+        'Stories ilimitados',
         "Feed 'Recomendados'",
-        "Acesso ao StoriesCarousel",
-        "Cupons promocionais",
-        "+30 créditos mensais",
-        "Compra de pacotes de créditos"
+        'Acesso ao StoriesCarousel',
+        'Cupons promocionais',
+        '+30 créditos mensais',
+        'Compra de pacotes de créditos'
       ],
       highlight: true,
-      badge: "Mais Popular"
+      badge: 'Mais Popular'
     },
     {
-      name: "Premium",
-      subtitle: "Para profissionais sérios",
+      name: 'Premium',
+      subtitle: 'Para profissionais sérios',
       price: { monthly: 59.90, yearly: 599 },
-      description: "Máxima personalização, alcance e conversão",
+      description: 'Máxima personalização, alcance e conversão',
       icon: Rocket,
-      gradient: "from-rose-500/20 to-pink-500/20",
-      borderGradient: "from-rose-400 to-pink-400",
+      gradient: 'from-rose-500/20 to-pink-500/20',
+      borderGradient: 'from-rose-400 to-pink-400',
       features: [
-        "Tudo do plano Standard",
-        "Boost no TrendingAds",
-        "Cupons ilimitados",
-        "Banner Promocional no Perfil",
-        "Estatísticas avançadas",
-        "Integração YouTube/Calendly",
-        "Suporte prioritário",
-        "+100 créditos mensais",
-        "Desconto em ações premium"
+        'Tudo do plano Standard',
+        'Boost no TrendingAds',
+        'Cupons ilimitados',
+        'Banner Promocional no Perfil',
+        'Estatísticas avançadas',
+        'Integração YouTube/Calendly',
+        'Suporte prioritário',
+        '+100 créditos mensais',
+        'Desconto em ações premium'
       ],
       highlight: false,
-      badge: "Premium"
+      badge: 'Premium'
     }
   ];
 
   const additionalFeatures: AdditionalFeature[] = [
     {
       icon: Brain,
-      title: "Sistema de Créditos WhoCoins",
-      description: "Use créditos para liberar recursos premium sob demanda"
+      title: 'Sistema de Créditos WhoCoins',
+      description: 'Use créditos para liberar recursos premium sob demanda'
     },
     {
       icon: Shield,
-      title: "Segurança Avançada",
-      description: "Seus dados protegidos com criptografia de ponta"
+      title: 'Segurança Avançada',
+      description: 'Seus dados protegidos com criptografia de ponta'
     },
     {
       icon: Globe,
-      title: "Alcance Global",
-      description: "Seja encontrado por clientes do mundo todo"
+      title: 'Alcance Global',
+      description: 'Seja encontrado por clientes do mundo todo'
     },
     {
       icon: Users,
-      title: "Networking Profissional",
-      description: "Conecte-se com outros profissionais da sua área"
+      title: 'Networking Profissional',
+      description: 'Conecte-se com outros profissionais da sua área'
     }
   ];
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
+    visible: {
+      opacity: 1,
+      y: 0
     }
   };
 
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
-      opacity: 1,
+      opacity: 1
     }
   };
 
   const cardHover = {
     rest: { scale: 1, y: 0 },
-    hover: { 
-      scale: 1.05, 
-      y: -10,
+    hover: {
+      scale: 1.05,
+      y: -10
     }
   };
 
@@ -671,30 +671,30 @@ function PremiumPricing() {
       <section id="pricing" className="relative py-32 bg-gradient-to-br from-black via-indigo-950/20 to-black text-white overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
-          <motion.div 
+          <motion.div
             className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08]"
             animate={{
-              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
             }}
             transition={{
               duration: 40,
-              repeat: Infinity,
+              repeat: Infinity
             }}
             style={{
               backgroundSize: '400% 400%'
             }}
           />
-          
+
           <motion.div
             className="absolute top-1/4 left-1/6 w-80 h-80 bg-indigo-400/10 rounded-full blur-3xl"
             animate={{
               x: [0, 150, 0],
               y: [0, 80, 0],
-              scale: [1, 1.3, 1],
+              scale: [1, 1.3, 1]
             }}
             transition={{
               duration: 25,
-              repeat: Infinity,
+              repeat: Infinity
             }}
           />
           <motion.div
@@ -702,11 +702,11 @@ function PremiumPricing() {
             animate={{
               x: [0, -120, 0],
               y: [0, -60, 0],
-              scale: [1, 1.2, 1],
+              scale: [1, 1.2, 1]
             }}
             transition={{
               duration: 20,
-              repeat: Infinity,
+              repeat: Infinity
             }}
           />
 
@@ -716,37 +716,37 @@ function PremiumPricing() {
               className="absolute w-1 h-1 bg-white/20 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`
               }}
               animate={{
                 y: [0, -100, 0],
                 opacity: [0.2, 1, 0.2],
-                scale: [1, 2, 1],
+                scale: [1, 2, 1]
               }}
               transition={{
                 duration: 4 + Math.random() * 4,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: Math.random() * 2
               }}
             />
           ))}
         </div>
 
-        <motion.div 
+        <motion.div
           className="relative z-10 max-w-7xl mx-auto px-6"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
         >
           {/* Header */}
-          <motion.div 
+          <motion.div
             className="text-center mb-20"
             variants={fadeInUp}
           >
             <motion.div
               className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.08] border border-white/[0.15] backdrop-blur-sm mb-6"
-              whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.3)" }}
+              whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.3)' }}
             >
               <motion.div
                 animate={{ rotate: 360 }}
@@ -760,7 +760,7 @@ function PremiumPricing() {
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             </motion.div>
 
-            <motion.h2 
+            <motion.h2
               className="text-4xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tight"
               variants={fadeInUp}
             >
@@ -768,14 +768,14 @@ function PremiumPricing() {
                 Escolha Seu
               </span>
               <br />
-              <motion.span 
+              <motion.span
                 className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-rose-300"
                 animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                 }}
                 transition={{
                   duration: 5,
-                  repeat: Infinity,
+                  repeat: Infinity
                 }}
                 style={{
                   backgroundSize: '200% 200%'
@@ -784,8 +784,8 @@ function PremiumPricing() {
                 Plano Ideal
               </motion.span>
             </motion.h2>
-            
-            <motion.p 
+
+            <motion.p
               className="text-xl sm:text-2xl text-white/60 max-w-4xl mx-auto leading-relaxed mb-12"
               variants={fadeInUp}
             >
@@ -793,7 +793,7 @@ function PremiumPricing() {
             </motion.p>
 
             {/* Billing Toggle */}
-            <motion.div 
+            <motion.div
               className="flex items-center justify-center gap-4"
               variants={fadeInUp}
             >
@@ -814,7 +814,7 @@ function PremiumPricing() {
                     x: isYearly ? 32 : 2
                   }}
                   transition={{
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 500,
                     damping: 30
                   }}
@@ -836,7 +836,7 @@ function PremiumPricing() {
           </motion.div>
 
           {/* Pricing Cards */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
             variants={staggerContainer}
           >
@@ -858,9 +858,9 @@ function PremiumPricing() {
                   initial="rest"
                   whileHover="hover"
                   style={{
-                    boxShadow: plan.highlight 
-                      ? "0 25px 50px -12px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2)"
-                      : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+                    boxShadow: plan.highlight
+                      ? '0 25px 50px -12px rgba(99, 102, 241, 0.4), 0 0 30px rgba(99, 102, 241, 0.2)'
+                      : '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                   }}
                 >
                   {/* Badge */}
@@ -878,11 +878,11 @@ function PremiumPricing() {
                   <motion.div
                     className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} rounded-3xl opacity-60`}
                     animate={{
-                      backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                      backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
                     }}
                     transition={{
                       duration: 15,
-                      repeat: Infinity,
+                      repeat: Infinity
                     }}
                     style={{
                       backgroundSize: '300% 300%'
@@ -961,7 +961,7 @@ function PremiumPricing() {
                         className="absolute inset-0 rounded-3xl"
                         style={{
                           background: `linear-gradient(135deg, ${plan.borderGradient.replace('from-', 'rgba(').replace(' to-', ', 0.2) 0%, rgba(').replace('-', ', ')}, 0.1) 100%)`,
-                          filter: 'blur(20px)',
+                          filter: 'blur(20px)'
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -976,7 +976,7 @@ function PremiumPricing() {
           </motion.div>
 
           {/* Additional Features */}
-          <motion.div 
+          <motion.div
             className="mb-20"
             variants={fadeInUp}
           >
@@ -1006,7 +1006,7 @@ function PremiumPricing() {
           </motion.div>
 
           {/* CTA Section */}
-          <motion.div 
+          <motion.div
             className="text-center"
             variants={fadeInUp}
           >
@@ -1014,17 +1014,17 @@ function PremiumPricing() {
               <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.08] via-purple-500/[0.05] to-rose-500/[0.08] rounded-3xl"
                 animate={{
-                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
                 }}
                 transition={{
                   duration: 15,
-                  repeat: Infinity,
+                  repeat: Infinity
                 }}
                 style={{
                   backgroundSize: '300% 300%'
                 }}
               />
-              
+
               <div className="relative z-10">
                 <h3 className="text-3xl md:text-4xl font-bold mb-6">
                   <span className="bg-gradient-to-r from-white via-indigo-200 to-rose-200 bg-clip-text text-transparent">
@@ -1032,10 +1032,10 @@ function PremiumPricing() {
                   </span>
                 </h3>
                 <p className="text-xl text-white/70 mb-8 leading-relaxed">
-                  Junte-se a milhares de profissionais que já usam o WhosDo para destacar seus serviços. 
+                  Junte-se a milhares de profissionais que já usam o WhosDo para destacar seus serviços.
                   Comece gratuitamente hoje mesmo.
                 </p>
-                
+
                 <Button size="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <a href="#pricing">
                     Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
@@ -1054,20 +1054,20 @@ function PremiumPricing() {
 function LandingFaqSection() {
   const faqs = [
     {
-      question: "Como funciona o sistema de créditos WhoCoins?",
-      answer: "Os WhoCoins são créditos virtuais que você pode usar para liberar recursos premium sob demanda. Você ganha créditos através de ações na plataforma e pode comprar pacotes adicionais."
+      question: 'Como funciona o sistema de créditos WhoCoins?',
+      answer: 'Os WhoCoins são créditos virtuais que você pode usar para liberar recursos premium sob demanda. Você ganha créditos através de ações na plataforma e pode comprar pacotes adicionais.'
     },
     {
-      question: "Posso cancelar minha assinatura a qualquer momento?",
-      answer: "Sim, você pode cancelar sua assinatura a qualquer momento sem taxas de cancelamento. Seus créditos acumulados permanecerão disponíveis."
+      question: 'Posso cancelar minha assinatura a qualquer momento?',
+      answer: 'Sim, você pode cancelar sua assinatura a qualquer momento sem taxas de cancelamento. Seus créditos acumulados permanecerão disponíveis.'
     },
     {
-      question: "Qual a diferença entre os planos?",
-      answer: "O plano Free é ideal para começar, o Standard oferece recursos profissionais com 30 créditos mensais, e o Premium inclui todos os recursos avançados com 100 créditos mensais."
+      question: 'Qual a diferença entre os planos?',
+      answer: 'O plano Free é ideal para começar, o Standard oferece recursos profissionais com 30 créditos mensais, e o Premium inclui todos os recursos avançados com 100 créditos mensais.'
     },
     {
-      question: "Como posso ganhar créditos gratuitamente?",
-      answer: "Você pode ganhar créditos através de login diário, completar seu perfil, convidar amigos, criar stories e outras ações na plataforma."
+      question: 'Como posso ganhar créditos gratuitamente?',
+      answer: 'Você pode ganhar créditos através de login diário, completar seu perfil, convidar amigos, criar stories e outras ações na plataforma.'
     }
   ];
 
@@ -1125,7 +1125,7 @@ function PublicFooter() {
               Transformando carreiras através de perfis profissionais únicos com sistema de créditos flexível.
             </p>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Produto</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -1134,7 +1134,7 @@ function PublicFooter() {
               <li><a href="#" className="hover:text-foreground transition-colors">Recursos</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Empresa</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -1143,7 +1143,7 @@ function PublicFooter() {
               <li><a href="#" className="hover:text-foreground transition-colors">Carreiras</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Suporte</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -1153,7 +1153,7 @@ function PublicFooter() {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
           <p>&copy; 2024 {siteConfig.name}. Todos os direitos reservados.</p>
         </div>
@@ -1183,7 +1183,7 @@ function WhosDoPricingPlans() {
             <span className="text-primary block">Seu Perfil Profissional</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Destaque-se no mercado com recursos exclusivos, sistema de créditos flexível 
+            Destaque-se no mercado com recursos exclusivos, sistema de créditos flexível
             e ferramentas profissionais para impulsionar sua presença digital no WhosDo.com
           </p>
         </motion.div>
@@ -1222,7 +1222,7 @@ function WhosDoPricingPlans() {
             Pronto para Impulsionar Seu Perfil?
           </h2>
           <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Comece gratuitamente e evolua conforme suas necessidades. 
+            Comece gratuitamente e evolua conforme suas necessidades.
             Cancele a qualquer momento, sem compromisso.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1257,7 +1257,7 @@ function WhosDoPricingPage() {
         <PremiumPricing />
         <WhosDoPricingPlans />
         <LandingFaqSection />
-        
+
         {/* Final CTA Section */}
         <section className="py-16 bg-muted">
           <div className="container mx-auto px-6 text-center">

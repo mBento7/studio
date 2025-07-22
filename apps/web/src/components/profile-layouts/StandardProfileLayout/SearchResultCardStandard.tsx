@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import type { UserProfile } from "@/lib/types";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Medal, MapPin } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import type { UserProfile } from '@/lib/types';
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Medal, MapPin } from 'lucide-react';
 
 interface SearchResultCardStandardProps {
   user: UserProfile;
@@ -13,9 +13,9 @@ interface SearchResultCardStandardProps {
 
 const SearchResultCardStandard: React.FC<SearchResultCardStandardProps> = ({ user }) => {
   const initials = user.name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("")
+    .join('')
     .slice(0, 2)
     .toUpperCase();
 
@@ -47,7 +47,7 @@ const SearchResultCardStandard: React.FC<SearchResultCardStandardProps> = ({ use
         {/* Avatar centralizado */}
         <div className="relative -mt-12 z-20">
           <Avatar className="w-24 h-24 border-4 border-white shadow-md transition-transform group-hover:scale-105">
-            <AvatarImage src={user.profile_picture_url || "/avatar-default.png"} alt={user.name} />
+            <AvatarImage src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} />
             <AvatarFallback className="text-xl font-bold">{initials}</AvatarFallback>
           </Avatar>
         </div>
@@ -65,7 +65,7 @@ const SearchResultCardStandard: React.FC<SearchResultCardStandardProps> = ({ use
             <p className="flex items-center gap-1 text-xs text-blue-900 mt-2">
               <MapPin className="w-4 h-4" />
               {user.location.city}
-              {user.location.state ? `, ${user.location.state}` : ""}
+              {user.location.state ? `, ${user.location.state}` : ''}
             </p>
           )}
 

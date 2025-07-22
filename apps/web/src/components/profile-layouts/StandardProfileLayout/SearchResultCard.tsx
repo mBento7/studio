@@ -44,4 +44,4 @@ const SearchResultCardStandard: React.FC<SearchResultCardStandardProps> = ({ use
   );
 };
 
-export default SearchResultCardStandard; 
+export default SearchResultCardStandard;

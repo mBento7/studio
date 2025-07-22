@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 interface ProfileVisibilitySettingsProps {
   publicVisibility: boolean;
@@ -7,12 +7,12 @@ interface ProfileVisibilitySettingsProps {
 }
 
 const SECTION_LABELS: Record<string, string> = {
-  basic: "Informações básicas",
-  experience: "Experiência",
-  education: "Formação acadêmica",
-  skills: "Competências",
-  photo: "Foto de perfil",
-  title: "Título"
+  basic: 'Informações básicas',
+  experience: 'Experiência',
+  education: 'Formação acadêmica',
+  skills: 'Competências',
+  photo: 'Foto de perfil',
+  title: 'Título'
 };
 
 export function ProfileVisibilitySettings({ publicVisibility, publicSections, onSave }: ProfileVisibilitySettingsProps) {
@@ -62,4 +62,4 @@ export function ProfileVisibilitySettings({ publicVisibility, publicSections, on
       </button>
     </div>
   );
-} 
+}

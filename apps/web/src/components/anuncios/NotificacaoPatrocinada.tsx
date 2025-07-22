@@ -23,4 +23,4 @@ const NotificacaoPatrocinada = ({ mensagem, link }: NotificacaoPatrocinadaProps)
   );
 };
 
-export default NotificacaoPatrocinada; 
+export default NotificacaoPatrocinada;

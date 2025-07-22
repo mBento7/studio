@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 interface ProfileHeaderProps {
   sections: { key: string; label: string; icon?: React.ReactNode }[];
   sectionRefs: Record<string, React.RefObject<HTMLElement>>;
   onSectionClick: (section: string) => void;
-  variant: "free" | "standard" | "premium";
+  variant: 'free' | 'standard' | 'premium';
 }
 
 export function ProfileHeader({ sections, sectionRefs, onSectionClick, variant }: ProfileHeaderProps) {
@@ -21,9 +21,9 @@ export function ProfileHeader({ sections, sectionRefs, onSectionClick, variant }
         </button>
       ))}
       {/* Exemplo: adicionar seções extras para premium */}
-      {variant === "premium" && (
+      {variant === 'premium' && (
         <button className="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-bold ml-2">Destaque Premium</button>
       )}
     </nav>
   );
-} 
+}

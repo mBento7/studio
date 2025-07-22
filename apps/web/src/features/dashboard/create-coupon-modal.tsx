@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import {
@@ -7,12 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+  DialogFooter
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 import { Tag, Ticket, Coins } from 'lucide-react';
 
 interface CreateCouponModalProps {
@@ -22,27 +22,27 @@ interface CreateCouponModalProps {
 }
 
 export function CreateCouponModal({ isOpen, onOpenChange, onSave }: CreateCouponModalProps) {
-  const [couponCode, setCouponCode] = useState("");
-  const [couponDesc, setCouponDesc] = useState("");
+  const [couponCode, setCouponCode] = useState('');
+  const [couponDesc, setCouponDesc] = useState('');
   const { toast } = useToast();
-  
+
   const handlePublish = () => {
     // Lógica de publicação (simulada)
-    console.log("Publishing coupon:", { code: couponCode, desc: couponDesc });
+    console.log('Publishing coupon:', { code: couponCode, desc: couponDesc });
     if (onSave) {
       onSave({
         code: couponCode,
-        description: couponDesc,
+        description: couponDesc
         // Pode adicionar mais campos aqui se necessário, como discount, validUntil, etc.
       });
     }
     toast({
-      title: "Cupom Publicado!",
-      description: `O cupom "${couponCode}" foi publicado com sucesso.`,
+      title: 'Cupom Publicado!',
+      description: `O cupom "${couponCode}" foi publicado com sucesso.`
     });
     onOpenChange(false); // Fecha o modal
-    setCouponCode("");
-    setCouponDesc("");
+    setCouponCode('');
+    setCouponDesc('');
   };
 
   return (
@@ -85,10 +85,10 @@ export function CreateCouponModal({ isOpen, onOpenChange, onSave }: CreateCoupon
           </div>
         </div>
         <DialogFooter className="flex-col sm:flex-row sm:justify-between items-center sm:items-end gap-4">
-           <div className="flex items-center gap-2 text-sm font-semibold text-primary p-2 bg-primary/10 rounded-md">
-                <Coins className="w-5 h-5" />
-                <span>Custo: 10 moedas</span>
-            </div>
+          <div className="flex items-center gap-2 text-sm font-semibold text-primary p-2 bg-primary/10 rounded-md">
+            <Coins className="w-5 h-5" />
+            <span>Custo: 10 moedas</span>
+          </div>
           <Button onClick={handlePublish} disabled={!couponCode || !couponDesc}>
             Publicar Cupom
           </Button>

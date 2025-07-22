@@ -1,5 +1,5 @@
-import React from "react";
-import { Star, Megaphone } from "lucide-react";
+import React from 'react';
+import { Star, Megaphone } from 'lucide-react';
 
 interface SponsoredAdCardProps {
   titulo: string;
@@ -33,4 +33,4 @@ export function SponsoredAdCard({ titulo, descricao, imagem, link, usuarioId }: 
       </div>
     </div>
   );
-} 
+}

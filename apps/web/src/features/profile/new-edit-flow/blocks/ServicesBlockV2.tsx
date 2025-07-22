@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
 import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 
 interface ServicesBlockV2Props {
   services: any[];
@@ -17,11 +17,11 @@ export function ServicesBlockV2({ services, onChange, plan = PlanType.FREE }: Se
   const limit = PLAN_LIMITS[plan as PlanType].services;
   const [touched, setTouched] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentService, setCurrentService] = useState<{ name: string }>({ name: "" });
+  const [currentService, setCurrentService] = useState<{ name: string }>({ name: '' });
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const handleOpenModalForAdd = () => {
-    const newServices = [...safeServices, { name: "" }];
+    const newServices = [...safeServices, { name: '' }];
     onChange(newServices);
     setCurrentService(newServices[newServices.length - 1]);
     setEditingIndex(newServices.length - 1);
@@ -60,7 +60,7 @@ export function ServicesBlockV2({ services, onChange, plan = PlanType.FREE }: Se
         <div key={idx} className="flex gap-2 items-center">
           <Input
             id={`service-${idx}`}
-            value={service.name ?? ""}
+            value={service.name ?? ''}
             onChange={(e) => {
               const newServices = [...safeServices];
               newServices[idx] = { ...newServices[idx], name: e.target.value };
@@ -91,9 +91,9 @@ export function ServicesBlockV2({ services, onChange, plan = PlanType.FREE }: Se
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{editingIndex !== null ? "Editar Serviço" : "Adicionar Serviço"}</DialogTitle>
+            <DialogTitle>{editingIndex !== null ? 'Editar Serviço' : 'Adicionar Serviço'}</DialogTitle>
             <DialogDescription>
-              {editingIndex !== null ? "Edite os detalhes do seu serviço." : "Adicione um novo serviço ao seu perfil."}
+              {editingIndex !== null ? 'Edite os detalhes do seu serviço.' : 'Adicione um novo serviço ao seu perfil.'}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -120,4 +120,4 @@ export function ServicesBlockV2({ services, onChange, plan = PlanType.FREE }: Se
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos um serviço.</div>}
     </div>
   );
-} 
+}

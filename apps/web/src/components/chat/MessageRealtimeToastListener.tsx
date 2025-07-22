@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/lib/supabase/client';
@@ -31,7 +31,7 @@ export const MessageRealtimeToastListener = () => {
           .single();
         toast({
           title: `Nova mensagem de ${sender?.full_name || 'Usuário'}`,
-          description: msg.content,
+          description: msg.content
         });
       })
       .subscribe();

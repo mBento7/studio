@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -11,8 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-  SidebarInset,
-} from "@/components/ui/sidebar";
+  SidebarInset
+} from '@/components/ui/sidebar';
 
 // Hook simples para controle da sidebar
 const useSidebar = () => {
@@ -20,16 +20,16 @@ const useSidebar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
   return { isOpen, toggleSidebar };
 };
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { CardDescription, CardTitle } from '@/components/ui/card';
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+  ResizablePanelGroup
+} from '@/components/ui/resizable';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,8 +37,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import {
   Brush,
   Camera,
@@ -67,8 +67,8 @@ import {
   User2,
   UserRound,
   Users,
-  Video,
-} from "lucide-react";
+  Video
+} from 'lucide-react';
 
 type Message = {
   from: string;
@@ -81,58 +81,58 @@ type ExampleMessages = Record<string, Message[]>;
 // Lista de contatos (mock)
 const contactList = [
   {
-    name: "Manoj Rayi",
-    message: "Vamos revisar o projeto amanhã?",
-    image: "https://github.com/rayimanoj8.png",
+    name: 'Manoj Rayi',
+    message: 'Vamos revisar o projeto amanhã?',
+    image: 'https://github.com/rayimanoj8.png'
   },
   {
-    name: "Anjali Kumar",
-    message: "Recebeu os arquivos?",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
+    name: 'Anjali Kumar',
+    message: 'Recebeu os arquivos?',
+    image: 'https://randomuser.me/api/portraits/women/2.jpg'
   },
   {
-    name: "Ravi Teja",
-    message: "Ótimo trabalho na apresentação!",
-    image: "https://randomuser.me/api/portraits/men/3.jpg",
+    name: 'Ravi Teja',
+    message: 'Ótimo trabalho na apresentação!',
+    image: 'https://randomuser.me/api/portraits/men/3.jpg'
   },
   {
-    name: "Sneha Reddy",
-    message: "Pode me ligar quando estiver livre?",
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
+    name: 'Sneha Reddy',
+    message: 'Pode me ligar quando estiver livre?',
+    image: 'https://randomuser.me/api/portraits/women/4.jpg'
+  }
 ];
 
 // Mensagens de exemplo para cada contato
 const exampleMessages: ExampleMessages = {
-  "Manoj Rayi": [
-    { from: "Manoj Rayi", text: "Oi! Como está?", created_at: "09:00" },
-    { from: "me", text: "Olá Manoj! Estou bem, e você?", created_at: "09:01" },
-    { from: "Manoj Rayi", text: "Tudo ótimo. Vamos revisar o projeto amanhã?", created_at: "09:02" },
-    { from: "me", text: "Claro! Qual horário prefere?", created_at: "09:03" },
+  'Manoj Rayi': [
+    { from: 'Manoj Rayi', text: 'Oi! Como está?', created_at: '09:00' },
+    { from: 'me', text: 'Olá Manoj! Estou bem, e você?', created_at: '09:01' },
+    { from: 'Manoj Rayi', text: 'Tudo ótimo. Vamos revisar o projeto amanhã?', created_at: '09:02' },
+    { from: 'me', text: 'Claro! Qual horário prefere?', created_at: '09:03' }
   ],
-  "Anjali Kumar": [
-    { from: "me", text: "Bom dia, Anjali! Envie os arquivos, por favor.", created_at: "08:30" },
-    { from: "Anjali Kumar", text: "Bom dia! Acabei de enviar para seu e-mail.", created_at: "08:31" },
-    { from: "me", text: "Recebido, obrigado!", created_at: "08:32" },
-    { from: "Anjali Kumar", text: "Qualquer dúvida, me avise.", created_at: "08:33" },
+  'Anjali Kumar': [
+    { from: 'me', text: 'Bom dia, Anjali! Envie os arquivos, por favor.', created_at: '08:30' },
+    { from: 'Anjali Kumar', text: 'Bom dia! Acabei de enviar para seu e-mail.', created_at: '08:31' },
+    { from: 'me', text: 'Recebido, obrigado!', created_at: '08:32' },
+    { from: 'Anjali Kumar', text: 'Qualquer dúvida, me avise.', created_at: '08:33' }
   ],
-  "Ravi Teja": [
-    { from: "Ravi Teja", text: "Ótimo trabalho na apresentação!", created_at: "10:00" },
-    { from: "me", text: "Obrigado, Ravi! Fico feliz que gostou.", created_at: "10:01" },
-    { from: "Ravi Teja", text: "Vamos marcar uma call para alinhar os próximos passos?", created_at: "10:02" },
-    { from: "me", text: "Sim, pode ser hoje à tarde?", created_at: "10:03" },
+  'Ravi Teja': [
+    { from: 'Ravi Teja', text: 'Ótimo trabalho na apresentação!', created_at: '10:00' },
+    { from: 'me', text: 'Obrigado, Ravi! Fico feliz que gostou.', created_at: '10:01' },
+    { from: 'Ravi Teja', text: 'Vamos marcar uma call para alinhar os próximos passos?', created_at: '10:02' },
+    { from: 'me', text: 'Sim, pode ser hoje à tarde?', created_at: '10:03' }
   ],
-  "Sneha Reddy": [
-    { from: "Sneha Reddy", text: "Pode me ligar quando estiver livre?", created_at: "11:00" },
-    { from: "me", text: "Posso sim, te ligo em 10 minutos!", created_at: "11:01" },
-    { from: "Sneha Reddy", text: "Perfeito, obrigada!", created_at: "11:02" },
-  ],
+  'Sneha Reddy': [
+    { from: 'Sneha Reddy', text: 'Pode me ligar quando estiver livre?', created_at: '11:00' },
+    { from: 'me', text: 'Posso sim, te ligo em 10 minutos!', created_at: '11:01' },
+    { from: 'Sneha Reddy', text: 'Perfeito, obrigada!', created_at: '11:02' }
+  ]
 };
 
 const menuItems = [
-  { title: "Messages", url: "#", icon: MessageCircle },
-  { title: "Phone", url: "#", icon: Phone },
-  { title: "Status", url: "#", icon: CircleFadingPlus },
+  { title: 'Messages', url: '#', icon: MessageCircle },
+  { title: 'Phone', url: '#', icon: Phone },
+  { title: 'Status', url: '#', icon: CircleFadingPlus }
 ];
 
 export const Home = () => {
@@ -145,7 +145,7 @@ export const Home = () => {
       contactList.map((c) => [c.name, exampleMessages[c.name] || []])
     )
   );
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
 
   // Envio de mensagem
   const handleSend = () => {
@@ -155,18 +155,18 @@ export const Home = () => {
       ...prev,
       [currentChat.name]: [
         ...(prev[currentChat.name] || []),
-        { from: "me", text: input, created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-      ],
+        { from: 'me', text: input, created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+      ]
     }));
-    setInput("");
+    setInput('');
   };
 
   // Gera iniciais para o AvatarFallback
   const getInitials = (name: string) =>
     name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase();
 
   return (
@@ -309,7 +309,7 @@ export const Home = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentChat(contact)}
-                    className={`px-4 w-full py-2 hover:bg-secondary cursor-pointer text-left ${currentChat.name === contact.name ? "bg-accent/30" : ""}`}
+                    className={`px-4 w-full py-2 hover:bg-secondary cursor-pointer text-left ${currentChat.name === contact.name ? 'bg-accent/30' : ''}`}
                     aria-label={`Abrir chat com ${contact.name}`}
                   >
                     <div className="flex flex-row gap-2">
@@ -335,7 +335,7 @@ export const Home = () => {
               <div className="h-16 border-b flex items-center px-3 bg-card/80 backdrop-blur-md">
                 <Avatar className="size-12">
                   <AvatarImage src={currentChat?.image} />
-                  <AvatarFallback>{getInitials(currentChat?.name || "")}</AvatarFallback>
+                  <AvatarFallback>{getInitials(currentChat?.name || '')}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1 ml-2">
                   <CardTitle>{currentChat?.name}</CardTitle>
@@ -357,11 +357,11 @@ export const Home = () => {
               <ScrollArea className="flex-grow px-4 py-4 bg-gradient-to-b from-background to-muted/40">
                 <div className="flex flex-col gap-2">
                   {(messages[currentChat.name] || []).map((msg: Message, idx: number) => {
-                    const isMe = msg.from === "me";
+                    const isMe = msg.from === 'me';
                     return (
                       <div
                         key={idx}
-                        className={`flex items-end ${isMe ? "justify-end" : "justify-start"}`}
+                        className={`flex items-end ${isMe ? 'justify-end' : 'justify-start'}`}
                       >
                         {!isMe && (
                           <Avatar className="size-8 mr-2">
@@ -371,12 +371,12 @@ export const Home = () => {
                         )}
                         <div
                           className={`max-w-[70%] rounded-2xl px-4 py-2 shadow-md text-sm relative
-                            ${isMe ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-white text-black dark:bg-muted dark:text-white rounded-bl-sm"}
+                            ${isMe ? 'bg-primary text-primary-foreground rounded-br-sm' : 'bg-white text-black dark:bg-muted dark:text-white rounded-bl-sm'}
                           `}
                         >
                           {msg.text}
                           <span className="block text-xs text-muted-foreground mt-1 text-right">
-                            {msg.created_at || ""}
+                            {msg.created_at || ''}
                           </span>
                         </div>
                         {isMe && (
@@ -425,7 +425,7 @@ export const Home = () => {
                 <Input
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSend()}
+                  onKeyDown={e => e.key === 'Enter' && handleSend()}
                   className="flex-grow border-0 bg-background rounded-full px-4"
                   placeholder="Digite uma mensagem"
                   aria-label="Digite uma mensagem"

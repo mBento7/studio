@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
-import { Heart, MessageCircle, Share2, MapPin, User, Tag, Hand, Star } from "lucide-react";
-import { tipoConfig } from "@/config/feed";
-import { useRouter } from "next/navigation";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/card';
+import { Heart, MessageCircle, Share2, MapPin, User, Tag, Hand, Star } from 'lucide-react';
+import { tipoConfig } from '@/config/feed';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -131,12 +131,12 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
             <div className="flex items-center gap-4">
               <Button
                 onClick={handleLike}
-                variant={isLiked ? "default" : "ghost"}
+                variant={isLiked ? 'default' : 'ghost'}
                 size="sm"
-                aria-label={isLiked ? "Descurtir" : "Curtir"}
-                className={cn(isLiked ? "text-red-500" : "text-muted-foreground hover:text-red-500")}
+                aria-label={isLiked ? 'Descurtir' : 'Curtir'}
+                className={cn(isLiked ? 'text-red-500' : 'text-muted-foreground hover:text-red-500')}
               >
-                <Heart className={cn("w-4 h-4", isLiked && "fill-current animate-pulse")}/>
+                <Heart className={cn('w-4 h-4', isLiked && 'fill-current animate-pulse')}/>
                 <span>{likeCount}</span>
               </Button>
               <Button
@@ -160,7 +160,7 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
               </Button>
             </div>
             {/* Botão de contato em destaque */}
-            <Button 
+            <Button
               onClick={handleContato}
               className="flex items-center gap-2 py-2 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-sm rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all"
             >
@@ -173,6 +173,6 @@ const FeedCard = React.forwardRef<HTMLDivElement, FeedCardProps>(({
   );
 });
 
-FeedCard.displayName = "FeedCard";
+FeedCard.displayName = 'FeedCard';
 
 export { FeedCard };

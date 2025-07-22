@@ -1,38 +1,37 @@
-
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Zap, Link as LinkIcon, QrCode, Palette, Users, Share2 } from 'lucide-react';
 
 const benefits = [
   {
     icon: Zap,
-    title: "Perfil Centralizado",
-    description: "Una suas informações de contato, redes sociais, portfólio e serviços em um único link profissional e fácil de compartilhar.",
+    title: 'Perfil Centralizado',
+    description: 'Una suas informações de contato, redes sociais, portfólio e serviços em um único link profissional e fácil de compartilhar.'
   },
   {
     icon: LinkIcon,
-    title: "Templates Personalizáveis",
-    description: "Escolha entre diversos templates e personalize o design para que seu perfil tenha a cara da sua marca pessoal ou empresarial.",
+    title: 'Templates Personalizáveis',
+    description: 'Escolha entre diversos templates e personalize o design para que seu perfil tenha a cara da sua marca pessoal ou empresarial.'
   },
   {
     icon: QrCode,
-    title: "Cartão de Visita Digital e QR Code",
-    description: "Gere um QR Code e um cartão de visita digital para compartilhar seu perfil de forma rápida em qualquer situação, online ou offline.",
+    title: 'Cartão de Visita Digital e QR Code',
+    description: 'Gere um QR Code e um cartão de visita digital para compartilhar seu perfil de forma rápida em qualquer situação, online ou offline.'
   },
   {
     icon: Palette,
-    title: "Mostre Seu Trabalho",
-    description: "Destaque seus melhores projetos, produtos ou serviços com seções de portfólio, vídeos e descrições detalhadas.",
+    title: 'Mostre Seu Trabalho',
+    description: 'Destaque seus melhores projetos, produtos ou serviços com seções de portfólio, vídeos e descrições detalhadas.'
   },
   {
     icon: Users,
-    title: "Facilite o Contato",
-    description: "Permita que clientes, recrutadores e parceiros entrem em contato com você facilmente através de formulários e links diretos.",
+    title: 'Facilite o Contato',
+    description: 'Permita que clientes, recrutadores e parceiros entrem em contato com você facilmente através de formulários e links diretos.'
   },
   {
     icon: Share2,
-    title: "Otimizado para Descoberta",
-    description: "Aumente sua visibilidade online com um perfil otimizado para ser encontrado em mecanismos de busca.",
-  },
+    title: 'Otimizado para Descoberta',
+    description: 'Aumente sua visibilidade online com um perfil otimizado para ser encontrado em mecanismos de busca.'
+  }
 ];
 
 export function LandingBenefitsSection() {

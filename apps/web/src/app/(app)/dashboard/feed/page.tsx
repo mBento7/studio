@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,16 +21,16 @@ import {
   ConciergeBell,
   Box,
   Siren,
-  ShoppingCart,
+  ShoppingCart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { FeedCard } from '@/components/feed/FeedCard';
 import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
 import './feed-scrollbar.css';
@@ -38,7 +38,7 @@ import { FeedPostEditor } from '@/components/feed/FeedPostEditor';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { Button as UIButton } from '@/components/ui/button';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import { SponsoredAdCard } from '@/components/feed/SponsoredAdCard';
@@ -56,49 +56,49 @@ import CuponFeedCard from '@/components/feed/CuponFeedCard';
 
 // Mock data
 const stories = [
-  { id: 1, user: "João", avatar: "https://picsum.photos/seed/user1/80/80", timeLeft: 85 },
-  { id: 2, user: "Maria", avatar: "https://picsum.photos/seed/user2/80/80", timeLeft: 60 },
-  { id: 3, user: "Pedro", avatar: "https://picsum.photos/seed/user3/80/80", timeLeft: 92 },
-  { id: 4, user: "Ana", avatar: "https://picsum.photos/seed/user4/80/80", timeLeft: 45 },
-  { id: 5, user: "Carlos", avatar: "https://picsum.photos/seed/user5/80/80", timeLeft: 78 },
-  { id: 6, user: "Lucia", avatar: "https://picsum.photos/seed/user6/80/80", timeLeft: 30 },
-  { id: 7, user: "Rafael", avatar: "https://picsum.photos/seed/user7/80/80", timeLeft: 95 },
-  { id: 8, user: "Sofia", avatar: "https://picsum.photos/seed/user8/80/80", timeLeft: 15 },
+  { id: 1, user: 'João', avatar: 'https://picsum.photos/seed/user1/80/80', timeLeft: 85 },
+  { id: 2, user: 'Maria', avatar: 'https://picsum.photos/seed/user2/80/80', timeLeft: 60 },
+  { id: 3, user: 'Pedro', avatar: 'https://picsum.photos/seed/user3/80/80', timeLeft: 92 },
+  { id: 4, user: 'Ana', avatar: 'https://picsum.photos/seed/user4/80/80', timeLeft: 45 },
+  { id: 5, user: 'Carlos', avatar: 'https://picsum.photos/seed/user5/80/80', timeLeft: 78 },
+  { id: 6, user: 'Lucia', avatar: 'https://picsum.photos/seed/user6/80/80', timeLeft: 30 },
+  { id: 7, user: 'Rafael', avatar: 'https://picsum.photos/seed/user7/80/80', timeLeft: 95 },
+  { id: 8, user: 'Sofia', avatar: 'https://picsum.photos/seed/user8/80/80', timeLeft: 15 }
 ];
 
 const feedItems = {
   trending: [
-    { id: 1, title: "Serviço de Limpeza Premium", user: "CleanPro", category: "Limpeza" },
-    { id: 2, title: "Consultoria em Marketing Digital", user: "DigitalMax", category: "Marketing" },
-    { id: 3, title: "Aulas de Yoga Personalizadas", user: "YogaLife", category: "Saúde" },
-    { id: 4, title: "Desenvolvimento de Apps", user: "TechSolutions", category: "Tecnologia" },
-    { id: 5, title: "Consultoria Financeira", user: "FinanceExpert", category: "Finanças" },
-    { id: 6, title: "Design de Interiores", user: "InteriorDesign", category: "Design" },
+    { id: 1, title: 'Serviço de Limpeza Premium', user: 'CleanPro', category: 'Limpeza' },
+    { id: 2, title: 'Consultoria em Marketing Digital', user: 'DigitalMax', category: 'Marketing' },
+    { id: 3, title: 'Aulas de Yoga Personalizadas', user: 'YogaLife', category: 'Saúde' },
+    { id: 4, title: 'Desenvolvimento de Apps', user: 'TechSolutions', category: 'Tecnologia' },
+    { id: 5, title: 'Consultoria Financeira', user: 'FinanceExpert', category: 'Finanças' },
+    { id: 6, title: 'Design de Interiores', user: 'InteriorDesign', category: 'Design' }
   ],
   new: [
-    { id: 5, title: "Fotografia de Eventos", user: "PhotoStudio", category: "Fotografia" },
-    { id: 6, title: "Jardinagem Residencial", user: "GreenThumb", category: "Jardinagem" },
-    { id: 7, title: "Personal Trainer", user: "FitCoach", category: "Fitness" },
-    { id: 8, title: "Culinária Gourmet", user: "ChefMaster", category: "Gastronomia" },
+    { id: 5, title: 'Fotografia de Eventos', user: 'PhotoStudio', category: 'Fotografia' },
+    { id: 6, title: 'Jardinagem Residencial', user: 'GreenThumb', category: 'Jardinagem' },
+    { id: 7, title: 'Personal Trainer', user: 'FitCoach', category: 'Fitness' },
+    { id: 8, title: 'Culinária Gourmet', user: 'ChefMaster', category: 'Gastronomia' }
   ],
   recommended: [
-    { id: 9, title: "Consultoria Jurídica", user: "LawFirm", category: "Jurídico" },
-    { id: 10, title: "Design Gráfico", user: "CreativeDesign", category: "Design" },
-    { id: 11, title: "Manutenção Residencial", user: "FixIt", category: "Manutenção" },
-    { id: 12, title: "Tradução Profissional", user: "TranslatePro", category: "Idiomas" },
-  ],
+    { id: 9, title: 'Consultoria Jurídica', user: 'LawFirm', category: 'Jurídico' },
+    { id: 10, title: 'Design Gráfico', user: 'CreativeDesign', category: 'Design' },
+    { id: 11, title: 'Manutenção Residencial', user: 'FixIt', category: 'Manutenção' },
+    { id: 12, title: 'Tradução Profissional', user: 'TranslatePro', category: 'Idiomas' }
+  ]
 };
 
 const ads = [
-  { id: 1, title: "Promoção Especial - 50% OFF", img: "https://picsum.photos/seed/ad1/300/100" },
-  { id: 2, title: "Novo Serviço Disponível", img: "https://picsum.photos/seed/ad2/300/100" },
-  { id: 3, title: "Cadastre-se e Ganhe Desconto", img: "https://picsum.photos/seed/ad3/300/100" },
+  { id: 1, title: 'Promoção Especial - 50% OFF', img: 'https://picsum.photos/seed/ad1/300/100' },
+  { id: 2, title: 'Novo Serviço Disponível', img: 'https://picsum.photos/seed/ad2/300/100' },
+  { id: 3, title: 'Cadastre-se e Ganhe Desconto', img: 'https://picsum.photos/seed/ad3/300/100' }
 ];
 
 const coupons = [
-  { id: 1, code: "SAVE20", desc: "20% de desconto em limpeza" },
-  { id: 2, code: "FIRST10", desc: "10% para novos clientes" },
-  { id: 3, code: "PREMIUM15", desc: "15% em serviços premium" },
+  { id: 1, code: 'SAVE20', desc: '20% de desconto em limpeza' },
+  { id: 2, code: 'FIRST10', desc: '10% para novos clientes' },
+  { id: 3, code: 'PREMIUM15', desc: '15% em serviços premium' }
 ];
 
 interface CreateCouponModalProps {
@@ -111,7 +111,7 @@ function CreateCouponModal({ isOpen, onOpenChange }: CreateCouponModalProps) {
     code: '',
     description: '',
     discount: '',
-    validUntil: '',
+    validUntil: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -193,31 +193,31 @@ function StoriesCarousel({ userStories, userProfile }: { userStories?: any[]; us
   const storiesPerView = 7;
   const storiesData = (userStories && userStories.length > 0)
     ? userStories.map((s) => ({
-        id: String(s.id),
-        user: {
-          name: userProfile?.name || userProfile?.full_name || 'Você',
-          avatarUrl: userProfile?.profile_picture_url || '',
-          username: userProfile?.username || '',
-        },
-        mediaUrl: s.imageUrl,
-        type: 'image' as 'image',
-        time: '24h',
-        timeLeft: 24,
-        liked: false,
-      }))
+      id: String(s.id),
+      user: {
+        name: userProfile?.name || userProfile?.full_name || 'Você',
+        avatarUrl: userProfile?.profile_picture_url || '',
+        username: userProfile?.username || ''
+      },
+      mediaUrl: s.imageUrl,
+      type: 'image' as 'image',
+      time: '24h',
+      timeLeft: 24,
+      liked: false
+    }))
     : stories.map((s, idx) => ({
-        id: s.id.toString(),
-        user: {
-          name: s.user,
-          avatarUrl: s.avatar,
-          username: s.user.toLowerCase(),
-        },
-        mediaUrl: s.avatar,
-        type: 'image' as 'image',
-        time: '24h',
-        timeLeft: 24,
-        liked: false,
-      }));
+      id: s.id.toString(),
+      user: {
+        name: s.user,
+        avatarUrl: s.avatar,
+        username: s.user.toLowerCase()
+      },
+      mediaUrl: s.avatar,
+      type: 'image' as 'image',
+      time: '24h',
+      timeLeft: 24,
+      liked: false
+    }));
   const maxIndex = Math.max(0, storiesData.length - storiesPerView);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStoryIdx, setSelectedStoryIdx] = useState<number | null>(null);
@@ -235,7 +235,7 @@ function StoriesCarousel({ userStories, userProfile }: { userStories?: any[]; us
     let interval: NodeJS.Timeout | null = null;
     if (modalOpen && selectedStoryIdx !== null && !isPaused) {
       setProgress(0);
-      let start = Date.now();
+      const start = Date.now();
       interval = setInterval(() => {
         const elapsed = Date.now() - start;
         const percent = Math.min(100, (elapsed / 5000) * 100);
@@ -345,11 +345,11 @@ function TabButton({ icon: Icon, label, active, onClick }: { icon: React.Element
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center justify-center gap-2 h-10 px-4 rounded-full text-sm font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-dark focus:ring-accent",
-        "border",
+        'flex items-center justify-center gap-2 h-10 px-4 rounded-full text-sm font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-dark focus:ring-accent',
+        'border',
         active
-          ? "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md border-transparent"
-          : "border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] bg-transparent"
+          ? 'bg-gradient-to-r from-[#14b8a6] to-[#0e9094] hover:brightness-110 text-white font-semibold shadow-md border-transparent'
+          : 'border-[#0e9094]/50 text-[#0e9094] hover:bg-[#0e9094]/10 hover:text-[#0e9094] bg-transparent'
       )}
     >
       <Icon className="w-4 h-4" />
@@ -379,8 +379,8 @@ function SocialCard({ item }: { item: any }) {
       </div>
       <div className="px-4 pb-3 pt-2 border-t border-border/50 flex justify-between items-center">
         <div className="flex gap-4 items-center">
-          <button onClick={handleLike} className={cn("flex items-center gap-1.5 text-sm transition-colors", liked ? "text-red-500" : "text-muted-foreground hover:text-red-500")}>
-            <Heart className={cn("w-4 h-4", liked && "fill-current")} />
+          <button onClick={handleLike} className={cn('flex items-center gap-1.5 text-sm transition-colors', liked ? 'text-red-500' : 'text-muted-foreground hover:text-red-500')}>
+            <Heart className={cn('w-4 h-4', liked && 'fill-current')} />
             <span className="text-xs">Gostar</span>
           </button>
           <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-sky-500 transition-colors">
@@ -388,8 +388,8 @@ function SocialCard({ item }: { item: any }) {
             <span className="text-xs">Comentar</span>
           </button>
         </div>
-        <button onClick={handleBookmark} className={cn("text-muted-foreground transition-colors", bookmarked ? "text-orange-500" : "hover:text-orange-500")}>
-          <Bookmark className={cn("w-5 h-5", bookmarked && "fill-current")} />
+        <button onClick={handleBookmark} className={cn('text-muted-foreground transition-colors', bookmarked ? 'text-orange-500' : 'hover:text-orange-500')}>
+          <Bookmark className={cn('w-5 h-5', bookmarked && 'fill-current')} />
         </button>
       </div>
     </div>
@@ -404,7 +404,7 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
   const couponUser = user && user.user_metadata ? {
     name: user.user_metadata.full_name || user.user_metadata.name || 'Usuário',
     username: user.user_metadata.username || user.email?.split('@')[0] || 'usuario',
-    avatarUrl: user.user_metadata.avatar_url || '/avatar-default.png',
+    avatarUrl: user.user_metadata.avatar_url || '/avatar-default.png'
   } : undefined;
 
   const filteredPosts = posts.filter(post => {
@@ -465,7 +465,7 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
               if (typeof usuario === 'string') {
                 usuario = {
                   nome: usuario,
-                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
+                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'
                 };
               }
               return <FeedCard key={idx} {...feedCardProps} usuario={usuario} />;
@@ -484,13 +484,13 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
               if (typeof usuario === 'string') {
                 usuario = {
                   nome: usuario,
-                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder',
+                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'
                 };
               }
               // Adaptar para o formato esperado pelo TestimonialCard moderno
               const user = {
                 name: usuario.nome,
-                avatar: usuario.avatar,
+                avatar: usuario.avatar
               };
               const rating = item.nota || item.rating || 5;
               const comment = item.comentario || item.comment || '';
@@ -509,7 +509,7 @@ function FeedContent({ activeTab, setActiveTab, posts, userProfile, hideFilter }
                     service,
                     serviceProvider: user, // ajuste conforme necessário
                     engagement: { likes: 0, comments: 0, shares: 0 }, // ajuste conforme necessário
-                    timeAgo: date,
+                    timeAgo: date
                   }}
                 />
               );
@@ -533,12 +533,12 @@ function UserAdExample() {
       <div className="absolute top-3 right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
         PATROCINADO
       </div>
-      
+
       {/* Large header image */}
       <div className="relative h-32 bg-gradient-to-r from-blue-600 to-purple-600 overflow-hidden">
-        <img 
-          src="https://picsum.photos/seed/useradexample/400/150" 
-          alt="TechSolutions Banner" 
+        <img
+          src="https://picsum.photos/seed/useradexample/400/150"
+          alt="TechSolutions Banner"
           className="w-full h-full object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -546,9 +546,9 @@ function UserAdExample() {
 
       <div className="p-4 space-y-3">
         <div className="flex items-start gap-3">
-          <img 
-            src="https://picsum.photos/seed/useradlogo/50/50" 
-            alt="TechSolutions" 
+          <img
+            src="https://picsum.photos/seed/useradlogo/50/50"
+            alt="TechSolutions"
             className="w-12 h-12 rounded-full object-cover border-2 border-background shadow-md"
           />
           <div className="flex-1">
@@ -556,24 +556,24 @@ function UserAdExample() {
             <p className="text-sm text-muted-foreground">Desenvolvimento de Apps</p>
             <div className="flex items-center gap-1 mt-1">
               <div className="flex text-yellow-400">
-                {"★".repeat(5)}
+                {'★'.repeat(5)}
               </div>
               <span className="text-xs text-muted-foreground">(4.9)</span>
             </div>
           </div>
         </div>
-        
+
         <p className="text-sm text-muted-foreground">
           Transforme sua ideia em realidade! Apps iOS e Android com qualidade profissional e suporte completo.
         </p>
-        
+
         <div className="flex items-center gap-2">
           <span className="text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full font-medium">
             20% OFF
           </span>
           <span className="text-sm text-muted-foreground">até 31/12</span>
         </div>
-        
+
         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md">
           Ver Oferta Completa
         </Button>
@@ -626,7 +626,7 @@ function QuickActions({ onCouponClick }: { onCouponClick: () => void }) {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
+              <Button
                 className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 shadow-md transition-transform hover:scale-105"
                 onClick={onCouponClick}
               >
@@ -674,11 +674,11 @@ function TrendingAds() {
 
 function TrendingHashtags() {
   const hashtags = [
-    { tag: "#limpeza", posts: 1234 },
-    { tag: "#marketing", posts: 987 },
-    { tag: "#design", posts: 756 },
-    { tag: "#consultoria", posts: 543 },
-    { tag: "#fitness", posts: 432 },
+    { tag: '#limpeza', posts: 1234 },
+    { tag: '#marketing', posts: 987 },
+    { tag: '#design', posts: 756 },
+    { tag: '#consultoria', posts: 543 },
+    { tag: '#fitness', posts: 432 }
   ];
 
   return (
@@ -701,9 +701,9 @@ function TrendingHashtags() {
 
 function UserSuggestions() {
   const suggestions = [
-    { id: 1, name: "TechSolutions", category: "Tecnologia", followers: "2.3k", avatar: "https://picsum.photos/seed/suggest1/40/40" },
-    { id: 2, name: "CleanPro", category: "Limpeza", followers: "1.8k", avatar: "https://picsum.photos/seed/suggest2/40/40" },
-    { id: 3, name: "DesignStudio", category: "Design", followers: "3.1k", avatar: "https://picsum.photos/seed/suggest3/40/40" },
+    { id: 1, name: 'TechSolutions', category: 'Tecnologia', followers: '2.3k', avatar: 'https://picsum.photos/seed/suggest1/40/40' },
+    { id: 2, name: 'CleanPro', category: 'Limpeza', followers: '1.8k', avatar: 'https://picsum.photos/seed/suggest2/40/40' },
+    { id: 3, name: 'DesignStudio', category: 'Design', followers: '3.1k', avatar: 'https://picsum.photos/seed/suggest3/40/40' }
   ];
 
   return (
@@ -886,7 +886,7 @@ export default function FeedPage() {
           comentarios: Math.floor(Math.random() * 20),
           tags: u.skills?.slice(0, 3) || ['qualidade', 'promoção'],
           whatsappUrl: u.whatsappNumber ? `https://wa.me/${u.whatsappNumber}` : undefined,
-          urgente: idx % 5 === 0,
+          urgente: idx % 5 === 0
         },
         // CouponCard
         {
@@ -894,14 +894,14 @@ export default function FeedPage() {
           codigo: `USER${idx + 1}OFF`,
           desconto: `${10 + idx % 20}%`,
           validade: '31/12/2024',
-          descricao: `Cupom especial do(a) ${u.name}`,
+          descricao: `Cupom especial do(a) ${u.name}`
         },
         // BannerCard
         {
           tipo: 'banner',
           imagem: u.cover_photo_url || 'https://picsum.photos/seed/banner/400/200',
           texto: `Conheça o perfil de ${u.name}`,
-          link: `/${u.username}`,
+          link: `/${u.username}`
         },
         // EventCard
         {
@@ -910,14 +910,14 @@ export default function FeedPage() {
           data: '15/08/2024',
           local: u.location?.city || 'Online',
           imagem: u.profile_picture_url || 'https://picsum.photos/seed/event/400/200',
-          link: `/${u.username}`,
+          link: `/${u.username}`
         },
         // InviteCard
         {
           tipo: 'convite',
           texto: `Convide amigos para conhecer ${u.name}!`,
           bonus: `${5 + idx} créditos`,
-          link: `/${u.username}`,
+          link: `/${u.username}`
         },
         // SponsoredAdCard
         {
@@ -926,7 +926,7 @@ export default function FeedPage() {
           descricao: u.bio || 'Profissional em destaque na plataforma.',
           imagem: u.profile_picture_url || 'https://picsum.photos/seed/ad/400/200',
           link: `/${u.username}`,
-          usuarioId: u.id,
+          usuarioId: u.id
         },
         // TestimonialCard
         {
@@ -935,15 +935,15 @@ export default function FeedPage() {
           nota: Math.floor(Math.random() * 2) + 4,
           comentario: 'Ótimo profissional, recomendo muito!',
           servico: u.services?.[0]?.name || 'Serviço',
-          imagem: u.profile_picture_url || 'https://picsum.photos/seed/testimonial/80/80',
+          imagem: u.profile_picture_url || 'https://picsum.photos/seed/testimonial/80/80'
         },
         // UpdateCard
         {
           tipo: 'atualizacao',
           titulo: `Atualização de ${u.name}`,
           descricao: 'Perfil atualizado recentemente!',
-          data: 'Hoje',
-        },
+          data: 'Hoje'
+        }
       ]);
       // Embaralhar cards
       for (let i = cards.length - 1; i > 0; i--) {
@@ -974,14 +974,14 @@ export default function FeedPage() {
       localizacao: newPostData.localizacao,
       patrocinado: false,
       urgente: newPostData.urgente,
-      usuario: { 
-        nome: user?.user_metadata.full_name || 'Usuário', 
-        avatar: user?.user_metadata.avatar_url || 'https://randomuser.me/api/portraits/men/1.jpg' 
+      usuario: {
+        nome: user?.user_metadata.full_name || 'Usuário',
+        avatar: user?.user_metadata.avatar_url || 'https://randomuser.me/api/portraits/men/1.jpg'
       },
       curtidas: 0,
       comentarios: 0,
       tags: newPostData.tags || [],
-      whatsappUrl: newPostData.whatsappUrl,
+      whatsappUrl: newPostData.whatsappUrl
     };
     setPosts((prevPosts: any[]) => [newPost, ...prevPosts]);
   };

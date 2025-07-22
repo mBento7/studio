@@ -1,5 +1,5 @@
-import React from "react";
-import ProfileEditV2Page from "./profile-edit-v2/page";
+import React from 'react';
+import ProfileEditV2Page from './profile-edit-v2/page';
 import { LayoutDecider } from '@/components/layout/layout-decider';
 import Link from 'next/link';
 

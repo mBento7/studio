@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import type { UserProfile } from "@/lib/types";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { MapPin } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import type { UserProfile } from '@/lib/types';
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { MapPin } from 'lucide-react';
 import { Logo } from '@/components/common/logo';
-import { useState } from "react";
+import { useState } from 'react';
 
 interface SearchResultCardFreeProps {
   user: UserProfile;
@@ -16,9 +16,9 @@ interface SearchResultCardFreeProps {
 const SearchResultCardFree: React.FC<SearchResultCardFreeProps> = ({ user }) => {
   const [coverError, setCoverError] = useState(false);
   const initials = user.name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("")
+    .join('')
     .slice(0, 2)
     .toUpperCase();
 
@@ -50,7 +50,7 @@ const SearchResultCardFree: React.FC<SearchResultCardFreeProps> = ({ user }) => 
         {/* Avatar flutuante */}
         <div className="relative -mt-12 z-10">
           <Avatar className="w-24 h-24 border-4 border-white shadow-sm transition-transform group-hover:scale-105">
-            <AvatarImage src={user.profile_picture_url || "/avatar-default.png"} alt={user.name} />
+            <AvatarImage src={user.profile_picture_url || '/avatar-default.png'} alt={user.name} />
             <AvatarFallback className="text-xl font-bold">{initials}</AvatarFallback>
           </Avatar>
         </div>
@@ -68,7 +68,7 @@ const SearchResultCardFree: React.FC<SearchResultCardFreeProps> = ({ user }) => 
             <p className="flex items-center gap-1 text-xs text-slate-600 mt-2">
               <MapPin className="w-4 h-4" />
               {user.location.city}
-              {user.location.state ? `, ${user.location.state}` : ""}
+              {user.location.state ? `, ${user.location.state}` : ''}
             </p>
           )}
 

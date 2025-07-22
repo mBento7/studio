@@ -1,17 +1,17 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Camera, Image as ImageIcon, MapPin, CheckCircle, XCircle } from "lucide-react";
-import { Instagram, Linkedin, Facebook, Globe, Github, MessageCircle, Trash2, Plus } from "lucide-react";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import ImageCropper from "@/components/ImageCropper";
-import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase/client";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Camera, Image as ImageIcon, MapPin, CheckCircle, XCircle } from 'lucide-react';
+import { Instagram, Linkedin, Facebook, Globe, Github, MessageCircle, Trash2, Plus } from 'lucide-react';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ImageCropper from '@/components/ImageCropper';
+import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase/client';
 
 interface ProfileBasicTabV2Props {
   data: any;
@@ -19,8 +19,8 @@ interface ProfileBasicTabV2Props {
 }
 
 // Definir as categorias disponíveis, similar à página de busca
-const categories = ["Serviços", "Produtos", "Lojas e Estabelecimentos"];
-const ALL_VALUE = "all"; // Usado para valor padrão, se necessário
+const categories = ['Serviços', 'Produtos', 'Lojas e Estabelecimentos'];
+const ALL_VALUE = 'all'; // Usado para valor padrão, se necessário
 
 // Função utilitária para montar a URL completa do perfil social
 function getFullSocialUrl(type: string, value: string) {
@@ -128,16 +128,16 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
 
   // Redes sociais disponíveis
   const socialOptions = [
-    { type: "website", label: "Website", icon: Globe },
-    { type: "linkedin", label: "LinkedIn", icon: Linkedin },
-    { type: "instagram", label: "Instagram", icon: Instagram },
-    { type: "facebook", label: "Facebook", icon: Facebook },
-    { type: "tiktok", label: "TikTok", icon: Globe },
-    { type: "github", label: "GitHub", icon: Github },
-    { type: "whatsapp", label: "WhatsApp", icon: MessageCircle },
+    { type: 'website', label: 'Website', icon: Globe },
+    { type: 'linkedin', label: 'LinkedIn', icon: Linkedin },
+    { type: 'instagram', label: 'Instagram', icon: Instagram },
+    { type: 'facebook', label: 'Facebook', icon: Facebook },
+    { type: 'tiktok', label: 'TikTok', icon: Globe },
+    { type: 'github', label: 'GitHub', icon: Github },
+    { type: 'whatsapp', label: 'WhatsApp', icon: MessageCircle }
   ];
   const [selectedSocial, setSelectedSocial] = React.useState(socialOptions[0]);
-  const [socialUrl, setSocialUrl] = React.useState("");
+  const [socialUrl, setSocialUrl] = React.useState('');
 
   const handleAddSocial = () => {
     if (!socialUrl) return;
@@ -153,7 +153,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
       // Corrigir aqui: salvar como 'platform' e não 'type'
       newLinks.push({ platform: selectedSocial.type, url });
       onChange({ ...data, sociallinks: newLinks });
-      setSocialUrl("");
+      setSocialUrl('');
     }
   };
   const handleRemoveSocial = (idx: number) => {
@@ -188,7 +188,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
     // Regex: começa e termina com letra/número, pode conter . e _, sem duplos, min 1, max 30
     return /^[a-z0-9](?!.*[._]{2})[a-z0-9._]{0,28}[a-z0-9]$/.test(username);
   }
-  const [usernameError, setUsernameError] = useState<string>("");
+  const [usernameError, setUsernameError] = useState<string>('');
   const [usernameAvailable, setUsernameAvailable] = useState<null | boolean>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
 
@@ -199,13 +199,13 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
 
   async function handleCheckUsername() {
     setUsernameAvailable(null);
-    setUsernameError("");
+    setUsernameError('');
     if (!data.username) {
-      setUsernameError("Digite um nome de usuário.");
+      setUsernameError('Digite um nome de usuário.');
       return;
     }
     if (!isValidInstagramUsername(data.username)) {
-      setUsernameError("Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.");
+      setUsernameError('Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.');
       return;
     }
     setCheckingUsername(true);
@@ -217,15 +217,15 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
       .maybeSingle();
     setCheckingUsername(false);
     if (error) {
-      setUsernameError("Erro ao verificar disponibilidade. Tente novamente.");
+      setUsernameError('Erro ao verificar disponibilidade. Tente novamente.');
       setUsernameAvailable(null);
       return;
     }
     if (existing) {
-      setUsernameError("Este nome de usuário já está em uso.");
+      setUsernameError('Este nome de usuário já está em uso.');
       setUsernameAvailable(false);
     } else {
-      setUsernameError("");
+      setUsernameError('');
       setUsernameAvailable(true);
     }
   }
@@ -293,7 +293,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <Label htmlFor="full_name">Nome Completo</Label>
             <Input
               id="full_name"
-              value={data.full_name ?? ""}
+              value={data.full_name ?? ''}
               onChange={e => onChange({ ...data, full_name: e.target.value })}
               placeholder="Digite seu nome completo"
               className="mt-1"
@@ -303,17 +303,17 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <Label htmlFor="username">Nome de Usuário</Label>
             <Input
               id="username"
-              value={data.username ?? ""}
+              value={data.username ?? ''}
               onChange={e => {
                 const value = e.target.value;
                 onChange({ ...data, username: value });
                 setUsernameAvailable(null); // resetar status ao digitar
                 if (!value) {
-                  setUsernameError("");
+                  setUsernameError('');
                 } else if (!isValidInstagramUsername(value)) {
-                  setUsernameError("Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.");
+                  setUsernameError('Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.');
                 } else {
-                  setUsernameError("");
+                  setUsernameError('');
                 }
               }}
               placeholder="Escolha um nome de usuário"
@@ -329,7 +329,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
                 onClick={handleCheckUsername}
                 disabled={checkingUsername || !data.username}
               >
-                {checkingUsername ? "Verificando..." : "Verificar"}
+                {checkingUsername ? 'Verificando...' : 'Verificar'}
               </button>
               {usernameAvailable === true && !usernameError && (
                 <span className="flex items-center gap-1 text-green-600 text-sm"><CheckCircle className="w-5 h-5" /> Disponível</span>
@@ -346,7 +346,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
             <Label htmlFor="bio">Bio</Label>
             <Textarea
               id="bio"
-              value={data.bio ?? ""}
+              value={data.bio ?? ''}
               onChange={e => onChange({ ...data, bio: e.target.value })}
               placeholder="Fale um pouco sobre você"
               className="mt-1"
@@ -405,11 +405,11 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
               <Label>Email</Label>
-              <Input type="email" placeholder="Seu e-mail" value={data.email ?? ""} onChange={e => onChange({ ...data, email: e.target.value })} />
+              <Input type="email" placeholder="Seu e-mail" value={data.email ?? ''} onChange={e => onChange({ ...data, email: e.target.value })} />
             </div>
             <div>
               <Label>Telefone</Label>
-              <Input type="tel" placeholder="Seu telefone" value={data.phone ?? ""} onChange={e => onChange({ ...data, phone: e.target.value })} />
+              <Input type="tel" placeholder="Seu telefone" value={data.phone ?? ''} onChange={e => onChange({ ...data, phone: e.target.value })} />
             </div>
           </div>
           {/* Endereço por extenso */}
@@ -418,7 +418,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_rua">Rua</Label>
               <Input
                 id="endereco_rua"
-                value={data.endereco_rua ?? ""}
+                value={data.endereco_rua ?? ''}
                 onChange={e => onChange({ ...data, endereco_rua: e.target.value })}
                 placeholder="Ex: Av. Paulista"
                 className="mt-1"
@@ -428,7 +428,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_numero">Número</Label>
               <Input
                 id="endereco_numero"
-                value={data.endereco_numero ?? ""}
+                value={data.endereco_numero ?? ''}
                 onChange={e => onChange({ ...data, endereco_numero: e.target.value })}
                 placeholder="Ex: 1000"
                 className="mt-1"
@@ -438,7 +438,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_complemento">Complemento</Label>
               <Input
                 id="endereco_complemento"
-                value={data.endereco_complemento ?? ""}
+                value={data.endereco_complemento ?? ''}
                 onChange={e => onChange({ ...data, endereco_complemento: e.target.value })}
                 placeholder="Ex: Sala 101"
                 className="mt-1"
@@ -450,7 +450,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_bairro">Bairro</Label>
               <Input
                 id="endereco_bairro"
-                value={data.endereco_bairro ?? ""}
+                value={data.endereco_bairro ?? ''}
                 onChange={e => onChange({ ...data, endereco_bairro: e.target.value })}
                 placeholder="Ex: Bela Vista"
                 className="mt-1"
@@ -460,7 +460,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_cidade">Cidade</Label>
               <Input
                 id="endereco_cidade"
-                value={data.endereco_cidade ?? ""}
+                value={data.endereco_cidade ?? ''}
                 onChange={e => onChange({ ...data, endereco_cidade: e.target.value })}
                 placeholder="Ex: São Paulo"
                 className="mt-1"
@@ -470,7 +470,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_estado">Estado</Label>
               <Input
                 id="endereco_estado"
-                value={data.endereco_estado ?? ""}
+                value={data.endereco_estado ?? ''}
                 onChange={e => onChange({ ...data, endereco_estado: e.target.value })}
                 placeholder="Ex: SP"
                 className="mt-1"
@@ -482,7 +482,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               <Label htmlFor="endereco_cep">CEP</Label>
               <Input
                 id="endereco_cep"
-                value={data.endereco_cep ?? ""}
+                value={data.endereco_cep ?? ''}
                 onChange={e => onChange({ ...data, endereco_cep: e.target.value })}
                 placeholder="Ex: 01310-100"
                 className="mt-1"
@@ -511,7 +511,7 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
               id="maps_link"
               type="url"
               placeholder="Cole aqui o link do Google Maps"
-              value={data.maps_link ?? ""}
+              value={data.maps_link ?? ''}
               onChange={e => onChange({ ...data, maps_link: e.target.value })}
               className="mt-1 flex-1"
             />
@@ -566,4 +566,4 @@ export function ProfileBasicTabV2({ data, onChange }: ProfileBasicTabV2Props) {
       </Card>
     </div>
   );
-} 
+}

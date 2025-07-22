@@ -1,27 +1,27 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { ProfileActions } from "./ProfileActions";
-import { SocialLinks } from "../social/SocialLinks";
-import { useProfileQrCode } from "./useProfileQrCode";
-import { LocationInfo } from "./LocationInfo";
-import { Edit, Mail, Phone } from "lucide-react";
-import Link from "next/link";
-import { defaultFreeProfileLayoutConfig } from "./FreeProfileLayout/config";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import FreeProfileCardHeaderStandardPremium from "./ProfileCardHeaderStandardPremium";
-import StandardProfileCardHeader from "./StandardProfileCardHeader";
-import { SkillsList } from "@/components/skills/SkillsList";
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
+import { ProfileActions } from './ProfileActions';
+import { SocialLinks } from '../social/SocialLinks';
+import { useProfileQrCode } from './useProfileQrCode';
+import { LocationInfo } from './LocationInfo';
+import { Edit, Mail, Phone } from 'lucide-react';
+import Link from 'next/link';
+import { defaultFreeProfileLayoutConfig } from './FreeProfileLayout/config';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import FreeProfileCardHeaderStandardPremium from './ProfileCardHeaderStandardPremium';
+import StandardProfileCardHeader from './StandardProfileCardHeader';
+import { SkillsList } from '@/components/skills/SkillsList';
 
 interface ProfileCardHeaderProps {
   user: any;
   isCurrentUserProfile: boolean;
-  variant: "free" | "standard" | "premium";
+  variant: 'free' | 'standard' | 'premium';
 }
 
 export default function ProfileCardHeader({ user, isCurrentUserProfile, variant }: ProfileCardHeaderProps) {
-  if (variant === "free") {
+  if (variant === 'free') {
     // Header Free (mantém o código atual do header free)
     const showPremiumBadge = false;
     const showExtraLinks = false;
@@ -79,7 +79,7 @@ export default function ProfileCardHeader({ user, isCurrentUserProfile, variant 
             </div>
           </div>
           {/* Social Links */}
-          {variant !== "free" || config.showSocialLinks !== false ? (
+          {variant !== 'free' || config.showSocialLinks !== false ? (
             <div className="flex gap-6 justify-center mt-2">
               {displayedSocialLinks.map((link: any, idx: number) =>
                 link ? (
@@ -87,7 +87,7 @@ export default function ProfileCardHeader({ user, isCurrentUserProfile, variant 
                     <SocialLinks links={[link]} variant={variant} maxToShow={1} />
                   </span>
                 ) : (
-                  <span key={"placeholder-"+idx} className="w-10 h-10 rounded-full border-2 border-primary/30 dark:border-slate-700 flex items-center justify-center opacity-40 bg-white dark:bg-slate-800 shadow-lg dark:shadow-black/40 transition-colors" />
+                  <span key={'placeholder-'+idx} className="w-10 h-10 rounded-full border-2 border-primary/30 dark:border-slate-700 flex items-center justify-center opacity-40 bg-white dark:bg-slate-800 shadow-lg dark:shadow-black/40 transition-colors" />
                 )
               )}
             </div>
@@ -164,10 +164,10 @@ export default function ProfileCardHeader({ user, isCurrentUserProfile, variant 
       </header>
     );
   }
-  if (variant === "standard") {
+  if (variant === 'standard') {
     return <StandardProfileCardHeader user={user} isCurrentUserProfile={isCurrentUserProfile} />;
   }
-  if (variant === "premium") {
+  if (variant === 'premium') {
     return <FreeProfileCardHeaderStandardPremium user={user} isCurrentUserProfile={isCurrentUserProfile} variant={variant} />;
   }
   return null;

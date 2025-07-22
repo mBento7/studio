@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/use-auth';
 import { Shield, Trash2, LogOut } from 'lucide-react';
 import {
@@ -19,16 +19,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 import { BillingSettings } from '@/features/dashboard/billing-settings';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileInMockData } from '@/lib/mock-data';
 import { supabase } from '@/lib/supabase/client';
@@ -64,13 +64,13 @@ export default function AccountPage() {
       updateUserProfile({ ...currentUserProfile, plan: selectedPlan });
       toast({
         title: 'Plano Atualizado',
-        description: `Seu plano foi alterado para "${selectedPlan}" e salvo com sucesso!`,
+        description: `Seu plano foi alterado para "${selectedPlan}" e salvo com sucesso!`
       });
     } catch (err) {
       toast({
         title: 'Erro ao salvar plano',
         description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        variant: 'destructive'
       });
     } finally {
       setSaving(false);
@@ -202,7 +202,7 @@ export default function AccountPage() {
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                 <AlertDialogAction
                   className="bg-destructive hover:bg-destructive/90"
-                  onClick={() => console.log("Account deletion initiated")}
+                  onClick={() => console.log('Account deletion initiated')}
                 >
                   Sim, excluir conta
                 </AlertDialogAction>
@@ -214,11 +214,11 @@ export default function AccountPage() {
 
       {/* Botão de Logout */}
       <div className="flex justify-start">
-            <Button variant="outline" onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
+        <Button variant="outline" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
                 Sair da Conta
-            </Button>
-        </div>
+        </Button>
+      </div>
     </div>
   );
 }

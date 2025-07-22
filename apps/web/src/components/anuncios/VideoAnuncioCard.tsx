@@ -72,4 +72,4 @@ const VideoAnuncioCard = ({ videoUrl, titulo, descricao, link }: VideoAnuncioCar
   );
 };
 
-export default VideoAnuncioCard; 
+export default VideoAnuncioCard;

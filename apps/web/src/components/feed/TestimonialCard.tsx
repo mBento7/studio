@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Card } from "../ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
-import { Award, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { motion } from 'framer-motion';
+import { Card } from '../ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Award, Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Types necessários para o componente
 interface User {
@@ -40,41 +40,41 @@ const TestimonialCard = ({ post }: { post: TestimonialPost }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
   >
-    <Card className="overflow-hidden border-0 shadow-lg 
-      bg-gradient-to-br from-blue-50 to-indigo-50 
+    <Card className="overflow-hidden border-0 shadow-lg
+      bg-gradient-to-br from-blue-50 to-indigo-50
       dark:from-slate-800/40 dark:to-indigo-900/20
       dark:border dark:border-slate-700/50
       dark:shadow-2xl dark:shadow-black/25">
-      <PostHeader 
-        user={post.user} 
-        timeAgo={post.timeAgo} 
+      <PostHeader
+        user={post.user}
+        timeAgo={post.timeAgo}
         type={post.type}
         onMore={() => console.log('More options')}
       />
-      
+
       <div className="px-4 pb-3">
         <div className="flex items-center gap-2 mb-3">
           <Award className="w-5 h-5 text-yellow-500" />
           <span className="text-sm font-medium text-muted-foreground">Avaliação do serviço</span>
         </div>
-        
+
         <div className="flex items-center gap-1 mb-3">
           {[...Array(5)].map((_, i) => (
-            <Star 
-              key={i} 
+            <Star
+              key={i}
               className={cn(
-                "w-4 h-4",
-                i < post.rating ? "text-yellow-500 fill-current" : "text-gray-300"
-              )} 
+                'w-4 h-4',
+                i < post.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'
+              )}
             />
           ))}
           <span className="ml-2 text-sm font-medium">{post.rating}/5</span>
         </div>
-        
+
         <blockquote className="text-foreground mb-4 italic">
           "{post.comment}"
         </blockquote>
-        
+
         <div className="flex items-center gap-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
           <Avatar className="w-8 h-8">
             <AvatarImage src={post.serviceProvider.avatar} alt={post.serviceProvider.name} />

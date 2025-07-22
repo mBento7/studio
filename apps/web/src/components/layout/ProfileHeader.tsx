@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 // import { UserProfile } from "@/components/profile-layouts/PremiumProfileLayout"; // Removido, pois não é mais usado aqui
 
 interface ProfileHeaderProps {
@@ -45,12 +45,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ handleSectionClick, prima
                   }
                 }}
                 className={cn(
-                  "px-6 xxs:px-2 py-2 xxs:py-1 flex items-center justify-center rounded-full font-semibold whitespace-nowrap xxs:text-xs transition-all duration-200",
-                  "bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/50",
+                  'px-6 xxs:px-2 py-2 xxs:py-1 flex items-center justify-center rounded-full font-semibold whitespace-nowrap xxs:text-xs transition-all duration-200',
+                  'bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/50',
                   // Gradiente dinâmico baseado no primaryColorHex
                   primaryColorHex
                     ? `data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#${primaryColorHex}] data-[state=active]:to-[#${primaryColorHex}dd] data-[state=active]:text-black data-[state=active]:shadow-lg`
-                    : "data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-400 data-[state=active]:text-black data-[state=active]:shadow-lg"
+                    : 'data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-400 data-[state=active]:text-black data-[state=active]:shadow-lg'
                 )}
               >
                 {tab.label}
@@ -64,4 +64,4 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ handleSectionClick, prima
   );
 };
 
-export default ProfileHeader; 
+export default ProfileHeader;

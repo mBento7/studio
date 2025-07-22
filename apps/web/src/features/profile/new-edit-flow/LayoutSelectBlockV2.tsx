@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { LAYOUTS, PlanType } from "./layoutFeatures";
-import { Star as StarIcon, CheckCircle2, Info, Star, User, Briefcase, Award, Layers, Crown, Gem, MapPin } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { motion } from "framer-motion";
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { LAYOUTS, PlanType } from './layoutFeatures';
+import { Star as StarIcon, CheckCircle2, Info, Star, User, Briefcase, Award, Layers, Crown, Gem, MapPin } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 const PLAN_COLORS: Record<PlanType, string> = {
-  default: "bg-gray-200 text-gray-700",
-  free: "bg-green-200 text-green-800",
-  standard: "bg-blue-200 text-blue-800",
-  premium: "bg-yellow-200 text-yellow-800",
+  default: 'bg-gray-200 text-gray-700',
+  free: 'bg-green-200 text-green-800',
+  standard: 'bg-blue-200 text-blue-800',
+  premium: 'bg-yellow-200 text-yellow-800'
 };
 
 const PLAN_LABELS: Record<PlanType, string> = {
-  default: "Padrão",
-  free: "Free",
-  standard: "Standard",
-  premium: "Premium",
+  default: 'Padrão',
+  free: 'Free',
+  standard: 'Standard',
+  premium: 'Premium'
 };
 
 const ICONS: Record<string, React.ReactNode> = {
@@ -27,58 +27,58 @@ const ICONS: Record<string, React.ReactNode> = {
   modern: <Layers className="w-7 h-7 text-green-700" />,
   portfolio: <Briefcase className="w-7 h-7 text-purple-400" />,
   pro: <Award className="w-7 h-7 text-yellow-500" />,
-  advanced: <Info className="w-7 h-7 text-blue-700" />,
+  advanced: <Info className="w-7 h-7 text-blue-700" />
 };
 
 function isAllowed(plan: PlanType, layoutPlan: PlanType) {
-  if (plan === "premium") return true;
-  if (plan === "standard") return layoutPlan === "standard" || layoutPlan === "free" || layoutPlan === "default";
-  if (plan === "free") return layoutPlan === "free" || layoutPlan === "default";
-  return layoutPlan === "default";
+  if (plan === 'premium') return true;
+  if (plan === 'standard') return layoutPlan === 'standard' || layoutPlan === 'free' || layoutPlan === 'default';
+  if (plan === 'free') return layoutPlan === 'free' || layoutPlan === 'default';
+  return layoutPlan === 'default';
 }
 
 // Atualize a lista de features exclusivas do plano Standard para incluir todos os benefícios em relação ao Free
 const STANDARD_EXCLUSIVE = [
-  "Abas e navegação rápida",
-  "Seções detalhadas",
-  "Vídeo do YouTube integrado",
-  "Chat integrado",
-  "Portfólio visual avançado (até 8 itens)",
-  "Serviços (até 5)",
-  "Tags em destaque (até 6)",
-  "FAQ (até 5 perguntas)",
-  "Links para redes sociais (até 6)",
-  "Experiência profissional (até 8)"
+  'Abas e navegação rápida',
+  'Seções detalhadas',
+  'Vídeo do YouTube integrado',
+  'Chat integrado',
+  'Portfólio visual avançado (até 8 itens)',
+  'Serviços (até 5)',
+  'Tags em destaque (até 6)',
+  'FAQ (até 5 perguntas)',
+  'Links para redes sociais (até 6)',
+  'Experiência profissional (até 8)'
 ];
 
 // Lista de features do Premium que têm limite maior que o Standard
 const PREMIUM_LIMITS_EXCLUSIVE = [
-  "Portfólio visual avançado (até 12 itens)",
-  "Serviços (até 12)",
-  "FAQ (até 10 perguntas)",
-  "Experiência profissional (até 12)",
-  "Tags em destaque (até 12)",
-  "Links para redes sociais (até 12)",
-  "Destaque para conquistas",
-  "Visual sofisticado",
-  "Destaque de depoimentos",
-  "Destaque de depoimentos em carrossel",
-  "Animações exclusivas",
-  "Reviews e avaliações integradas",
-  "Banner personalizável",
-  "Stories (destaques rápidos)"
+  'Portfólio visual avançado (até 12 itens)',
+  'Serviços (até 12)',
+  'FAQ (até 10 perguntas)',
+  'Experiência profissional (até 12)',
+  'Tags em destaque (até 12)',
+  'Links para redes sociais (até 12)',
+  'Destaque para conquistas',
+  'Visual sofisticado',
+  'Destaque de depoimentos',
+  'Destaque de depoimentos em carrossel',
+  'Animações exclusivas',
+  'Reviews e avaliações integradas',
+  'Banner personalizável',
+  'Stories (destaques rápidos)'
 ];
 
 const STANDARD_LIMITS_EXCLUSIVE = [
-  "Abas e navegação rápida",
-  "Portfólio visual avançado (até 8 itens)",
-  "Serviços (até 5)",
-  "Tags em destaque (até 6)",
-  "Links para redes sociais (até 6)",
-  "Vídeo do YouTube integrado",
-  "Chat integrado",
-  "FAQ (até 5 perguntas)",
-  "Experiência profissional (até 8)"
+  'Abas e navegação rápida',
+  'Portfólio visual avançado (até 8 itens)',
+  'Serviços (até 5)',
+  'Tags em destaque (até 6)',
+  'Links para redes sociais (até 6)',
+  'Vídeo do YouTube integrado',
+  'Chat integrado',
+  'FAQ (até 5 perguntas)',
+  'Experiência profissional (até 8)'
 ];
 
 export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onUpgrade }: {
@@ -119,7 +119,7 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
             >
               <div className="relative">
                 <Card
-                  className={`p-6 flex flex-col gap-3 border-2 transition-all h-full shadow-md bg-white/95 dark:bg-card/90 ${selectedLayout === layout.key ? "border-primary ring-2 ring-primary/30" : "border-muted"} ${!isAllowed(currentPlan, layout.plan) ? "opacity-70" : ""}`}
+                  className={`p-6 flex flex-col gap-3 border-2 transition-all h-full shadow-md bg-white/95 dark:bg-card/90 ${selectedLayout === layout.key ? 'border-primary ring-2 ring-primary/30' : 'border-muted'} ${!isAllowed(currentPlan, layout.plan) ? 'opacity-70' : ''}`}
                 >
                   {layout.previewImage && (
                     <img src={layout.previewImage} alt={layout.name + ' preview'} className="w-full h-32 object-cover rounded mb-2 border" />
@@ -167,7 +167,7 @@ export function LayoutSelectBlockV2({ currentPlan, selectedLayout, onSelect, onU
                       // Destaque Standard para os dois itens
                       const isStandardExclusive = ((layout.plan === 'standard' || layout.plan === 'free') && STANDARD_LIMITS_EXCLUSIVE.includes(f)) ||
                         (layout.plan === 'premium' && (f === 'Vídeo do YouTube integrado' || f === 'Chat integrado'));
-                      if (f.includes("Pino de localização")) {
+                      if (f.includes('Pino de localização')) {
                         return (
                           <li key={f} className="flex items-center gap-2">
                             <TooltipProvider>

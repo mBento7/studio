@@ -15,7 +15,7 @@
         "@joshuarileydev/coolify-mcp-server"
       ],
       "env": {
-        "COOLIFY_API_TOKEN": "3|nrgAkXW2aF4GqvoiTyjYAjxjBqYkDVrinenvWPOzcbe2eafe",
+        "COOLIFY_API_TOKEN": "4|v51zIoICp7OoCCNHH3RsxqiIlx9UUD6bpQeehWgW3b0b28af",
         "COOLIFY_API_URL": "http://localhost:8000"
       }
     }

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { logger } from '@/lib/logger';
 
@@ -39,7 +39,7 @@ class MockSupabaseClient {
       created_at: new Date().toISOString()
     },
     {
-      id: '2', 
+      id: '2',
       email: 'admin@whosfy.com',
       password: 'admin123',
       user_metadata: { full_name: 'Admin Whosfy' },
@@ -51,12 +51,12 @@ class MockSupabaseClient {
     signInWithPassword: async ({ email, password }: { email: string; password: string }): Promise<MockAuthResponse> => {
       logger.auth('Tentando login mock', { email });
       logger.debug('Usuários mock disponíveis', { count: this.mockUsers.length });
-      
+
       // Simular delay de rede
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const mockUser = this.mockUsers.find(u => u.email === email && u.password === password);
-      
+
       if (!mockUser) {
         logger.auth('Credenciais inválidas - usuário não encontrado', { email });
         return {
@@ -64,28 +64,28 @@ class MockSupabaseClient {
           error: new Error('Invalid login credentials')
         };
       }
-      
+
       const user: MockUser = {
         id: mockUser.id,
         email: mockUser.email,
         user_metadata: mockUser.user_metadata,
         created_at: mockUser.created_at
       };
-      
+
       const session: MockSession = {
         user,
         access_token: 'mock-access-token'
       };
-      
+
       this.currentUser = user;
-      
+
       // Notificar listeners
       setTimeout(() => {
         this.listeners.forEach(listener => listener('SIGNED_IN', session));
       }, 100);
-      
+
       logger.auth('Login mock bem-sucedido', { email: user.email });
-      
+
       return {
         data: { user, session },
         error: null
@@ -94,10 +94,10 @@ class MockSupabaseClient {
 
     signUp: async ({ email, password, options }: { email: string; password: string; options?: any }): Promise<MockAuthResponse> => {
       logger.auth('Tentando cadastro mock', { email });
-      
+
       // Simular delay de rede
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Verificar se usuário já existe
       const existingUser = this.mockUsers.find(u => u.email === email);
       if (existingUser) {
@@ -106,7 +106,7 @@ class MockSupabaseClient {
           error: new Error('User already registered')
         };
       }
-      
+
       // Criar novo usuário mock
       const newUser = {
         id: Date.now().toString(),
@@ -115,30 +115,30 @@ class MockSupabaseClient {
         user_metadata: { full_name: options?.data?.full_name || 'Novo Usuário' },
         created_at: new Date().toISOString()
       };
-      
+
       this.mockUsers.push(newUser);
-      
+
       const user: MockUser = {
         id: newUser.id,
         email: newUser.email,
         user_metadata: newUser.user_metadata,
         created_at: newUser.created_at
       };
-      
+
       const session: MockSession = {
         user,
         access_token: 'mock-access-token'
       };
-      
+
       this.currentUser = user;
-      
+
       // Notificar listeners
       setTimeout(() => {
         this.listeners.forEach(listener => listener('SIGNED_IN', session));
       }, 100);
-      
+
       logger.auth('Cadastro mock bem-sucedido', { email: user.email });
-      
+
       return {
         data: { user, session },
         error: null
@@ -163,18 +163,18 @@ class MockSupabaseClient {
     signOut: async () => {
       logger.auth('Fazendo logout mock');
       this.currentUser = null;
-      
+
       // Notificar listeners
       setTimeout(() => {
         this.listeners.forEach(listener => listener('SIGNED_OUT', null));
       }, 100);
-      
+
       return { error: null };
     },
 
     onAuthStateChange: (callback: (event: string, session: MockSession | null) => void) => {
       this.listeners.push(callback);
-      
+
       // Simular sessão inicial
       setTimeout(() => {
         callback('INITIAL_SESSION', this.currentUser ? {
@@ -182,7 +182,7 @@ class MockSupabaseClient {
           access_token: 'mock-access-token'
         } : null);
       }, 100);
-      
+
       return {
         data: {
           subscription: {
@@ -244,7 +244,7 @@ class MockSupabaseClient {
         })
       };
     }
-    
+
     return {
       select: () => ({
         eq: () => ({

@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+import { MapPin } from 'lucide-react';
 
 interface LocationInfoProps {
   city?: string;
@@ -30,4 +30,4 @@ export function LocationInfo({ city, country, mapsLink }: LocationInfoProps) {
       </span>
     </div>
   );
-} 
+}

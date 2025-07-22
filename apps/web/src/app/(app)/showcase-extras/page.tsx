@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
   TrendingUp,
   CheckCircle,
@@ -15,16 +15,16 @@ import {
   ThumbsUp,
   Star,
   MapPin,
-  MessageCircle,
-} from "lucide-react";
-import { LayoutDecider } from "@/components/layout/layout-decider";
+  MessageCircle
+} from 'lucide-react';
+import { LayoutDecider } from '@/components/layout/layout-decider';
 
 // ✅ ChecklistCard
 const ChecklistCard = () => {
   const tasks = [
-    { label: "Briefing recebido", done: true },
-    { label: "Rascunho entregue", done: false },
-    { label: "Aprovação pendente", done: false },
+    { label: 'Briefing recebido', done: true },
+    { label: 'Rascunho entregue', done: false },
+    { label: 'Aprovação pendente', done: false }
   ];
 
   return (
@@ -37,11 +37,11 @@ const ChecklistCard = () => {
           <li
             key={i}
             className={`flex items-center gap-2 ${
-              task.done ? "text-green-600" : "text-muted-foreground"
+              task.done ? 'text-green-600' : 'text-muted-foreground'
             }`}
           >
             <CheckCircle
-              className={task.done ? "text-green-500" : "text-gray-300"}
+              className={task.done ? 'text-green-500' : 'text-gray-300'}
               size={18}
             />
             {task.label}
@@ -205,4 +205,4 @@ export default function ShowcaseExtrasPage() {
       <ShowcaseExtras />
     </LayoutDecider>
   );
-} 
+}

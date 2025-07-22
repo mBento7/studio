@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 import {
   Briefcase,
   Newspaper,
@@ -10,115 +10,115 @@ import {
   Megaphone,
   ImageIcon,
   Ticket,
-  PlusCircle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+  PlusCircle
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { LayoutDecider } from "@/components/layout/layout-decider";
+  CardTitle
+} from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { LayoutDecider } from '@/components/layout/layout-decider';
 
 const creationOptions = [
   {
-    title: "Postagem no Feed",
-    description: "Compartilhe uma nova atualização, ideia ou projeto com sua rede.",
+    title: 'Postagem no Feed',
+    description: 'Compartilhe uma nova atualização, ideia ou projeto com sua rede.',
     icon: <Newspaper className="h-8 w-8 text-primary" />,
-    href: "/dashboard/feed",
-    cta: "Criar Postagem",
-    category: "services",
+    href: '/dashboard/feed',
+    cta: 'Criar Postagem',
+    category: 'services'
   },
   {
-    title: "Storie 24h",
-    description: "Compartilhe um momento que dura 24 horas com seus seguidores.",
+    title: 'Storie 24h',
+    description: 'Compartilhe um momento que dura 24 horas com seus seguidores.',
     icon: <Clock className="h-8 w-8 text-primary" />,
-    href: "#",
-    cta: "Criar Storie",
-    badge: "Novo",
-    category: "stories",
+    href: '#',
+    cta: 'Criar Storie',
+    badge: 'Novo',
+    category: 'stories'
   },
   {
-    title: "Item de Portfólio",
-    description: "Adicione um novo trabalho, projeto ou case de sucesso ao seu perfil.",
+    title: 'Item de Portfólio',
+    description: 'Adicione um novo trabalho, projeto ou case de sucesso ao seu perfil.',
     icon: <Briefcase className="h-8 w-8 text-primary" />,
-    href: "/dashboard/my-profile",
-    cta: "Adicionar Item",
-    category: "services",
+    href: '/dashboard/my-profile',
+    cta: 'Adicionar Item',
+    category: 'services'
   },
   {
-    title: "Anúncio Patrocinado",
-    description: "Promova seu perfil, serviço ou produto para alcançar mais pessoas.",
+    title: 'Anúncio Patrocinado',
+    description: 'Promova seu perfil, serviço ou produto para alcançar mais pessoas.',
     icon: <Megaphone className="h-8 w-8 text-primary" />,
-    href: "/dashboard/credits/promover",
-    cta: "Criar Anúncio",
-    badge: "Premium",
-    category: "promotions",
+    href: '/dashboard/credits/promover',
+    cta: 'Criar Anúncio',
+    badge: 'Premium',
+    category: 'promotions'
   },
   {
-    title: "Banner de Perfil",
-    description: "Crie um banner customizado para o topo do seu perfil público.",
+    title: 'Banner de Perfil',
+    description: 'Crie um banner customizado para o topo do seu perfil público.',
     icon: <ImageIcon className="h-8 w-8 text-primary" />,
-    href: "/dashboard/settings/appearance",
-    cta: "Criar Banner",
-    category: "promotions",
+    href: '/dashboard/settings/appearance',
+    cta: 'Criar Banner',
+    category: 'promotions'
   },
   {
-    title: "Cupom de Desconto",
-    description: "Gere cupons para seus serviços ou produtos (contas de negócio).",
+    title: 'Cupom de Desconto',
+    description: 'Gere cupons para seus serviços ou produtos (contas de negócio).',
     icon: <Ticket className="h-8 w-8 text-primary" />,
-    href: "#",
-    cta: "Gerar Cupom",
-    badge: "Business",
-    category: "promotions",
+    href: '#',
+    cta: 'Gerar Cupom',
+    badge: 'Business',
+    category: 'promotions'
   },
   {
-    title: "Showcase de Anúncios",
-    description: "Veja exemplos de todos os tipos de anúncios da plataforma.",
+    title: 'Showcase de Anúncios',
+    description: 'Veja exemplos de todos os tipos de anúncios da plataforma.',
     icon: <Megaphone className="h-8 w-8 text-primary" />,
-    href: "/showcase-anuncios",
-    cta: "Ver Exemplos",
-    badge: "Exemplo",
-    category: "examples",
+    href: '/showcase-anuncios',
+    cta: 'Ver Exemplos',
+    badge: 'Exemplo',
+    category: 'examples'
   },
   {
-    title: "Showcase do Feed",
-    description: "Veja exemplos de componentes do feed (cards, eventos, cupons, etc).",
+    title: 'Showcase do Feed',
+    description: 'Veja exemplos de componentes do feed (cards, eventos, cupons, etc).',
     icon: <Newspaper className="h-8 w-8 text-primary" />,
-    href: "/showcase-feed",
-    cta: "Ver Feed Demo",
-    badge: "Exemplo",
-    category: "examples",
+    href: '/showcase-feed',
+    cta: 'Ver Feed Demo',
+    badge: 'Exemplo',
+    category: 'examples'
   },
   {
-    title: "Showcase Extras",
-    description: "Veja exemplos de componentes e funcionalidades extras da plataforma.",
+    title: 'Showcase Extras',
+    description: 'Veja exemplos de componentes e funcionalidades extras da plataforma.',
     icon: <PlusCircle className="h-8 w-8 text-primary" />,
-    href: "/showcase-extras",
-    cta: "Ver Extras",
-    badge: "Exemplo",
-    category: "examples",
-  },
+    href: '/showcase-extras',
+    cta: 'Ver Extras',
+    badge: 'Exemplo',
+    category: 'examples'
+  }
 ];
 
 const tabs = [
-  { label: "Todos", value: "all" },
-  { label: "Serviços", value: "services" },
-  { label: "Promoções", value: "promotions" },
-  { label: "Stories", value: "stories" },
-  { label: "Exemplos", value: "examples" },
+  { label: 'Todos', value: 'all' },
+  { label: 'Serviços', value: 'services' },
+  { label: 'Promoções', value: 'promotions' },
+  { label: 'Stories', value: 'stories' },
+  { label: 'Exemplos', value: 'examples' }
 ];
 
 export default function CreatePage() {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState('all');
 
   const filteredOptions =
-    activeTab === "all"
+    activeTab === 'all'
       ? creationOptions
       : creationOptions.filter((item) => item.category === activeTab);
 
@@ -138,7 +138,7 @@ export default function CreatePage() {
           {tabs.map((tab) => (
             <Button
               key={tab.value}
-              variant={activeTab === tab.value ? "default" : "outline"}
+              variant={activeTab === tab.value ? 'default' : 'outline'}
               onClick={() => setActiveTab(tab.value)}
               className="text-sm"
             >
@@ -153,7 +153,7 @@ export default function CreatePage() {
               key={option.title}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.06, duration: 0.4, type: "spring" }}
+              transition={{ delay: idx * 0.06, duration: 0.4, type: 'spring' }}
             >
               <Card className="flex flex-col rounded-lg shadow-xl border border-border bg-card p-5 transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl focus-within:ring-2 focus-within:ring-primary/40">
                 <CardHeader className="flex-row items-start gap-4 space-y-0">
@@ -169,9 +169,9 @@ export default function CreatePage() {
                         <Badge
                           variant="secondary"
                           className={cn(
-                            "px-2 py-0.5 rounded-full text-xs font-bold",
-                            option.badge === "Premium" &&
-                              "bg-yellow-100 text-yellow-600 border border-yellow-400"
+                            'px-2 py-0.5 rounded-full text-xs font-bold',
+                            option.badge === 'Premium' &&
+                              'bg-yellow-100 text-yellow-600 border border-yellow-400'
                           )}
                         >
                           {option.badge}
@@ -186,7 +186,7 @@ export default function CreatePage() {
                 <CardFooter className="mt-auto">
                   <Button
                     asChild
-                    variant={option.badge === "Premium" ? "premium" : "default"}
+                    variant={option.badge === 'Premium' ? 'premium' : 'default'}
                     className="w-full flex items-center gap-2"
                   >
                     <Link href={option.href} className="w-full">

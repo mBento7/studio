@@ -1,7 +1,7 @@
 import { Logo } from '@/components/common/logo';
 
 export default function AuthLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

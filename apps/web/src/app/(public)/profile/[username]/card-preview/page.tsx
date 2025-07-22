@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
@@ -63,7 +63,7 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
       const profileUrl = `${window.location.origin}/profile/${user.username}`;
-      
+
       let colorForQr = '008080';
       try {
         const computedStyle = getComputedStyle(document.documentElement);
@@ -90,11 +90,11 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
           }
         }
       } catch (e) {
-        console.error("Falha ao calcular cor primária, usando padrão.", e)
+        console.error('Falha ao calcular cor primária, usando padrão.', e);
       }
 
       setPrimaryColorHex(colorForQr);
-      
+
       const generatedQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(profileUrl)}&color=${colorForQr}&bgcolor=FFFFFF&format=png&qzone=1`;
       setQrCodeUrl(generatedQrUrl);
       setLoading(false);
@@ -142,17 +142,17 @@ export default function CardPreviewPage({ params }: CardPreviewPageProps) {
         </div>
 
         <div className="printable-area">
-          <PrintableBusinessCard 
-              id="printable-card"
-              ref={cardRef}
-              user={user}
-              qrCodeUrl={qrCodeUrl}
-              primaryColorHex={primaryColorHex}
+          <PrintableBusinessCard
+            id="printable-card"
+            ref={cardRef}
+            user={user}
+            qrCodeUrl={qrCodeUrl}
+            primaryColorHex={primaryColorHex}
           />
         </div>
 
         <div className="no-print mt-8 flex items-center justify-center">
-          <Button 
+          <Button
             onClick={handlePrint}
             className="bg-gradient-to-r from-orange-500 to-red-600 hover:brightness-110 text-white font-semibold shadow-md rounded py-3 px-6 text-base"
           >

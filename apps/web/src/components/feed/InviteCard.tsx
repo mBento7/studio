@@ -25,4 +25,4 @@ const InviteCard = ({ texto, bonus, link }: InviteCardProps) => {
   );
 };
 
-export default InviteCard; 
+export default InviteCard;

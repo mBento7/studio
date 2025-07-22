@@ -34,4 +34,4 @@ const PostPatrocinadoCard = ({ usuario, conteudo, imagem, link }: PostPatrocinad
   );
 };
 
-export default PostPatrocinadoCard; 
+export default PostPatrocinadoCard;

@@ -19,13 +19,13 @@ const userCredits = 1000000; // mock
 const transactions = [
   { date: '2024-06-10', type: 'Compra', amount: '+250', desc: 'Pacote Pro' },
   { date: '2024-06-12', type: 'Promoção', amount: '-50', desc: 'Banner na Busca' },
-  { date: '2024-06-13', type: 'Bônus', amount: '+10', desc: 'Bônus diário' },
+  { date: '2024-06-13', type: 'Bônus', amount: '+10', desc: 'Bônus diário' }
 ];
 
 const coinPackages = [
-  { name: "100 moedas", price: "R$9,90", discount: "" },
-  { name: "250 moedas", price: "R$19,90", discount: "+10% Bônus" },
-  { name: "500 moedas", price: "R$34,90", discount: "+20% Bônus" },
+  { name: '100 moedas', price: 'R$9,90', discount: '' },
+  { name: '250 moedas', price: 'R$19,90', discount: '+10% Bônus' },
+  { name: '500 moedas', price: 'R$34,90', discount: '+20% Bônus' }
 ];
 
 export default function CreditsDashboardPage() {

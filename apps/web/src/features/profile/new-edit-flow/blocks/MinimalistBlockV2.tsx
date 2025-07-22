@@ -1,10 +1,10 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Image as ImageIcon, Camera } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Image as ImageIcon, Camera } from 'lucide-react';
+import { supabase } from '@/lib/supabase/client';
 
 interface MinimalistBlockV2Props {
   profile_picture_url?: string;
@@ -78,15 +78,15 @@ export function MinimalistBlockV2({ profile_picture_url, cover_photo_url, email,
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
             <Label>Email</Label>
-            <Input type="email" placeholder="Seu e-mail" value={email ?? ""} onChange={e => onChange({ profile_picture_url, cover_photo_url, email: e.target.value, phone })} />
+            <Input type="email" placeholder="Seu e-mail" value={email ?? ''} onChange={e => onChange({ profile_picture_url, cover_photo_url, email: e.target.value, phone })} />
           </div>
           <div>
             <Label>Telefone</Label>
-            <Input type="tel" placeholder="Seu telefone" value={phone ?? ""} onChange={e => onChange({ profile_picture_url, cover_photo_url, email, phone: e.target.value })} />
+            <Input type="tel" placeholder="Seu telefone" value={phone ?? ''} onChange={e => onChange({ profile_picture_url, cover_photo_url, email, phone: e.target.value })} />
           </div>
         </div>
       </div>
     </Card>
   );
-} 
-// Para usar um campo 'contact' (jsonb) no Supabase, ajuste o backend e as props deste componente. 
+}
+// Para usar um campo 'contact' (jsonb) no Supabase, ajuste o backend e as props deste componente.

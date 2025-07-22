@@ -1,5 +1,5 @@
-import React from "react";
-import EventCard from "../feed/EventCard";
+import React from 'react';
+import EventCard from '../feed/EventCard';
 
 export function EventList({ events }: { events: any[] }) {
   if (!events || events.length === 0) return null;

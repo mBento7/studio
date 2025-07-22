@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
-import React, { useEffect, useState } from "react";
-import ProfileEditPageV2 from "@/features/profile/new-edit-flow/ProfileEditPageV2";
-import { useAuth } from "@/hooks/use-auth";
-import { getUserProfileV2, saveUserProfileV2, filterValidProfileFields } from "@/features/profile/new-edit-flow/profile.service";
+import React, { useEffect, useState } from 'react';
+import ProfileEditPageV2 from '@/features/profile/new-edit-flow/ProfileEditPageV2';
+import { useAuth } from '@/hooks/use-auth';
+import { getUserProfileV2, saveUserProfileV2, filterValidProfileFields } from '@/features/profile/new-edit-flow/profile.service';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ export default function ProfileEditV2Page() {
         const data = await getUserProfileV2(user.id);
         setProfile(data);
       } catch (err: any) {
-        setError("Erro ao carregar perfil: " + (err.message || err.toString()));
+        setError('Erro ao carregar perfil: ' + (err.message || err.toString()));
       } finally {
         setLoading(false);
       }
@@ -45,9 +45,9 @@ export default function ProfileEditV2Page() {
     try {
       await saveUserProfileV2(user.id, filterValidProfileFields(newProfile));
       setProfile(newProfile);
-      setSuccess("Perfil salvo com sucesso!");
+      setSuccess('Perfil salvo com sucesso!');
     } catch (err: any) {
-      setError("Erro ao salvar perfil: " + (err.message || err.toString()));
+      setError('Erro ao salvar perfil: ' + (err.message || err.toString()));
     } finally {
       setLoading(false);
     }

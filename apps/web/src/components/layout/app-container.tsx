@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { useAuth } from '@/hooks/use-auth';
@@ -13,7 +13,7 @@ import { RightWidgetsColumn } from './right-widgets-column';
 export function MainGridLayout({
   children,
   leftSidebar,
-  rightSidebar,
+  rightSidebar
 }: {
   children: React.ReactNode;
   leftSidebar?: React.ReactNode;
@@ -53,7 +53,7 @@ export function MainGridLayout({
 export function AppContainer({
   children,
   hideSidebar = false,
-  hideRightSidebar = false,
+  hideRightSidebar = false
 }: {
   children: React.ReactNode;
   hideSidebar?: boolean;

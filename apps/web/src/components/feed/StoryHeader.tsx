@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import StoryOptionsMenu from "./StoryOptionsMenu";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect, useRef } from 'react';
+import StoryOptionsMenu from './StoryOptionsMenu';
+import { Button } from '@/components/ui/button';
 
 interface StoryHeaderProps {
   story: {
@@ -44,7 +44,7 @@ const StoryHeader: React.FC<StoryHeaderProps> = ({ story, onClose, onUserAction,
             className="h-2 bg-primary"
             style={{
               width: `${barProgress}%`,
-              transition,
+              transition
             }}
           />
         </div>

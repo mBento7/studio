@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface CarrosselAnunciosProps {
   anuncios: { imagem: string; titulo: string; link: string }[];
@@ -19,4 +19,4 @@ export const CarrosselAnuncios: React.FC<CarrosselAnunciosProps> = ({ anuncios }
       </a>
     ))}
   </div>
-); 
+);

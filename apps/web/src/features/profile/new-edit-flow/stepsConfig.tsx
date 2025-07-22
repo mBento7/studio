@@ -1,21 +1,21 @@
-import { User, Award, Camera, Layout, FolderOpen, Sparkles, Eye, Megaphone, TicketPercent } from "lucide-react";
+import { User, Award, Camera, Layout, FolderOpen, Sparkles, Eye, Megaphone, TicketPercent } from 'lucide-react';
 import { logger } from '@/lib/logger';
-import { ProfileBasicTabV2 } from "./ProfileBasicTabV2";
-import { MinimalistBlockV2 } from "./blocks/MinimalistBlockV2";
-import { LayoutSelectBlockV2 } from "./LayoutSelectBlockV2";
-import { PortfolioBlockV2 } from "./blocks/PortfolioBlockV2";
-import * as React from "react";
-import type { UserProfileV2 } from "./types";
-import type { Dispatch } from "react";
-import { ProfileContentTabV2 } from "./ProfileContentTabV2";
-import { ContentBlock } from "./components/ContentBlock";
-import { ImageUploadField } from "@/components/ui/image-upload-field";
-import StoryModal from "@/components/feed/StoryModal";
+import { ProfileBasicTabV2 } from './ProfileBasicTabV2';
+import { MinimalistBlockV2 } from './blocks/MinimalistBlockV2';
+import { LayoutSelectBlockV2 } from './LayoutSelectBlockV2';
+import { PortfolioBlockV2 } from './blocks/PortfolioBlockV2';
+import * as React from 'react';
+import type { UserProfileV2 } from './types';
+import type { Dispatch } from 'react';
+import { ProfileContentTabV2 } from './ProfileContentTabV2';
+import { ContentBlock } from './components/ContentBlock';
+import { ImageUploadField } from '@/components/ui/image-upload-field';
+import StoryModal from '@/components/feed/StoryModal';
 import CouponCard from '@/components/feed/CouponCard';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { motion } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { motion } from 'framer-motion';
 
 interface PremiumTabV2Props {
   data: any;
@@ -54,7 +54,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
       imageUrl: storyDraft.image,
       text: storyDraft.text,
       createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 24*60*60*1000).toISOString(),
+      expiresAt: new Date(Date.now() + 24*60*60*1000).toISOString()
     };
     onChange({ ...data, stories: [newStory, ...stories] });
     setStoryDraft({ title: '', image: '', text: '' });
@@ -90,7 +90,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
           <ContentBlock
             title={<span className="flex items-center gap-2 text-xl font-semibold text-yellow-800"><Megaphone className="w-5 h-5 text-yellow-500" />Banner Promocional</span>}
             description="Destaque uma mensagem ou promoção especial."
-            isLocked={plan !== "premium"}
+            isLocked={plan !== 'premium'}
             badgeText="Premium"
           >
             <input type="text" placeholder="Título" className="input input-bordered" disabled />
@@ -102,7 +102,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
           <ContentBlock
             title={<span className="flex items-center gap-2 text-xl font-semibold text-purple-800"><Camera className="w-5 h-5 text-purple-500" />Stories 24h</span>}
             description="Crie stories que ficarão disponíveis por 24 horas."
-            isLocked={plan !== "premium"}
+            isLocked={plan !== 'premium'}
             badgeText="Premium"
           >
             <ImageUploadField
@@ -119,7 +119,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
               className="input input-bordered"
               value={storyDraft.title}
               onChange={e => setStoryDraft(d => ({ ...d, title: e.target.value }))}
-              disabled={plan !== "premium"}
+              disabled={plan !== 'premium'}
             />
             <button className="btn btn-primary mt-2" type="button" onClick={handleAddStory}>Adicionar Story</button>
           </ContentBlock>
@@ -130,7 +130,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
           <ContentBlock
             title={<span className="flex items-center gap-2 text-xl font-semibold text-green-800"><TicketPercent className="w-5 h-5 text-green-500" />Cupons de Desconto</span>}
             description="Adicione cupons de desconto para seus seguidores."
-            isLocked={plan !== "premium"}
+            isLocked={plan !== 'premium'}
             badgeText="Premium"
           >
             <input type="text" placeholder="Código do cupom" className="input input-bordered" disabled />
@@ -159,7 +159,7 @@ export function PremiumTabV2({ data, plan, layout, onChange }: { data: any, plan
             mediaUrl: stories[selectedStoryIdx].imageUrl,
             type: 'image',
             time: stories[selectedStoryIdx].createdAt || '',
-            liked: false,
+            liked: false
           }}
           onPrev={() => {
             if (selectedStoryIdx !== null && selectedStoryIdx > 0) setSelectedStoryIdx(selectedStoryIdx - 1);
@@ -180,14 +180,14 @@ export const RAW_STEPS = [
   { key: 'layout', label: 'Layout', icon: Layout, component: LayoutSelectBlockV2, requiredPlan: 'free' },
   { key: 'conteudo', label: 'Conteúdo', icon: FolderOpen, component: ProfileContentTabV2, requiredPlan: 'free' },
   { key: 'portfolio', label: 'Portfólio', icon: Camera, component: PortfolioBlockV2, requiredPlan: 'free' },
-  { key: 'premium', label: 'Premium', icon: Sparkles, component: PremiumTabV2, requiredPlan: 'free' },
+  { key: 'premium', label: 'Premium', icon: Sparkles, component: PremiumTabV2, requiredPlan: 'free' }
 ];
 
 export function buildSteps(
   profile: UserProfileV2,
   plan: string,
   // userId removido pois não estava sendo utilizado
-  dispatch: Dispatch<{ type: "update"; payload: Partial<UserProfileV2> }>
+  dispatch: Dispatch<{ type: 'update'; payload: Partial<UserProfileV2> }>
 ) {
   return RAW_STEPS.map(s => {
     let componentProps: Record<string, any> = {};
@@ -219,7 +219,7 @@ export function buildSteps(
         componentProps = {
           portfolio: profile.portfolio || [],
           onChange: (portfolio: any[]) => dispatch({ type: 'update', payload: { portfolio } }),
-          plan,
+          plan
         };
         component = React.createElement(s.component as React.ComponentType<any>, componentProps);
         break;
@@ -258,12 +258,12 @@ export const stepIcons = {
   layout: Layout,
   conteudo: FolderOpen,
   portfolio: Camera,
-  premium: Sparkles,
+  premium: Sparkles
 };
 export const stepLabels = {
   basic: 'Básico',
   layout: 'Layout',
   conteudo: 'Conteúdo',
   portfolio: 'Portfólio',
-  premium: 'Premium',
+  premium: 'Premium'
 };

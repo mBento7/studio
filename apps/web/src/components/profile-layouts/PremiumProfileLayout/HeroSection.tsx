@@ -1,14 +1,14 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Pencil, Clock, MessageCircle, Share2, Sparkles, Play, ChevronDown, Star } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
-import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
-import { SocialLinks } from "@/components/social/SocialLinks";
-import { SkillsList } from "@/components/skills/SkillsList";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Pencil, Clock, MessageCircle, Share2, Sparkles, Play, ChevronDown, Star } from 'lucide-react';
+import { Avatar } from '@/components/ui/avatar';
+import { LocationInfo } from '@/components/profile-layouts/LocationInfo';
+import { SocialLinks } from '@/components/social/SocialLinks';
+import { SkillsList } from '@/components/skills/SkillsList';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
 interface HeroSectionProps {
   user: any;
@@ -63,7 +63,7 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
                 {/* Nome do usuário dentro do card de perfil */}
                 <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-slate-900 dark:text-white leading-tight">{user.name}</h3>
                 <p className="text-blue-700 dark:text-blue-400 font-medium mb-4">{user.category}</p>
-                
+
                 {/* Quick Info com espaçamento melhorado */}
                 <div className="space-y-3 mb-6">
                   {/* Endereço completo + pino do Google Maps destacado visualmente, sem duplicidade */}
@@ -107,14 +107,14 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
                 </div>
 
                 {/* Botões de contato com hover effects */}
-                <Button 
+                <Button
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 text-white hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-800 dark:hover:to-blue-600 font-semibold rounded-full text-base sm:text-lg py-2.5 sm:py-3 flex items-center justify-center mb-2 shadow-lg transition-all duration-300 hover:shadow-xl"
                   onClick={() => {/* lógica para abrir chat */}}
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Chamar no Chat
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
                   className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center"
                   onClick={() => {/* lógica para compartilhar perfil */}}
@@ -159,7 +159,7 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl"
             >
-              {user.bio || "Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados."}
+              {user.bio || 'Transforme sua visão em realidade com expertise profissional e soluções criativas que geram resultados.'}
             </motion.p>
 
             {/* Disponível para projetos e tags */}
@@ -189,16 +189,16 @@ export function HeroSection({ user, isCurrentUserProfile, primaryColorHex, onPor
               transition={{ duration: 0.6, delay: 0.7 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4"
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
               >
                 <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Start Project
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 backdrop-blur-sm px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-all duration-300 hover:scale-105"
                 onClick={() => onPortfolioItemClick && onPortfolioItemClick('portfolio')}
               >

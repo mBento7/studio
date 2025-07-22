@@ -1,4 +1,3 @@
-
 import type * as React from 'react';
 
 export const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (

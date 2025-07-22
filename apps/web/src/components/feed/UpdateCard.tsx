@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import { Card } from '../ui/card';
-import { Sparkles } from "lucide-react";
+import { Sparkles } from 'lucide-react';
 
 interface UpdateCardProps {
   titulo: string;
@@ -10,8 +10,8 @@ interface UpdateCardProps {
 
 const UpdateCard = ({ titulo, descricao, data }: UpdateCardProps) => {
   return (
-    <Card className="w-full max-w-2xl mx-auto mb-4 p-4 
-      bg-gradient-to-br from-blue-50 via-blue-100 to-white 
+    <Card className="w-full max-w-2xl mx-auto mb-4 p-4
+      bg-gradient-to-br from-blue-50 via-blue-100 to-white
       dark:from-slate-800/50 dark:via-slate-700/30 dark:to-slate-800/20
       border border-border/50 dark:border-slate-600/30
       shadow-lg dark:shadow-2xl dark:shadow-black/20

@@ -61,7 +61,7 @@ const MessagesPage = () => {
             return {
               ...conv,
               otherUser: otherUser,
-              messages: conv.messages.length > 0 ? [conv.messages[0]] : [], // Pegar apenas a última mensagem para preview
+              messages: conv.messages.length > 0 ? [conv.messages[0]] : [] // Pegar apenas a última mensagem para preview
             };
           })
           .filter((conv: any) => new Date(conv.expires_at) > new Date()); // Filtrar conversas não expiradas
@@ -81,7 +81,7 @@ const MessagesPage = () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, (payload) => {
         if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
           // Simplificação: apenas refetch para ver atualizações no momento
-          fetchConversations(); 
+          fetchConversations();
         }
       })
       .subscribe();
@@ -136,7 +136,7 @@ const MessagesPage = () => {
                     // Dispara evento para abrir o chat flutuante na ProfileClientPage
                     window.dispatchEvent(
                       new CustomEvent('open-chat', {
-                        detail: { user: conv.otherUser },
+                        detail: { user: conv.otherUser }
                       })
                     );
                   }}

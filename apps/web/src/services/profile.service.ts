@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { createClient } from "@/lib/supabase/server";
-import type { UserProfile } from "@/lib/types";
-import { logger } from "@/lib/logger";
+import { createClient } from '@/lib/supabase/server';
+import type { UserProfile } from '@/lib/types';
+import { logger } from '@/lib/logger';
 
 // Função para detectar se estamos em modo mock
 function isMockMode(): boolean {
@@ -66,7 +66,7 @@ function getMockUserProfileById(userId: string): UserProfile | null {
       faqs: []
     }
   };
-  
+
   return mockProfiles[userId] || null;
 }
 
@@ -94,7 +94,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     supabase.from('coupons').select('*').eq('username', merged.username), // Alterado para buscar por username
     supabase.from('reviews').select('*').eq('reviewed_user_id', merged.id).eq('is_public', true),
     supabase.from('faq').select('*').eq('profile_id', merged.id),
-    supabase.from('portfolio_items').select('*').eq('profile_id', merged.id), // <-- ADICIONADO
+    supabase.from('portfolio_items').select('*').eq('profile_id', merged.id) // <-- ADICIONADO
   ]);
 
   // Log detalhado do resultado bruto da query de reviews
@@ -107,7 +107,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     authorAvatarUrl: rev.author_avatar_url || rev.profiles?.avatar_url || '',
     rating: rev.rating,
     comment: rev.comment,
-    createdAt: rev.created_at,
+    createdAt: rev.created_at
     // outros campos se necessário
   }));
 
@@ -119,7 +119,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     imageUrl: item.image_url,
     caption: item.caption,
     description: item.description,
-    externalLink: item.external_link,
+    externalLink: item.external_link
   }));
 
   // Log para depuração
@@ -163,7 +163,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     endereco_bairro: merged.endereco_bairro,
     endereco_cidade: merged.endereco_cidade,
     endereco_estado: merged.endereco_estado,
-    endereco_cep: merged.endereco_cep,
+    endereco_cep: merged.endereco_cep
   };
 
   // Se for o usuário joaosilva, insere portfólio de exemplo
@@ -174,7 +174,7 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
       title: 'Transforme seu negócio com João Silva',
       description: 'Soluções digitais sob medida para você crescer mais rápido. Peça seu orçamento premium!',
       imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop',
-      ctaText: 'Solicitar orçamento',
+      ctaText: 'Solicitar orçamento'
     };
     userProfile.portfolio = [
       {
@@ -182,29 +182,29 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
         caption: 'Website Institucional',
         imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
         description: 'Site institucional moderno, responsivo e otimizado para SEO.',
-        externalLink: 'https://exemplo.com/projeto1',
+        externalLink: 'https://exemplo.com/projeto1'
       },
       {
         id: '2',
         caption: 'Campanha de Oferta',
         imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80',
         description: 'Landing page de alta conversão para campanha promocional.',
-        externalLink: 'https://exemplo.com/projeto2',
+        externalLink: 'https://exemplo.com/projeto2'
       },
       {
         id: '3',
         caption: 'Anúncio Patrocinado',
         imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80',
         description: 'Criativo para mídia paga com foco em engajamento.',
-        externalLink: 'https://exemplo.com/projeto3',
+        externalLink: 'https://exemplo.com/projeto3'
       },
       {
         id: '4',
         caption: 'Landing Page Responsiva',
         imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
         description: 'Página responsiva para captação de leads.',
-        externalLink: 'https://exemplo.com/projeto4',
-      },
+        externalLink: 'https://exemplo.com/projeto4'
+      }
     ];
     // Adiciona propriedades do YouTube
     userProfile.youtubeVideoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
@@ -235,14 +235,14 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
     userProfile.sociallinks = [
       { id: 'sl1', platform: 'linkedin', url: 'https://www.linkedin.com/in/pedrosantos' },
       { id: 'sl2', platform: 'instagram', url: 'https://www.instagram.com/pedrosantos_marketing' },
-      { id: 'sl3', platform: 'website', url: 'https://www.pedrosantos.com.br' },
+      { id: 'sl3', platform: 'website', url: 'https://www.pedrosantos.com.br' }
     ];
 
     userProfile.services = [
       { id: 's1', name: 'Consultoria SEO', description: 'Otimização para motores de busca.', icon: 'search' },
       { id: 's2', name: 'Gestão de Tráfego Pago', description: 'Campanhas no Google Ads e Meta Ads.', icon: 'ad' },
       { id: 's3', name: 'Criação de Conteúdo', description: 'Textos e vídeos para engajamento.', icon: 'content' },
-      { id: 's4', name: 'Social Media', description: 'Gestão de redes sociais para empresas.', icon: 'instagram' },
+      { id: 's4', name: 'Social Media', description: 'Gestão de redes sociais para empresas.', icon: 'instagram' }
     ];
 
     userProfile.portfolio = [
@@ -251,39 +251,39 @@ export async function getUserProfileByUsername(username: string): Promise<UserPr
         caption: 'Campanha de Marketing para Startup',
         imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
         description: 'Campanha de lançamento de produto para startup de tecnologia, com foco em redes sociais e mídia paga.',
-        externalLink: 'https://exemplo.com/portfolio/startup-campanha',
+        externalLink: 'https://exemplo.com/portfolio/startup-campanha'
       },
       {
         id: 'p2',
         caption: 'Website para Consultoria Financeira',
         imageUrl: 'https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&w=600&q=80',
         description: 'Desenvolvimento de site institucional moderno e responsivo para consultoria financeira.',
-        externalLink: 'https://exemplo.com/portfolio/consultoria-site',
+        externalLink: 'https://exemplo.com/portfolio/consultoria-site'
       },
       {
         id: 'p3',
         caption: 'Gestão de Redes Sociais para Restaurante',
         imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
         description: 'Criação de conteúdo e gestão de campanhas para restaurante local, aumentando o engajamento em 40%.',
-        externalLink: 'https://exemplo.com/portfolio/restaurante-social',
+        externalLink: 'https://exemplo.com/portfolio/restaurante-social'
       },
       {
         id: 'p4',
         caption: 'Landing Page para Evento',
         imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80',
         description: 'Landing page criada para evento corporativo, com foco em conversão de inscrições.',
-        externalLink: 'https://exemplo.com/portfolio/evento-landing',
-      },
+        externalLink: 'https://exemplo.com/portfolio/evento-landing'
+      }
     ];
 
     userProfile.experience = [
       { id: 'e1', title: 'Analista de Marketing Digital Sênior', company: 'Agência Alpha', startDate: '2020-03-01', endDate: null, description: 'Responsável por estratégias de SEO e SEM para grandes contas.' },
-      { id: 'e2', title: 'Coordenador de Conteúdo', company: 'Startup Beta', startDate: '2017-06-01', endDate: '2020-02-28', description: 'Liderança da equipe de criação de conteúdo e blog.' },
+      { id: 'e2', title: 'Coordenador de Conteúdo', company: 'Startup Beta', startDate: '2017-06-01', endDate: '2020-02-28', description: 'Liderança da equipe de criação de conteúdo e blog.' }
     ];
 
     userProfile.education = [
       { id: 'edu1', degree: 'Pós-graduação em Marketing Digital', institution: 'Universidade XYZ', startDate: '2019-01-01', endDate: '2020-12-31', description: 'Especialização em estratégias digitais avançadas.' },
-      { id: 'edu2', degree: 'Bacharelado em Comunicação Social', institution: 'Faculdade ABC', startDate: '2013-02-01', endDate: '2016-12-31', description: 'Formação abrangente em comunicação e publicidade.' },
+      { id: 'edu2', degree: 'Bacharelado em Comunicação Social', institution: 'Faculdade ABC', startDate: '2013-02-01', endDate: '2016-12-31', description: 'Formação abrangente em comunicação e publicidade.' }
     ];
 
     // Garantir que não há campos exclusivos de planos pagos
@@ -307,7 +307,7 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     logger.profile('Modo MOCK ativado - retornando dados mock', { userId });
     return getMockUserProfileById(userId);
   }
-  
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
@@ -349,7 +349,7 @@ export async function getUserProfileById(userId: string): Promise<UserProfile | 
     experience: (data.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
     education: (data.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })),
     reviews: (data.reviews || []),
-    skills: data.skills ?? [],
+    skills: data.skills ?? []
   };
 
   return userProfile;
@@ -382,7 +382,7 @@ export async function updateUserProfile(userId: string, data: Partial<UserProfil
     is_available: isAvailable,
     profile_picture_url: profile_picture_url,
     cover_photo_url: cover_photo_url,
-    whatsapp_number: whatsappNumber,
+    whatsapp_number: whatsappNumber
   };
 
   logger.debug('Profile update initiated', { userId, fieldsCount: Object.keys(updateData).length });
@@ -499,7 +499,7 @@ export async function getAllUserProfiles(limit = 20): Promise<UserProfile[]> {
       portfolio: (profile.portfolio || []) as UserProfile['portfolio'],
       experience: (profile.experience || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['experience'],
       education: (profile.education || []).map((e: any) => ({ ...e, startDate: e.start_date || undefined, endDate: e.end_date || undefined })) as UserProfile['education'],
-      reviews: (profile.reviews || []) as UserProfile['reviews'],
+      reviews: (profile.reviews || []) as UserProfile['reviews']
     };
     return userProfile;
   });

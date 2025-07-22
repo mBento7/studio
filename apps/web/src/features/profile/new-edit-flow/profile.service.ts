@@ -1,12 +1,12 @@
-import { supabase } from "@/lib/supabase/client";
+import { supabase } from '@/lib/supabase/client';
 import { refreshProfileSnapshot } from '@/services/profile.service';
 
 // Busca o perfil do usuário logado (V2)
 export async function getUserProfileV2(userId: string) {
   const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
     .single();
   if (error) throw error;
   return data;
@@ -30,7 +30,7 @@ const VALID_PROFILE_FIELDS = [
   'primaryColor',
   'secondaryColor',
   'font',
-  'maps_link',
+  'maps_link'
   // 'social_links', // Removido: social_links é uma tabela relacional separada
 ];
 
@@ -60,16 +60,16 @@ export async function saveUserProfileV2(userId: string, profileData: any) {
   //   safeProfileData.social_links = JSON.stringify(safeProfileData.social_links);
   // }
   const { error } = await supabase
-    .from("profiles")
+    .from('profiles')
     .update(safeProfileData)
-    .eq("id", userId);
+    .eq('id', userId);
   if (error) throw error;
 
   // Registra atividade de atualização de perfil
   const activity = {
     user_id: userId,
     type: 'profile_update',
-    data: safeProfileData,
+    data: safeProfileData
   };
   await supabase.from('activities').insert([activity]);
 
@@ -140,4 +140,4 @@ export async function saveCouponsV2(userId: string, username: string, coupons: A
 
 // Exemplo de uso:
 // const profile = await getUserProfileV2(user.id);
-// await saveUserProfileV2(user.id, profileData); 
+// await saveUserProfileV2(user.id, profileData);

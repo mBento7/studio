@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
 interface ProgressBarProps {
   duration?: number; // em segundos
@@ -47,8 +47,8 @@ export const StoryProgressBar: React.FC<ProgressBarProps> = ({ duration = 6, onC
     >
       <motion.div
         className="h-full bg-white"
-        style={{ width: progress.get() + "%" }}
+        style={{ width: progress.get() + '%' }}
       />
     </div>
   );
-}; 
+};

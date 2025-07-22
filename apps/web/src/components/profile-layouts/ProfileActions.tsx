@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Share2, Edit } from "lucide-react";
-import Link from "next/link";
-import { getFullProfileUrl } from "@/lib/profile-url";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from '@/components/ui/button';
+import { Share2, Edit } from 'lucide-react';
+import Link from 'next/link';
+import { getFullProfileUrl } from '@/lib/profile-url';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProfileActionsProps {
   user: any;
@@ -11,12 +11,12 @@ interface ProfileActionsProps {
 
 export function ProfileActions({ user, isCurrentUserProfile }: ProfileActionsProps) {
   const { toast } = useToast();
-  
+
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
-    
+
     const profileUrl = getFullProfileUrl(user.username);
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -29,16 +29,16 @@ export function ProfileActions({ user, isCurrentUserProfile }: ProfileActionsPro
         if (error instanceof Error && error.name !== 'AbortError') {
           await navigator.clipboard.writeText(profileUrl);
           toast({
-            title: "Link copiado!",
-            description: "O link do perfil foi copiado para a área de transferência.",
+            title: 'Link copiado!',
+            description: 'O link do perfil foi copiado para a área de transferência.'
           });
         }
       }
     } else {
       await navigator.clipboard.writeText(profileUrl);
       toast({
-        title: "Link copiado!",
-        description: "O link do perfil foi copiado para a área de transferência.",
+        title: 'Link copiado!',
+        description: 'O link do perfil foi copiado para a área de transferência.'
       });
     }
   };

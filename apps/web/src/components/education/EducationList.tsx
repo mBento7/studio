@@ -1,7 +1,7 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-react';
 
 /**
  * Props para o componente EducationList
@@ -21,7 +21,7 @@ export interface EducationItem {
 export interface EducationListProps {
   education: EducationItem[];
   maxToShow?: number;
-  variant?: "free" | "standard" | "premium";
+  variant?: 'free' | 'standard' | 'premium';
   isCurrentUserProfile?: boolean;
   onEdit?: (index: number) => void;
 }
@@ -29,20 +29,20 @@ export interface EducationListProps {
 export const EducationList: React.FC<EducationListProps> = ({
   education = [],
   maxToShow = 6,
-  variant = "free",
+  variant = 'free',
   isCurrentUserProfile = false,
-  onEdit,
+  onEdit
 }) => {
   const displayed = education.slice(0, maxToShow);
 
   return (
     <div
       className={
-        variant === "premium"
-          ? "space-y-4"
-          : variant === "standard"
-          ? "space-y-3"
-          : "space-y-2"
+        variant === 'premium'
+          ? 'space-y-4'
+          : variant === 'standard'
+            ? 'space-y-3'
+            : 'space-y-2'
       }
     >
       {displayed.map((edu, idx) => (
@@ -67,4 +67,4 @@ export const EducationList: React.FC<EducationListProps> = ({
       ))}
     </div>
   );
-}; 
+};

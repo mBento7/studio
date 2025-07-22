@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Edit3, Mail, Phone, MapPin, QrCode, Share2, MessageSquare, Settings, Eye, Star, X, Instagram, Linkedin, Twitter, Facebook, Github, Globe, Youtube } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { useProfileQrCode } from "./useProfileQrCode";
-import Link from "next/link";
-import { SocialLinks } from "../social/SocialLinks";
-import { LocationInfo } from "./LocationInfo";
-import { motion } from "framer-motion"; // Importar motion
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Edit3, Mail, Phone, MapPin, QrCode, Share2, MessageSquare, Settings, Eye, Star, X, Instagram, Linkedin, Twitter, Facebook, Github, Globe, Youtube } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { useProfileQrCode } from './useProfileQrCode';
+import Link from 'next/link';
+import { SocialLinks } from '../social/SocialLinks';
+import { LocationInfo } from './LocationInfo';
+import { motion } from 'framer-motion'; // Importar motion
 
 interface StandardProfileCardHeaderProps {
   user: any;
   isCurrentUserProfile: boolean;
 }
 
-const DEFAULT_PRIMARY = "#BDBDBD"; // igual à borda padrão dos cards
-const DEFAULT_SECONDARY = "#F4F4F5"; // cinza claro padrão
-const PRIMARY_COLORS = ["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"];
-const SECONDARY_COLORS = ["#8B5CF6", "#F59E0B", "#10B981", "#EF4444", "#3B82F6"];
+const DEFAULT_PRIMARY = '#BDBDBD'; // igual à borda padrão dos cards
+const DEFAULT_SECONDARY = '#F4F4F5'; // cinza claro padrão
+const PRIMARY_COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'];
+const SECONDARY_COLORS = ['#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#3B82F6'];
 
 const ColorCustomizer = ({
   isOpen,
@@ -25,7 +25,7 @@ const ColorCustomizer = ({
   primaryColor,
   secondaryColor,
   onPrimaryColorChange,
-  onSecondaryColorChange,
+  onSecondaryColorChange
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -104,7 +104,7 @@ const platformIcons: Record<string, any> = {
   github: Github,
   whatsapp: MessageSquare,
   globe: Globe,
-  youtube: Youtube,
+  youtube: Youtube
 };
 
 const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ user, isCurrentUserProfile }) => {
@@ -135,15 +135,15 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
   // Função para compartilhar perfil
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
-    
+
     const shareUrl = typeof window !== 'undefined' ? window.location.origin + `/${user.username}` : `/${user.username}`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: user.full_name || user.name,
           text: user.bio,
-          url: shareUrl,
+          url: shareUrl
         });
       } catch (error) {
         // fallback para clipboard se cancelar
@@ -209,8 +209,8 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
             <motion.div
               className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 shadow-lg ring-2 overflow-hidden bg-background flex-shrink-0 shadow-xl dark:shadow-black/70"
               style={{ borderColor: primaryColor, boxShadow: `0 0 0 4px ${primaryColor}40` }}
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 20px rgba(0,0,0,0.4)" }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.4)' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
               <Avatar className="w-full h-full">
                 <AvatarImage src={user.profile_picture_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=placeholder'} alt={user.name} />
@@ -231,7 +231,7 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
             {/* Botão Chamar no Chat (Condicional) */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               className="shadow-lg dark:shadow-black/40 rounded-full"
             >
               <Button
@@ -244,7 +244,7 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
             {/* Botão Compartilhar Perfil */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               className="shadow-md dark:shadow-black/40 rounded-full"
             >
               <Button
@@ -300,12 +300,12 @@ const StandardProfileCardHeader: React.FC<StandardProfileCardHeaderProps> = ({ u
                         key={link.id || idx}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 border-2 border-primary/20 dark:border-slate-700 shadow-xl dark:shadow-black/40 transition-all hover:bg-primary/10 dark:hover:bg-slate-700 text-primary dark:text-white transition-colors"
                         whileHover={{ scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                       >
                         <SocialLinks links={[link]} variant="standard" maxToShow={1} />
                       </motion.span>
                     ) : (
-                      <span key={"placeholder-"+idx} className="w-10 h-10 rounded-full border-2 border-primary/30 dark:border-slate-700 flex items-center justify-center opacity-40 bg-white dark:bg-slate-800 shadow-xl dark:shadow-black/40 transition-colors" />
+                      <span key={'placeholder-'+idx} className="w-10 h-10 rounded-full border-2 border-primary/30 dark:border-slate-700 flex items-center justify-center opacity-40 bg-white dark:bg-slate-800 shadow-xl dark:shadow-black/40 transition-colors" />
                     )
                   )}
                 </div>

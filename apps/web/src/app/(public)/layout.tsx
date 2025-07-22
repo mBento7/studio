@@ -1,7 +1,7 @@
 import PublicHeader from '@/features/landing/header';
 
 export default function PublicLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export type CreditPackage = {
   name: string;
@@ -14,16 +14,16 @@ interface CreditPackagesGridProps {
 
 export function CreditPackagesGrid({ onBuy }: CreditPackagesGridProps) {
   const packages: CreditPackage[] = [
-    { name: "Pacote Básico", credits: 100, price: 19.9, bonus: 0 },
-    { name: "Pacote Pro", credits: 250, price: 49.9, bonus: 10, bestValue: true },
-    { name: "Pacote Business", credits: 500, price: 89.9, bonus: 20 },
+    { name: 'Pacote Básico', credits: 100, price: 19.9, bonus: 0 },
+    { name: 'Pacote Pro', credits: 250, price: 49.9, bonus: 10, bestValue: true },
+    { name: 'Pacote Business', credits: 500, price: 89.9, bonus: 20 }
   ];
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
       {packages.map((pkg) => (
         <div
           key={pkg.name}
-          className={`flex flex-col border rounded-lg p-6 shadow ${pkg.bestValue ? "border-blue-500" : ""}`}
+          className={`flex flex-col border rounded-lg p-6 shadow ${pkg.bestValue ? 'border-blue-500' : ''}`}
         >
           {pkg.bestValue && (
             <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded mb-2 self-center">Melhor Custo-Benefício</span>
@@ -43,4 +43,4 @@ export function CreditPackagesGrid({ onBuy }: CreditPackagesGridProps) {
       ))}
     </div>
   );
-} 
+}

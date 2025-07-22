@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -7,11 +7,11 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Gem } from "lucide-react";
-import React from "react";
+  DialogClose
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Gem } from 'lucide-react';
+import React from 'react';
 
 // Define a interface para garantir a consistência dos dados da promoção
 export interface PromotionOption {
@@ -36,7 +36,7 @@ export function PromotionModal({
   isOpen,
   onClose,
   promotion,
-  onConfirm,
+  onConfirm
 }: PromotionModalProps) {
   if (!promotion) {
     return null;
@@ -61,8 +61,8 @@ export function PromotionModal({
         </DialogHeader>
         <div className="py-4">
           <p className="text-center text-lg">
-            Você está prestes a usar{" "}
-            <span className="font-bold text-primary">{promotion.cost} créditos</span>{" "}
+            Você está prestes a usar{' '}
+            <span className="font-bold text-primary">{promotion.cost} créditos</span>{' '}
             para ativar esta promoção.
           </p>
           <p className="text-center text-sm text-muted-foreground mt-1">
@@ -81,4 +81,4 @@ export function PromotionModal({
       </DialogContent>
     </Dialog>
   );
-} 
+}

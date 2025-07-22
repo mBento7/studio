@@ -16,19 +16,19 @@ import { UserAdExample } from '@/components/anuncios/UserAdExample';
 //             PATROCINADO
 //           </div>
 //           <div className="relative h-32 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-600 overflow-hidden">
-//             <img 
-//               src="https://picsum.photos/seed/useradexample/400/150" 
-//               alt="TechSolutions Banner" 
-//               className="w-full h-full object-cover opacity-85 user-ad-img transition-all duration-500 group-hover:scale-105" 
+//             <img
+//               src="https://picsum.photos/seed/useradexample/400/150"
+//               alt="TechSolutions Banner"
+//               className="w-full h-full object-cover opacity-85 user-ad-img transition-all duration-500 group-hover:scale-105"
 //             />
 //             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
 //           </div>
 //           <div className="p-4 space-y-4">
 //             <div className="flex items-start gap-4">
-//               <img 
-//                 src="https://picsum.photos/seed/useradlogo/50/50" 
-//                 alt="TechSolutions" 
-//                 className="w-14 h-14 rounded-xl object-cover border-2 border-background shadow-lg shadow-black/10 transition-transform hover:scale-105" 
+//               <img
+//                 src="https://picsum.photos/seed/useradlogo/50/50"
+//                 alt="TechSolutions"
+//                 className="w-14 h-14 rounded-xl object-cover border-2 border-background shadow-lg shadow-black/10 transition-transform hover:scale-105"
 //               />
 //               <div className="flex-1">
 //                 <h4 className="font-bold text-lg text-foreground">TechSolutions</h4>
@@ -49,7 +49,7 @@ import { UserAdExample } from '@/components/anuncios/UserAdExample';
 //               </span>
 //               <span className="text-sm text-muted-foreground font-medium">até 31/12</span>
 //             </div>
-//             <Button 
+//             <Button
 //               className="w-full rounded-full bg-primary text-primary-foreground font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
 //             >
 //               Ver Oferta Completa
@@ -82,7 +82,7 @@ export function PremiumAdCard() {
             <span className="text-green-600 font-semibold text-lg">+300%</span>
             <span className="text-muted-foreground">mais visualizações</span>
           </div>
-          <Button 
+          <Button
             className="w-full rounded-full bg-primary text-primary-foreground font-semibold shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] night-theme:shadow-black/50"
           >
             Começar Agora
@@ -104,11 +104,11 @@ export function PremiumAdCard() {
 
 export function TrendingHashtags() {
   const hashtags = [
-    { tag: "#limpeza", posts: 1234 },
-    { tag: "#marketing", posts: 987 },
-    { tag: "#design", posts: 756 },
-    { tag: "#consultoria", posts: 543 },
-    { tag: "#fitness", posts: 432 },
+    { tag: '#limpeza', posts: 1234 },
+    { tag: '#marketing', posts: 987 },
+    { tag: '#design', posts: 756 },
+    { tag: '#consultoria', posts: 543 },
+    { tag: '#fitness', posts: 432 }
   ];
   return (
     <div className="p-5 bg-card rounded-2xl space-y-4 border border-black/5 dark:border-white/10 shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
@@ -118,8 +118,8 @@ export function TrendingHashtags() {
       </h3>
       <div className="space-y-2">
         {hashtags.map((item, index) => (
-          <div 
-            key={item.tag} 
+          <div
+            key={item.tag}
             className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-xl cursor-pointer transition-all hover:scale-[1.02] hover:shadow-sm"
           >
             <div className="flex items-center gap-3">
@@ -138,9 +138,9 @@ export function TrendingHashtags() {
 
 export function UserSuggestions() {
   const suggestions = [
-    { id: 1, name: "TechSolutions", category: "Tecnologia", followers: "2.3k", avatar: "https://picsum.photos/seed/suggest1/40/40" },
-    { id: 2, name: "CleanPro", category: "Limpeza", followers: "1.8k", avatar: "https://picsum.photos/seed/suggest2/40/40" },
-    { id: 3, name: "DesignStudio", category: "Design", followers: "3.1k", avatar: "https://picsum.photos/seed/suggest3/40/40" },
+    { id: 1, name: 'TechSolutions', category: 'Tecnologia', followers: '2.3k', avatar: 'https://picsum.photos/seed/suggest1/40/40' },
+    { id: 2, name: 'CleanPro', category: 'Limpeza', followers: '1.8k', avatar: 'https://picsum.photos/seed/suggest2/40/40' },
+    { id: 3, name: 'DesignStudio', category: 'Design', followers: '3.1k', avatar: 'https://picsum.photos/seed/suggest3/40/40' }
   ];
   return (
     <div className="p-5 bg-card rounded-2xl space-y-4 border border-black/5 dark:border-white/10 shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
@@ -148,18 +148,18 @@ export function UserSuggestions() {
       <div className="space-y-3">
         {suggestions.map((user) => (
           <div key={user.id} className="flex items-center gap-4 p-2 hover:bg-muted/50 rounded-xl transition-all">
-            <img 
-              src={user.avatar} 
-              alt={user.name} 
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-transparent hover:ring-primary/30 transition-all" 
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-12 h-12 rounded-xl object-cover ring-2 ring-transparent hover:ring-primary/30 transition-all"
             />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate text-foreground">{user.name}</p>
               <p className="text-xs text-muted-foreground">{user.category} • {user.followers} seguidores</p>
             </div>
-            <Button 
-              size="sm" 
-              variant="outline" 
+            <Button
+              size="sm"
+              variant="outline"
               className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary rounded-full flex items-center gap-1 transition-all hover:scale-105"
             >
               <Plus className="w-3 h-3" />
@@ -174,9 +174,9 @@ export function UserSuggestions() {
 
 export function TrendingAds() {
   const ads = [
-    { id: 1, title: "Promoção Limpeza Pro", img: "https://picsum.photos/seed/ad1/200/80" },
-    { id: 2, title: "Desconto Marketing", img: "https://picsum.photos/seed/ad2/200/80" },
-    { id: 3, title: "Design em Alta", img: "https://picsum.photos/seed/ad3/200/80" },
+    { id: 1, title: 'Promoção Limpeza Pro', img: 'https://picsum.photos/seed/ad1/200/80' },
+    { id: 2, title: 'Desconto Marketing', img: 'https://picsum.photos/seed/ad2/200/80' },
+    { id: 3, title: 'Design em Alta', img: 'https://picsum.photos/seed/ad3/200/80' }
   ];
   return (
     <div className="p-5 bg-card rounded-2xl space-y-4 border border-black/5 dark:border-white/10 shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
@@ -186,10 +186,10 @@ export function TrendingAds() {
       </h3>
       {ads.map((ad) => (
         <div key={ad.id} className="relative h-28 rounded-xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-md transition-all">
-          <img 
-            src={ad.img} 
-            alt={ad.title} 
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-300" 
+          <img
+            src={ad.img}
+            alt={ad.title}
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-300"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
           <div className="absolute bottom-0 left-0 right-0 p-3">
@@ -203,8 +203,8 @@ export function TrendingAds() {
 
 export function CouponsWidget() {
   const coupons = [
-    { id: 1, code: "BEMVINDO20", desc: "20% OFF na primeira compra" },
-    { id: 2, code: "FRETEGRATIS", desc: "Frete grátis acima de R$100" },
+    { id: 1, code: 'BEMVINDO20', desc: '20% OFF na primeira compra' },
+    { id: 2, code: 'FRETEGRATIS', desc: 'Frete grátis acima de R$100' }
   ];
   return (
     <div className="p-5 bg-card rounded-2xl space-y-4 border border-black/5 dark:border-white/10 shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
@@ -218,9 +218,9 @@ export function CouponsWidget() {
             <p className="font-semibold text-primary text-lg">{c.code}</p>
             <p className="text-xs text-muted-foreground">{c.desc}</p>
           </div>
-          <Button 
-            size="sm" 
-            variant="outline" 
+          <Button
+            size="sm"
+            variant="outline"
             className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary rounded-full flex items-center gap-1 transition-all hover:scale-105"
           >
             Copiar
@@ -245,4 +245,4 @@ export function RightWidgetsColumn({ onCouponClick }: { onCouponClick?: () => vo
       <CouponsWidget />
     </div>
   );
-} 
+}

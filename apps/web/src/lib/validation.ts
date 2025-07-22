@@ -1,4 +1,4 @@
-import { ClassValue } from "clsx";
+import { ClassValue } from 'clsx';
 
 /**
  * Valida se uma string é um UUID válido

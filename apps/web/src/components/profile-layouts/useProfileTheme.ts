@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export interface ProfileTheme {
   primaryColor: string;
   secondaryColor: string;
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
 }
 
 const DEFAULT_THEME: ProfileTheme = {
-  primaryColor: "#3B82F6",
-  secondaryColor: "#F4F4F5",
-  mode: "light",
+  primaryColor: '#3B82F6',
+  secondaryColor: '#F4F4F5',
+  mode: 'light'
 };
 
 /**
@@ -29,8 +29,8 @@ export function useProfileTheme(initialTheme: ProfileTheme = DEFAULT_THEME) {
   }
 
   function toggleMode() {
-    setTheme((prev) => ({ ...prev, mode: prev.mode === "light" ? "dark" : "light" }));
+    setTheme((prev) => ({ ...prev, mode: prev.mode === 'light' ? 'dark' : 'light' }));
   }
 
   return { theme, setTheme, setPrimaryColor, setSecondaryColor, toggleMode };
-} 
+}

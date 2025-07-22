@@ -1,2 +1,2 @@
 export { ChatFloatingBox } from './ChatFloatingBox';
-export { ChatMessengerCard } from './ChatMessengerCard'; 
+export { ChatMessengerCard } from './ChatMessengerCard';

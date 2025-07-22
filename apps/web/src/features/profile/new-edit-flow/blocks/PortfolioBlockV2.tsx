@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import React, { useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
 
 interface PortfolioProject {
@@ -50,7 +50,7 @@ export function PortfolioBlockV2({ portfolio, onChange, plan = PlanType.FREE }: 
   };
 
   const handleSave = () => {
-    let newPortfolio = [...safePortfolio];
+    const newPortfolio = [...safePortfolio];
     if (editingIndex !== null) {
       newPortfolio[editingIndex] = currentItem;
     } else {
@@ -88,7 +88,7 @@ export function PortfolioBlockV2({ portfolio, onChange, plan = PlanType.FREE }: 
             <Label htmlFor={`portfolio-title-${idx}`} className="font-semibold">Título*</Label>
             <Input
               id={`portfolio-title-${idx}`}
-              value={item.title ?? ""}
+              value={item.title ?? ''}
               placeholder="Ex: Site institucional, App mobile, Ilustração..."
               className="flex-1 pointer-events-none"
               autoComplete="off"
@@ -103,7 +103,7 @@ export function PortfolioBlockV2({ portfolio, onChange, plan = PlanType.FREE }: 
             <Label htmlFor={`portfolio-desc-${idx}`}>Descrição</Label>
             <Textarea
               id={`portfolio-desc-${idx}`}
-              value={item.description ?? ""}
+              value={item.description ?? ''}
               placeholder="Conte mais sobre este projeto..."
               className="mt-1 pointer-events-none"
               rows={2}
@@ -133,9 +133,9 @@ export function PortfolioBlockV2({ portfolio, onChange, plan = PlanType.FREE }: 
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{editingIndex !== null ? "Editar Projeto" : "Adicionar Projeto"}</DialogTitle>
+            <DialogTitle>{editingIndex !== null ? 'Editar Projeto' : 'Adicionar Projeto'}</DialogTitle>
             <DialogDescription>
-              {editingIndex !== null ? "Edite os detalhes do seu projeto." : "Adicione um novo projeto ao seu portfólio."}
+              {editingIndex !== null ? 'Edite os detalhes do seu projeto.' : 'Adicione um novo projeto ao seu portfólio.'}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -213,4 +213,4 @@ export function PortfolioBlockV2({ portfolio, onChange, plan = PlanType.FREE }: 
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos um projeto.</div>}
     </div>
   );
-} 
+}

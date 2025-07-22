@@ -32,7 +32,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   aiHintName,
   aspectRatio = '1/1',
   hint,
-  buttonText,
+  buttonText
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragActive, setIsDragActive] = useState(false);
@@ -133,7 +133,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
               <Button
                 type="button"
                 variant="destructive"
-                onClick={() => setValue(name, "")}
+                onClick={() => setValue(name, '')}
                 disabled={uploading}
                 className="w-full"
                 aria-label={`Remover ${label}`}
@@ -159,7 +159,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
           <div
             className={
               `relative w-full md:w-auto flex flex-col md:flex-row md:items-center gap-4`}
-            >
+          >
             <div
               className={`relative overflow-hidden rounded-xl bg-muted flex items-center justify-center shadow-md transition-all group focus-within:ring-2 focus-within:ring-primary hover:scale-105 hover:border-primary/70 ${previewClass}`}
               tabIndex={0}
@@ -225,4 +225,4 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       )}
     />
   );
-}; 
+};

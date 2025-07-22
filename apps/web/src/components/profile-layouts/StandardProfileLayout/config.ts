@@ -11,5 +11,5 @@ export const defaultStandardProfileLayoutConfig: StandardProfileLayoutConfig = {
   showSkills: true,
   showExperience: true,
   showEducation: true,
-  themeColor: '#2563eb',
-}; 
+  themeColor: '#2563eb'
+};

@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import React from 'react';
 import Image from 'next/image';
@@ -20,19 +19,19 @@ interface DigitalBusinessCardProps {
 
 export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl }: DigitalBusinessCardProps) {
   const { toast } = useToast();
-  
+
   const handleDownloadQrCode = async () => {
     if (!user || !primaryColorHex) return;
-    
+
     const profileUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/${user.username}`
-    : `${siteConfig.url}/${user.username}`; // Fallback for server/static generation context
+      ? `${window.location.origin}/${user.username}`
+      : `${siteConfig.url}/${user.username}`; // Fallback for server/static generation context
 
     const bgColorForDownload = 'FFFFFF'; // White background for better print/scan compatibility
-    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorHex.replace("#","")}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
-    
+    const qrCodeUrlForDownload = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(profileUrl)}&color=${primaryColorHex.replace('#','')}&bgcolor=${bgColorForDownload}&format=png&qzone=1`;
+
     try {
-      toast({ title: "Preparando QR Code para download..." });
+      toast({ title: 'Preparando QR Code para download...' });
       const response = await fetch(qrCodeUrlForDownload);
       if (!response.ok) throw new Error(`Falha ao buscar QR Code: ${response.statusText}`);
       const blob = await response.blob();
@@ -44,10 +43,10 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toast({ title: "QR Code Baixado", description: "O QR Code do perfil foi baixado como PNG." });
+      toast({ title: 'QR Code Baixado', description: 'O QR Code do perfil foi baixado como PNG.' });
     } catch (error) {
-        console.error("Erro ao baixar QR Code:", error);
-        toast({ title: "Erro no Download", description: "Não foi possível baixar o QR Code.", variant: "destructive" });
+      console.error('Erro ao baixar QR Code:', error);
+      toast({ title: 'Erro no Download', description: 'Não foi possível baixar o QR Code.', variant: 'destructive' });
     }
   };
 
@@ -55,7 +54,7 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
     if (typeof window !== 'undefined' && user.username) {
       window.open(`/${user.username}/card-preview`, '_blank');
     } else {
-      toast({ title: "Erro", description: "Não foi possível abrir a pré-visualização do cartão.", variant: "destructive"});
+      toast({ title: 'Erro', description: 'Não foi possível abrir a pré-visualização do cartão.', variant: 'destructive'});
     }
   };
 
@@ -68,14 +67,14 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
       {qrCodeUrl && (
         <div className="flex flex-col items-center">
           <div className="relative w-36 h-36 md:w-40 md:h-40 mb-2 rounded-lg border-4 border-card shadow-lg bg-muted overflow-hidden flex items-center justify-center p-1">
-              <Image
-                  src={qrCodeUrl}
-                  alt={`QR Code do perfil de ${user.name}`}
-                  width={160}
-                  height={160}
-                  className="rounded-md"
-                  data-ai-hint="qr code"
-              />
+            <Image
+              src={qrCodeUrl}
+              alt={`QR Code do perfil de ${user.name}`}
+              width={160}
+              height={160}
+              className="rounded-md"
+              data-ai-hint="qr code"
+            />
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Aponte a câmera para acessar meu perfil!
@@ -84,34 +83,34 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
       )}
 
       <div className={cn(
-          "grid gap-2",
-          (isFreeUser || isStandardUser) ? "sm:grid-cols-2" : "sm:grid-cols-1" 
-        )}>
-         <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={handleDownloadQrCode} 
-            disabled={!mounted}
-            className="w-full"
-          >
-            <Download className="mr-2 h-4 w-4" /> Baixar QR Code
-          </Button>
-        
-        <Button 
-          variant="default" 
-          size="sm" 
-          onClick={handleViewCardPreview} 
+        'grid gap-2',
+        (isFreeUser || isStandardUser) ? 'sm:grid-cols-2' : 'sm:grid-cols-1'
+      )}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleDownloadQrCode}
+          disabled={!mounted}
+          className="w-full"
+        >
+          <Download className="mr-2 h-4 w-4" /> Baixar QR Code
+        </Button>
+
+        <Button
+          variant="default"
+          size="sm"
+          onClick={handleViewCardPreview}
           disabled={!mounted}
           className={cn(
-            "w-full",
-            (isFreeUser || isStandardUser) ? "sm:col-span-1" : "sm:col-span-1" 
+            'w-full',
+            (isFreeUser || isStandardUser) ? 'sm:col-span-1' : 'sm:col-span-1'
           )}
         >
           <Eye className="mr-2 h-4 w-4" /> Visualizar Cartão
         </Button>
       </div>
 
-       { (isFreeUser) && (
+      { (isFreeUser) && (
         <p className="text-xs text-muted-foreground pt-2">
             Funcionalidades avançadas de cartão (como PDF) disponíveis nos planos Padrão e Premium.
         </p>
@@ -121,7 +120,6 @@ export function DigitalBusinessCard({ user, primaryColorHex, mounted, qrCodeUrl 
             Funcionalidade de download do cartão em PDF disponível no plano Premium.
         </p>
       )}
-
 
       <div className="pt-2 text-left space-y-1 text-sm">
         {user.location.city && user.location.country && (

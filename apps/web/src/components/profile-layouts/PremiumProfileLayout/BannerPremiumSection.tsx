@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import React from 'react';
 
 interface BannerPremiumSectionProps {
   premiumBanner: {
@@ -20,7 +20,7 @@ export function BannerPremiumSection({ premiumBanner }: BannerPremiumSectionProp
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '240px',
-        borderRadius: '0',
+        borderRadius: '0'
       }}
     >
       {/* Overlay para legibilidade do texto */}
@@ -40,4 +40,4 @@ export function BannerPremiumSection({ premiumBanner }: BannerPremiumSectionProp
       </div>
     </section>
   );
-} 
+}

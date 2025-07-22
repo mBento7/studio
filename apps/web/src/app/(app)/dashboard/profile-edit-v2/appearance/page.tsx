@@ -2,10 +2,10 @@
 
 export const dynamic = 'force-dynamic';
 
-import React, { useEffect, useState, useCallback } from "react";
-import { ProfileAppearanceTabV2 } from "@/features/profile/new-edit-flow/ProfileAppearanceTabV2";
-import { useAuth } from "@/hooks/use-auth";
-import { getUserProfileV2, saveUserProfileV2, filterValidProfileFields } from "@/features/profile/new-edit-flow/profile.service";
+import React, { useEffect, useState, useCallback } from 'react';
+import { ProfileAppearanceTabV2 } from '@/features/profile/new-edit-flow/ProfileAppearanceTabV2';
+import { useAuth } from '@/hooks/use-auth';
+import { getUserProfileV2, saveUserProfileV2, filterValidProfileFields } from '@/features/profile/new-edit-flow/profile.service';
 
 // Página da aba 'Aparência' do novo fluxo de edição de perfil V2
 export default function ProfileEditV2AppearancePage() {
@@ -24,7 +24,7 @@ export default function ProfileEditV2AppearancePage() {
         const data = await getUserProfileV2(user.id);
         setProfile(data);
       } catch (err: any) {
-        setError("Erro ao carregar perfil: " + (err.message || err.toString()));
+        setError('Erro ao carregar perfil: ' + (err.message || err.toString()));
       } finally {
         setLoading(false);
       }
@@ -39,9 +39,9 @@ export default function ProfileEditV2AppearancePage() {
     setSuccess(null);
     try {
       await saveUserProfileV2(user.id, filterValidProfileFields(profile));
-      setSuccess("Perfil salvo com sucesso!");
+      setSuccess('Perfil salvo com sucesso!');
     } catch (err: any) {
-      setError("Erro ao salvar perfil: " + (err.message || err.toString()));
+      setError('Erro ao salvar perfil: ' + (err.message || err.toString()));
     } finally {
       setLoading(false);
     }
@@ -51,8 +51,8 @@ export default function ProfileEditV2AppearancePage() {
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
   if (!profile) return <div>Nenhum dado de perfil encontrado.</div>;
 
-  const plan = profile.plan || "free";
-  const layout = profile.layout || "minimalist";
+  const plan = profile.plan || 'free';
+  const layout = profile.layout || 'minimalist';
 
   return (
     <div>

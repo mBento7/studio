@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,11 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import type { PortfolioItem } from "@/lib/types";
-import { ExternalLink } from "lucide-react";
+  DialogClose
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import type { PortfolioItem } from '@/lib/types';
+import { ExternalLink } from 'lucide-react';
 
 interface PortfolioItemModalProps {
   item: PortfolioItem | null;
@@ -24,7 +24,7 @@ interface PortfolioItemModalProps {
 export const PortfolioItemModal: React.FC<PortfolioItemModalProps> = ({
   item,
   open,
-  onOpenChange,
+  onOpenChange
 }) => {
   if (!item) return null;
 
@@ -48,11 +48,11 @@ export const PortfolioItemModal: React.FC<PortfolioItemModalProps> = ({
             {item.imageUrl ? (
               <Image
                 src={item.imageUrl}
-                alt={item.caption || "Imagem do Portfólio"}
+                alt={item.caption || 'Imagem do Portfólio'}
                 fill
                 className="object-cover rounded-xl transition-transform duration-500 ease-in-out group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                data-ai-hint={item.dataAiHint || "portfolio detail"}
+                data-ai-hint={item.dataAiHint || 'portfolio detail'}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-slate-400 text-base font-medium">

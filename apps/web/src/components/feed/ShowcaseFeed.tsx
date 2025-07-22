@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -67,12 +67,12 @@ const feedData = [
         views: 156
       }
     }
-  },
+  }
   // ... (demais itens do feed)
 ];
 
 // Exemplo de card de serviço
-const ServicePostCard = ({ user, title, description, image, price, location, tags, engagement, timeAgo = "2h" }: any) => {
+const ServicePostCard = ({ user, title, description, image, price, location, tags, engagement, timeAgo = '2h' }: any) => {
   return (
     <Card className="max-w-lg">
       <div className="flex items-center justify-between p-4">
@@ -140,14 +140,14 @@ const ShowcaseFeed = () => {
     user: {
       name: 'Lucas Story',
       avatarUrl: 'https://i.pravatar.cc/100?img=3',
-      username: 'lucas.story',
+      username: 'lucas.story'
     },
     mediaUrl: 'https://picsum.photos/seed/story/400/300',
     type: 'image',
     timeLeft: 80,
     liked: false,
     description: 'Exemplo de story com imagem.',
-    time: 'há 2h',
+    time: 'há 2h'
   };
 
   return (
@@ -175,7 +175,7 @@ const ShowcaseFeed = () => {
               usuario={{ nome: 'Ana Paula', avatar: 'https://i.pravatar.cc/100?img=5' }}
               curtidas={12}
               comentarios={3}
-              tags={["design", "branding"]}
+              tags={['design', 'branding']}
             />
           </section>
           {/* InviteCard */}
@@ -194,7 +194,7 @@ const ShowcaseFeed = () => {
               user={{
                 name: 'Maria Souza',
                 username: 'maria.souza',
-                avatarUrl: 'https://i.pravatar.cc/100?img=8',
+                avatarUrl: 'https://i.pravatar.cc/100?img=8'
               }}
               publishedAt={new Date().toISOString()}
               code="PROMO10"
@@ -211,7 +211,7 @@ const ShowcaseFeed = () => {
               user={{
                 name: 'Maria Souza',
                 username: 'maria.souza',
-                avatarUrl: 'https://i.pravatar.cc/100?img=8',
+                avatarUrl: 'https://i.pravatar.cc/100?img=8'
               }}
               benefit="10% OFF em qualquer serviço!"
               description="Aproveite 10% de desconto em todos os serviços do perfil da Maria. Visite o perfil e copie o código do cupom!"
@@ -262,7 +262,7 @@ const ShowcaseFeed = () => {
                 service: 'Design Gráfico',
                 serviceProvider: { name: 'Ana Paula', avatar: 'https://i.pravatar.cc/100?img=5' },
                 engagement: { likes: 10, comments: 2, shares: 1 },
-                timeAgo: '2h',
+                timeAgo: '2h'
               }}
             />
           </section>
@@ -305,14 +305,14 @@ const ShowcaseFeed = () => {
                   user: {
                     name: exampleStory.user.name,
                     username: exampleStory.user.username,
-                    avatarUrl: exampleStory.user.avatarUrl,
+                    avatarUrl: exampleStory.user.avatarUrl
                   },
                   mediaUrl: exampleStory.mediaUrl,
                   description: exampleStory.description,
                   type: exampleStory.type === 'image' || exampleStory.type === 'video' ? exampleStory.type : 'image',
                   time: exampleStory.time,
                   liked: exampleStory.liked,
-                  timeLeft: exampleStory.timeLeft,
+                  timeLeft: exampleStory.timeLeft
                 }}
                 onPrev={() => alert('Anterior')}
                 onNext={() => alert('Próximo')}
@@ -325,7 +325,7 @@ const ShowcaseFeed = () => {
             <StoryHeader
               story={{
                 user: exampleStory.user,
-                timeLeft: 60,
+                timeLeft: 60
               }}
               onClose={() => alert('Fechar')}
               progress={80}
@@ -337,7 +337,7 @@ const ShowcaseFeed = () => {
             <StoryActions
               story={{
                 user: { username: 'lucas.story' },
-                liked: false,
+                liked: false
               }}
             />
           </section>
@@ -361,4 +361,4 @@ const ShowcaseFeed = () => {
   );
 };
 
-export default ShowcaseFeed; 
+export default ShowcaseFeed;

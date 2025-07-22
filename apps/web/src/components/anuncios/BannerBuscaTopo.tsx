@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface BannerBuscaTopoProps {
   imagem: string;
@@ -13,4 +13,4 @@ export const BannerBuscaTopo: React.FC<BannerBuscaTopoProps> = ({ imagem, titulo
       <span className="sr-only">{titulo}</span>
     </a>
   </div>
-); 
+);

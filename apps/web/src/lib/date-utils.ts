@@ -21,10 +21,10 @@ export function timeAgo(dateString: string): string {
 export function formatarMoeda(valor: string): string {
   // Remove caracteres não numéricos
   const numerico = valor.replace(/\D/g, '');
-  
+
   // Converte para número e divide por 100 para obter o valor em reais
   const valorNumerico = parseInt(numerico) / 100;
-  
+
   // Formata como moeda brasileira
   return valorNumerico.toLocaleString('pt-BR', {
     style: 'currency',

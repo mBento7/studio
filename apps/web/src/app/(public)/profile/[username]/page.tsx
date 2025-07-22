@@ -1,10 +1,10 @@
 // Esta é a nova estrutura da página: um Server Component que busca os dados
 // e passa para um Client Component que lida com a interatividade.
 
-import { notFound } from "next/navigation";
-import { getUserProfileByUsername } from "@/services/profile.service";
-import { ProfileClientPage } from "./ProfileClientPage";
-import { isPremiumLayout, getLayoutTier } from "@/lib/isPremiumLayout";
+import { notFound } from 'next/navigation';
+import { getUserProfileByUsername } from '@/services/profile.service';
+import { ProfileClientPage } from './ProfileClientPage';
+import { isPremiumLayout, getLayoutTier } from '@/lib/isPremiumLayout';
 import { ProfileLayoutProvider } from '@/contexts/ProfileLayoutContext';
 import { LayoutDecider } from '@/components/layout/layout-decider';
 import Link from 'next/link';

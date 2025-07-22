@@ -1,15 +1,14 @@
+'use client';
 
-"use client";
-
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
-import { Briefcase as ServicesIcon, Image as PortfolioIcon, PlusCircle, Trash2, Upload, ArrowUp, ArrowDown } from "lucide-react";
-import type { Service, PortfolioItem } from "@/lib/types";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import Image from 'next/image';
+import { Briefcase as ServicesIcon, Image as PortfolioIcon, PlusCircle, Trash2, Upload, ArrowUp, ArrowDown } from 'lucide-react';
+import type { Service, PortfolioItem } from '@/lib/types';
 
 interface ContentSettingsProps {
   services: Service[];
@@ -95,15 +94,13 @@ export function ContentSettings({
           {userPlan !== 'premium' && <p className="text-xs text-muted-foreground">Limite de {serviceLimit} serviços para o plano {userPlan}.</p>}
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><PortfolioIcon />Gerenciar Portfólio</CardTitle><CardDescription>Mostre seus melhores trabalhos.</CardDescription></CardHeader>
         <CardContent className="space-y-4">
-            {/* ... (UI para Portfólio similar ao de Serviços) ... */}
+          {/* ... (UI para Portfólio similar ao de Serviços) ... */}
         </CardContent>
       </Card>
-
-      
 
       <div className="flex justify-end">
         <Button onClick={onSaveContent}>Salvar Conteúdo</Button>

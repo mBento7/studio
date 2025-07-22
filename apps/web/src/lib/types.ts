@@ -1,10 +1,10 @@
-import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MessageSquare, Briefcase, Facebook, Twitch } from "lucide-react";
+import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MessageSquare, Briefcase, Facebook, Twitch } from 'lucide-react';
 import { SocialIcon } from 'react-social-icons'; // Importe SocialIcon
 import type { User } from '@supabase/supabase-js';
 
 export interface SocialLink {
   id: string;
-  platform: string; 
+  platform: string;
   url: string;
 }
 
@@ -47,9 +47,9 @@ export interface Review {
   id: string;
   authorName: string;
   authorAvatarUrl?: string;
-  rating: number; 
+  rating: number;
   comment: string;
-  createdAt: string; 
+  createdAt: string;
 }
 
 export interface PremiumBanner {
@@ -141,7 +141,7 @@ export interface ProfileLayoutProps {
   primaryColorHex: string;
   isCurrentUserProfile: boolean;
   mounted: boolean;
-  toast: ReturnType<typeof import("@/hooks/use-toast").useToast>['toast'];
+  toast: ReturnType<typeof import('@/hooks/use-toast').useToast>['toast'];
   qrCodeUrl: string;
   onPortfolioItemClick: (item: PortfolioItem) => void;
 }
@@ -153,12 +153,12 @@ export const platformIcons: { [key: string]: React.ElementType } = {
   github: Github,
   website: Globe,
   youtube: Youtube,
-  behance: Globe, 
-  discord: MessageSquare, 
-  tiktok: MessageSquare, 
+  behance: Globe,
+  discord: MessageSquare,
+  tiktok: MessageSquare,
   facebook: Facebook,
   twitch: Twitch,
-  whatsapp: SocialIcon, // Adicione o SocialIcon para o WhatsApp
+  whatsapp: SocialIcon // Adicione o SocialIcon para o WhatsApp
 };
 
 export interface LayoutTemplate {

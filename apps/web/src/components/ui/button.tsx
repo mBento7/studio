@@ -32,20 +32,20 @@ const buttonVariants = cva(
         action: 'bg-gradient-to-r from-[#FFA500] via-[#FF8800] to-[#FF6600] text-white rounded-full px-6 py-2 hover:brightness-110 shadow-md', // Ação especial
         ad: 'bg-gradient-to-r from-[#FFA500] via-[#FF8800] to-[#FF6600] text-white rounded-full px-6 py-2 hover:brightness-110 shadow-md', // Anúncio
         premiumProfilePrimary: 'bg-gradient-to-r from-blue-600 to-blue-400 text-white hover:from-blue-700 hover:to-blue-500 font-semibold rounded-full text-lg py-3 flex items-center justify-center shadow-lg transition-all duration-300', // Perfil premium principal
-        premiumProfileSecondary: 'border border-white/30 text-white hover:bg-white/10 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center', // Perfil premium secundário
+        premiumProfileSecondary: 'border border-white/30 text-white hover:bg-white/10 backdrop-blur-sm font-semibold rounded-full flex items-center justify-center' // Perfil premium secundário
         // Adicione aqui novas variantes se necessário
       },
       size: {
         default: 'h-10 px-4', // Tamanho padrão
         sm: 'h-8 rounded-md px-3', // Pequeno
         lg: 'h-12 rounded-md px-6 text-base', // Grande
-        icon: 'h-10 w-10', // Ícone
-      },
+        icon: 'h-10 w-10' // Ícone
+      }
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
-    },
+      size: 'default'
+    }
   }
 );
 

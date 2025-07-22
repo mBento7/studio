@@ -1,13 +1,13 @@
-import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
 interface ContentBlockProps {
   title: React.ReactNode;
   description: string;
   isLocked?: boolean;
   badgeText?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline" | null | undefined;
+  badgeVariant?: 'default' | 'secondary' | 'destructive' | 'outline' | null | undefined;
   lockMessage?: string;
   showOverlay?: boolean;
   children?: React.ReactNode;
@@ -18,13 +18,13 @@ export function ContentBlock({
   description,
   isLocked,
   badgeText,
-  badgeVariant = "default",
+  badgeVariant = 'default',
   lockMessage,
   showOverlay = true,
   children
 }: ContentBlockProps) {
   return (
-    <div className={`relative rounded-lg border p-5 bg-background shadow-sm transition-all ${isLocked ? "opacity-60" : ""} ${isLocked ? "pointer-events-none" : ""}`}>
+    <div className={`relative rounded-lg border p-5 bg-background shadow-sm transition-all ${isLocked ? 'opacity-60' : ''} ${isLocked ? 'pointer-events-none' : ''}`}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-bold">{title}</h3>
         {badgeText && (
@@ -51,4 +51,4 @@ export function ContentBlock({
       )}
     </div>
   );
-} 
+}

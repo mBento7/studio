@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { createBrowserClient } from "@supabase/ssr";
-import { mockSupabase } from "./mock-client";
+import { createBrowserClient } from '@supabase/ssr';
+import { mockSupabase } from './mock-client';
 import { logger } from '@/lib/logger';
 
 // Verificar se as variáveis de ambiente existem antes de criar o cliente
@@ -9,9 +9,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Debug: Log das variáveis de ambiente
-logger.debug('Supabase Client configuração', { 
-  hasUrl: !!supabaseUrl, 
-  hasAnonKey: !!supabaseAnonKey 
+logger.debug('Supabase Client configuração', {
+  hasUrl: !!supabaseUrl,
+  hasAnonKey: !!supabaseAnonKey
 });
 
 // Verificar se estamos em modo mock
@@ -22,7 +22,7 @@ function createSupabaseClient() {
   if (isMockMode) {
     logger.info('Modo MOCK ativado - usando cliente simulado');
     logger.info('Usuários de teste disponíveis: test@example.com, admin@whosfy.com');
-    
+
     return mockSupabase;
   } else {
     // Durante o build, permitir valores vazios, mas validar em runtime

@@ -51,11 +51,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       totalReviews,
       averageRating: parseFloat(averageRating),
-      distribution,
+      distribution
     }, { status: 200 });
 
   } catch (error: any) {
     console.error('Erro inesperado na API de resumo de reviews (GET):', error);
     return NextResponse.json({ error: error.message || 'Erro interno do servidor.' }, { status: 500 });
   }
-} 
+}

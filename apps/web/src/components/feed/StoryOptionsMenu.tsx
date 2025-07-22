@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface StoryOptionsMenuProps {
   onClose: () => void;
@@ -15,4 +15,4 @@ const StoryOptionsMenu: React.FC<StoryOptionsMenuProps> = ({ onClose }) => {
   );
 };
 
-export default StoryOptionsMenu; 
+export default StoryOptionsMenu;

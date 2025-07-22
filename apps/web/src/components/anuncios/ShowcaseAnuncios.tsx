@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -134,4 +134,4 @@ const ShowcaseAnuncios = () => {
   );
 };
 
-export default ShowcaseAnuncios; 
+export default ShowcaseAnuncios;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ProfilePreviewV2Props {
   profile: any;
@@ -20,4 +20,4 @@ export function ProfilePreviewV2({ profile, plan, layout }: ProfilePreviewV2Prop
       </div>
     </div>
   );
-} 
+}

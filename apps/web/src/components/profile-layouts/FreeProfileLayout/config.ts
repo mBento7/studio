@@ -7,5 +7,5 @@ export type FreeProfileLayoutConfig = {
 export const defaultFreeProfileLayoutConfig: FreeProfileLayoutConfig = {
   showPortfolio: true,
   showSocialLinks: true,
-  themeColor: '#f59e42',
-}; 
+  themeColor: '#f59e42'
+};

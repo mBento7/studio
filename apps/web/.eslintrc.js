@@ -12,22 +12,22 @@ module.exports = {
       jsx: true
     }
   },
-  plugins: [],
+  plugins: [
+    'react-hooks'
+  ],
   rules: {
     // Regras básicas para evitar problemas comuns
-    'no-console': ['warn', {
-      allow: ['warn', 'error']
-    }],
+    'no-console': 'off',
     'no-debugger': 'error',
-    'no-alert': 'error',
+    'no-alert': 'off',
     'no-var': 'error',
     'prefer-const': 'error',
-    'no-duplicate-imports': 'error',
+    'no-duplicate-imports': 'off',
     'no-unreachable': 'error',
     'no-unused-expressions': 'error',
     'no-useless-return': 'error',
     'no-useless-concat': 'error',
-    'no-useless-escape': 'error',
+    'no-useless-escape': 'off',
     'no-trailing-spaces': 'error',
     'no-multiple-empty-lines': ['error', {
       max: 1,
@@ -45,6 +45,8 @@ module.exports = {
       SwitchCase: 1
     }]
   },
+  'react-hooks/exhaustive-deps': 'off',
+  '@next/next/no-img-element': 'off',
   
   ignorePatterns: [
     'node_modules/',

@@ -1,30 +1,30 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { ProfileActions } from "./ProfileActions";
-import { SocialLinks } from "../social/SocialLinks";
-import { useProfileQrCode } from "./useProfileQrCode";
-import { LocationInfo } from "./LocationInfo";
-import { Edit } from "lucide-react";
-import Link from "next/link";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
+import { ProfileActions } from './ProfileActions';
+import { SocialLinks } from '../social/SocialLinks';
+import { useProfileQrCode } from './useProfileQrCode';
+import { LocationInfo } from './LocationInfo';
+import { Edit } from 'lucide-react';
+import Link from 'next/link';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
 interface ProfileCardHeaderProps {
   user: any;
   isCurrentUserProfile: boolean;
-  variant: "standard" | "premium";
+  variant: 'standard' | 'premium';
 }
 
 export default function ProfileCardHeaderStandardPremium({ user, isCurrentUserProfile, variant }: ProfileCardHeaderProps) {
-  const showPremiumBadge = variant === "premium" && user.isPremium;
-  const showExtraLinks = variant === "premium" || variant === "standard";
+  const showPremiumBadge = variant === 'premium' && user.isPremium;
+  const showExtraLinks = variant === 'premium' || variant === 'standard';
   // QR Code do perfil
   const profileUrl = typeof window !== 'undefined' ? window.location.origin + `/profile/${user.id}` : `https://example.com/profile/${user.id}`;
   const { qrCodeUrl, isLoading: qrLoading } = useProfileQrCode(profileUrl);
 
-  let displayedSocialLinks = user.socialLinks || [];
-  let displayedSkills = user.skills || [];
+  const displayedSocialLinks = user.socialLinks || [];
+  const displayedSkills = user.skills || [];
 
   return (
     <header className="w-full bg-white rounded-2xl shadow flex flex-col md:flex-row gap-8 p-8 items-center md:items-start relative">
@@ -60,7 +60,7 @@ export default function ProfileCardHeaderStandardPremium({ user, isCurrentUserPr
           </div>
         )}
         {/* Skills/tags no header, se desejado */}
-        {variant === "standard" && displayedSkills.length > 0 && (
+        {variant === 'standard' && displayedSkills.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {displayedSkills.map((skill: string, idx: number) => (
               <span key={idx} className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">{skill}</span>
@@ -135,7 +135,7 @@ export default function ProfileCardHeaderStandardPremium({ user, isCurrentUserPr
           <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline mt-2 block">{user.website}</a>
         )}
         {/* Botão de ação premium (exemplo) */}
-        {variant === "premium" && (
+        {variant === 'premium' && (
           <Button variant="default" size="sm" className="mt-3">
             <Star className="w-4 h-4 mr-1" /> Destaque Premium
           </Button>

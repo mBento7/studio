@@ -4,31 +4,31 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { 
-  Youtube, 
-  Linkedin, 
-  Twitter, 
-  Instagram, 
-  Globe, 
-  Github, 
-  MapPin, 
-  Briefcase, 
-  Phone, 
-  MessageSquare, 
-  Upload, 
-  RefreshCw, 
-  Image as ImageIcon, 
-  X, 
-  Facebook, 
-  Twitch, 
-  Link as LinkIcon, 
-  CheckCircle, 
-  AlertCircle, 
-  PlusCircle, 
-  Trash2, 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import {
+  Youtube,
+  Linkedin,
+  Twitter,
+  Instagram,
+  Globe,
+  Github,
+  MapPin,
+  Briefcase,
+  Phone,
+  MessageSquare,
+  Upload,
+  RefreshCw,
+  Image as ImageIcon,
+  X,
+  Facebook,
+  Twitch,
+  Link as LinkIcon,
+  CheckCircle,
+  AlertCircle,
+  PlusCircle,
+  Trash2,
   BookOpenText,
   User,
   Mail,
@@ -46,52 +46,52 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ActionButton } from '@/components/ui/action-button';
 import { ImageUploadField } from '@/components/ui/image-upload-field';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { updateUserProfile } from '@/services/profile.service';
 import { useToast } from '@/hooks/use-toast';
 
 // Simulação de dados do usuário (substituir por dados reais do backend)
 const mockCurrentUser = {
-  id: "user_123",
-  email: "joao.silva@example.com",
-  name: "João Silva",
-  username: "joao.silva",
-  bio: "Entusiasta de tecnologia e desenvolvedor de software com paixão por criar soluções inovadoras. Aberto a novas oportunidades e colaborações.",
-  category: "Desenvolvedor de Software",
-  phone: "+55 (11) 98765-4321",
-  whatsappNumber: "+55 (11) 98765-4321",
-  profile_picture_url: "/images/mock-profile-pic.jpg",
-  profilePictureDataAiHint: "homem sorrindo, camisa azul",
-  cover_photo_url: "/images/mock-cover-pic.jpg",
-  coverPhotoDataAiHint: "abstrato, tons azuis",
+  id: 'user_123',
+  email: 'joao.silva@example.com',
+  name: 'João Silva',
+  username: 'joao.silva',
+  bio: 'Entusiasta de tecnologia e desenvolvedor de software com paixão por criar soluções inovadoras. Aberto a novas oportunidades e colaborações.',
+  category: 'Desenvolvedor de Software',
+  phone: '+55 (11) 98765-4321',
+  whatsappNumber: '+55 (11) 98765-4321',
+  profile_picture_url: '/images/mock-profile-pic.jpg',
+  profilePictureDataAiHint: 'homem sorrindo, camisa azul',
+  cover_photo_url: '/images/mock-cover-pic.jpg',
+  coverPhotoDataAiHint: 'abstrato, tons azuis',
   sociallinks: [
-    { id: "1", platform: "linkedin", url: "https://www.linkedin.com/in/joaosilva" },
-    { id: "2", platform: "github", url: "https://github.com/joaosilva" },
-    { id: "3", platform: "youtube", url: "https://www.youtube.com/user/joaosilva" },
+    { id: '1', platform: 'linkedin', url: 'https://www.linkedin.com/in/joaosilva' },
+    { id: '2', platform: 'github', url: 'https://github.com/joaosilva' },
+    { id: '3', platform: 'youtube', url: 'https://www.youtube.com/user/joaosilva' }
   ],
   location: {
-    city: "São Paulo",
-    address: "Av. Paulista, 1000",
-    state: "SP",
-    country: "Brasil",
-    googleMapsUrl: "https://maps.app.goo.gl/someplace",
+    city: 'São Paulo',
+    address: 'Av. Paulista, 1000',
+    state: 'SP',
+    country: 'Brasil',
+    googleMapsUrl: 'https://maps.app.goo.gl/someplace'
   },
-  plan: "premium",
+  plan: 'premium',
   isAvailable: true,
-  layoutTemplateId: "free",
-  skills: ["React", "Node.js", "TypeScript", "SQL", "Cloud Computing"],
+  layoutTemplateId: 'free',
+  skills: ['React', 'Node.js', 'TypeScript', 'SQL', 'Cloud Computing'],
   experience: [
-    { id: "exp1", title: "Desenvolvedor Sênior", company: "Tech Solutions Inc.", duration: "2020 - Atualmente", description: "Liderança de equipe no desenvolvimento de novas features." },
-    { id: "exp2", title: "Desenvolvedor Júnior", company: "Startup Inovação", duration: "2018 - 2020", description: "Desenvolvimento e manutenção de APIs RESTful." },
+    { id: 'exp1', title: 'Desenvolvedor Sênior', company: 'Tech Solutions Inc.', duration: '2020 - Atualmente', description: 'Liderança de equipe no desenvolvimento de novas features.' },
+    { id: 'exp2', title: 'Desenvolvedor Júnior', company: 'Startup Inovação', duration: '2018 - 2020', description: 'Desenvolvimento e manutenção de APIs RESTful.' }
   ],
   education: [
-    { id: "edu1", degree: "Bacharel em Ciência da Computação", institution: "Universidade Federal", duration: "2014 - 2018", description: "Foco em algoritmos e estruturas de dados." },
+    { id: 'edu1', degree: 'Bacharel em Ciência da Computação', institution: 'Universidade Federal', duration: '2014 - 2018', description: 'Foco em algoritmos e estruturas de dados.' }
   ],
-  reviews: [], // Assumindo que reviews são carregadas separadamente ou não editáveis aqui
+  reviews: [] // Assumindo que reviews são carregadas separadamente ou não editáveis aqui
 };
 
-const defaultProfilePicUrl = "/images/default-profile.jpg";
-const defaultCoverPicUrl = "/images/default-cover.jpg";
+const defaultProfilePicUrl = '/images/default-profile.jpg';
+const defaultCoverPicUrl = '/images/default-cover.jpg';
 
 const platformOptions = [
   { value: 'linkedin', label: 'LinkedIn', icon: Linkedin, placeholder: 'https://linkedin.com/in/seu_usuario' },
@@ -101,7 +101,7 @@ const platformOptions = [
   { value: 'twitter', label: 'Twitter/X', icon: Twitter, placeholder: 'https://x.com/seu_usuario' },
   { value: 'facebook', label: 'Facebook', icon: Facebook, placeholder: 'https://facebook.com/seu_usuario' },
   { value: 'twitch', label: 'Twitch', icon: Twitch, placeholder: 'https://twitch.tv/seu_canal' },
-  { value: 'website', label: 'Website', icon: Globe, placeholder: 'https://seu_site.com' },
+  { value: 'website', label: 'Website', icon: Globe, placeholder: 'https://seu_site.com' }
 ];
 
 type SocialLink = {
@@ -163,7 +163,7 @@ interface InputWithFeedbackProps extends React.InputHTMLAttributes<HTMLInputElem
 const InputWithFeedback: React.FC<InputWithFeedbackProps> = ({ id, error, success, ...props }) => (
   <div className="space-y-2">
     <Label htmlFor={id}>{id}</Label>
-    <Input id={id} {...props} className={cn({ "border-destructive": error, "border-success": success })} />
+    <Input id={id} {...props} className={cn({ 'border-destructive': error, 'border-success': success })} />
     {error && <p className="text-sm text-destructive">{error}</p>}
     {success && <p className="text-sm text-success">{success}</p>}
   </div>
@@ -192,8 +192,8 @@ export function ProfileForm() {
       profilePictureDataAiHint: baseProfile.profilePictureDataAiHint || 'user profile',
       cover_photo_url: baseProfile.cover_photo_url || defaultCoverPicUrl,
       coverPhotoDataAiHint: baseProfile.coverPhotoDataAiHint || 'banner image',
-      sociallinks: Array.isArray(baseProfile.sociallinks) 
-        ? baseProfile.sociallinks.map(link => ({ ...link, id: link.id || Date.now().toString() })) 
+      sociallinks: Array.isArray(baseProfile.sociallinks)
+        ? baseProfile.sociallinks.map(link => ({ ...link, id: link.id || Date.now().toString() }))
         : [],
       locationCity: baseProfile.location?.city || '',
       locationAddress: baseProfile.location?.address || undefined,
@@ -207,22 +207,22 @@ export function ProfileForm() {
       layoutTemplateId: baseProfile.layoutTemplateId,
       skills: Array.isArray(baseProfile.skills) ? baseProfile.skills : [],
       experience: Array.isArray(baseProfile.experience) ? baseProfile.experience : [],
-      education: Array.isArray(baseProfile.education) ? baseProfile.education : [],
+      education: Array.isArray(baseProfile.education) ? baseProfile.education : []
     };
   }, []);
 
   const { control, register, handleSubmit, reset, formState: { errors, isSubmitting, dirtyFields }, setValue, watch } = useForm<ProfileFormData>({
-    defaultValues: getInitialFormValues(),
+    defaultValues: getInitialFormValues()
   });
 
-  const watchedProfile_picture_url = watch("profile_picture_url");
-  const watchedCover_photo_url = watch("cover_photo_url");
-  const watchedLocationAddress = watch("locationAddress");
-  const watchedLocationCity = watch("locationCity");
-  const watchedLocationState = watch("locationState");
-  const watchedLocationCountry = watch("locationCountry");
-  const watchedLocationGoogleMapsUrl = watch("locationGoogleMapsUrl");
-  const watchedUsername = watch("username");
+  const watchedProfile_picture_url = watch('profile_picture_url');
+  const watchedCover_photo_url = watch('cover_photo_url');
+  const watchedLocationAddress = watch('locationAddress');
+  const watchedLocationCity = watch('locationCity');
+  const watchedLocationState = watch('locationState');
+  const watchedLocationCountry = watch('locationCountry');
+  const watchedLocationGoogleMapsUrl = watch('locationGoogleMapsUrl');
+  const watchedUsername = watch('username');
 
   const checkUsernameAvailability = useCallback((usernameToCheck: string) => {
     if (!usernameToCheck) {
@@ -242,20 +242,20 @@ export function ProfileForm() {
     }
   }, [getInitialFormValues, reset, checkUsernameAvailability]);
 
-  const { fields: socialLinkFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({ control, name: "sociallinks" });
-  const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({ control, name: "experience" });
-  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({ control, name: "education" });
+  const { fields: socialLinkFields, append: appendSocialLink, remove: removeSocialLink } = useFieldArray({ control, name: 'sociallinks' });
+  const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({ control, name: 'experience' });
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({ control, name: 'education' });
 
   const onSubmit = async (data: ProfileFormData) => {
     if (usernameAvailable === false && data.username !== mockCurrentUser.username) {
       toast({
-        title: "Erro ao salvar",
-        description: "Nome de usuário indisponível.",
-        variant: "destructive",
+        title: 'Erro ao salvar',
+        description: 'Nome de usuário indisponível.',
+        variant: 'destructive'
       });
       return;
     }
-    
+
     try {
       // Extrair o ID do usuário para a chamada da API
       const userId = data.id;
@@ -276,37 +276,37 @@ export function ProfileForm() {
           address: data.locationAddress,
           state: data.locationState,
           country: data.locationCountry,
-          googleMapsUrl: data.locationGoogleMapsUrl,
+          googleMapsUrl: data.locationGoogleMapsUrl
         },
         plan: data.plan,
         isAvailable: data.isAvailable,
         layoutTemplateId: data.layoutTemplateId,
         skills: data.skills,
         experience: data.experience,
-        education: data.education,
+        education: data.education
         // Não passe o email aqui, ele é apenas para exibição no formulário.
         // id também já é passado como primeiro argumento para updateUserProfile.
       });
 
       toast({
-        title: "Sucesso!",
-        description: "Perfil atualizado com sucesso.",
-        variant: "default",
+        title: 'Sucesso!',
+        description: 'Perfil atualizado com sucesso.',
+        variant: 'default'
       });
       setUsernameTouched(false);
     } catch (error: any) {
-      console.error("Erro ao salvar perfil:", error);
+      console.error('Erro ao salvar perfil:', error);
       toast({
-        title: "Erro ao salvar",
-        description: error.message || "Ocorreu um erro ao atualizar o perfil.",
-        variant: "destructive",
+        title: 'Erro ao salvar',
+        description: error.message || 'Ocorreu um erro ao atualizar o perfil.',
+        variant: 'destructive'
       });
     }
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newUsername = e.target.value;
-    setValue("username", newUsername, { shouldDirty: true });
+    setValue('username', newUsername, { shouldDirty: true });
     setUsernameTouched(true);
     if (newUsername.length > 2) {
       checkUsernameAvailability(newUsername);
@@ -328,7 +328,7 @@ export function ProfileForm() {
       watchedLocationAddress,
       watchedLocationCity,
       watchedLocationState,
-      watchedLocationCountry,
+      watchedLocationCountry
     ].filter(Boolean);
     if (addressParts.length === 0) return null;
     const query = encodeURIComponent(addressParts.join(', '));
@@ -347,7 +347,7 @@ export function ProfileForm() {
     <div className="min-h-screen bg-white py-12 px-2 xxs:px-1 sm:px-4">
       <div className="container mx-auto px-0 py-0 max-w-2xl">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
@@ -367,30 +367,30 @@ export function ProfileForm() {
 
         <div className="bg-card rounded shadow-xl shadow-black/20 border border-black/5 p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="flex h-auto w-full flex-wrap justify-center gap-x-2 gap-y-3 rounded-lg bg-white border border-black/10 shadow-sm p-2 mb-4">
-                {[
-                  { value: 'basic-info', label: 'Básico', icon: User },
-                  { value: 'contact', label: 'Contato', icon: Phone },
-                  { value: 'images', label: 'Imagens', icon: ImageIcon },
-                  { value: 'social-links', label: 'Sociais', icon: Globe },
-                  { value: 'location', label: 'Localização', icon: MapPin },
-                  { value: 'experience', label: 'Experiência', icon: Briefcase },
-                  { value: 'education', label: 'Educação', icon: GraduationCap },
-                  { value: 'skills', label: 'Habilidades', icon: Star },
-                ].map((tab) => (
-                  <TabsTrigger
-                    key={tab.value}
-                    value={tab.value}
-                    className={cn(
-                      "flex items-center gap-2 h-9 px-4 rounded-full text-sm font-medium transition-all whitespace-nowrap border border-transparent",
-                      activeTab === tab.value && "bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md border-none"
-                    )}
-                  >
-                    <tab.icon className={cn("w-4 h-4", activeTab === tab.value ? "text-white" : "text-[#0e9094]")}/>
-                    <span className={activeTab === tab.value ? "text-white" : "text-[#0e9094]"}>{tab.label}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            <TabsList className="flex h-auto w-full flex-wrap justify-center gap-x-2 gap-y-3 rounded-lg bg-white border border-black/10 shadow-sm p-2 mb-4">
+              {[
+                { value: 'basic-info', label: 'Básico', icon: User },
+                { value: 'contact', label: 'Contato', icon: Phone },
+                { value: 'images', label: 'Imagens', icon: ImageIcon },
+                { value: 'social-links', label: 'Sociais', icon: Globe },
+                { value: 'location', label: 'Localização', icon: MapPin },
+                { value: 'experience', label: 'Experiência', icon: Briefcase },
+                { value: 'education', label: 'Educação', icon: GraduationCap },
+                { value: 'skills', label: 'Habilidades', icon: Star }
+              ].map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className={cn(
+                    'flex items-center gap-2 h-9 px-4 rounded-full text-sm font-medium transition-all whitespace-nowrap border border-transparent',
+                    activeTab === tab.value && 'bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white shadow-md border-none'
+                  )}
+                >
+                  <tab.icon className={cn('w-4 h-4', activeTab === tab.value ? 'text-white' : 'text-[#0e9094]')}/>
+                  <span className={activeTab === tab.value ? 'text-white' : 'text-[#0e9094]'}>{tab.label}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
             <div className="p-6 dark:bg-slate-900">
               <TabsContent value="basic-info" className="space-y-6 p-6 dark:bg-slate-900">
@@ -399,7 +399,7 @@ export function ProfileForm() {
                     <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Nome Completo</Label>
                     <InputWithFeedback
                       id="name"
-                      {...register("name", { required: "Nome é obrigatório" })}
+                      {...register('name', { required: 'Nome é obrigatório' })}
                       placeholder="Seu nome completo"
                       error={errors.name?.message}
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
@@ -409,14 +409,14 @@ export function ProfileForm() {
                     <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Nome de Usuário</Label>
                     <InputWithFeedback
                       id="username"
-                      {...register("username", { 
-                        required: "Nome de usuário é obrigatório",
-                        minLength: { value: 3, message: "Nome de usuário deve ter no mínimo 3 caracteres" }
+                      {...register('username', {
+                        required: 'Nome de usuário é obrigatório',
+                        minLength: { value: 3, message: 'Nome de usuário deve ter no mínimo 3 caracteres' }
                       })}
                       placeholder="ex: joao.silva"
                       onChange={handleUsernameChange}
                       error={errors.username?.message}
-                      success={usernameTouched && usernameAvailable === true ? "Disponível!" : undefined}
+                      success={usernameTouched && usernameAvailable === true ? 'Disponível!' : undefined}
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
                     {usernameTouched && usernameAvailable === false && (
@@ -427,7 +427,7 @@ export function ProfileForm() {
                     <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Bio</Label>
                     <Textarea
                       id="bio"
-                      {...register("bio")}
+                      {...register('bio')}
                       placeholder="Conte-nos sobre você em poucas palavras..."
                       rows={4}
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 min-h-[100px] dark:bg-slate-800 dark:text-white dark:border-slate-700"
@@ -437,7 +437,7 @@ export function ProfileForm() {
                     <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">Categoria</Label>
                     <InputWithFeedback
                       id="category"
-                      {...register("category")}
+                      {...register('category')}
                       placeholder="Ex: Desenvolvedor de Software, Designer Gráfico"
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
@@ -450,7 +450,7 @@ export function ProfileForm() {
                     label="Telefone"
                     id="phone"
                     type="tel"
-                    {...register("phone")}
+                    {...register('phone')}
                     placeholder="(00) 00000-0000"
                     className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                   />
@@ -458,7 +458,7 @@ export function ProfileForm() {
                     label="WhatsApp"
                     id="whatsappNumber"
                     type="tel"
-                    {...register("whatsappNumber")}
+                    {...register('whatsappNumber')}
                     placeholder="(00) 00000-0000"
                     className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                   />
@@ -474,7 +474,7 @@ export function ProfileForm() {
                     currentImageUrl={watchedProfile_picture_url}
                     uploading={profileUploading}
                     setUploading={setProfileUploading}
-                    userId={watch("id")}
+                    userId={watch('id')}
                   />
                   <ImageUploadField
                     label="Foto de Capa"
@@ -484,7 +484,7 @@ export function ProfileForm() {
                     currentImageUrl={watchedCover_photo_url}
                     uploading={coverUploading}
                     setUploading={setCoverUploading}
-                    userId={watch("id")}
+                    userId={watch('id')}
                   />
                 </div>
               </TabsContent>
@@ -519,8 +519,8 @@ export function ProfileForm() {
                       <div className="space-y-2 flex-grow w-full">
                         <Label className="text-base font-semibold text-foreground dark:text-slate-100 mb-1">URL</Label>
                         <Input
-                          {...register(`sociallinks.${index}.url`, { required: "URL é obrigatória" })}
-                          placeholder={platformOptions.find(opt => opt.value === watch(`sociallinks.${index}.platform`))?.placeholder || "https://"}
+                          {...register(`sociallinks.${index}.url`, { required: 'URL é obrigatória' })}
+                          placeholder={platformOptions.find(opt => opt.value === watch(`sociallinks.${index}.platform`))?.placeholder || 'https://'}
                           className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                         />
                         {errors.sociallinks?.[index]?.url && (
@@ -544,35 +544,35 @@ export function ProfileForm() {
                     <InputWithFeedback
                       label="Cidade"
                       id="locationCity"
-                      {...register("locationCity")}
+                      {...register('locationCity')}
                       placeholder="Ex: São Paulo"
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
                     <InputWithFeedback
                       label="Estado/Província"
                       id="locationState"
-                      {...register("locationState")}
+                      {...register('locationState')}
                       placeholder="Ex: SP"
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
                     <InputWithFeedback
                       label="País"
                       id="locationCountry"
-                      {...register("locationCountry")}
+                      {...register('locationCountry')}
                       placeholder="Ex: Brasil"
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
                     <InputWithFeedback
                       label="Endereço (opcional)"
                       id="locationAddress"
-                      {...register("locationAddress")}
+                      {...register('locationAddress')}
                       placeholder="Ex: Av. Paulista, 1000"
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
                     <InputWithFeedback
                       label="Link Google Maps (opcional)"
                       id="locationGoogleMapsUrl"
-                      {...register("locationGoogleMapsUrl")}
+                      {...register('locationGoogleMapsUrl')}
                       placeholder="https://maps.app.goo.gl/..."
                       className="rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary border-muted-foreground/20 bg-background/70 dark:bg-slate-800 dark:text-white dark:border-slate-700"
                     />
@@ -636,12 +636,12 @@ export function ProfileForm() {
                     <p className="text-sm text-muted-foreground dark:text-slate-300">Liste suas habilidades separadas por vírgula.</p>
                     <Textarea
                       id="skills"
-                      {...register("skills", {
+                      {...register('skills', {
                         setValueAs: (value: any) => {
                           if (Array.isArray(value)) return value;
-                          if (typeof value === "string") return value.split(',').map(s => s.trim()).filter(Boolean);
+                          if (typeof value === 'string') return value.split(',').map(s => s.trim()).filter(Boolean);
                           return [];
-                        },
+                        }
                       })}
                       placeholder="Ex: React, Node.js, TypeScript, SQL"
                       rows={3}
@@ -667,8 +667,8 @@ export function ProfileForm() {
           transition={{ delay: 0.3 }}
           className="flex justify-end mt-8"
         >
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={isSubmitting || isSaveDisabled()}
             className="bg-gradient-to-r from-[#14b8a6] to-[#0e9094] text-white font-semibold text-base rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all px-8 py-2 h-auto"
           >
@@ -692,4 +692,4 @@ export function ProfileForm() {
 
 export default function ProfileFormDemo() {
   return <ProfileForm />;
-} 
+}

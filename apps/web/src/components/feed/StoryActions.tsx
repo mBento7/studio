@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 interface StoryActionsProps {
   story: {
@@ -13,12 +13,12 @@ interface StoryActionsProps {
 
 const StoryActions: React.FC<StoryActionsProps> = ({ story, onUserAction }) => {
   const [liked, setLiked] = useState(story.liked);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const handleAction = () => { if (onUserAction) onUserAction(); };
   return (
     <div className="flex items-center gap-4 px-4 py-3 border-t border-border bg-card">
-      <Button variant="ghost" size="icon" aria-label="Curtir" onClick={() => { setLiked(!liked); handleAction(); }} className={liked ? "text-red-500 animate-pulse" : "text-muted-foreground hover:text-red-500"}>
-        <span style={{ fontSize: 28 }}>{liked ? "❤️" : "🤍"}</span>
+      <Button variant="ghost" size="icon" aria-label="Curtir" onClick={() => { setLiked(!liked); handleAction(); }} className={liked ? 'text-red-500 animate-pulse' : 'text-muted-foreground hover:text-red-500'}>
+        <span style={{ fontSize: 28 }}>{liked ? '❤️' : '🤍'}</span>
       </Button>
       {/* Campo de resposta rápida */}
       <input
@@ -31,8 +31,8 @@ const StoryActions: React.FC<StoryActionsProps> = ({ story, onUserAction }) => {
       <Button
         className={
           message.trim()
-            ? "bg-primary text-primary-foreground px-4 py-2 text-sm"
-            : "bg-muted text-muted-foreground px-4 py-2 text-sm cursor-not-allowed"
+            ? 'bg-primary text-primary-foreground px-4 py-2 text-sm'
+            : 'bg-muted text-muted-foreground px-4 py-2 text-sm cursor-not-allowed'
         }
         size="sm"
         disabled={!message.trim()}
@@ -44,4 +44,4 @@ const StoryActions: React.FC<StoryActionsProps> = ({ story, onUserAction }) => {
   );
 };
 
-export default StoryActions; 
+export default StoryActions;

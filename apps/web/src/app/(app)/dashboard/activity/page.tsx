@@ -30,7 +30,7 @@ export default function ActivityPage() {
     viewsToday: 0,
     newFollowers: 0,
     engagement: 0,
-    history: [],
+    history: []
   });
 
   useEffect(() => {

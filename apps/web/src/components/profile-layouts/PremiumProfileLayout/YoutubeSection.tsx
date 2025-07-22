@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface YoutubeSectionProps {
   youtubeVideoUrl: string;
@@ -33,4 +33,4 @@ export function YoutubeSection({ youtubeVideoUrl, youtubeVideoTitle, youtubeVide
       </div>
     </section>
   );
-} 
+}

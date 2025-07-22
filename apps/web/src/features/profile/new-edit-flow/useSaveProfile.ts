@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { UserProfileV2 } from "./types";
-import { filterValidProfileFields, saveSocialLinksV2, saveCouponsV2 } from "./profile.service";
-import { createClient } from "@supabase/supabase-js";
+import { useState } from 'react';
+import type { UserProfileV2 } from './types';
+import { filterValidProfileFields, saveSocialLinksV2, saveCouponsV2 } from './profile.service';
+import { createClient } from '@supabase/supabase-js';
 
 export function useSaveProfile(onSave?: (profile: UserProfileV2) => void, profile?: UserProfileV2) {
   const [saving, setSaving] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   // Função de validação de username estilo Instagram
   function isValidInstagramUsername(username: string): boolean {
@@ -20,12 +20,12 @@ export function useSaveProfile(onSave?: (profile: UserProfileV2) => void, profil
 
   const save = async () => {
     setSaving(true);
-    setSuccessMsg("");
-    setErrorMsg("");
+    setSuccessMsg('');
+    setErrorMsg('');
     try {
       // Validação de username
       if (!profile?.username || !isValidInstagramUsername(profile.username)) {
-        setErrorMsg("Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.");
+        setErrorMsg('Nome de usuário inválido. Use apenas letras minúsculas, números, ponto e sublinhado, sem iniciar/terminar com ponto ou sublinhado, nem duplos.');
         setSaving(false);
         return;
       }
@@ -38,7 +38,7 @@ export function useSaveProfile(onSave?: (profile: UserProfileV2) => void, profil
         .maybeSingle();
       if (checkError) throw checkError;
       if (existing) {
-        setErrorMsg("Este nome de usuário já está em uso. Escolha outro.");
+        setErrorMsg('Este nome de usuário já está em uso. Escolha outro.');
         setSaving(false);
         return;
       }
@@ -55,12 +55,12 @@ export function useSaveProfile(onSave?: (profile: UserProfileV2) => void, profil
         await saveCouponsV2(profile.id, profile.username, (profile as any).coupons);
       }
       await onSave?.(safeProfile);
-      setSuccessMsg("Perfil salvo com sucesso!");
+      setSuccessMsg('Perfil salvo com sucesso!');
     } catch (e: any) {
-      setErrorMsg(e?.message || "Erro ao salvar.");
+      setErrorMsg(e?.message || 'Erro ao salvar.');
     } finally {
       setSaving(false);
     }
   };
   return { save, saving, successMsg, errorMsg };
-} 
+}

@@ -1,7 +1,7 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-react';
 
 /**
  * Props para o componente ServicesList
@@ -21,7 +21,7 @@ export interface ServiceItem {
 export interface ServicesListProps {
   services: ServiceItem[];
   maxToShow?: number;
-  variant?: "free" | "standard" | "premium";
+  variant?: 'free' | 'standard' | 'premium';
   onEdit?: (index: number) => void;
   isCurrentUserProfile?: boolean;
 }
@@ -29,9 +29,9 @@ export interface ServicesListProps {
 export const ServicesList: React.FC<ServicesListProps> = ({
   services = [],
   maxToShow = 6,
-  variant = "free",
+  variant = 'free',
   onEdit,
-  isCurrentUserProfile = false,
+  isCurrentUserProfile = false
 }) => {
   const displayed = services.slice(0, maxToShow);
 
@@ -51,4 +51,4 @@ export const ServicesList: React.FC<ServicesListProps> = ({
       ))}
     </div>
   );
-}; 
+};

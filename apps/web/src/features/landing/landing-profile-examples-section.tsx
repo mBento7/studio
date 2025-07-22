@@ -2,7 +2,7 @@ import { PublicProfileCard } from '@/features/public/public-profile-card';
 import { mockUserProfiles } from '@/lib/mock-data';
 
 export function LandingProfileExamplesSection() {
-  
+
   const exampleUsernames = ['defaultprofile', 'commercialweb', 'minimalistcard'];
   const exampleProfiles = mockUserProfiles.filter(p => exampleUsernames.includes(p.username));
 

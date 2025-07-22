@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export function WhosdoLogo({ className = "h-8 w-auto" }: { className?: string }) {
+export function WhosdoLogo({ className = 'h-8 w-auto' }: { className?: string }) {
   return (
     <div className={className} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -13,4 +13,4 @@ export function WhosdoLogo({ className = "h-8 w-auto" }: { className?: string })
       </span>
     </div>
   );
-} 
+}

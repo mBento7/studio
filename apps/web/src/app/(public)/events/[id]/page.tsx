@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useParams } from 'next/navigation';
 import EventCard from '@/components/feed/EventCard';
 import Link from 'next/link';
@@ -114,4 +114,4 @@ export default function EventDetailPage() {
       </aside>
     </div>
   );
-} 
+}

@@ -11,7 +11,7 @@ const DEVELOPMENT_URL_PATTERNS = [
   /http:\/\/localhost/,
   /http:\/\/127\.0\.0\.1/,
   /http:\/\/10\./,
-  /http:\/\/192\.168\./,
+  /http:\/\/192\.168\./
 ];
 
 // Lista de campos sensíveis que não devem ser logados
@@ -26,7 +26,7 @@ const SENSITIVE_FIELDS = [
   'email',
   'phone',
   'ssn',
-  'credit_card',
+  'credit_card'
 ];
 
 /**
@@ -42,12 +42,12 @@ export function isDevelopmentUrl(url: string): boolean {
  */
 export function sanitizeUrl(url: string, fallbackUrl?: string): string {
   if (!url) return fallbackUrl || '';
-  
+
   if (isDevelopmentUrl(url)) {
     console.warn(`[Security] Development URL detected and sanitized: ${url}`);
     return fallbackUrl || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=400&fit=crop';
   }
-  
+
   return url;
 }
 
@@ -56,12 +56,12 @@ export function sanitizeUrl(url: string, fallbackUrl?: string): string {
  */
 export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
   if (!obj || typeof obj !== 'object') return obj;
-  
+
   const sanitized = { ...obj };
-  
+
   Object.keys(sanitized).forEach(key => {
     const value = sanitized[key];
-    
+
     if (typeof value === 'string') {
       // Sanitizar URLs
       if (key.toLowerCase().includes('url') || key.toLowerCase().includes('image')) {
@@ -69,7 +69,7 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
       }
     } else if (Array.isArray(value)) {
       // Sanitizar arrays recursivamente
-      sanitized[key] = value.map(item => 
+      sanitized[key] = value.map(item =>
         typeof item === 'object' ? sanitizeObject(item) : item
       );
     } else if (typeof value === 'object' && value !== null) {
@@ -77,7 +77,7 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
       sanitized[key] = sanitizeObject(value);
     }
   });
-  
+
   return sanitized;
 }
 
@@ -86,20 +86,20 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
  */
 export function sanitizeForLogging<T extends Record<string, any>>(obj: T): Partial<T> {
   if (!obj || typeof obj !== 'object') return obj;
-  
+
   const sanitized = { ...obj };
-  
+
   Object.keys(sanitized).forEach(key => {
     const lowerKey = key.toLowerCase();
-    
+
     // Remover campos sensíveis
     if (SENSITIVE_FIELDS.some(field => lowerKey.includes(field))) {
       delete sanitized[key];
       return;
     }
-    
+
     const value = sanitized[key];
-    
+
     if (typeof value === 'string') {
       // Sanitizar URLs de desenvolvimento
       if (isDevelopmentUrl(value)) {
@@ -107,7 +107,7 @@ export function sanitizeForLogging<T extends Record<string, any>>(obj: T): Parti
       }
     } else if (Array.isArray(value)) {
       // Sanitizar arrays recursivamente
-      sanitized[key] = value.map(item => 
+      sanitized[key] = value.map(item =>
         typeof item === 'object' ? sanitizeForLogging(item) : item
       ) as any;
     } else if (typeof value === 'object' && value !== null) {
@@ -115,7 +115,7 @@ export function sanitizeForLogging<T extends Record<string, any>>(obj: T): Parti
       sanitized[key] = sanitizeForLogging(value) as any;
     }
   });
-  
+
   return sanitized;
 }
 
@@ -128,7 +128,7 @@ export function secureLog(message: string, data?: any): void {
     console.log(message);
     return;
   }
-  
+
   if (data) {
     const sanitizedData = sanitizeForLogging(data);
     console.log(message, sanitizedData);
@@ -145,15 +145,15 @@ export function validateUserProfileSecurity(profile: any): {
   issues: string[];
 } {
   const issues: string[] = [];
-  
+
   if (profile.profile_picture_url && isDevelopmentUrl(profile.profile_picture_url)) {
     issues.push('Profile picture contains development URL');
   }
-  
+
   if (profile.cover_photo_url && isDevelopmentUrl(profile.cover_photo_url)) {
     issues.push('Cover photo contains development URL');
   }
-  
+
   // Verificar outros campos que podem conter URLs
   const urlFields = ['website', 'portfolio_url', 'social_links'];
   urlFields.forEach(field => {
@@ -170,7 +170,7 @@ export function validateUserProfileSecurity(profile: any): {
       });
     }
   });
-  
+
   return {
     isSecure: issues.length === 0,
     issues

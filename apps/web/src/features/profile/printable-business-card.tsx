@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Phone, Mail, Globe, Briefcase } from 'lucide-react';
@@ -24,7 +24,7 @@ interface PrintableBusinessCardProps extends React.HTMLAttributes<HTMLDivElement
 }
 
 const Logo = ({ className }: { className?: string }) => (
-  <div className={cn("flex items-center justify-center", className)}>
+  <div className={cn('flex items-center justify-center', className)}>
     <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
       <span className="text-white font-bold text-sm">BC</span>
     </div>
@@ -33,13 +33,13 @@ const Logo = ({ className }: { className?: string }) => (
 
 export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableBusinessCardProps>(
   ({ user, qrCodeUrl, primaryColorHex, className, id, ...props }, ref) => {
-    
+
     const contactItems = [
       ...(user.phone ? [{ icon: Phone, text: user.phone, href: `tel:${user.phone}` }] : []),
       ...(user.email ? [{ icon: Mail, text: user.email, href: `mailto:${user.email}` }] : []),
-      ...(user.sociallinks.find(link => link.platform === 'website')?.url 
+      ...(user.sociallinks.find(link => link.platform === 'website')?.url
         ? [{ icon: Globe, text: user.sociallinks.find(link => link.platform === 'website')?.url.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0], href: user.sociallinks.find(link => link.platform === 'website')?.url }]
-        : []),
+        : [])
     ];
 
     return (
@@ -47,9 +47,9 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
         id={id}
         ref={ref}
         className={cn(
-          "bg-background text-foreground p-6 flex flex-col justify-between shadow-2xl rounded-2xl w-[336px] h-[192px] overflow-hidden border border-border relative night-theme:shadow-2xl night-theme:shadow-black/50",
-          "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:pointer-events-none",
-          "after:absolute after:inset-0 after:bg-gradient-to-t after:from-black/5 after:to-transparent after:pointer-events-none",
+          'bg-background text-foreground p-6 flex flex-col justify-between shadow-2xl rounded-2xl w-[336px] h-[192px] overflow-hidden border border-border relative night-theme:shadow-2xl night-theme:shadow-black/50',
+          'before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:pointer-events-none',
+          'after:absolute after:inset-0 after:bg-gradient-to-t after:from-black/5 after:to-transparent after:pointer-events-none',
           className
         )}
         style={{
@@ -58,11 +58,11 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
         {...props}
       >
         {/* Decorative elements */}
-        <div 
+        <div
           className="absolute top-0 right-0 w-24 h-24 rounded-full opacity-10 -translate-y-8 translate-x-8"
           style={{ backgroundColor: `#${primaryColorHex}` }}
         />
-        <div 
+        <div
           className="absolute bottom-0 left-0 w-16 h-16 rounded-full opacity-5 translate-y-6 -translate-x-6"
           style={{ backgroundColor: `#${primaryColorHex}` }}
         />
@@ -74,13 +74,13 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
               src={user.profilePictureUrl}
               alt={`Foto de ${user.name}`}
               className="object-cover w-full h-full"
-              data-ai-hint={user.profilePictureDataAiHint || "person portrait"}
+              data-ai-hint={user.profilePictureDataAiHint || 'person portrait'}
             />
           </div>
           <div className="flex-grow">
-            <h2 
+            <h2
               className="text-xl font-bold leading-tight truncate bg-gradient-to-r bg-clip-text text-transparent"
-              style={{ 
+              style={{
                 backgroundImage: `linear-gradient(135deg, #${primaryColorHex}, #${primaryColorHex}dd)`
               }}
             >
@@ -88,8 +88,8 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
             </h2>
             {user.category && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1.5">
-                 <Briefcase className="w-3.5 h-3.5"/>
-                 <p className="leading-tight truncate font-medium">{user.category}</p>
+                <Briefcase className="w-3.5 h-3.5"/>
+                <p className="leading-tight truncate font-medium">{user.category}</p>
               </div>
             )}
           </div>
@@ -107,12 +107,12 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 group hover:scale-105 transition-all duration-200"
               >
-                <div 
+                <div
                   className="w-6 h-6 rounded-lg flex items-center justify-center group-hover:shadow-md transition-all duration-200"
                   style={{ backgroundColor: `#${primaryColorHex}20` }}
                 >
-                  <item.icon 
-                    className="w-3 h-3 transition-colors flex-shrink-0" 
+                  <item.icon
+                    className="w-3 h-3 transition-colors flex-shrink-0"
                     style={{ color: `#${primaryColorHex}` }}
                   />
                 </div>
@@ -137,9 +137,9 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
                 />
               </div>
             )}
-             <div className="mt-2 flex items-center justify-center">
-               <Logo className="w-10 h-auto opacity-80" />
-             </div>
+            <div className="mt-2 flex items-center justify-center">
+              <Logo className="w-10 h-auto opacity-80" />
+            </div>
           </div>
         </div>
       </div>
@@ -147,21 +147,21 @@ export const PrintableBusinessCard = React.forwardRef<HTMLDivElement, PrintableB
   }
 );
 
-PrintableBusinessCard.displayName = "PrintableBusinessCard";
+PrintableBusinessCard.displayName = 'PrintableBusinessCard';
 
 // Usage example with default props
 const BusinessCardExample = () => {
   const defaultUser: UserProfile = {
-    name: "João Silva",
-    email: "joao@exemplo.com",
-    phone: "+55 11 99999-9999",
-    category: "Desenvolvedor Full Stack",
-    profilePictureUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    profilePictureDataAiHint: "professional headshot",
+    name: 'João Silva',
+    email: 'joao@exemplo.com',
+    phone: '+55 11 99999-9999',
+    category: 'Desenvolvedor Full Stack',
+    profilePictureUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    profilePictureDataAiHint: 'professional headshot',
     sociallinks: [
       {
-        platform: "website",
-        url: "https://joaosilva.dev"
+        platform: 'website',
+        url: 'https://joaosilva.dev'
       }
     ]
   };

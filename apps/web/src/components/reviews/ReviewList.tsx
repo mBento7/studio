@@ -3,15 +3,15 @@ import { Star, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Card } from "@/components/ui/card";
+import { Card } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-import useEmblaCarousel from "embla-carousel-react";
+  CarouselNext
+} from '@/components/ui/carousel';
+import useEmblaCarousel from 'embla-carousel-react';
 
 interface Review {
   id: string;
@@ -99,7 +99,7 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
 
     try {
       const response = await fetch(`/api/reviews?id=${reviewId}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       });
 
       const data = await response.json();
@@ -127,10 +127,10 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
       >
         <CarouselContent ref={emblaRef}>
           {reviews.map((review, idx) => {
-            let className = "transition-transform duration-300";
-            if (idx === selectedIndex) className += " is-selected";
-            else if (idx === selectedIndex - 1) className += " is-prev";
-            else if (idx === selectedIndex + 1) className += " is-next";
+            let className = 'transition-transform duration-300';
+            if (idx === selectedIndex) className += ' is-selected';
+            else if (idx === selectedIndex - 1) className += ' is-prev';
+            else if (idx === selectedIndex + 1) className += ' is-next';
             return (
               <CarouselItem
                 key={review.id}
@@ -139,7 +139,7 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
               >
                 <Card
                   className={
-                    "min-w-[320px] max-w-xs flex-shrink-0 p-4 md:p-6 shadow-md dark:bg-slate-800/80 mx-auto review-carousel-card"
+                    'min-w-[320px] max-w-xs flex-shrink-0 p-4 md:p-6 shadow-md dark:bg-slate-800/80 mx-auto review-carousel-card'
                   }
                   data-index={idx}
                 >
@@ -157,7 +157,7 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
-                            className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
+                            className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300 dark:text-gray-600'}`}
                           />
                         ))}
                         <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">
@@ -219,7 +219,7 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
-                      className={`w-4 h-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300 dark:text-gray-600"}`}
+                      className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300 dark:text-gray-600'}`}
                     />
                   ))}
                   <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">
@@ -257,4 +257,4 @@ export function ReviewList({ reviewedUserId, currentUserId, renderAsCarousel = f
       </div>
     </Card>
   );
-} 
+}

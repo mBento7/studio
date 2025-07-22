@@ -1,37 +1,36 @@
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { siteConfig } from "@/config/site";
+  AccordionTrigger
+} from '@/components/ui/accordion';
+import { siteConfig } from '@/config/site';
 
 const faqs = [
   {
     question: `O que é o ${siteConfig.name}?`,
-    answer: `${siteConfig.name} é uma plataforma que permite a profissionais e empresas criar um perfil público único, completo e compartilhável. Foi projetado para consolidar sua presença online, facilitando a exibição de seu trabalho, serviços e informações de contato.`,
+    answer: `${siteConfig.name} é uma plataforma que permite a profissionais e empresas criar um perfil público único, completo e compartilhável. Foi projetado para consolidar sua presença online, facilitando a exibição de seu trabalho, serviços e informações de contato.`
   },
   {
     question: `Para quem é o ${siteConfig.name}?`,
-    answer: `${siteConfig.name} é ideal para freelancers, consultores, artistas, desenvolvedores, proprietários de pequenas empresas e qualquer pessoa que queira criar uma identidade digital profissional. Se você precisa de um lugar central para direcionar as pessoas para saberem sobre você e o que você faz, o ${siteConfig.name} é para você.`,
+    answer: `${siteConfig.name} é ideal para freelancers, consultores, artistas, desenvolvedores, proprietários de pequenas empresas e qualquer pessoa que queira criar uma identidade digital profissional. Se você precisa de um lugar central para direcionar as pessoas para saberem sobre você e o que você faz, o ${siteConfig.name} é para você.`
   },
   {
-    question: "Existe um plano gratuito?",
-    answer: `Sim, o ${siteConfig.name} oferece um plano gratuito que permite criar um perfil básico com recursos essenciais. Também temos planos pagos com opções de personalização mais avançadas, maior capacidade de portfólio e funcionalidades adicionais.`,
+    question: 'Existe um plano gratuito?',
+    answer: `Sim, o ${siteConfig.name} oferece um plano gratuito que permite criar um perfil básico com recursos essenciais. Também temos planos pagos com opções de personalização mais avançadas, maior capacidade de portfólio e funcionalidades adicionais.`
   },
   {
-    question: "Como funciona o compartilhamento por QR code?",
-    answer: `Todo perfil ${siteConfig.name} vem com um QR code exclusivo. Você pode baixar este QR code e adicioná-lo aos seus cartões de visita, apresentações ou compartilhá-lo digitalmente. Quando escaneado, ele direciona as pessoas diretamente para o seu perfil ${siteConfig.name}.`,
+    question: 'Como funciona o compartilhamento por QR code?',
+    answer: `Todo perfil ${siteConfig.name} vem com um QR code exclusivo. Você pode baixar este QR code e adicioná-lo aos seus cartões de visita, apresentações ou compartilhá-lo digitalmente. Quando escaneado, ele direciona as pessoas diretamente para o seu perfil ${siteConfig.name}.`
   },
   {
-    question: "Posso personalizar a aparência do meu perfil?",
-    answer: "Com certeza! Nossos planos pagos oferecem várias opções de personalização, incluindo cores de tema, ajustes de layout e mais, para garantir que seu perfil esteja alinhado com sua marca pessoal ou empresarial.",
+    question: 'Posso personalizar a aparência do meu perfil?',
+    answer: 'Com certeza! Nossos planos pagos oferecem várias opções de personalização, incluindo cores de tema, ajustes de layout e mais, para garantir que seu perfil esteja alinhado com sua marca pessoal ou empresarial.'
   },
-   {
-    question: "Como começo a usar?",
-    answer: `Começar é fácil! Basta clicar em qualquer botão 'Comece Agora' ou 'Crie seu ${siteConfig.name}' em nosso site, escolher um plano (você pode começar gratuitamente!) e seguir os passos simples para construir seu perfil.`,
-  },
+  {
+    question: 'Como começo a usar?',
+    answer: `Começar é fácil! Basta clicar em qualquer botão 'Comece Agora' ou 'Crie seu ${siteConfig.name}' em nosso site, escolher um plano (você pode começar gratuitamente!) e seguir os passos simples para construir seu perfil.`
+  }
 ];
 
 export function LandingFaqSection() {

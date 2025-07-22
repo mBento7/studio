@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,8 +16,8 @@ function cn(...classes: (string | undefined | null | false)[]): string {
 
 // Site config
 const siteConfig = {
-  name: "ProfilePro",
-  description: "Crie um perfil profissional que se destaca"
+  name: 'ProfilePro',
+  description: 'Crie um perfil profissional que se destaca'
 };
 
 // Hero Section
@@ -40,7 +40,7 @@ function LandingHeroSection() {
             <span className="text-primary block">Profissional</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Destaque-se no mercado com um perfil profissional único e impactante. 
+            Destaque-se no mercado com um perfil profissional único e impactante.
             Templates modernos, fácil personalização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -64,23 +64,23 @@ function LandingBenefitsSection() {
   const benefits = [
     {
       icon: Zap,
-      title: "Criação Rápida",
-      description: "Monte seu perfil em minutos com nossos templates inteligentes"
+      title: 'Criação Rápida',
+      description: 'Monte seu perfil em minutos com nossos templates inteligentes'
     },
     {
       icon: Shield,
-      title: "Seguro e Confiável",
-      description: "Seus dados protegidos com criptografia de ponta"
+      title: 'Seguro e Confiável',
+      description: 'Seus dados protegidos com criptografia de ponta'
     },
     {
       icon: Users,
-      title: "Networking Eficaz",
-      description: "Conecte-se com profissionais da sua área"
+      title: 'Networking Eficaz',
+      description: 'Conecte-se com profissionais da sua área'
     },
     {
       icon: Globe,
-      title: "Visibilidade Global",
-      description: "Seja encontrado por recrutadores do mundo todo"
+      title: 'Visibilidade Global',
+      description: 'Seja encontrado por recrutadores do mundo todo'
     }
   ];
 
@@ -133,10 +133,10 @@ function LandingBenefitsSection() {
 // Templates Section
 function LandingTemplatesSection() {
   const templates = [
-    { name: "Executivo", category: "Liderança", preview: "bg-gradient-to-br from-blue-500 to-purple-600" },
-    { name: "Criativo", category: "Design", preview: "bg-gradient-to-br from-pink-500 to-orange-500" },
-    { name: "Tech", category: "Tecnologia", preview: "bg-gradient-to-br from-green-500 to-teal-600" },
-    { name: "Vendas", category: "Comercial", preview: "bg-gradient-to-br from-red-500 to-pink-600" }
+    { name: 'Executivo', category: 'Liderança', preview: 'bg-gradient-to-br from-blue-500 to-purple-600' },
+    { name: 'Criativo', category: 'Design', preview: 'bg-gradient-to-br from-pink-500 to-orange-500' },
+    { name: 'Tech', category: 'Tecnologia', preview: 'bg-gradient-to-br from-green-500 to-teal-600' },
+    { name: 'Vendas', category: 'Comercial', preview: 'bg-gradient-to-br from-red-500 to-pink-600' }
   ];
 
   return (
@@ -187,21 +187,21 @@ function LandingTemplatesSection() {
 function LandingTestimonialsSection() {
   const testimonials = [
     {
-      name: "Maria Silva",
-      role: "Gerente de Marketing",
-      content: "O ProfilePro transformou minha presença online. Consegui 3x mais visualizações no meu perfil!",
+      name: 'Maria Silva',
+      role: 'Gerente de Marketing',
+      content: 'O ProfilePro transformou minha presença online. Consegui 3x mais visualizações no meu perfil!',
       rating: 5
     },
     {
-      name: "João Santos",
-      role: "Desenvolvedor",
-      content: "Interface intuitiva e templates incríveis. Recomendo para todos os profissionais.",
+      name: 'João Santos',
+      role: 'Desenvolvedor',
+      content: 'Interface intuitiva e templates incríveis. Recomendo para todos os profissionais.',
       rating: 5
     },
     {
-      name: "Ana Costa",
-      role: "Designer",
-      content: "Finalmente um serviço que entende as necessidades dos criativos. Perfeito!",
+      name: 'Ana Costa',
+      role: 'Designer',
+      content: 'Finalmente um serviço que entende as necessidades dos criativos. Perfeito!',
       rating: 5
     }
   ];
@@ -261,24 +261,24 @@ function LandingTestimonialsSection() {
 function LandingPricingSection() {
   const plans = [
     {
-      name: "Básico",
-      price: "Grátis",
-      description: "Perfeito para começar",
-      features: ["1 perfil", "Templates básicos", "Suporte por email"],
+      name: 'Básico',
+      price: 'Grátis',
+      description: 'Perfeito para começar',
+      features: ['1 perfil', 'Templates básicos', 'Suporte por email'],
       popular: false
     },
     {
-      name: "Pro",
-      price: "R$ 29/mês",
-      description: "Para profissionais sérios",
-      features: ["Perfis ilimitados", "Todos os templates", "Analytics avançado", "Suporte prioritário"],
+      name: 'Pro',
+      price: 'R$ 29/mês',
+      description: 'Para profissionais sérios',
+      features: ['Perfis ilimitados', 'Todos os templates', 'Analytics avançado', 'Suporte prioritário'],
       popular: true
     },
     {
-      name: "Enterprise",
-      price: "R$ 99/mês",
-      description: "Para equipes e empresas",
-      features: ["Tudo do Pro", "Gestão de equipe", "API personalizada", "Suporte dedicado"],
+      name: 'Enterprise',
+      price: 'R$ 99/mês',
+      description: 'Para equipes e empresas',
+      features: ['Tudo do Pro', 'Gestão de equipe', 'API personalizada', 'Suporte dedicado'],
       popular: false
     }
   ];
@@ -311,7 +311,7 @@ function LandingPricingSection() {
               viewport={{ once: true }}
               className="relative"
             >
-              <Card className={cn("h-full", plan.popular && "border-primary shadow-lg")}>
+              <Card className={cn('h-full', plan.popular && 'border-primary shadow-lg')}>
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                     Mais Popular
@@ -331,8 +331,8 @@ function LandingPricingSection() {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
-                    {plan.price === "Grátis" ? "Começar Grátis" : "Escolher Plano"}
+                  <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
+                    {plan.price === 'Grátis' ? 'Começar Grátis' : 'Escolher Plano'}
                   </Button>
                 </CardContent>
               </Card>
@@ -348,20 +348,20 @@ function LandingPricingSection() {
 function LandingFaqSection() {
   const faqs = [
     {
-      question: "Como funciona o período gratuito?",
-      answer: "Você pode usar o plano básico gratuitamente por tempo ilimitado, com acesso a templates básicos e 1 perfil."
+      question: 'Como funciona o período gratuito?',
+      answer: 'Você pode usar o plano básico gratuitamente por tempo ilimitado, com acesso a templates básicos e 1 perfil.'
     },
     {
-      question: "Posso cancelar a qualquer momento?",
-      answer: "Sim, você pode cancelar sua assinatura a qualquer momento sem taxas de cancelamento."
+      question: 'Posso cancelar a qualquer momento?',
+      answer: 'Sim, você pode cancelar sua assinatura a qualquer momento sem taxas de cancelamento.'
     },
     {
-      question: "Os templates são personalizáveis?",
-      answer: "Todos os nossos templates são totalmente personalizáveis. Você pode alterar cores, fontes, layout e conteúdo."
+      question: 'Os templates são personalizáveis?',
+      answer: 'Todos os nossos templates são totalmente personalizáveis. Você pode alterar cores, fontes, layout e conteúdo.'
     },
     {
-      question: "Há suporte técnico disponível?",
-      answer: "Oferecemos suporte por email para todos os usuários e suporte prioritário para assinantes Pro e Enterprise."
+      question: 'Há suporte técnico disponível?',
+      answer: 'Oferecemos suporte por email para todos os usuários e suporte prioritário para assinantes Pro e Enterprise.'
     }
   ];
 
@@ -419,7 +419,7 @@ function PublicFooter() {
               Transformando carreiras através de perfis profissionais únicos.
             </p>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Produto</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -428,7 +428,7 @@ function PublicFooter() {
               <li><a href="#" className="hover:text-foreground transition-colors">Recursos</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Empresa</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -437,7 +437,7 @@ function PublicFooter() {
               <li><a href="#" className="hover:text-foreground transition-colors">Carreiras</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Suporte</h3>
             <ul className="space-y-2 text-muted-foreground">
@@ -447,7 +447,7 @@ function PublicFooter() {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
           <p>&copy; 2024 {siteConfig.name}. Todos os direitos reservados.</p>
         </div>

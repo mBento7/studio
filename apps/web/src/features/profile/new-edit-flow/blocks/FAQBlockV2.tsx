@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
 import { PLAN_LIMITS, PlanType } from '../layoutFeatures';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 export interface FAQItem {
   question: string;
@@ -37,7 +37,7 @@ export function FAQBlockV2({ faqs, onChange, plan = PlanType.FREE }: FAQBlockV2P
     setIsModalOpen(true);
   };
   const handleSave = () => {
-    let newFaqs = [...safeFaqs];
+    const newFaqs = [...safeFaqs];
     if (editingIndex !== null) {
       newFaqs[editingIndex] = currentItem;
     } else {
@@ -100,7 +100,7 @@ export function FAQBlockV2({ faqs, onChange, plan = PlanType.FREE }: FAQBlockV2P
           <DialogHeader>
             <DialogTitle>{editingIndex !== null ? 'Editar Pergunta' : 'Adicionar Pergunta'}</DialogTitle>
             <DialogDescription>
-              {editingIndex !== null ? "Edite a pergunta e a resposta." : "Adicione uma nova pergunta e resposta frequente."}
+              {editingIndex !== null ? 'Edite a pergunta e a resposta.' : 'Adicione uma nova pergunta e resposta frequente.'}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -140,4 +140,4 @@ export function FAQBlockV2({ faqs, onChange, plan = PlanType.FREE }: FAQBlockV2P
       {hasError && <div className="text-destructive text-xs mt-1">Adicione pelo menos uma pergunta.</div>}
     </div>
   );
-} 
+}

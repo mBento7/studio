@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -124,4 +124,4 @@ const EventCard = ({
   );
 };
 
-export default EventCard; 
+export default EventCard;

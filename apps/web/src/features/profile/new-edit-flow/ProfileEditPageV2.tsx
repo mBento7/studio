@@ -1,31 +1,31 @@
 // Arquivo: ProfileEditPageV2.tsx
-"use client";
+'use client';
 
-import React, { useMemo, useCallback, useReducer, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ChevronLeft, ChevronRight, Save, Loader2 } from "lucide-react";
+import React, { useMemo, useCallback, useReducer, useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, ChevronLeft, ChevronRight, Save, Loader2 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import { useAuth } from "@/hooks/use-auth";
-import { useSaveProfile } from "./useSaveProfile";
-import { useProfileWizard } from "./useProfileWizard";
-import { PlanGate } from "./components/PlanGate";
-import { RAW_STEPS, buildSteps, stepIcons, stepLabels } from "./stepsConfig";
+import { useAuth } from '@/hooks/use-auth';
+import { useSaveProfile } from './useSaveProfile';
+import { useProfileWizard } from './useProfileWizard';
+import { PlanGate } from './components/PlanGate';
+import { RAW_STEPS, buildSteps, stepIcons, stepLabels } from './stepsConfig';
 import { useToast } from '@/hooks/use-toast';
 
-import type { ProfileEditPageV2Props, UserProfileV2 } from "./types";
+import type { ProfileEditPageV2Props, UserProfileV2 } from './types';
 
-function profileReducer(state: UserProfileV2, action: { type: "update"; payload: Partial<UserProfileV2> } | { type: "reset"; payload: UserProfileV2 }): UserProfileV2 {
+function profileReducer(state: UserProfileV2, action: { type: 'update'; payload: Partial<UserProfileV2> } | { type: 'reset'; payload: UserProfileV2 }): UserProfileV2 {
   switch (action.type) {
-    case "update":
+    case 'update':
       return { ...state, ...action.payload };
-    case "reset":
+    case 'reset':
       return action.payload;
   }
 }
@@ -34,13 +34,13 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
   const { user, currentUserProfile } = useAuth();
   const { toast } = useToast();
   const initialProfile: UserProfileV2 = {
-    full_name: "",
-    username: "",
-    bio: "",
-    profile_picture_url: "",
-    email: "",
-    phone: "",
-    layout: "minimalist",
+    full_name: '',
+    username: '',
+    bio: '',
+    profile_picture_url: '',
+    email: '',
+    phone: '',
+    layout: 'minimalist',
     services: [],
     portfolio: [],
     skills: [],
@@ -52,7 +52,7 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
   };
 
   const [internalProfile, dispatch] = useReducer(profileReducer, initialProfile);
-  const plan = internalProfile.plan || "free";
+  const plan = internalProfile.plan || 'free';
 
   const steps = useMemo(() => buildSteps(internalProfile, plan, dispatch), [internalProfile, plan]);
   const { step, setStep, isFirst, isLast, goNext, goPrev } = useProfileWizard(steps);
@@ -103,10 +103,10 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
                 aria-current={isActive ? 'step' : undefined}
                 tabIndex={0}
               >
-                <div className={`rounded-full border-2 flex items-center justify-center w-9 h-9 mb-1 transition-all duration-300 ${isActive ? "border-primary bg-primary/10" : "border-muted bg-muted"}`}>
+                <div className={`rounded-full border-2 flex items-center justify-center w-9 h-9 mb-1 transition-all duration-300 ${isActive ? 'border-primary bg-primary/10' : 'border-muted bg-muted'}`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className={`text-xs flex items-center gap-1 ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
+                <span className={`text-xs flex items-center gap-1 ${isActive ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
               </button>
             );
           })}
@@ -172,10 +172,10 @@ export default function ProfileEditPageV2({ profile, onProfileChange, onSave, on
                   aria-current={isActive ? 'step' : undefined}
                   tabIndex={0}
                 >
-                  <div className={`rounded-full border-2 flex items-center justify-center w-11 h-11 mb-1 shadow-md transition-all duration-300 ${isActive ? "border-primary bg-primary/10" : "border-muted bg-muted"}`}>
+                  <div className={`rounded-full border-2 flex items-center justify-center w-11 h-11 mb-1 shadow-md transition-all duration-300 ${isActive ? 'border-primary bg-primary/10' : 'border-muted bg-muted'}`}>
                     <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
                   </div>
-                  <span className={`text-xs flex items-center gap-1 text-center ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
+                  <span className={`text-xs flex items-center gap-1 text-center ${isActive ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>{String(label)}{badge && (<span className="ml-1 px-2 py-0.5 rounded bg-yellow-400 text-yellow-900 text-[10px] font-bold uppercase">{badge}</span>)}</span>
                 </button>
               </SwiperSlide>
             );

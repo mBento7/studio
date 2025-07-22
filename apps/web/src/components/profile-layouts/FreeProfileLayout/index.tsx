@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import React, { useState, useRef, useCallback, lazy, Suspense, useEffect } from 'react';
-import type { ProfileLayoutProps } from "@/lib/types";
+import type { ProfileLayoutProps } from '@/lib/types';
 import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+  CardTitle
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
   Mail,
   Phone,
@@ -23,31 +23,31 @@ import {
   Edit,
   MessageSquare,
   Share2
-} from "lucide-react";
-import { platformIcons } from "@/lib/types";
-import Image from "next/image";
-import Link from "next/link";
+} from 'lucide-react';
+import { platformIcons } from '@/lib/types';
+import Image from 'next/image';
+import Link from 'next/link';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
-import { SocialLinks } from "@/components/social/SocialLinks";
-import { SkillsList } from "@/components/skills/SkillsList";
-import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
-import { ServicesList } from "@/components/services/ServicesList";
-import { ExperienceList } from "@/components/experience/ExperienceList";
-import { ReviewList } from "@/components/reviews/ReviewList";
-import { ProfileActions } from "@/components/profile-layouts/ProfileActions";
-import { LocationInfo } from "@/components/profile-layouts/LocationInfo";
-import FreeProfileCardHeader from "@/components/profile-layouts/ProfileCardHeader";
-import { ProfileHeader } from "@/components/profile-layouts/ProfileHeader";
-import { ProfileCardContainer } from "@/components/profile-layouts/ProfileCardContainer";
-import { useProfileQrCode } from "@/components/profile-layouts/useProfileQrCode";
+import { SocialLinks } from '@/components/social/SocialLinks';
+import { SkillsList } from '@/components/skills/SkillsList';
+import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid';
+import { ServicesList } from '@/components/services/ServicesList';
+import { ExperienceList } from '@/components/experience/ExperienceList';
+import { ReviewList } from '@/components/reviews/ReviewList';
+import { ProfileActions } from '@/components/profile-layouts/ProfileActions';
+import { LocationInfo } from '@/components/profile-layouts/LocationInfo';
+import FreeProfileCardHeader from '@/components/profile-layouts/ProfileCardHeader';
+import { ProfileHeader } from '@/components/profile-layouts/ProfileHeader';
+import { ProfileCardContainer } from '@/components/profile-layouts/ProfileCardContainer';
+import { useProfileQrCode } from '@/components/profile-layouts/useProfileQrCode';
 
 const PortfolioItemModal = lazy(() => import('@/features/profile/portfolio-item-modal').then(mod => ({ default: mod.PortfolioItemModal })));
 
 const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
   user,
   isCurrentUserProfile,
-  onPortfolioItemClick,
+  onPortfolioItemClick
 }) => {
   const skills = user.skills || [];
   const experience = user.experience || [];
@@ -58,17 +58,17 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
   // Ordenar para WhatsApp primeiro
   const sortedSocialLinks = [
     ...sociallinks.filter(link => link.platform === 'whatsapp'),
-    ...sociallinks.filter(link => link.platform !== 'whatsapp'),
+    ...sociallinks.filter(link => link.platform !== 'whatsapp')
   ];
   const displayedLinks = sortedSocialLinks.slice(0, 3);
-  const location = user.location || { city: "", country: "" };
+  const location = user.location || { city: '', country: '' };
 
   const sectionRefs = {
     skills: useRef<HTMLDivElement>(null),
     portfolio: useRef<HTMLDivElement>(null),
     services: useRef<HTMLDivElement>(null),
     experience: useRef<HTMLDivElement>(null),
-    education: useRef<HTMLDivElement>(null),
+    education: useRef<HTMLDivElement>(null)
   };
 
   type SectionKey = 'skills' | 'portfolio' | 'services' | 'experience' | 'education';
@@ -188,17 +188,17 @@ const FreeProfileLayout: React.FC<ProfileLayoutProps> = ({
                 </CardContent>
               </ProfileCardContainer>
             )}
-            
+
             {qrCodeUrl && (
               <ProfileCardContainer className="p-6 shadow-xl flex flex-col items-center">
-                 <Image
-                    src={qrCodeUrl}
-                    alt={`QR Code de ${user.name}`}
-                    width={120}
-                    height={120}
-                    className="rounded-lg border p-1 bg-white shadow-md"
-                  />
-                  <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
+                <Image
+                  src={qrCodeUrl}
+                  alt={`QR Code de ${user.name}`}
+                  width={120}
+                  height={120}
+                  className="rounded-lg border p-1 bg-white shadow-md"
+                />
+                <p className="mt-2 text-xs text-muted-foreground">Escaneie para salvar o contato</p>
               </ProfileCardContainer>
             )}
             {isSectionVisible('skills') && (
@@ -252,5 +252,5 @@ export const segmentConfig = {
   name: 'Moderno',
   description: 'Layout moderno e visualmente atrativo, ideal para perfis gratuitos.',
   imageUrl: 'https://picsum.photos/seed/layout-modern/300/200',
-  plan: 'free',
+  plan: 'free'
 };

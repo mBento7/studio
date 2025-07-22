@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Home, Search, PlusCircle, Bell, User } from "lucide-react";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Home, Search, PlusCircle, Bell, User } from 'lucide-react';
 
 export function BottomBarMobile() {
   const router = useRouter();

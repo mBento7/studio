@@ -61,17 +61,17 @@ export function extractUsernameFromUrl(url: string): string | null {
     const urlObj = new URL(url);
     const pathname = urlObj.pathname;
     const segments = pathname.split('/').filter(Boolean);
-    
+
     // Se é formato /profile/username
     if (segments[0] === 'profile' && segments[1]) {
       return segments[1];
     }
-    
+
     // Se é formato /username
     if (segments[0] && isValidUsername(segments[0]) && !isReservedUsername(segments[0])) {
       return segments[0];
     }
-    
+
     return null;
   } catch {
     return null;
@@ -82,18 +82,18 @@ export function extractUsernameFromUrl(url: string): string | null {
  * Gera URL de compartilhamento com parâmetros UTM
  */
 export function getShareableProfileUrl(
-  username: string, 
-  source?: string, 
-  medium?: string, 
+  username: string,
+  source?: string,
+  medium?: string,
   campaign?: string
 ): string {
   const baseUrl = getFullProfileUrl(username);
   const params = new URLSearchParams();
-  
+
   if (source) params.set('utm_source', source);
   if (medium) params.set('utm_medium', medium);
   if (campaign) params.set('utm_campaign', campaign);
-  
+
   const queryString = params.toString();
   return queryString ? `${baseUrl}?${queryString}` : baseUrl;
 }

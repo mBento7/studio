@@ -20,4 +20,4 @@ const BannerCard = ({ imagem, texto, link }: BannerCardProps) => {
   );
 };
 
-export default BannerCard; 
+export default BannerCard;

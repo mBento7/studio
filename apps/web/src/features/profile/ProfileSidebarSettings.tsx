@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { ProfileVisibilitySettings } from "./ProfileVisibilitySettings";
-import { ProfileEditContext } from "./new-edit-flow/ProfileEditContext";
-import { useToast } from "@/hooks/use-toast";
+import { useContext } from 'react';
+import { ProfileVisibilitySettings } from './ProfileVisibilitySettings';
+import { ProfileEditContext } from './new-edit-flow/ProfileEditContext';
+import { useToast } from '@/hooks/use-toast';
 
 export function ProfileSidebarSettings({ onAfterSave }: { onAfterSave?: () => void }) {
   const { profile, updateProfile, saveProfile } = useContext(ProfileEditContext);
@@ -13,10 +13,10 @@ export function ProfileSidebarSettings({ onAfterSave }: { onAfterSave?: () => vo
     try {
       updateProfile({ public_visibility, public_sections });
       await saveProfile();
-      toast({ title: "Configurações salvas com sucesso!" });
+      toast({ title: 'Configurações salvas com sucesso!' });
       if (onAfterSave) onAfterSave();
     } catch (e: any) {
-      toast({ title: "Erro ao salvar configurações", description: e.message, variant: "destructive" });
+      toast({ title: 'Erro ao salvar configurações', description: e.message, variant: 'destructive' });
     }
   };
 
@@ -30,4 +30,4 @@ export function ProfileSidebarSettings({ onAfterSave }: { onAfterSave?: () => vo
       {/* Outras opções rápidas podem ser adicionadas aqui */}
     </aside>
   );
-} 
+}

@@ -14,4 +14,4 @@ export const WhosdoIcon = ({ className }: { className?: string }) => (
     <path d="M4 8l2 8 2-6 2 6 2-8" />
     <path d="M15 8v8h2a4 4 0 000-8h-2z" />
   </svg>
-); 
+);

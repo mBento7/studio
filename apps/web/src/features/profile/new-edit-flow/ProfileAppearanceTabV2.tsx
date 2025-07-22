@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 
 interface ProfileAppearanceTabV2Props {
   data: any;
@@ -18,7 +18,7 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
     { value: 'pro', label: 'Pro', tier: 'premium' },
     { value: 'standard', label: 'Avançado', tier: 'standard' },
     { value: 'premiumplus', label: 'Premium Plus', tier: 'premium' },
-    { value: 'super-premium', label: 'Super Premium', tier: 'premium' },
+    { value: 'super-premium', label: 'Super Premium', tier: 'premium' }
   ];
   // Lista de layouts premium (hardcoded para garantir funcionamento)
   const allPremiumLayouts = ['pro', 'standard', 'premiumplus', 'super-premium'];
@@ -31,25 +31,25 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
       ...data,
       primaryColor: '',
       secondaryColor: '',
-      font: 'default',
+      font: 'default'
     });
   }
 
   return (
     <div className="space-y-6">
       {/* Só exibe opções de aparência se for layout premium */}
-      {isPremiumLayout && plan === "premium" ? (
+      {isPremiumLayout && plan === 'premium' ? (
         <div className="p-4 rounded-lg border bg-muted/30 space-y-4">
           <div>
             <label className="block font-semibold mb-1">Cor Primária</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
-                value={data.primaryColor || "#000000"}
+                value={data.primaryColor || '#000000'}
                 onChange={e => onChange({ ...data, primaryColor: e.target.value })}
                 className="w-8 h-8 rounded"
               />
-              <span className="font-mono text-xs">{data.primaryColor || "#000000"}</span>
+              <span className="font-mono text-xs">{data.primaryColor || '#000000'}</span>
               <span className="ml-2 text-xs text-muted-foreground">Destaques e botões</span>
             </div>
           </div>
@@ -58,24 +58,24 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
             <div className="flex items-center gap-2">
               <input
                 type="color"
-                value={data.secondaryColor || "#ffffff"}
+                value={data.secondaryColor || '#ffffff'}
                 onChange={e => onChange({ ...data, secondaryColor: e.target.value })}
                 className="w-8 h-8 rounded"
               />
-              <span className="font-mono text-xs">{data.secondaryColor || "#ffffff"}</span>
+              <span className="font-mono text-xs">{data.secondaryColor || '#ffffff'}</span>
               <span className="ml-2 text-xs text-muted-foreground">Fundo do perfil</span>
             </div>
           </div>
           <div>
             <label className="block font-semibold mb-1">Fonte Premium (nome)</label>
             <select
-              value={data.font || "default"}
+              value={data.font || 'default'}
               onChange={e => onChange({ ...data, font: e.target.value })}
               className="w-full p-2 rounded border"
             >
-              <option value="default" style={{ fontFamily: "inherit" }}>Padrão</option>
-              <option value="montserrat" style={{ fontFamily: "Montserrat, sans-serif" }}>Montserrat – Exemplo</option>
-              <option value="roboto" style={{ fontFamily: "Roboto, sans-serif" }}>Roboto – Exemplo</option>
+              <option value="default" style={{ fontFamily: 'inherit' }}>Padrão</option>
+              <option value="montserrat" style={{ fontFamily: 'Montserrat, sans-serif' }}>Montserrat – Exemplo</option>
+              <option value="roboto" style={{ fontFamily: 'Roboto, sans-serif' }}>Roboto – Exemplo</option>
             </select>
           </div>
           <Button type="button" variant="link" className="mt-2 text-xs underline" onClick={resetAppearance}>
@@ -89,4 +89,4 @@ export function ProfileAppearanceTabV2({ data, plan, layout, onChange, premiumLa
       )}
     </div>
   );
-} 
+}

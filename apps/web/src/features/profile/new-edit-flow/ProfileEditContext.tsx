@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import type { UserProfileV2 } from "./types";
-import { saveUserProfileV2 } from "./profile.service";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import type { UserProfileV2 } from './types';
+import { saveUserProfileV2 } from './profile.service';
 
 interface ProfileEditContextType {
   profile: UserProfileV2 | null;
@@ -11,7 +11,7 @@ interface ProfileEditContextType {
 export const ProfileEditContext = createContext<ProfileEditContextType>({
   profile: null,
   updateProfile: () => {},
-  saveProfile: async () => {},
+  saveProfile: async () => {}
 });
 
 export function ProfileEditProvider({ initialProfile, children }: { initialProfile: UserProfileV2; children: ReactNode }) {
@@ -23,7 +23,7 @@ export function ProfileEditProvider({ initialProfile, children }: { initialProfi
 
   const saveProfile = async () => {
     if (!profile || !(profile as any).id) {
-      throw new Error("Perfil sem ID. Não é possível salvar.");
+      throw new Error('Perfil sem ID. Não é possível salvar.');
     }
     await saveUserProfileV2((profile as any).id, profile);
   };
@@ -33,4 +33,4 @@ export function ProfileEditProvider({ initialProfile, children }: { initialProfi
       {children}
     </ProfileEditContext.Provider>
   );
-} 
+}

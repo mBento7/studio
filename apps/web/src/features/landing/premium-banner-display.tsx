@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 interface PremiumBannerDisplayProps {
   imageUrl: string;
@@ -15,11 +15,11 @@ export const PremiumBannerDisplay: React.FC<PremiumBannerDisplayProps> = ({
   title,
   description,
   ctaText,
-  ctaLink,
+  ctaLink
 }) => {
   return (
     <div className="w-full flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-800 via-purple-800 to-indigo-900 text-white overflow-hidden">
-      
+
       {/* Imagem com espaçamento interno (recuada) */}
       <div className="p-4 w-full md:w-1/2 flex items-center justify-center">
         <div className="relative w-full h-64 md:h-[300px] rounded-lg overflow-hidden shadow-lg">

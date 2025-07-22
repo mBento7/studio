@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { ReferralProgram } from '@/features/dashboard/referral-program';
 

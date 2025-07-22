@@ -37,14 +37,14 @@ export const profileLayouts: BaseProfileLayout[] = [
   //   Component: SuperPremiumProfileLayout,
   //   SearchResultComponent: SuperPremiumSearchResultCard,
   // },
-  { ...premiumProfileLayoutConfig, Component: PremiumProfileLayout, SearchResultComponent: SearchResultCardPremium },
+  { ...premiumProfileLayoutConfig, Component: PremiumProfileLayout, SearchResultComponent: SearchResultCardPremium }
   // { ...enhancedConfig, Component: EnhancedProfileLayout, SearchResultComponent: undefined },
 ];
 
 export {
   FreeProfileLayout,
   PremiumProfileLayout,
-  StandardProfileLayout,
+  StandardProfileLayout
   // EnhancedProfileLayout,
 };
 

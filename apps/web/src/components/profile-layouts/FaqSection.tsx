@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Sparkles, ChevronDown } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Sparkles, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface Faq {
   question: string;
@@ -20,7 +20,7 @@ interface FaqSectionProps {
 
 export function FaqSection({ faqs, canAdd, onAddFaq, expandedFaq: expanded, setExpandedFaq, maxFaqs }: FaqSectionProps) {
   const [expandedFaq, setExpandedFaqLocal] = useState<number | null>(null);
-  const isControlled = typeof expanded === "number" && typeof setExpandedFaq === "function";
+  const isControlled = typeof expanded === 'number' && typeof setExpandedFaq === 'function';
   const expandedIdx = isControlled ? expanded : expandedFaq;
   const setExpanded = isControlled ? setExpandedFaq! : setExpandedFaqLocal;
 
@@ -68,4 +68,4 @@ export function FaqSection({ faqs, canAdd, onAddFaq, expandedFaq: expanded, setE
       )}
     </section>
   );
-} 
+}

@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         reviewer_id,
         reviewed_user_id,
         rating,
-        comment,
+        comment
       })
       .select();
 
@@ -144,4 +144,4 @@ export async function DELETE(req: NextRequest) {
     console.error('Erro inesperado na API de reviews (DELETE):', error);
     return NextResponse.json({ error: error.message || 'Erro interno do servidor.' }, { status: 500 });
   }
-} 
+}

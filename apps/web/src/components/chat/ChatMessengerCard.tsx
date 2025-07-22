@@ -37,7 +37,7 @@ export const ChatMessengerCard: React.FC<ChatMessengerCardProps> = ({ onOpenMess
   useEffect(() => {
     if (!currentUserProfile?.id || !expanded) return;
     const fetchConvs = async () => {
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from('conversations')
         .select('*')
         .or(`user1_id.eq.${currentUserProfile.id},user2_id.eq.${currentUserProfile.id}`)
@@ -64,10 +64,10 @@ export const ChatMessengerCard: React.FC<ChatMessengerCardProps> = ({ onOpenMess
               id: user.id,
               name: user.full_name,
               username: user.username,
-              profile_picture_url: user.profile_picture_url,
+              profile_picture_url: user.profile_picture_url
             } : undefined,
             last_message: lastMsg?.content || '',
-            last_message_at: lastMsg?.created_at || conv.created_at,
+            last_message_at: lastMsg?.created_at || conv.created_at
           };
         }));
         setConversations(convs);

@@ -27,7 +27,7 @@ interface CouponCardProps {
 }
 
 // Substituir a função timeAgo por:
-import { timeAgo } from "@/lib/date-utils";
+import { timeAgo } from '@/lib/date-utils';
 
 // Remover a função timeAgo definida localmente
 
@@ -43,7 +43,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
   onCopy,
   isExpired = false,
   likesCount = 0,
-  onLike,
+  onLike
 }) => {
   const [copied, setCopied] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -89,7 +89,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
 
   const handleCopy = () => {
     if (typeof navigator === 'undefined' || !navigator.clipboard) return;
-    
+
     navigator.clipboard.writeText(code);
     setCopied(true);
     if (onCopy) onCopy();
@@ -208,10 +208,10 @@ const CouponCard: React.FC<CouponCardProps> = ({
       {/* Header com perfil e cabeçalho do cupom */}
       <div className="relative px-6 pt-6 pb-2 flex flex-col gap-2">
         <div className="flex items-center gap-3 cursor-pointer" tabIndex={0} onClick={() => typeof window !== 'undefined' && window.open(`/${username}`, '_blank')}>
-          <img 
-            src={avatarUrl} 
-            alt={`Foto de perfil de ${name}`} 
-            className="w-10 h-10 rounded-full border-2 border-white shadow-sm" 
+          <img
+            src={avatarUrl}
+            alt={`Foto de perfil de ${name}`}
+            className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
           />
           <div>
             <div className="font-bold text-black text-lg">{name}</div>

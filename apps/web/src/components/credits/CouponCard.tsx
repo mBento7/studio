@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface CouponCardProps {
   code: string;
@@ -20,7 +20,7 @@ const CouponCard: React.FC<CouponCardProps> = ({ code, description, discount, va
         </div>
         <div className="relative w-full px-6 pb-4">
           <div className="flex flex-col justify-center gap-3">
-            <div className="text-2xl font-bold text-black tracking-tight leading-none">{discount || "Desconto"}</div>
+            <div className="text-2xl font-bold text-black tracking-tight leading-none">{discount || 'Desconto'}</div>
             <div className="text-black text-base leading-relaxed">{description}</div>
             <div className="w-full mt-2">
               <span className="bg-white/90 px-4 py-2 rounded-lg font-mono text-lg font-bold tracking-wide text-center truncate block w-full text-black">{code}</span>
@@ -42,4 +42,4 @@ const CouponCard: React.FC<CouponCardProps> = ({ code, description, discount, va
   );
 };
 
-export default CouponCard; 
+export default CouponCard;

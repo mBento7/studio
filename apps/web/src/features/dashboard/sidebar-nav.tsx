@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   Home,
   User,
@@ -15,11 +15,11 @@ import {
   Loader2,
   LucideIcon,
   Gift
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Estrutura de Navegação Aninhada
 interface NavSubItem {
@@ -43,23 +43,23 @@ interface SidebarNavProps {
 export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
   const pathname = usePathname();
   const { user, signOutUser, loading: authLoading, currentUserProfile } = useAuth();
-  const publicProfileLink = currentUserProfile ? `/${currentUserProfile.username}` : (user ? "/search" : "/login");
+  const publicProfileLink = currentUserProfile ? `/${currentUserProfile.username}` : (user ? '/search' : '/login');
 
   // Itens de navegação com sub-itens para "Meu Perfil"
   const navItems: NavItem[] = [
-    { href: "/dashboard/feed", label: "Home", icon: Home },
-    { href: "/dashboard", label: "Editar Perfil", icon: Pencil },
-    { href: publicProfileLink, label: "Ver Perfil Público", icon: Eye },
-    { href: "/dashboard/referrals", label: "Indique e Ganhe", icon: Gift },
-    { href: "/dashboard/account", label: "Conta", icon: UserCog },
+    { href: '/dashboard/feed', label: 'Home', icon: Home },
+    { href: '/dashboard', label: 'Editar Perfil', icon: Pencil },
+    { href: publicProfileLink, label: 'Ver Perfil Público', icon: Eye },
+    { href: '/dashboard/referrals', label: 'Indique e Ganhe', icon: Gift },
+    { href: '/dashboard/account', label: 'Conta', icon: UserCog }
   ];
 
   const handleLogout = async () => {
     await signOutUser();
   };
-  
+
   // Verifica se a rota atual está relacionada ao perfil para exibir os sub-itens
-  const isProfileSectionActive = pathname.startsWith("/dashboard/my-profile") || pathname.startsWith("/dashboard/settings") || pathname === "/dashboard";
+  const isProfileSectionActive = pathname.startsWith('/dashboard/my-profile') || pathname.startsWith('/dashboard/settings') || pathname === '/dashboard';
 
   return (
     <div className="relative h-full flex flex-col">
@@ -71,11 +71,11 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
                 <TooltipTrigger>
                   <Link href={item.href} passHref>
                     <Button
-                      variant={pathname === item.href ? "secondary" : "ghost"}
-                      className={cn("w-full justify-start gap-3", !isSidebarOpen && "justify-center")}
+                      variant={pathname === item.href ? 'secondary' : 'ghost'}
+                      className={cn('w-full justify-start gap-3', !isSidebarOpen && 'justify-center')}
                     >
                       <item.icon className="w-5 h-5 shrink-0" />
-                      <span className={cn("truncate", !isSidebarOpen && "hidden")}>{item.label}</span>
+                      <span className={cn('truncate', !isSidebarOpen && 'hidden')}>{item.label}</span>
                     </Button>
                   </Link>
                 </TooltipTrigger>
@@ -90,19 +90,19 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
               {isProfileSectionActive && item.subItems && isSidebarOpen && (
                 <div className="pl-6 mt-1 space-y-1">
                   {item.subItems.map((subItem) => (
-                     <Tooltip key={subItem.href} delayDuration={0}>
-                        <TooltipTrigger>
-                            <Link href={subItem.href} passHref>
-                              <Button
-                                variant={pathname === subItem.href ? "secondary" : "ghost"}
-                                className="w-full justify-start gap-3 text-sm"
-                              >
-                                <subItem.icon className="w-4 h-4 shrink-0" />
-                                <span>{subItem.label}</span>
-                              </Button>
-                            </Link>
-                        </TooltipTrigger>
-                     </Tooltip>
+                    <Tooltip key={subItem.href} delayDuration={0}>
+                      <TooltipTrigger>
+                        <Link href={subItem.href} passHref>
+                          <Button
+                            variant={pathname === subItem.href ? 'secondary' : 'ghost'}
+                            className="w-full justify-start gap-3 text-sm"
+                          >
+                            <subItem.icon className="w-4 h-4 shrink-0" />
+                            <span>{subItem.label}</span>
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                    </Tooltip>
                   ))}
                 </div>
               )}
@@ -118,7 +118,7 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
               <Button
                 variant="ghost"
                 onClick={handleLogout}
-                className={cn("w-full justify-start gap-3", !isSidebarOpen && "justify-center")}
+                className={cn('w-full justify-start gap-3', !isSidebarOpen && 'justify-center')}
                 disabled={authLoading}
               >
                 {authLoading ? (
@@ -126,13 +126,13 @@ export function SidebarNav({ isSidebarOpen, toggleSidebar }: SidebarNavProps) {
                 ) : (
                   <LogOut className="w-5 h-5 shrink-0" />
                 )}
-                <span className={cn("truncate", !isSidebarOpen && "hidden")}>Sair</span>
+                <span className={cn('truncate', !isSidebarOpen && 'hidden')}>Sair</span>
               </Button>
             </TooltipTrigger>
             {!isSidebarOpen && (
-                <TooltipContent side="right" sideOffset={5}>
+              <TooltipContent side="right" sideOffset={5}>
                     Sair
-                </TooltipContent>
+              </TooltipContent>
             )}
           </Tooltip>
         </TooltipProvider>

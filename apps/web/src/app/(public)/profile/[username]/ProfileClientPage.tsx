@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
 // Todo o código que estava em page.tsx foi movido para cá.
 // Este é um Client Component que lida com estado, interatividade e hooks.
 
 import React, { useState, useEffect, use } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { UserProfile, PortfolioItem } from "@/lib/types";
-import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrCode, Download, Edit3, MessageSquare, Briefcase, Loader2, Maximize } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { UserProfile, PortfolioItem } from '@/lib/types';
+import { Youtube, Linkedin, Twitter, Instagram, Github, Globe, Mail, MapPin, QrCode, Download, Edit3, MessageSquare, Briefcase, Loader2, Maximize } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import { DigitalBusinessCard } from '@/features/profile/digital-business-card';
 import { PortfolioItemModal } from '@/features/profile/portfolio-item-modal';
 import { PremiumBannerDisplay } from '@/features/landing/premium-banner-display';
-import { platformIcons } from "@/lib/types";
+import { platformIcons } from '@/lib/types';
 import { getUserProfileV2 } from '@/features/profile/new-edit-flow/profile.service';
 import { PrintableBusinessCard } from '@/features/profile/printable-business-card';
 import { logger } from '@/lib/logger';
@@ -24,12 +24,12 @@ import { logger } from '@/lib/logger';
 // import { getMockUserByUsername, mockUserProfiles } from "@/lib/mock-data";
 
 // Componentes de layout de perfil
-import FreeProfileLayout from "@/components/profile-layouts/FreeProfileLayout";
-import StandardProfileLayout from "@/components/profile-layouts/StandardProfileLayout";
-import PremiumProfileLayout from "@/components/profile-layouts/PremiumProfileLayout";
+import FreeProfileLayout from '@/components/profile-layouts/FreeProfileLayout';
+import StandardProfileLayout from '@/components/profile-layouts/StandardProfileLayout';
+import PremiumProfileLayout from '@/components/profile-layouts/PremiumProfileLayout';
 // Removido: import EnhancedProfileLayout from "@/components/profile-layouts/EnhancedProfileLayout";
-import { LeftProfileSidebar } from "@/components/layout/left-profile-sidebar";
-import { isPremiumLayout } from "@/lib/isPremiumLayout";
+import { LeftProfileSidebar } from '@/components/layout/left-profile-sidebar';
+import { isPremiumLayout } from '@/lib/isPremiumLayout';
 import { ChatFloatingBox } from '@/components/chat/ChatFloatingBox';
 import { useRouter } from 'next/navigation';
 
@@ -48,7 +48,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   const { toast } = useToast();
   const { user: authUser, loading: authLoading, currentUserProfile } = useAuth();
   const router = useRouter();
-  
+
   const [mounted, setMounted] = useState(false);
   const [userToDisplay, setUserToDisplay] = useState<UserProfile | null>(initialUserProfile);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
@@ -77,16 +77,16 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
     setSelectedPortfolioItem(item);
     setIsPortfolioModalOpen(true);
   };
-  
+
   // Detectar tema e montar
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+      const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
       if (storedTheme) {
         setTheme(storedTheme);
       } else {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        setTheme(prefersDark ? "dark" : "light");
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
       }
       setMounted(true);
     }
@@ -167,10 +167,10 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
   const handleChatButtonClick = () => {
     if (!isCurrentUserPremium) {
       toast({
-        title: "Funcionalidade Premium",
-        description: "Para iniciar um chat, você precisa de um plano Standard ou Premium. Faça upgrade para ter acesso!",
-        variant: "destructive",
-        action: <Link href="/planos"><Button variant="outline">Ver Planos</Button></Link>,
+        title: 'Funcionalidade Premium',
+        description: 'Para iniciar um chat, você precisa de um plano Standard ou Premium. Faça upgrade para ter acesso!',
+        variant: 'destructive',
+        action: <Link href="/planos"><Button variant="outline">Ver Planos</Button></Link>
       });
       return;
     }
@@ -210,20 +210,20 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
     onPortfolioItemClick: handleOpenPortfolioModal,
     toast: toast,
     mounted: mounted,
-    onRefreshProfile: fetchAndUpdateProfile,
+    onRefreshProfile: fetchAndUpdateProfile
   };
 
   // Extrair propriedades de aparência customizadas do perfil
   const premiumAppearanceProps = {
     primaryColor: (userToDisplay as any).primaryColor || (userToDisplay as any).data?.primaryColor,
     secondaryColor: (userToDisplay as any).secondaryColor || (userToDisplay as any).data?.secondaryColor,
-    font: (userToDisplay as any).font || (userToDisplay as any).data?.font,
+    font: (userToDisplay as any).font || (userToDisplay as any).data?.font
   };
 
   const renderProfileLayout = () => {
     // Forçar micaelsbento a usar o EnhancedProfileLayout, mas com props do FreeProfileLayout
     // Substituir por FreeProfileLayout
-    if (userToDisplay.username === "micaelsbento") {
+    if (userToDisplay.username === 'micaelsbento') {
       return <FreeProfileLayout user={userToDisplay} />;
     }
     // Lógica para determinar o layout baseado no plano e imagens
@@ -246,12 +246,12 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
           experience: userToDisplay.experience?.map(exp => ({
             title: exp.title,
             company: exp.company,
-            years: (exp as any).years ?? '',
+            years: (exp as any).years ?? ''
           })),
           education: userToDisplay.education?.map(edu => ({
             degree: edu.degree,
             institution: edu.institution,
-            years: (edu as any).years ?? '',
+            years: (edu as any).years ?? ''
           })),
           reviews: userToDisplay.reviews?.map(rev => ({
             id: rev.id,
@@ -259,8 +259,8 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
             authorAvatarUrl: rev.authorAvatarUrl ?? '',
             rating: rev.rating,
             comment: rev.comment,
-            createdAt: rev.createdAt,
-          })),
+            createdAt: rev.createdAt
+          }))
         };
         return (
           <PremiumProfileLayout
@@ -313,13 +313,13 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
         {/* Botão de chat para visitantes logados (não o próprio perfil) */}
         {authUser && authUser.id !== userToDisplay.id && (userToDisplay.plan === 'standard' || userToDisplay.plan === 'premium') && (
           <Button
-            variant={isCurrentUserPremium ? "default" : "outline"}
+            variant={isCurrentUserPremium ? 'default' : 'outline'}
             className="fixed bottom-8 right-8 z-50 shadow-lg rounded-full p-4 sm:bottom-[88px]"
             onClick={handleChatButtonClick}
-            title={isCurrentUserPremium ? "Chamar no chat" : "Recurso premium"}
+            title={isCurrentUserPremium ? 'Chamar no chat' : 'Recurso premium'}
           >
             <MessageSquare className="w-5 h-5 mr-2" />
-            {isCurrentUserPremium ? "Chamar no chat" : "Fazer Upgrade"}
+            {isCurrentUserPremium ? 'Chamar no chat' : 'Fazer Upgrade'}
           </Button>
         )}
         {renderProfileLayout()}
@@ -340,7 +340,7 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
             />
           </div>
         )}
-        <PortfolioItemModal 
+        <PortfolioItemModal
           item={selectedPortfolioItem}
           open={isPortfolioModalOpen}
           onOpenChange={setIsPortfolioModalOpen}
@@ -356,4 +356,4 @@ export const ProfileClientPage = ({ userProfile: initialUserProfile, hideRightSi
       </div>
     </>
   );
-}
+};

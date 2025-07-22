@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import { Logo } from "@/components/common/logo";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import { Logo } from '@/components/common/logo';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,13 +18,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         />
         {/* Gradiente sobre a imagem */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-        
+
         {/* Logo */}
         <div className="absolute top-8 md:top-10 left-8 md:left-14 flex items-center gap-3 z-10">
           <Logo className="h-10 w-auto text-white drop-shadow-lg" />
           <span className="text-white text-lg font-medium drop-shadow-lg">WhosDo</span>
         </div>
-        
+
         {/* Texto sobre a imagem */}
         <div className="absolute left-8 md:left-20 bottom-24 w-[280px] md:w-[320px] bg-black/20 rounded-2xl p-6 backdrop-blur-md text-white shadow-lg">
           <div className="text-xl md:text-2xl font-medium mb-3 leading-tight">
@@ -41,8 +41,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <span className="text-gray-600 dark:text-gray-300 font-light">
             Já tem conta?
           </span>
-          <a 
-            href="/login" 
+          <a
+            href="/login"
             className="text-[#20DC49] dark:text-[#4ADE80] font-medium hover:underline transition-colors"
           >
             Sign in!
@@ -52,12 +52,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Formulário central */}
         <div className="w-full max-w-md lg:max-w-lg flex flex-col justify-center items-center py-8 md:py-12">
           {children}
-          
+
           {/* Mensagem de termos */}
           <p className="mt-8 md:mt-10 text-xs text-gray-500 dark:text-gray-400 text-center font-light max-w-md">
-            Ao continuar você indica que leu e concorda com os{" "}
-            <a 
-              href="#" 
+            Ao continuar você indica que leu e concorda com os{' '}
+            <a
+              href="#"
               className="underline hover:text-[#20DC49] dark:hover:text-[#4ADE80] transition-colors"
             >
               Termos de Uso

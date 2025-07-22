@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const { toast } = useToast();
-  
+
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setCurrentUserProfile(null);
         router.push('/login');
       }
-      
+
       // Para o estado inicial, também precisamos verificar se há um usuário
       if (event === 'INITIAL_SESSION' && supabaseUser) {
         fetchUserProfile(supabaseUser);
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast({
       title: `Falha em ${context}`,
       description: error.message || `Ocorreu um erro durante a operação.`,
-      variant: 'destructive',
+      variant: 'destructive'
     });
     setLoading(false);
   };
@@ -101,10 +101,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
-      },
+        redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`
+      }
     });
-    if (error) handleAuthError(error, "Login com Google");
+    if (error) handleAuthError(error, 'Login com Google');
     // O onAuthStateChange cuidará do resto
   };
 
@@ -116,13 +116,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       options: {
         // Passamos dados que podem ser usados por um DB trigger para criar o perfil
         data: {
-          full_name: fullName,
+          full_name: fullName
           // Você pode adicionar um username gerado aqui, se desejar
         }
       }
     });
     if (error) {
-      handleAuthError(error, "Cadastro com Email");
+      handleAuthError(error, 'Cadastro com Email');
     } else {
       toast({ title: 'Cadastro bem-sucedido!', description: 'Enviamos um email de confirmação para sua caixa de entrada.', variant: 'success', duration: 2000 });
     }
@@ -132,17 +132,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithEmail = async (email: string, password: string) => {
     try {
       logger.auth('Iniciando login', { email });
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password,
+        password
       });
 
       logger.auth('Resposta do login', { hasData: !!data, hasError: !!error });
 
       if (error) {
         logger.error('Erro do Supabase no login', { error });
-        handleAuthError(error, "Login com Email");
+        handleAuthError(error, 'Login com Email');
         throw error;
       }
 
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return data;
     } catch (error) {
       logger.error('Erro capturado no login', { error });
-      handleAuthError(error as Error, "Login com Email");
+      handleAuthError(error as Error, 'Login com Email');
       throw error;
     }
   };
@@ -159,13 +159,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/reset-password`,
+      redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/reset-password`
     });
 
     if (error) {
-      handleAuthError(error, "Redefinição de Senha");
+      handleAuthError(error, 'Redefinição de Senha');
     } else {
-      toast({ title: "Email de Redefinição Enviado", description: "Verifique sua caixa de entrada para o link.", variant: 'success', duration: 2000 });
+      toast({ title: 'Email de Redefinição Enviado', description: 'Verifique sua caixa de entrada para o link.', variant: 'success', duration: 2000 });
     }
     setLoading(false);
   };
@@ -174,7 +174,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     logger.auth('Iniciando logout');
     const { error } = await supabase.auth.signOut();
-    if (error) handleAuthError(error, "Logout");
+    if (error) handleAuthError(error, 'Logout');
     else {
       toast({ title: 'Logout bem-sucedido', variant: 'success', duration: 2000 });
       logger.auth('Logout bem-sucedido');
@@ -189,15 +189,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{
-        user,
-        currentUserProfile,
-        loading,
-        signInWithGoogle,
-        signUpWithEmail,
-        signInWithEmail,
-        sendPasswordResetEmail,
-        signOutUser,
-        updateUserProfile, // Expõe a nova função
+      user,
+      currentUserProfile,
+      loading,
+      signInWithGoogle,
+      signUpWithEmail,
+      signInWithEmail,
+      sendPasswordResetEmail,
+      signOutUser,
+      updateUserProfile // Expõe a nova função
     }}>
       {children}
     </AuthContext.Provider>

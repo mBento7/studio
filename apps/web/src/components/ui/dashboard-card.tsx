@@ -1,5 +1,5 @@
-import React from "react";
-import { Card } from "@/components/ui/card";
+import React from 'react';
+import { Card } from '@/components/ui/card';
 
 interface DashboardCardProps {
   icon: React.ElementType;
@@ -15,17 +15,17 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   icon: Icon,
   title,
   description,
-  colorClass = "bg-primary text-primary-foreground",
+  colorClass = 'bg-primary text-primary-foreground',
   onClick,
   children,
-  className = "",
+  className = ''
 }) => {
   return (
     <Card
       className={`p-6 bg-card rounded-xl shadow-xl shadow-black/20 border border-black/5 hover:shadow-2xl transition-shadow cursor-pointer ${className}`}
       onClick={onClick}
       tabIndex={0}
-      role={onClick ? "button" : undefined}
+      role={onClick ? 'button' : undefined}
       aria-label={title}
     >
       <div className="flex items-start gap-4">
@@ -40,4 +40,4 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       </div>
     </Card>
   );
-}; 
+};

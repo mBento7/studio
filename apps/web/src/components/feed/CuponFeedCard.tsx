@@ -19,7 +19,7 @@ interface CuponFeedCardProps {
 }
 
 // Substituir a função timeAgo por:
-import { timeAgo } from "@/lib/date-utils";
+import { timeAgo } from '@/lib/date-utils';
 
 // Remover a função timeAgo definida localmente
 

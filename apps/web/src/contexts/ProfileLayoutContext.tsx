@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext } from 'react';
 
-export type ProfileLayoutTier = "free" | "standard" | "premium";
+export type ProfileLayoutTier = 'free' | 'standard' | 'premium';
 
 type ProfileLayoutContextType = {
   hideRightSidebar: boolean;
   layoutTier: ProfileLayoutTier;
 };
 
-const ProfileLayoutContext = createContext<ProfileLayoutContextType>({ hideRightSidebar: false, layoutTier: "free" });
+const ProfileLayoutContext = createContext<ProfileLayoutContextType>({ hideRightSidebar: false, layoutTier: 'free' });
 
 export const useProfileLayout = () => useContext(ProfileLayoutContext);
 
 export const ProfileLayoutProvider = ({
   children,
   hideRightSidebar = false,
-  layoutTier = "free",
+  layoutTier = 'free'
 }: {
   children: React.ReactNode;
   hideRightSidebar?: boolean;
@@ -25,4 +25,4 @@ export const ProfileLayoutProvider = ({
   <ProfileLayoutContext.Provider value={{ hideRightSidebar, layoutTier }}>
     {children}
   </ProfileLayoutContext.Provider>
-); 
+);

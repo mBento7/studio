@@ -40,4 +40,4 @@ export interface ProfileEditPageV2Props {
   profile?: UserProfileV2;
   onProfileChange?: (profile: UserProfileV2) => void;
   onSave?: (profile: UserProfileV2) => void;
-} 
+}

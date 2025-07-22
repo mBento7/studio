@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
@@ -14,7 +14,7 @@ interface LayoutDeciderProps {
 export function LayoutDecider({
   children,
   hideSidebar,
-  hideRightSidebar,
+  hideRightSidebar
 }: LayoutDeciderProps) {
   const pathname = usePathname();
   const { hideRightSidebar: contextHideRightSidebar } = useProfileLayout();
@@ -22,13 +22,13 @@ export function LayoutDecider({
   if (!pathname) return null;
 
   // 🟢 Páginas públicas que não usam AppContainer
-  const isPublic = ["/", "/home", "/login"].includes(pathname);
+  const isPublic = ['/', '/home', '/login'].includes(pathname);
   if (isPublic) {
     return <div className="flex flex-col min-h-screen">{children}</div>;
   }
 
   // 🟡 Página de perfil público → sem sidebar esquerda
-  if (pathname.startsWith("/profile/")) {
+  if (pathname.startsWith('/profile/')) {
     return (
       <AppContainer
         hideSidebar
@@ -40,7 +40,7 @@ export function LayoutDecider({
   }
 
   // 🔵 Página de busca → sem sidebar esquerda
-  if (pathname.startsWith("/search")) {
+  if (pathname.startsWith('/search')) {
     return (
       <AppContainer
         hideSidebar
@@ -53,7 +53,7 @@ export function LayoutDecider({
 
   // 🟣 Demais páginas protegidas (ex: feed, dashboard, planos, etc)
   // Ocultar sidebar esquerda quando em /dashboard
-  if (pathname === "/dashboard") {
+  if (pathname === '/dashboard') {
     return (
       <AppContainer
         hideSidebar={true}
@@ -65,7 +65,7 @@ export function LayoutDecider({
   }
 
   // Ocultar sidebar esquerda quando em /create
-  if (pathname === "/create" || pathname.startsWith("/create")) {
+  if (pathname === '/create' || pathname.startsWith('/create')) {
     return (
       <AppContainer
         hideSidebar={true}

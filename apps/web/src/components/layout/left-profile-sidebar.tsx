@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 const quickActions = [
   { label: 'Storie 24h', icon: <Clock className="w-4 h-4 mr-2" />, href: '/create?type=status' },
   { label: 'Cupom de Desconto', icon: <Ticket className="w-4 h-4 mr-2" />, href: '/create?type=coupon' },
-  { label: 'Anúncio Patrocinado', icon: <Megaphone className="w-4 h-4 mr-2" />, href: '/create?type=ad' },
+  { label: 'Anúncio Patrocinado', icon: <Megaphone className="w-4 h-4 mr-2" />, href: '/create?type=ad' }
 ];
 
 const extraActions = [
@@ -22,7 +22,7 @@ const extraActions = [
   { label: 'Item de Portfólio', icon: <Briefcase className="w-4 h-4 mr-2" />, href: '/create?type=portfolio' },
   { label: 'Banner de Perfil', icon: <ImageIcon className="w-4 h-4 mr-2" />, href: '/create?type=banner' },
   { label: 'Showcase de Anúncios', icon: <Megaphone className="w-4 h-4 mr-2" />, href: '/showcase-lucas' },
-  { label: 'Showcase do Feed', icon: <Newspaper className="w-4 h-4 mr-2" />, href: '/showcase-feed' },
+  { label: 'Showcase do Feed', icon: <Newspaper className="w-4 h-4 mr-2" />, href: '/showcase-feed' }
 ];
 
 function QuickActions() {
@@ -97,7 +97,7 @@ function ActivityStats() {
         <h3 className="text-lg font-semibold">Sua Atividade</h3>
         <Activity className="w-5 h-5 text-blue-500" />
       </div>
-      
+
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ function ActivityStats() {
           </div>
           <span className="font-semibold text-primary text-lg">127</span>
         </div>
-        
+
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <User className="w-4 h-4 text-muted-foreground" />
@@ -114,7 +114,7 @@ function ActivityStats() {
           </div>
           <span className="font-semibold text-green-600 text-lg">+12</span>
         </div>
-        
+
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-muted-foreground" />
@@ -122,13 +122,13 @@ function ActivityStats() {
           </div>
           <span className="font-semibold text-blue-600 text-lg">8.4%</span>
         </div>
-        
+
         <Progress value={65} className="h-2 bg-muted/30" />
-        
-        <Button 
+
+        <Button
           asChild
-          variant="outline" 
-          size="sm" 
+          variant="outline"
+          size="sm"
           className="w-full mt-2 rounded-full border-primary/50 text-primary hover:bg-primary/10 hover:text-primary transition-all hover:scale-[1.02] hover:shadow-sm"
         >
           <Link href="/dashboard/activity">
@@ -145,20 +145,20 @@ function AchievementsCard() {
   const achievements = [
     { icon: Award, label: 'Primeiro Projeto', desc: 'Você publicou seu primeiro projeto!' },
     { icon: Activity, label: 'Perfil 100%', desc: 'Perfil completo e otimizado.' },
-    { icon: Trophy, label: 'Primeira Avaliação', desc: 'Recebeu sua primeira avaliação.' },
+    { icon: Trophy, label: 'Primeira Avaliação', desc: 'Recebeu sua primeira avaliação.' }
   ];
-  
+
   return (
     <div className="w-full bg-card rounded-2xl shadow-xl shadow-black/20 dark:shadow-black/50 overflow-hidden border border-black/5 dark:border-white/10 p-5 space-y-4 transition-all hover:shadow-lg">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-semibold">Minhas Conquistas</h3>
         <Trophy className="w-5 h-5 text-yellow-500" />
       </div>
-      
+
       <div className="space-y-3">
         {achievements.map((a, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className="flex items-center gap-4 p-3 rounded-xl hover:bg-muted/50 transition-all cursor-pointer group"
           >
             <a.icon className="w-8 h-8 text-yellow-500 group-hover:rotate-12 transition-transform" />
@@ -199,9 +199,9 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
           {/* Cover Photo with gradient overlay */}
           <div className="w-full h-24 bg-cover bg-center relative">
             {userProfile.cover_photo_url ? (
-              <img 
-                src={userProfile.cover_photo_url} 
-                alt="Cover" 
+              <img
+                src={userProfile.cover_photo_url}
+                alt="Cover"
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -217,9 +217,9 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
               <div className="w-36 h-36 rounded-full bg-background/80 dark:bg-muted/30 p-1.5 border-4 border-white dark:border-muted shadow-xl shadow-black/30 transition-all hover:shadow-2xl hover:scale-105">
                 <Avatar className="w-full h-full rounded-full overflow-hidden">
                   {userProfile.profile_picture_url ? (
-                    <AvatarImage 
-                      src={userProfile.profile_picture_url} 
-                      alt={userProfile.name || 'User'} 
+                    <AvatarImage
+                      src={userProfile.profile_picture_url}
+                      alt={userProfile.name || 'User'}
                       className="object-cover w-full h-full"
                     />
                   ) : (
@@ -242,8 +242,8 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
             {/* Action Buttons */}
             {userProfile.username && (
               <div className="w-full flex flex-col gap-3">
-                <Button 
-                  asChild 
+                <Button
+                  asChild
                   className="bg-primary text-primary-foreground font-semibold shadow-md rounded-full transition-all hover:scale-[1.02] hover:shadow-lg"
                 >
                   <Link href={publicProfileLink} className="flex items-center justify-center">
@@ -251,10 +251,10 @@ export function LeftProfileSidebar({ profile }: LeftProfileSidebarProps) {
                     Ver Perfil Público
                   </Link>
                 </Button>
-                
-                <Button 
-                  asChild 
-                  variant="outline" 
+
+                <Button
+                  asChild
+                  variant="outline"
                   className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary rounded-full transition-all hover:scale-[1.02]"
                 >
                   <Link href="/dashboard" className="flex items-center justify-center">
