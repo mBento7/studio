@@ -2,8 +2,53 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Clock, Percent, Megaphone, Tag, Flame, Plus } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { SuggestedEventsCard } from '@/components/events/SuggestedEventsCard';
 import { Card } from '@/components/ui/card';
 import { UserAdExample } from '@/components/anuncios/UserAdExample';
+import { Mail, BellRing } from 'lucide-react';
+
+export function FollowUs() {
+  return (
+    <div className="p-5 bg-card rounded-2xl space-y-4 border border-black/5 dark:border-white/10 shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
+      <h3 className="text-lg font-semibold">Follow Us</h3>
+      <div className="grid grid-cols-2 gap-3">
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:scale-105">Facebook</Button>
+        <Button className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:scale-105">Twitter</Button>
+        <Button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:scale-105">Instagram</Button>
+        <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 hover:scale-105">YouTube</Button>
+      </div>
+    </div>
+  );
+}
+
+export function StayUpdated() {
+  return (
+    <div className="p-5 bg-red-600 rounded-2xl space-y-4 text-white shadow-xl shadow-black/20 dark:shadow-black/50 transition-all hover:shadow-lg">
+      <div className="flex flex-col items-center space-y-3">
+        <BellRing className="w-8 h-8" />
+        <h3 className="text-xl font-bold">Stay Updated</h3>
+        <p className="text-sm text-center opacity-90">Join 50,000+ readers getting the latest news and updates.</p>
+      </div>
+      <div className="relative">
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="w-full p-3 pl-4 pr-10 rounded-full bg-red-700 border border-red-500 text-white placeholder-red-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+        />
+        <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-red-200" />
+      </div>
+      <Button className="w-full bg-white hover:bg-gray-100 text-red-600 font-semibold py-3 rounded-full shadow-md transition-all duration-300 hover:scale-[1.02]">
+        Subscribe Now
+      </Button>
+      <p className="text-xs text-center opacity-80 flex items-center justify-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        </svg>
+        No spam, unsubscribe anytime
+      </p>
+    </div>
+  );
+}
 
 // UserAdExample
 // export function UserAdExample() {
@@ -231,6 +276,27 @@ export function CouponsWidget() {
   );
 }
 
+const mockSuggestedEvents = [
+  {
+    id: 'coordenacao-producao-2025',
+    name: 'Coordenação da Produção: Desenvolvendo Pessoas e Resultados',
+    date: '2025-07-10T19:00:00',
+    image: '/banners/institucional1.png',
+  },
+  {
+    id: 'fellowship-aesthetic-medicine',
+    name: 'Fellowship in Aesthetic Medicine',
+    date: '2025-07-11T18:00:00',
+    image: '/banners/oferta1.png',
+  },
+  {
+    id: 'annual-william-bill',
+    name: '12th Annual William “Bill”...',
+    date: '2025-07-12T09:00:00',
+    image: '/banners/patrocinado1.png',
+  },
+];
+
 export function RightWidgetsColumn({ onCouponClick }: { onCouponClick?: () => void }) {
   console.log('RightWidgetsColumn RENDERIZADO');
   return (
@@ -239,10 +305,13 @@ export function RightWidgetsColumn({ onCouponClick }: { onCouponClick?: () => vo
       <PremiumAdCard />
       {/* <QuickActions onCouponClick={onCouponClick || (() => {})} /> Removido pois está na left-profile-sidebar */}
       {/* <ActivityStats /> Removido pois está na left-profile-sidebar */}
+      <SuggestedEventsCard sugestoes={mockSuggestedEvents} />
       <TrendingHashtags />
       <UserSuggestions />
       <TrendingAds />
       <CouponsWidget />
+      <FollowUs />
+      <StayUpdated />
     </div>
   );
 }

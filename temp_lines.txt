@@ -1,0 +1,15 @@
+          </div>
+         ) : user && currentUserProfile ? (
+                <button className="p-1 rounded-full hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={currentUserProfile.profile_picture_url} />
+                    <AvatarFallback className="bg-red-100 text-red-600 text-xs">
+                      {currentUserProfile.name?.charAt(0).toUpperCase() ?? '?'}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              ) : (
+                <a href="/login" className="p-3 rounded-full hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                  <IoPersonOutline className="w-6 h-6 text-gray-600" />
+                </a>
+              )}

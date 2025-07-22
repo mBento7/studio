@@ -1,6 +1,7 @@
 'use client';
 import { useParams } from 'next/navigation';
 import EventCard from '@/components/feed/EventCard';
+import { SuggestedEventsCard } from '@/components/events/SuggestedEventsCard';
 import Link from 'next/link';
 import React from 'react';
 
@@ -91,22 +92,7 @@ export default function EventDetailPage() {
       </div>
       {/* Coluna direita: sugestões */}
       <aside className="w-full md:w-80 flex-shrink-0">
-        <div className="bg-card rounded-xl border border-border p-4 mb-4">
-          <h3 className="text-base font-bold mb-4">Outros eventos para você</h3>
-          <div className="flex flex-col gap-4">
-            {sugestoes.map(sugestao => (
-              <Link key={sugestao.id} href={`/events/${sugestao.id}`} className="hover:opacity-90 transition">
-                <div className="flex gap-3 items-center">
-                  <img src={sugestao.image} alt={sugestao.name} className="w-16 h-16 object-cover rounded-md border" />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm line-clamp-2">{sugestao.name}</div>
-                    <div className="text-xs text-muted-foreground line-clamp-1">{new Date(sugestao.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}</div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <SuggestedEventsCard sugestoes={sugestoes} />
         <div className="bg-muted rounded-xl border border-border p-4 text-center">
           <span className="block text-xs text-muted-foreground mb-2">Espaço para banners ou anúncios de teste</span>
           <div className="h-16 bg-gray-200 rounded" />

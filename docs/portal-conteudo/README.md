@@ -170,6 +170,10 @@ interface Article {
 - **Sidebar Posts**: Quick updates com timestamps
 - **Banners**: Sistema de banners posicionais
 
+### Eventos
+- **Cards de Eventos**: Exibição de eventos com detalhes como data, local, participantes e preço.
+- **Interatividade com Eventos**: Funcionalidade de marcar interesse e compartilhar eventos.
+
 ## 🚀 Como Executar
 
 1. **Instalação das dependências**:
@@ -302,6 +306,20 @@ CREATE TABLE article_interactions (
   article_id UUID REFERENCES articles(id),
   interaction_type TEXT, -- 'like', 'share', 'bookmark'
   created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Eventos
+CREATE TABLE events (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  date TIMESTAMP NOT NULL,
+  location TEXT NOT NULL,
+  image_url TEXT,
+  attendees INTEGER DEFAULT 0,
+  price TEXT,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 ```
 

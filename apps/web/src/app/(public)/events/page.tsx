@@ -46,13 +46,22 @@ const eventos = [
 
 export default function EventsPage() {
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
+    <div className="max-w-6xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-2 text-foreground">Eventos</h1>
       <p className="text-muted-foreground mb-8">Confira os próximos eventos, participe e desenvolva sua carreira!</p>
-      <div className="grid gap-8">
-        {eventos.map((evento) => (
-          <EventCard key={evento.id} {...evento} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2 grid gap-8">
+          {eventos.map((evento) => (
+            <EventCard key={evento.id} {...evento} />
+          ))}
+        </div>
+        <div className="md:col-span-1">
+          {/* Suggested Events Card will go here */}
+          <div className="bg-card p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4">Eventos Sugeridos</h2>
+            <p className="text-muted-foreground">Em breve, cards de eventos sugeridos aparecerão aqui.</p>
+          </div>
+        </div>
       </div>
     </div>
   );
